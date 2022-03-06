@@ -24,3 +24,5 @@ The basic idea of this project is to create a mechanism to display digits, using
 
 # Egg of Columbus
 
+![pisco-code-121.png](https://github.com/andreviegas/Pisco-LED-Code/blob/2d7ab53852a28b9fdf24be6b03f43a6450f9fef0/graphics/pisco-code-121.png)
+
