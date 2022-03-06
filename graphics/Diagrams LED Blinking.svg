@@ -23,8 +23,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.0384144"
-     inkscape:cx="283.06058"
-     inkscape:cy="187.77096"
+     inkscape:cx="219.88015"
+     inkscape:cy="269.44337"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -195,13 +195,35 @@
        inkscape:locked="false"
        inkscape:color="rgb(0,0,255)" />
     <sodipodi:guide
-       position="226.15267,994.87692"
+       position="173.89274,983.67543"
        orientation="0,-1"
        id="guide913" />
     <sodipodi:guide
-       position="101.03553,937.4544"
+       position="74.421036,926.25291"
        orientation="0,-1"
        id="guide915" />
+    <sodipodi:guide
+       position="9.6300671,694.12369"
+       orientation="0,-1"
+       id="guide942" />
+    <sodipodi:guide
+       position="9.6300671,734.12369"
+       orientation="0,1"
+       id="guide946"
+       inkscape:label=""
+       inkscape:locked="false"
+       inkscape:color="rgb(0,0,255)" />
+    <sodipodi:guide
+       position="9.6300671,794.12369"
+       orientation="0,1"
+       id="guide948"
+       inkscape:label=""
+       inkscape:locked="false"
+       inkscape:color="rgb(0,0,255)" />
+    <sodipodi:guide
+       position="33.705235,884.79902"
+       orientation="1,0"
+       id="guide955" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -220,27 +242,30 @@
      inkscape:groupmode="layer"
      id="layer1">
     <rect
+       style="opacity:1;fill:#f9f9f9;stroke:#000000;stroke-width:1.37953;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect940"
+       width="690.47583"
+       height="181.04526"
+       x="16.371115"
+       y="208.97246"
+       ry="0"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
+    <rect
        style="opacity:1;fill:#f9f9f9;stroke-width:1.37952756;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke:#000000;stroke-miterlimit:4;stroke-dashoffset:0"
        id="rect917"
        width="690.47583"
        height="125.19087"
        x="16.371115"
        y="27.927195"
-       ry="0.46316871" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
-       x="199.90492"
-       y="178.46442"
-       id="text3845"><tspan
-         sodipodi:role="line"
-         id="tspan3847"
-         x="199.90492"
-         y="178.46442"
-         style="font-size:20px;line-height:1.25">Status LED showing code 312</tspan></text>
+       ry="0.46316871"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
     <g
        id="g924"
-       transform="translate(22.857213,11.201488)">
+       transform="translate(22.857213,11.201488)"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
       <path
          sodipodi:nodetypes="cccccccccccccccccccccccccc"
          inkscape:connector-curvature="0"
@@ -270,5 +295,52 @@
            y="110.07273"
            style="font-size:14.2153px;line-height:1.25">Off</tspan></text>
     </g>
+    <path
+       sodipodi:nodetypes="cccccccccccccccccccccccccc"
+       inkscape:connector-curvature="0"
+       id="path928"
+       d="m 76.680963,358.23849 h 49.471707 v -40 h 100 v -60 h 25 v 60 h 99.88286 v -60 h 25 v 60 h 25 v -60 h 25.11714 v 60 h 25 v 0 h 74.88286 v -60 h 25 v 60 h 0.11714 v 0 h 100.22058 l -0.22058,40 41.45991,0"
+       style="fill:none;stroke:#ff0000;stroke-width:2.48031;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
+    <text
+       id="text932"
+       y="262.5921"
+       x="33.384396"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100"><tspan
+         y="262.5921"
+         x="33.384396"
+         id="tspan930"
+         sodipodi:role="line"
+         style="font-size:14.2153px;line-height:1.25">Max Bright</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="34.076878"
+       y="362.59625"
+       id="text936"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100"><tspan
+         sodipodi:role="line"
+         id="tspan934"
+         x="34.076878"
+         y="362.59625"
+         style="font-size:14.2153px;line-height:1.25">Off</tspan></text>
+    <text
+       id="text959"
+       y="321.15369"
+       x="33.384396"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100"><tspan
+         y="321.15369"
+         x="33.384396"
+         id="tspan957"
+         sodipodi:role="line"
+         style="font-size:14.2153px;line-height:1.25">Low Bright</tspan></text>
   </g>
 </svg>
