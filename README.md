@@ -37,7 +37,7 @@ In the graphic below, code 120 is shown. As you can see, once the sequence of co
 
 ![pisco-code-120.png](https://github.com/andreviegas/Pisco-LED-Code/blob/9d276453b1f99df96e158106dcbb28b7e36d6daf/graphics/pisco-code-120.png)
 
-And the Pisco Code 002 below
+As an additional example, the graphic below shows what Pisco Code 002 would look like.
 
 ![pisco-code-002.png](https://github.com/andreviegas/Pisco-LED-Code/blob/9d276453b1f99df96e158106dcbb28b7e36d6daf/graphics/pisco-code-002.png)
 
