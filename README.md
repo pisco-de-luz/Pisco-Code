@@ -51,7 +51,7 @@ For decimal numbers, this system is already being used by [Pisco de Luz](https:/
 
 As some variables can contain negative values, as in their case the temperature inside of the device, it was necessary to create a mechanism to distinguish a positive number from a negative one. The idea was to create a long blink at the beginning of the sequence to signal the dash of the negative sign. After this blink, the digit-by-digit process begins.
 
-
+![pisco-code-12-negative.png](https://github.com/andreviegas/Pisco-LED-Code/blob/9d276453b1f99df96e158106dcbb28b7e36d6daf/graphics/pisco-code-12-negative.png)
 
 
 
