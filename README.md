@@ -41,4 +41,17 @@ As an additional example, the graphic below shows what Pisco Code 002 would look
 
 ![pisco-code-002.png](https://github.com/andreviegas/Pisco-LED-Code/blob/9d276453b1f99df96e158106dcbb28b7e36d6daf/graphics/pisco-code-002.png)
 
+# Binary and Hexadecimal Values
+
+Using the Pisco Code system, it would be easy to implement variations to allow displaying binary (0 and 1) or even hexadecimal (0 - 15) values. Of course, for binary numbers, the sequence would probably contain more digits while for hexadecimal numbers, each digit could have many blinks, making it a little more complicated to read them.
+
+For decimal numbers, this system is already being used by [Pisco de Luz](https://piscodeluz.org) project since 2020, working very well. They use it to read the number of hours of lighting already used, battery/solar board voltage, temperature and much more.
+
+# The Negative Side
+
+As some variables can contain negative values, as in their case the temperature inside of the device, it was necessary to create a mechanism to distinguish a positive number from a negative one. The idea was to create a long blink at the beginning of the sequence to signal the dash of the negative sign. After this blink, the digit-by-digit process begins.
+
+
+
+
 
