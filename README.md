@@ -30,3 +30,9 @@ As can be seen in the graphic below, the working principle of Pisco Code is prac
 
 This simple change makes the code easier to read, as it allows the observer to know when the sequence actually starts. When the LED is off and remains dimmed for a few seconds and starts blinking, the observer knows that a new sequence has just started.
 
+# The Origin of Zero
+
+In addition to the benefit mentioned above, this solution also created the possibility of representing the zero digit, in any position of the code to be displayed.
+In the graphic below, code 120 is shown. As you can see, once the sequence of codes is started with the LED partially on, the blinks with maximum brightness show numbers between 1-9 while a single blink, turning off the LED, signals the digit zero.
+
+
