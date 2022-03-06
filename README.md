@@ -24,5 +24,9 @@ The basic idea of this project is to create a mechanism to display digits, using
 
 # Egg of Columbus
 
+As can be seen in the graphic below, the working principle of Pisco Code is practically the same. The only difference is that before starting the blinking sequence, the LED is dimmed and it is turned off only after the code has all been "displayed".
+
 ![pisco-code-121.png](https://github.com/andreviegas/Pisco-LED-Code/blob/2d7ab53852a28b9fdf24be6b03f43a6450f9fef0/graphics/pisco-code-121.png)
+
+This simple change makes the code easier to read, as it allows the observer to know when the sequence actually starts. When the LED is off and remains dimmed for a few seconds and starts blinking, the observer knows that a new sequence has just started.
 
