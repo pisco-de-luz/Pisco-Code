@@ -10,7 +10,9 @@ At other times, we miss a simple and intuitive mechanism, where people who will 
 
 # The Simple and Current way to Implement this
 
-Currently, in the vast majority of cases, they develop the blinking patterns on the status LEDs to indicate certain conditions in the software have been reached.
+Currently, in the vast majority of cases, we develop some blinking patterns on the status LEDs to indicate certain conditions in the software have been reached.
+To indicate numerical values between 1 and 20, for example, we can blink a status LED x times, indicating the desired value.
+Other approaches I found for larger numbers were creating sequences of blinks.
 
 
 # Egg of Columbus
