@@ -24,7 +24,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="1.0384144"
      inkscape:cx="219.88015"
-     inkscape:cy="269.44337"
+     inkscape:cy="693.16631"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -224,6 +224,30 @@
        position="33.705235,884.79902"
        orientation="1,0"
        id="guide955" />
+    <sodipodi:guide
+       position="226.15267,558.18705"
+       orientation="0,-1"
+       id="guide898" />
+    <sodipodi:guide
+       position="126.15267,498.18705"
+       orientation="0,-1"
+       id="guide900" />
+    <sodipodi:guide
+       position="76.680963,458.18705"
+       orientation="0,-1"
+       id="guide902" />
+    <sodipodi:guide
+       position="226.15267,320.3244"
+       orientation="0,-1"
+       id="guide920" />
+    <sodipodi:guide
+       position="126.15267,260.3244"
+       orientation="0,-1"
+       id="guide922" />
+    <sodipodi:guide
+       position="76.680963,220.3244"
+       orientation="0,-1"
+       id="guide924" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -233,7 +257,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -340,6 +364,120 @@
          y="321.15369"
          x="33.384396"
          id="tspan957"
+         sodipodi:role="line"
+         style="font-size:14.2153px;line-height:1.25">Low Bright</tspan></text>
+    <rect
+       style="opacity:1;fill:#f9f9f9;stroke:#000000;stroke-width:1.37953;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect882"
+       width="690.47583"
+       height="181.04526"
+       x="16.371115"
+       y="444.90909"
+       ry="0"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
+    <path
+       sodipodi:nodetypes="cccccccccccccccccccccccccc"
+       inkscape:connector-curvature="0"
+       id="path884"
+       d="m 76.680963,594.17513 h 49.471707 v -40 h 100 v -60 h 25 v 60 h 99.88286 v -60 h 25 v 60 h 25 v -60 h 25.11714 v 60 h 25 v 0 h 74.88286 l 0,40 h 25 l 0,-40 h 0.11714 v 0 h 100.22058 l -0.22058,40 h 41.45991"
+       style="fill:none;stroke:#ff0000;stroke-width:2.48031;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
+    <text
+       id="text888"
+       y="498.52875"
+       x="33.384396"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100"><tspan
+         y="498.52875"
+         x="33.384396"
+         id="tspan886"
+         sodipodi:role="line"
+         style="font-size:14.2153px;line-height:1.25">Max Bright</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="34.076878"
+       y="598.5329"
+       id="text892"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100"><tspan
+         sodipodi:role="line"
+         id="tspan890"
+         x="34.076878"
+         y="598.5329"
+         style="font-size:14.2153px;line-height:1.25">Off</tspan></text>
+    <text
+       id="text896"
+       y="557.09033"
+       x="33.384396"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100"><tspan
+         y="557.09033"
+         x="33.384396"
+         id="tspan894"
+         sodipodi:role="line"
+         style="font-size:14.2153px;line-height:1.25">Low Bright</tspan></text>
+    <rect
+       style="opacity:1;fill:#f9f9f9;stroke:#000000;stroke-width:1.37953;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect904"
+       width="690.47583"
+       height="181.04526"
+       x="16.371115"
+       y="682.77173"
+       ry="0"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
+    <path
+       sodipodi:nodetypes="cccccccccccccccccccccccc"
+       inkscape:connector-curvature="0"
+       id="path906"
+       d="m 76.680963,832.03778 h 49.471707 v -40 h 100 v 40 h 25 v -40 h 99.88286 v 40 h 25 v -40 h 100 v -60 h 25.11714 l 0,60 h 25 l -0.11714,-60 h 25 v 60 h 0.11714 v 0 h 100.22058 l -0.22058,40 h 41.45991"
+       style="fill:none;stroke:#ff0000;stroke-width:2.48031;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
+    <text
+       id="text910"
+       y="736.39142"
+       x="33.384396"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100"><tspan
+         y="736.39142"
+         x="33.384396"
+         id="tspan908"
+         sodipodi:role="line"
+         style="font-size:14.2153px;line-height:1.25">Max Bright</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="34.076878"
+       y="836.39557"
+       id="text914"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100"><tspan
+         sodipodi:role="line"
+         id="tspan912"
+         x="34.076878"
+         y="836.39557"
+         style="font-size:14.2153px;line-height:1.25">Off</tspan></text>
+    <text
+       id="text918"
+       y="794.953"
+       x="33.384396"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100"><tspan
+         y="794.953"
+         x="33.384396"
+         id="tspan916"
          sodipodi:role="line"
          style="font-size:14.2153px;line-height:1.25">Low Bright</tspan></text>
   </g>
