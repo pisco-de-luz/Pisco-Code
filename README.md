@@ -43,7 +43,7 @@ As an additional example, the graphic below shows what Pisco Code 002 would look
 
 # Binary and Hexadecimal Values
 
-Using the Pisco Code system, it would be easy to implement variations to display binary (0 and 1) or even hexadecimal (0 - 15) values. But, of course, the sequence would probably contain more digits for binary numbers. In contrast, each digit could have many blinks for hexadecimal numbers, making it a little more hard to read them.
+Using the Pisco Code system, it would be easy to implement variations to display binary (0 and 1) or even hexadecimal (0 - 15) values. But, of course, the sequence would probably contain more digits for binary numbers. In contrast, each digit could have many blinks for hexadecimal numbers, making it a little harder to read them.
 
 For decimal numbers, this system has been used by the [Pisco de Luz](https://www.piscodeluz.org/?lang=en) project since 2020, working very well. They use it to read the number of hours of lighting already used, battery/solar board voltage, temperature and much more.
 
