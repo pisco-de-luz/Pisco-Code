@@ -69,7 +69,7 @@ Below is an example of the value -12 being shown. Note the long blink at the beg
  * The Pisco-LED-Code library is a nom blocking function that 
  * should be called frequently from the loop function. 
  * 
- * Andre Viegas
+ * Pisco de Luz (Andre Viegas)
  */
 
 /**************************************************************************************
@@ -87,9 +87,17 @@ PiscoCode      ledBuiltin;         // declare an object of class PiscoCode
  **************************************************************************************/
 
 void setup() {
-  pinMode(LED_BUILTIN, OUTPUT);    // initialize digital pin LED_BUILTIN as an output.                  
-  ledBuiltin.setup(LED_BUILTIN);   // calling the PiscoCode class constructor.
-  ledBuiltin.showDec(1024, 7, 1);  // display the 1024 number on BUILTIN led.
+  pinMode(LED_BUILTIN, OUTPUT);                    // initialize digital pin LED_BUILTIN as an output.                  
+  ledBuiltin.setup(&turnLed1On, &turnLed1Off, 0);  // calling the PiscoCode class constructor.
+  ledBuiltin.showDec(1024, 7, 1);                  // display the 1024 number on BUILTIN led.
+}
+
+void turnLed1On(void) {
+  digitalWrite(LED_BUILTIN, HIGH);
+}
+
+void turnLed1Off(void) {
+  digitalWrite(LED_BUILTIN, LOW);
 }
 
 void loop() {
