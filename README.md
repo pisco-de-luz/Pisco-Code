@@ -55,4 +55,33 @@ Below is an example of the value -12 being shown. Note the long blink at the beg
 
 ![pisco-code-12-negative.png](https://github.com/andreviegas/Pisco-LED-Code/blob/d46fea2847a2d3f49e9fccbcebee1c75f28df785/graphics/pisco-code-12-negative.png)
 
+# Usage
 
+```C++
+#include "Pisco-LED-Code.h"
+
+/**************************************************************************************
+ * GLOBAL VARIABLES
+ **************************************************************************************/
+
+PiscoCode      ledBuiltin;
+
+/**************************************************************************************
+ * SETUP/LOOP
+ **************************************************************************************/
+
+void setup()
+{
+  // initialize digital pin LED_BUILTIN as an output.
+  pinMode(LED_BUILTIN, OUTPUT);
+  
+  ledBuiltin.setup(LED_BUILTIN);  
+
+  ledBuiltin.showDec(1024, 60, 2);  
+}
+
+void loop()
+{
+   ledBuiltin.loop(millis());
+}
+```
