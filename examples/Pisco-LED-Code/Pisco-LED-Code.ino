@@ -57,7 +57,7 @@ void setup()
   digitalWrite(ledBuiltinPort,LOW);
   digitalWrite(ledRXPort,HIGH);
   delay(1800);
-  ledBuiltin.showDec(1024, 60, 2);
+  ledBuiltin.showDec(-12, 60, 2);
   delay(2000);
 //  ledRX.showDec(8, 60, 1);
 }
