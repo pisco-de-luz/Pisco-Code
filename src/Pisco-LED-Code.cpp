@@ -7,6 +7,7 @@ PiscoCode::PiscoCode(void) {
     
 }
 
+/*
 void PiscoCode::setup(int16_t selectedPort) {
       ledPort =               selectedPort;
       currentStep =           NOT_SEQUENCING;  
@@ -22,24 +23,39 @@ void PiscoCode::setup(int16_t selectedPort, uint8_t dimPWM) {
       pwmCounter =            0;                                                                                      // Varia entre 0-7
       digitalWrite(ledPort, ledOFF);
 }
+*/
+
+void PiscoCode::setup(void (*LedOnFunc)(void), void (*LedOffFunc)(void), uint8_t dimPWM) {
+      //ledPort =               selectedPort;
+      currentStep =           NOT_SEQUENCING;  
+      dimmedPWM =             dimPWM;                                                                       // Seta um valor inicial para o dimmedPWM
+      pwmCounter =            0;                                                                                      // Varia entre 0-7
+      LedOn =                 LedOnFunc;
+      LedOff =                LedOffFunc;
+      //digitalWrite(ledPort, ledOFF);
+      LedOff();
+}
 
 void PiscoCode::loop(uint32_t Millis) {  
      if ( pwmCounter == 0 ) {
         if ( currentStep == NOT_SEQUENCING ) {
-           digitalWrite(ledPort, ledOFF);                                                                               // Apaga o LED de sinalização
+           //digitalWrite(ledPort, ledOFF);                                                                               // Apaga o LED de sinalização
+           LedOff();
         }
      }
      if ( currentStep != NOT_SEQUENCING && (pwmCounter == 0 || pwmCounter == dimmedPWM || pwmCounter == pwmSequence) ) {              // Indica que há sinalizacao a fazer
         if ( pwmCounter == 0 && currentStepDuration != mSec_veryShortBlink && currentStep != REPEAT_SEQUENCE &&                     // Está no inicio do ciclo de pwm, e o digito não é o zero e não está repetindo o codigo e...
              currentStep != FINAL_PAUSE ) {                                                                                       // não está na pausa final
-           digitalWrite(ledPort, ledON);                                                                                // Acende o LED de sinalização de fundo
+           //digitalWrite(ledPort, ledON);                                                                                // Acende o LED de sinalização de fundo
+           LedOn();
         } 
 
         switch (currentStep) {
             case START_SEQUENCE:
                  if ( millisUltimaEtapa == 0 ) { millisUltimaEtapa = Millis; }                                                    // No inicio do processo, quando a sinalizacao é criada, o millisUltimaEtapa é zerado.
                  if ( pwmCounter == dimmedPWM  ) {                                                                                // Está no pwm de fundo desejado    
-                    digitalWrite(ledPort, ledOFF);                                                                               // Apaga o LED de sinalização
+                    //digitalWrite(ledPort, ledOFF);                                                                               // Apaga o LED de sinalização
+                    LedOff();
                  }
                  if ( ((uint32_t)(Millis - millisUltimaEtapa) > currentStepDuration) && pwmCounter == pwmSequence ) {                          // Tempo da etapa atual esgotado
                     if ( isNegative ) {
@@ -53,7 +69,8 @@ void PiscoCode::loop(uint32_t Millis) {
                  break;
             case NEGATIVE_SIGN_ON:
                  if ( pwmCounter == pwmSequence  ) {                                                                                // Está no pwm de fundo desejado    
-                    digitalWrite(ledPort, ledOFF);                                                                               // Apaga o LED de sinalização
+                    //digitalWrite(ledPort, ledOFF);                                                                               // Apaga o LED de sinalização
+                    LedOff();
                  }                
                  if ( ((uint32_t)(Millis - millisUltimaEtapa) > currentStepDuration) && pwmCounter == pwmSequence ) {                          // Tempo da etapa atual esgotado
                      currentStep = NEGATIVE_SIGN_OFF;                                                                                   // Finaliza de vez a sinalização                      
@@ -63,7 +80,8 @@ void PiscoCode::loop(uint32_t Millis) {
                  break;
             case NEGATIVE_SIGN_OFF:
                  if ( pwmCounter == dimmedPWM  ) {                                                                                       // Está no pwm de fundo desejado    
-                    digitalWrite(ledPort, ledOFF);                                                                               // Apaga o LED de sinalização
+                    //digitalWrite(ledPort, ledOFF);                                                                               // Apaga o LED de sinalização
+                    LedOff();
                  }                
                  if ( ((uint32_t)(Millis - millisUltimaEtapa) > currentStepDuration) && pwmCounter == pwmSequence ) {                          // Tempo da etapa atual esgotado
                      currentStep = READ_NEXT_DIGIT;                                                                                   // Finaliza de vez a sinalização                      
@@ -88,10 +106,12 @@ void PiscoCode::loop(uint32_t Millis) {
                  break;
             case SEQUENCING_ON:
                  if ( pwmCounter == pwmSequence  ) {                                                                          // Está no pwm do brilho desejado    
-                    digitalWrite(ledPort, ledOFF);                                                                               // Apaga o LED de sinalização
+                    //digitalWrite(ledPort, ledOFF);                                                                               // Apaga o LED de sinalização
+                    LedOff();
                  }
                  if ( ((uint32_t)(Millis - millisUltimaEtapa) > currentStepDuration) && pwmCounter == pwmSequence ) {                          // Tempo da etapa atual esgotado
-                    digitalWrite(ledPort, ledOFF);                                                                               // Apaga o LED de sinalização
+                    //digitalWrite(ledPort, ledOFF);                                                                               // Apaga o LED de sinalização
+                    LedOff();
                     currentStep = SEQUENCING_OFF;                                                                                      // Altera a etapa atual para desligar o LED
                     millisUltimaEtapa = Millis;                                                                                         // Registra inicio de uma nova etapa
                     blinksToShow[currentDigit]--;                                                                                     // Decrementa a quantidade de piscos do digito atual
@@ -104,7 +124,8 @@ void PiscoCode::loop(uint32_t Millis) {
                  break;
             case SEQUENCING_OFF:
                  if ( pwmCounter == dimmedPWM  ) {                                                                                // Está no pwm de fundo desejado    
-                    digitalWrite(ledPort, ledOFF);                                                                               // Apaga o LED de sinalização
+                    //digitalWrite(ledPort, ledOFF);                                                                               // Apaga o LED de sinalização
+                    LedOff();
                  }
                 
                  if ( ((uint32_t)(Millis - millisUltimaEtapa) > currentStepDuration) && pwmCounter == pwmSequence ) {                          // Tempo da etapa atual esgotado
@@ -123,7 +144,8 @@ void PiscoCode::loop(uint32_t Millis) {
                  break;
             case END_SEQUENCE:
                  if ( pwmCounter == dimmedPWM  ) {                                                                                // Está no pwm de fundo desejado    
-                    digitalWrite(ledPort, ledOFF);                                                                               // Apaga o LED de sinalização
+                    //digitalWrite(ledPort, ledOFF);                                                                               // Apaga o LED de sinalização
+                    LedOff();
                  }                
                  if ( ((uint32_t)(Millis - millisUltimaEtapa) > currentStepDuration) && pwmCounter == pwmSequence ) {                          // Tempo da etapa atual esgotado
                      if ( sequenceTimes == 0 ) {

@@ -48,8 +48,10 @@ void setup()
   pinMode(ledBuiltinPort, OUTPUT);
   pinMode(ledRXPort, OUTPUT);
   
-  ledBuiltin.setup(ledBuiltinPort);  
-  ledRX.setup(ledRXPort);  
+  ledBuiltin.setup(&turnLed1On, &turnLed1Off, 1);  
+  ledRX.setup(&turnLed2On, &turnLed2Off, 1);  
+  //ledBuiltin.setup(ledBuiltinPort);  
+  //ledRX.setup(ledRXPort);  
 
   digitalWrite(ledBuiltinPort,HIGH);
   delay(100);
@@ -59,27 +61,43 @@ void setup()
   delay(100);
   digitalWrite(ledBuiltinPort,LOW);
   digitalWrite(ledRXPort,HIGH);
-  delay(1800);
-  ledBuiltin.showDec(-12, 60, 2);
-  delay(2000);
-//  ledRX.showDec(8, 60, 1);
+  delay(800);
+  ledBuiltin.showDec(-12, 7, 2);
+//  ledRX.showDec(8, 7, 1);
 }
 
-void turnLed1On(void) {
-  
-}
 
 //unsigned long        lastMillis = 0;
 //const unsigned long  timeBetweenCounter = 9000UL;
 
 void loop()
 {
-  if ( (unsigned long)(millis() - lastMillis) >= timeBetweenCounter &&
+   if ( (unsigned long)(millis() - lastMillis) >= timeBetweenCounter &&
          ! ledBuiltin.isSequencing() ) {
-      ledBuiltin.showDec(millis()/1000, 30, 1);
+      ledBuiltin.showDec(millis()/1000, 7, 1);
       lastMillis = millis();
+   }
+   if ( millis() > 12000 && millis() < 13000 ) {
+      ledRX.showDec(18, 7, 1);
    }
 
    ledBuiltin.loop(millis());
-//   ledRX.loop(millis());
+   ledRX.loop(millis());
+}
+
+
+void turnLed1On(void) {
+  digitalWrite(ledBuiltinPort,HIGH);
+}
+
+void turnLed1Off(void) {
+  digitalWrite(ledBuiltinPort,LOW);
+}
+
+void turnLed2On(void) {
+  digitalWrite(ledRXPort,LOW);
+}
+
+void turnLed2Off(void) {
+  digitalWrite(ledRXPort,HIGH);
 }

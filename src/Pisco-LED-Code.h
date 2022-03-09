@@ -27,8 +27,9 @@ class PiscoCode {
     public:
 
                                PiscoCode(void);
-      void                     setup(int16_t sinalizadorPorta);                               
-      void                     setup(int16_t sinalizadorPorta, uint8_t dimPWM);
+      //void                     setup(int16_t sinalizadorPorta);                               
+      //void                     setup(int16_t sinalizadorPorta, uint8_t dimPWM);
+      void                     setup(void (*ledOnFunc)(void), void(*LedOffFunc)(void), uint8_t dimPWM);
       void                     loop(uint32_t Millis);
       uint8_t                  showDec(int32_t codigo, uint8_t pwm, uint8_t vezes);
       bool                  isSequencing(void);
@@ -69,6 +70,8 @@ class PiscoCode {
     uint32_t                               millisUltimaEtapa;                                       // Registra o millis da ultima etapa alterada 
     uint32_t                               currentStepDuration;                                       // Armazena os uSec necessários para a etapa atual  
     bool                               isNegative;                                                  // Sempre que vier um código negativo, essa variável será true                   
+    void                                  (*LedOn)(void);
+    void                                  (*LedOff)(void);
  
     
 };
