@@ -15,8 +15,8 @@ const uint32_t            mSec_betweenBlink =         350;          // Set the p
 const uint32_t            mSec_betweenDigits =       1100;          // Set the pause duration between digits in milliseconds.
 const uint32_t            mSec_betweenCodes =        1500;          // Set the pause duration between Codes in milliseconds.
 const uint8_t             MAX_DIGITS =                  5;          // The maximum number of digits a sequence will process.
-const uint8_t             initialDimmedPWM =            1;          // The default PWM set value for the dimmed phase of the sequence.
-const uint8_t             pwmMax  =                    63;
+const uint8_t             initialDimmedPWM =            0;          // The default PWM set value for the dimmed phase of the sequence.
+const uint8_t             pwmMax  =                     7;
 const uint16_t            ledON =                    HIGH;
 const uint16_t            ledOFF =                    LOW;
 

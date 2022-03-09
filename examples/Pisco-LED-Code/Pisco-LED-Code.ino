@@ -6,6 +6,9 @@
  * 
  * These values can be shown as positive or negative when needed.
  * 
+ * The Pisco-LED-Code library is a nom blocking function that 
+ * should be called frequently from the loop function. 
+ * 
  * Andre Viegas
  */
 
