@@ -32,7 +32,7 @@ void setup()
   // initialize digital pin LED_BUILTIN as an output.
   pinMode(LED_BUILTIN, OUTPUT);
   
-  ledBuiltin.setup(ledBuiltinPort);  
+  ledBuiltin.setup(LED_BUILTIN);  
 
   ledBuiltin.showDec(1024, 60, 2);  
 }
