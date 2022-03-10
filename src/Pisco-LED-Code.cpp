@@ -43,7 +43,8 @@ void PiscoCode::loop(uint32_t Millis) {
            LedOff();
         }
      }
-     if ( currentStep != NOT_SEQUENCING && (pwmCounter == 0 || pwmCounter == dimmedPWM || pwmCounter == pwmSequence) ) {              // Indica que há sinalizacao a fazer
+     //if ( currentStep != NOT_SEQUENCING && (pwmCounter == 0 || pwmCounter == dimmedPWM || pwmCounter == pwmSequence) ) {              // Indica que há sinalizacao a fazer
+     if ( currentStep != NOT_SEQUENCING ) {              // Indica que há sinalizacao a fazer
         if ( pwmCounter == 0 && currentStepDuration != mSec_veryShortBlink && currentStep != REPEAT_SEQUENCE &&                     // Está no inicio do ciclo de pwm, e o digito não é o zero e não está repetindo o codigo e...
              currentStep != FINAL_PAUSE ) {                                                                                       // não está na pausa final
            //digitalWrite(ledPort, ledON);                                                                                // Acende o LED de sinalização de fundo
