@@ -2,23 +2,17 @@
 #define PISCO_CODE
 
 #include <stdint.h>
-#include "Arduino.h"
-
-#define FALSE 0
-#define TRUE 1
 
 
-const uint32_t            mSec_longBlink =            350;          // Set the LED's duration during a long blink in milliseconds.
-const uint32_t            mSec_shortBlink =           250;          // Set the LED's duration during a short blink in milliseconds.
-const uint32_t            mSec_veryShortBlink =       240;          // Set the LED's duration during a very short blink in milliseconds. It has to be less than longBlink and shortBlink
+const uint32_t            mSec_longBlink =            550;          // Set the LED's duration during a long blink in milliseconds.
+const uint32_t            mSec_shortBlink =           350;          // Set the LED's duration during a short blink in milliseconds.
+const uint32_t            mSec_veryShortBlink =       440;          // Set the LED's duration during a very short blink in milliseconds. It has to be less than longBlink and shortBlink
 const uint32_t            mSec_betweenBlink =         350;          // Set the pause duration between blinks in milliseconds.
-const uint32_t            mSec_betweenDigits =       1100;          // Set the pause duration between digits in milliseconds.
+const uint32_t            mSec_betweenDigits =       1300;          // Set the pause duration between digits in milliseconds.
 const uint32_t            mSec_betweenCodes =        1500;          // Set the pause duration between Codes in milliseconds.
 const uint8_t             MAX_DIGITS =                  5;          // The maximum number of digits a sequence will process.
 const uint8_t             initialDimmedPWM =            0;          // The default PWM set value for the dimmed phase of the sequence.
-const uint8_t             pwmMax  =                     7;
-const uint16_t            ledON =                    HIGH;
-const uint16_t            ledOFF =                    LOW;
+const uint8_t             pwmMax  =                    15;          // The maximum value the PWM scale could have beginning with zero.
 
 
 
