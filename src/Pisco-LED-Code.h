@@ -21,34 +21,33 @@ class PiscoCode {
     public:
 
                                PiscoCode(void);
-      //void                     setup(int16_t sinalizadorPorta);                               
-      //void                     setup(int16_t sinalizadorPorta, uint8_t dimPWM);
+      void                     setup(void (*ledOnFunc)(void), void(*LedOffFunc)(void));
       void                     setup(void (*ledOnFunc)(void), void(*LedOffFunc)(void), uint8_t dimPWM);
       void                     loop(uint32_t Millis);
       uint8_t                  showDec(int32_t codigo, uint8_t pwm, uint8_t vezes);
-      bool                  isSequencing(void);
+      bool                     isSequencing(void);
 
       
-      enum Erros {
-         OK = 0,
-         SEQUENCE_RUNNING = 1
+      enum Errors {                                                 // Errors codes returned from showDec, showHex, and showBin functions.
+         OK = 0,                                                    // The Pisco Code was accepted and will soon start sequencing. 
+         SEQUENCE_RUNNING = 1                                       // The PiscoCode was rejected because another sequencing is running.
       };
 
 
 
     private:
 
-     enum CurrentSteps {
-        NOT_SEQUENCING = 10,
-        START_SEQUENCE = 20,
-        NEGATIVE_SIGN_ON = 23,
-        NEGATIVE_SIGN_OFF = 26,
-        READ_NEXT_DIGIT = 30,
-        SEQUENCING_ON = 40,
-        SEQUENCING_OFF = 50,
-        FINAL_PAUSE = 55,
-        END_SEQUENCE = 60,
-        REPEAT_SEQUENCE = 70
+     enum CurrentPhases {
+        NOT_SEQUENCING =     10,
+        START_SEQUENCE =     20,
+        NEGATIVE_SIGN_ON =   23,
+        NEGATIVE_SIGN_OFF =  26,
+        READ_NEXT_DIGIT =    30,
+        SEQUENCING_ON =      40,
+        SEQUENCING_OFF =     50,
+        FINAL_PAUSE =        55,
+        END_SEQUENCE =       60,
+        REPEAT_SEQUENCE =    70
      };
 
     int16_t                               ledPort;                                                 // I/O port of LED
@@ -59,17 +58,14 @@ class PiscoCode {
     uint8_t                               pwmSequence;                                          // PWM para controlar intensidade do sinalizador
     uint8_t                               pwmCounter;                                        
     uint8_t                               sequenceTimes;                                        // Quantas vezes o codigo deverá ser repetido
-    uint8_t                               currentStep;                                              // Indica em qual etapa está sendo sinalizada    
+    uint8_t                               currentPhase;                                              // Indica em qual etapa está sendo sinalizada    
     uint8_t                               dimmedPWM;                                                // Fase do pwm para desligar o sinalizador indicando a iluminação base para os piscos.
-    uint32_t                               millisUltimaEtapa;                                       // Registra o millis da ultima etapa alterada 
-    uint32_t                               currentStepDuration;                                       // Armazena os uSec necessários para a etapa atual  
-    bool                               isNegative;                                                  // Sempre que vier um código negativo, essa variável será true                   
+    uint32_t                              millisUltimaEtapa;                                       // Registra o millis da ultima etapa alterada 
+    uint32_t                              currentPhaseDuration;                                       // Armazena os uSec necessários para a etapa atual  
+    bool                                  isNegative;                                                  // Sempre que vier um código negativo, essa variável será true                   
     void                                  (*LedOn)(void);
     void                                  (*LedOff)(void);
- 
-    
+     
 };
-
-
 
 #endif
