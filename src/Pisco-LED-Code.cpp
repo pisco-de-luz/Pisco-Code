@@ -1,6 +1,5 @@
 #include "Pisco-LED-Code.h"
 
-
 PiscoCode::PiscoCode(void) {
     
 }
@@ -106,8 +105,7 @@ void PiscoCode::loop(uint32_t Millis) {
             case SEQUENCING_OFF:
                  if ( pwmCounter == dimmedPWM  ) {                                                                                // Está no pwm de fundo desejado    
                     LedOff();
-                 }
-                
+                 }                
                  if ( ((uint32_t)(Millis - millisUltimaEtapa) > currentPhaseDuration) && pwmCounter == pwmSequence ) {                          // Tempo da etapa atual esgotado
                     if ( blinksToShow[currentDigit] > 0 ) {                                                                           // Indica que ainda não mudou para outro digito
                        currentPhase = SEQUENCING_ON;                                                                                    // Altera a etapa atual para ligar o LED
