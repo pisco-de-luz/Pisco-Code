@@ -43,6 +43,8 @@ const unsigned long  timeBetweenCounter = 9000UL;
 void setup()
 {
   Serial.end();
+//  Serial.begin(115200);
+//  Serial.println("One LED Clock!");
 
   // initialize digital pin ledPort1 as an output.
   pinMode(ledBuiltinPort, OUTPUT);
@@ -62,8 +64,8 @@ void setup()
   digitalWrite(ledBuiltinPort,LOW);
   digitalWrite(ledRXPort,HIGH);
   delay(800);
-  ledBuiltin.showDec(-12, 7, 2);
-//  ledRX.showDec(8, 7, 1);
+  ledBuiltin.showDec(-20, 7, 2);
+  ledRX.showDec(8, 15, 1);
 }
 
 
@@ -74,7 +76,7 @@ void loop()
 {
    if ( (unsigned long)(millis() - lastMillis) >= timeBetweenCounter &&
          ! ledBuiltin.isSequencing() ) {
-      ledBuiltin.showDec(millis()/1000, 7, 1);
+      ledBuiltin.showDec(millis()/1000, 15, 1);
       lastMillis = millis();
    }
    if ( millis() > 12000 && millis() < 13000 ) {
@@ -88,10 +90,12 @@ void loop()
 
 void turnLed1On(void) {
   digitalWrite(ledBuiltinPort,HIGH);
+  //Serial.println("ON");
 }
 
 void turnLed1Off(void) {
   digitalWrite(ledBuiltinPort,LOW);
+  //Serial.println("OFF");
 }
 
 void turnLed2On(void) {

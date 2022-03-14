@@ -40,14 +40,14 @@ class PiscoCode {
      enum CurrentPhases {
         NOT_SEQUENCING =     10,
         START_SEQUENCE =     20,
-        NEGATIVE_SIGN_ON =   23,
-        NEGATIVE_SIGN_OFF =  26,
-        READ_NEXT_DIGIT =    30,
-        SEQUENCING_ON =      40,
-        SEQUENCING_OFF =     50,
-        FINAL_PAUSE =        55,
-        END_SEQUENCE =       60,
-        REPEAT_SEQUENCE =    70
+        NEGATIVE_SIGN_ON =   30,
+        NEGATIVE_SIGN_OFF =  40,
+        READ_NEXT_DIGIT =    50,
+        SEQUENCING_ON =      60,
+        SEQUENCING_OFF =     70,
+        FINAL_PAUSE =        80,
+        REPEAT_SEQUENCE =    90,
+        END_SEQUENCE =      100
      };
 
     int16_t                               ledPort;                                                 // I/O port of LED
