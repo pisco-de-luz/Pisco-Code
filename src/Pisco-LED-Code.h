@@ -1,9 +1,11 @@
 #ifndef PISCO_CODE
 #define PISCO_CODE
 
+// Central include file for Pisco-LED-Code and defines the PiscoCode class.
+
 #include <stdint.h>
 #include "loop.h"
-
+#include "show.h"
 
 const uint32_t            mSec_longBlink =            550;          // Set the LED's duration during a long blink in milliseconds.
 const uint32_t            mSec_shortBlink =           350;          // Set the LED's duration during a short blink in milliseconds.
