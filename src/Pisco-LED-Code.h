@@ -2,6 +2,7 @@
 #define PISCO_CODE
 
 #include <stdint.h>
+#include "loop.h"
 
 
 const uint32_t            mSec_longBlink =            550;          // Set the LED's duration during a long blink in milliseconds.
