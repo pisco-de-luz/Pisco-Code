@@ -7,6 +7,10 @@
 #include "loop.h"
 #include "show.h"
 
+#define LED_ON true
+#define LED_OFF false
+
+
 const uint32_t            mSec_longBlink =            550;          // Set the LED's duration during a long blink in milliseconds.
 const uint32_t            mSec_shortBlink =           350;          // Set the LED's duration during a short blink in milliseconds.
 const uint32_t            mSec_veryShortBlink =       440;          // Set the LED's duration during a very short blink in milliseconds. It has to be less than longBlink and shortBlink
@@ -24,8 +28,8 @@ class PiscoCode {
     public:
 
                                PiscoCode(void);
-      void                     setup(void (*ledOnFunc)(void), void(*LedOffFunc)(void));
-      void                     setup(void (*ledOnFunc)(void), void(*LedOffFunc)(void), uint8_t dimPWM);
+      void                     setup(void (*ledOnOffFunc)(bool turnItON));
+      void                     setup(void (*ledOnOffFunc)(bool turnItON), uint8_t dimPWM);                               
       void                     loop(uint32_t Millis);
       uint8_t                  showDec(int32_t codigo, uint8_t pwm, uint8_t vezes);
       bool                     isSequencing(void);
@@ -66,8 +70,7 @@ class PiscoCode {
     uint32_t                              startTimeLastPhase;                  // Start time of the last phase. 
     uint32_t                              currentPhaseDuration;                // Register the total milliseconds this phase should last.
     bool                                  isNegative;                          // It is true if the number to show is negative. 
-    void                                  (*LedOn)(void);
-    void                                  (*LedOff)(void);
+    void                                  (*LedOnOff)(bool);                   // Pointer variable to the LED activation function. 
      
 };
 

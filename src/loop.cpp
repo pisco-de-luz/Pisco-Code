@@ -3,20 +3,20 @@
 void PiscoCode::loop(uint32_t Millis) {  
      if ( pwmCounter == 0 ) {
         if ( currentPhase == NOT_SEQUENCING ) {
-           LedOff();
+           LedOnOff(LED_OFF);
         }
      }
      if ( currentPhase != NOT_SEQUENCING ) {              // Indica que há sinalizacao a fazer
         if ( pwmCounter == 0 && currentPhaseDuration != mSec_veryShortBlink && currentPhase != REPEAT_SEQUENCE &&                     // Está no inicio do ciclo de pwm, e o digito não é o zero e não está repetindo o codigo e...
              currentPhase != FINAL_PAUSE ) {                                                                                       // não está na pausa final
-           LedOn();
+           LedOnOff(LED_ON);
         } 
 
         switch (currentPhase) {
             case START_SEQUENCE:
                  if ( startTimeLastPhase == 0 ) { startTimeLastPhase = Millis; }                                                    // No inicio do processo, quando a sinalizacao é criada, o startTimeLastPhase é zerado.
                  if ( pwmCounter == dimmedPWM  ) {                                                                                // Está no pwm de fundo desejado    
-                    LedOff();
+                    LedOnOff(LED_OFF);
                  }
                  if ( ((uint32_t)(Millis - startTimeLastPhase) > currentPhaseDuration) && pwmCounter == pwmSequence ) {                          // Tempo da etapa atual esgotado
                     if ( isNegative ) {
@@ -30,7 +30,7 @@ void PiscoCode::loop(uint32_t Millis) {
                  break;
             case NEGATIVE_SIGN_ON:
                  if ( pwmCounter == pwmSequence  ) {                                                                                // Está no pwm de fundo desejado    
-                    LedOff();
+                    LedOnOff(LED_OFF);
                  }                
                  if ( ((uint32_t)(Millis - startTimeLastPhase) > currentPhaseDuration) && pwmCounter == pwmSequence ) {                          // Tempo da etapa atual esgotado
                      currentPhase = NEGATIVE_SIGN_OFF;                                                                                   // Finaliza de vez a sinalização                      
@@ -40,7 +40,7 @@ void PiscoCode::loop(uint32_t Millis) {
                  break;
             case NEGATIVE_SIGN_OFF:
                  if ( pwmCounter == dimmedPWM  ) {                                                                                       // Está no pwm de fundo desejado    
-                    LedOff();
+                    LedOnOff(LED_OFF);
                  }                
                  if ( ((uint32_t)(Millis - startTimeLastPhase) > currentPhaseDuration) && pwmCounter == pwmSequence ) {                          // Tempo da etapa atual esgotado
                      currentPhase = READ_NEXT_DIGIT;                                                                                   // Finaliza de vez a sinalização                      
@@ -65,10 +65,10 @@ void PiscoCode::loop(uint32_t Millis) {
                  break;
             case SEQUENCING_ON:
                  if ( pwmCounter == pwmSequence  ) {                                                                          // Está no pwm do brilho desejado    
-                    LedOff();
+                    LedOnOff(LED_OFF);
                  }
                  if ( ((uint32_t)(Millis - startTimeLastPhase) > currentPhaseDuration) && pwmCounter == pwmSequence ) {                          // Tempo da etapa atual esgotado
-                    LedOff();
+                    LedOnOff(LED_OFF);
                     currentPhase = SEQUENCING_OFF;                                                                                      // Altera a etapa atual para desligar o LED
                     startTimeLastPhase = Millis;                                                                                         // Registra inicio de uma nova etapa
                     blinksToShow[currentDigit]--;                                                                                     // Decrementa a quantidade de piscos do digito atual
@@ -81,7 +81,7 @@ void PiscoCode::loop(uint32_t Millis) {
                  break;
             case SEQUENCING_OFF:
                  if ( pwmCounter == dimmedPWM  ) {                                                                                // Está no pwm de fundo desejado    
-                    LedOff();
+                    LedOnOff(LED_OFF);
                  }                
                  if ( ((uint32_t)(Millis - startTimeLastPhase) > currentPhaseDuration) && pwmCounter == pwmSequence ) {                          // Tempo da etapa atual esgotado
                     if ( blinksToShow[currentDigit] > 0 ) {                                                                           // Indica que ainda não mudou para outro digito
@@ -99,7 +99,7 @@ void PiscoCode::loop(uint32_t Millis) {
                  break;
             case END_SEQUENCE:
                  if ( pwmCounter == dimmedPWM  ) {                                                                                // Está no pwm de fundo desejado    
-                    LedOff();
+                    LedOnOff(LED_OFF);
                  }                
                  if ( ((uint32_t)(Millis - startTimeLastPhase) > currentPhaseDuration) && pwmCounter == pwmSequence ) {                          // Tempo da etapa atual esgotado
                      if ( sequenceTimes == 0 ) {

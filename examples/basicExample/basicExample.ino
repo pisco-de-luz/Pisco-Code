@@ -28,7 +28,9 @@ PiscoCode      ledBuiltin;         // declare an object of class PiscoCode
 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);                    // initialize digital pin LED_BUILTIN as an output.                  
-  ledBuiltin.setup(&turnLed1On, &turnLed1Off, 2);  // calling the PiscoCode class constructor.
+  ledBuiltin.setup(&turnLedOnOff, 2);  // calling the PiscoCode class constructor.
+  //ledBuiltin.setup(&turnLed1On, &turnLed1Off, 2);  // calling the PiscoCode class constructor.  
+
   ledBuiltin.showDec(490, 15, 2);                  // display the 1024 number on BUILTIN led.
 }
 
@@ -38,6 +40,14 @@ void turnLed1On(void) {
 
 void turnLed1Off(void) {
   digitalWrite(LED_BUILTIN, LOW);
+}
+
+void turnLedOnOff(bool turnItON) {
+  if ( turnItON ) {
+     digitalWrite(LED_BUILTIN, HIGH);
+  } else {
+     digitalWrite(LED_BUILTIN, LOW);  
+  }
 }
 
 void loop() {
