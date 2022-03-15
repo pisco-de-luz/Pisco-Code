@@ -53,19 +53,19 @@ class PiscoCode {
         END_SEQUENCE =      100
      };
 
-    int16_t                               ledPort;                                                 // I/O port of LED
-    uint8_t                               digitToShow[MAX_DIGITS];                                 // Valor a ser sinalizado
-    int8_t                                blinksToShow[MAX_DIGITS];                                // Piscos pendentes para showDec
-    uint8_t                               currentDigit;                                             // Digito onde os piscos estão pendentes para showDec
-    uint8_t                               lastCurrentDigit;                                       // Digito inicial onde o codigo original começou a showDec.
-    uint8_t                               pwmSequence;                                          // PWM para controlar intensidade do sinalizador
-    uint8_t                               pwmCounter;                                        
-    uint8_t                               sequenceTimes;                                        // Quantas vezes o codigo deverá ser repetido
-    uint8_t                               currentPhase;                                              // Indica em qual etapa está sendo sinalizada    
-    uint8_t                               dimmedPWM;                                                // Fase do pwm para desligar o sinalizador indicando a iluminação base para os piscos.
-    uint32_t                              millisUltimaEtapa;                                       // Registra o millis da ultima etapa alterada 
-    uint32_t                              currentPhaseDuration;                                       // Armazena os uSec necessários para a etapa atual  
-    bool                                  isNegative;                                                  // Sempre que vier um código negativo, essa variável será true                   
+    int16_t                               ledPort;                             // I/O port of LED
+    uint8_t                               digitToShow[MAX_DIGITS];             // Separated digits to be displayed.
+    int8_t                                blinksToShow[MAX_DIGITS];            // The number of blinks is still pending to be displayed.
+    uint8_t                               currentDigit;                        // Current digit to show. 
+    uint8_t                               lessSignificantDigit;                // The less significant digit to be displayed.
+    uint8_t                               pwmSequence;                         // PWM value of the most bright light the LED should blink. 
+    uint8_t                               pwmCounter;                          // PWM counter from zero to pwmMax was used to set the PWM levels' timing.              
+    uint8_t                               sequenceTimes;                       // Register the number of times we should repeat the PiscoCode. 
+    uint8_t                               currentPhase;                        // The current phase we are working on now. 
+    uint8_t                               dimmedPWM;                           // PWM value of the dimmed light the LED should stay on during the hole sequence. 
+    uint32_t                              startTimeLastPhase;                  // Start time of the last phase. 
+    uint32_t                              currentPhaseDuration;                // Register the total milliseconds this phase should last.
+    bool                                  isNegative;                          // It is true if the number to show is negative. 
     void                                  (*LedOn)(void);
     void                                  (*LedOff)(void);
      

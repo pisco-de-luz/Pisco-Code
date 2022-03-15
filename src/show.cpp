@@ -21,11 +21,11 @@ uint8_t PiscoCode::showDec(int32_t codigo, uint8_t pwm, uint8_t vezes) {
            if ( digitToShow[dig] > 0 ) { currentDigit = dig; }
            codigo /= 10;                                                                                                        // Pega o próximo dígito do código
         }
-        lastCurrentDigit = currentDigit;
+        lessSignificantDigit = currentDigit;
 
 
         currentPhase = START_SEQUENCE;                                                                                            // Armazena a nova etapa
-        millisUltimaEtapa = 0;                                                                                       // Registra inicio de uma nova etapa
+        startTimeLastPhase = 0;                                                                                       // Registra inicio de uma nova etapa
         currentPhaseDuration = mSec_betweenDigits;                                                                           // Seta a duração atual para tempo apagado entre dígitos
         
         
