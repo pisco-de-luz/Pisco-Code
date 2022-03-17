@@ -34,14 +34,6 @@ void setup() {
   ledBuiltin.showDec(490, 15, 2);                  // display the 1024 number on BUILTIN led.
 }
 
-void turnLed1On(void) {
-  digitalWrite(LED_BUILTIN, HIGH);
-}
-
-void turnLed1Off(void) {
-  digitalWrite(LED_BUILTIN, LOW);
-}
-
 void turnLedOnOff(bool turnItON) {
   if ( turnItON ) {
      digitalWrite(LED_BUILTIN, HIGH);

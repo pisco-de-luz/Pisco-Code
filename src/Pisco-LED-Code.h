@@ -31,7 +31,7 @@ class PiscoCode {
       void                     setup(void (*ledOnOffFunc)(bool turnItON));
       void                     setup(void (*ledOnOffFunc)(bool turnItON), uint8_t dimPWM);                               
       void                     loop(uint32_t Millis);
-      uint8_t                  showDec(int32_t codigo, uint8_t pwm, uint8_t vezes);
+      uint8_t                  showDec(int32_t codeToShow, uint8_t pwm, uint8_t times);
       bool                     isSequencing(void);
 
       
@@ -57,7 +57,6 @@ class PiscoCode {
         END_SEQUENCE =      100
      };
 
-    int16_t                               ledPort;                             // I/O port of LED
     uint8_t                               digitToShow[MAX_DIGITS];             // Separated digits to be displayed.
     int8_t                                blinksToShow[MAX_DIGITS];            // The number of blinks is still pending to be displayed.
     uint8_t                               currentDigit;                        // Current digit to show. 
