@@ -7,10 +7,11 @@
 #include "loop.h"
 #include "show.h"
 
-#define LED_ON true
-#define LED_OFF false
-
-
+const uint8_t             LED_ON =                      0;
+const uint8_t             LED_OFF =                     1;
+const uint8_t             LED_FUNC_OK =               100;
+const bool                TURN_LED_ON =              true;
+const bool                TURN_LED_OFF =            false;
 const uint32_t            mSec_longBlink =            550;          // Set the LED's duration during a long blink in milliseconds.
 const uint32_t            mSec_shortBlink =           350;          // Set the LED's duration during a short blink in milliseconds.
 const uint32_t            mSec_veryShortBlink =       440;          // Set the LED's duration during a very short blink in milliseconds. It has to be less than longBlink and shortBlink
@@ -28,11 +29,13 @@ class PiscoCode {
     public:
 
                                PiscoCode(void);
-      void                     setup(void (*ledOnOffFunc)(bool turnItON));
-      void                     setup(void (*ledOnOffFunc)(bool turnItON), uint8_t dimPWM);                               
+                               // Defining all class members. 
+      void                     setup(bool (*ledOnOffFunc)(uint8_t ctrlLED));
+      void                     setup(bool (*ledOnOffFunc)(uint8_t ctrlLED), uint8_t dimPWM);                               
       void                     loop(uint32_t Millis);
       uint8_t                  showDec(int32_t codeToShow, uint8_t pwm, uint8_t times);
       bool                     isSequencing(void);
+      bool                     switchLED(bool turnItON);
 
       
       enum Errors {                                                 // Errors codes returned from showDec, showHex, and showBin functions.
@@ -69,7 +72,15 @@ class PiscoCode {
     uint32_t                              startTimeLastPhase;                  // Start time of the last phase. 
     uint32_t                              currentPhaseDuration;                // Register the total milliseconds this phase should last.
     bool                                  isNegative;                          // It is true if the number to show is negative. 
-    void                                  (*LedOnOff)(bool);                   // Pointer variable to the LED activation function. 
+
+    // LedOnOff() - Pointer to an external function used to switch LED on and off. 
+    // ------------------------------------------------------------------------------------------------
+    // Before using this function to turn the LED on and off, the caller will check if it is a valid
+    // pointer to a correct function, and it should respond to a LED_FUNC_OK call returning true. 
+    //
+    // This function will return true only if one of these three commands are received, LED_ON,
+    // LED_OFF, and LED_FUNC_OK. All other values will return false. 
+    bool                                  (*LedOnOff)(uint8_t);                // Pointer variable to the LED activation function. 
      
 };
 

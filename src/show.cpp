@@ -4,10 +4,9 @@
 uint8_t PiscoCode::showDec(int32_t codeToShow, uint8_t pwm, uint8_t times) {
   
      if ( currentPhase == NOT_SEQUENCING && pwm > 0 && times > 0 ) {                                       // Não está num processo de sinalização, sinalização pode ser aceita
-        if ( codeToShow >= 0 ) {                                                                                                // Se o código a ser sinalizado for possitivo
-           isNegative = false;                                                                                                  // Indicar que é um valor positivo
-        } else {                                                                                                            // Se for negativo
-           isNegative = true;                                                                                                   // Indicar que é um valor negativo
+        isNegative = false;
+        if ( codeToShow < 0 ) {                                                                                                // Se o código a ser sinalizado for possitivo
+           isNegative = true;                                                                                                  // Indicar que é um valor positivo
            codeToShow = -codeToShow;                                                                                                // Inverte o sinal
         }
         

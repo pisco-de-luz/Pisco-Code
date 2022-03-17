@@ -1,4 +1,4 @@
-/* Pisco-LED-Code.ino
+ /* Pisco-LED-Code.ino
  * 
  * This sketch demonstrates how to use the Pisco-LED-Code
  * library to show decimal or hexadecimal values using just
@@ -59,16 +59,6 @@ void setup() {
   }
 }
 
-// This function is used to turn the LED on and off. 
-void turnLedOnOff(bool turnItON) {
-  if ( turnItON ) {
-     digitalWrite(LED_BUILTIN, HIGH);
-  } else {
-     digitalWrite(LED_BUILTIN, LOW);  
-  }
-}
-
-
 void loop() {   
    if ( (unsigned long)(millis() - lastMillis) >= timeBetweenCounter &&     // If has passed X seconds and 
          ! ledBuiltin.isSequencing() ) {                                    // it is not sequencing.
@@ -81,4 +71,21 @@ void loop() {
    }  
    
    ledBuiltin.loop(millis());                                               // We should call the LOOP function regularly.
+}
+
+// Before using this function to turn the LED on and off, the caller will check if it is a valid
+// pointer to a correct function, and it should respond to a LED_FUNC_OK call returning true. 
+//
+// This function will return true only if one of these three commands are received, LED_ON,
+// LED_OFF, and LED_FUNC_OK. All other values will return false. 
+bool turnLedOnOff(uint8_t ctrlLED) {
+  bool funcOK = true;
+  if ( ctrlLED == LED_ON ) {
+     digitalWrite(LED_BUILTIN, HIGH);
+  } else if ( ctrlLED == LED_OFF ) {
+     digitalWrite(LED_BUILTIN, LOW);  
+  } else if ( ctrlLED != LED_FUNC_OK ) {
+     funcOK = false;
+  }
+  return( funcOK );
 }
