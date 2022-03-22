@@ -58,54 +58,41 @@ Below is an example of the value -12 being shown. Note the long blink at the beg
 # Usage
 
 ```C++
-/* Pisco-LED-Code.ino
- * 
- * This sketch demonstrates how to use the Pisco-LED-Code
- * library to show decimal or hexadecimal values using just
- * a single LED. 
- * 
- * These values can be shown as positive or negative when needed.
- * 
- * The Pisco-LED-Code library is a nom blocking function that 
- * should be called frequently from the loop function. 
- * 
- * Pisco de Luz (Andre Viegas)
- */
-
-/**************************************************************************************
- * INCLUDE
- **************************************************************************************/
 #include "Pisco-LED-Code.h"
 
-/**************************************************************************************
- * GLOBAL VARIABLES
- **************************************************************************************/
 PiscoCode      ledBuiltin;         // declare an object of class PiscoCode
-
-/**************************************************************************************
- * SETUP/LOOP
- **************************************************************************************/
+bool           ledBuiltinOK;       // It is safe to show codes with ledBuiltin?
 
 void setup() {
-  pinMode(LED_BUILTIN, OUTPUT);                    // initialize digital pin LED_BUILTIN as an output.                  
-  ledBuiltin.setup(&turnLed1On, &turnLed1Off, 0);  // calling the PiscoCode class constructor.
-  ledBuiltin.showDec(1024, 7, 1);                  // display the 1024 number on BUILTIN led.
-}
-
-void turnLed1On(void) {
-  digitalWrite(LED_BUILTIN, HIGH);
-}
-
-void turnLed1Off(void) {
-  digitalWrite(LED_BUILTIN, LOW);
+  pinMode(LED_BUILTIN, OUTPUT);                               // initialize digital pin LED_BUILTIN as an output.                  
+  if ( ledBuiltinOK = ledBuiltin.setup(&turnLedOnOff, 2) ) {  // calling the PiscoCode class constructor.
+     ledBuiltin.showDec(1024, 15, 2);                         // display the 1024 number on BUILTIN led.  
+  }
 }
 
 void loop() {
-   if ( ! ledBuiltin.isSequencing() ) {        // if this PiscoCode object is not showing codes.
-      ledBuiltin.showDec(millis()/3000, 7, 1); // display some number on BUILTIN led repeatedly.
-   }   
-   ledBuiltin.loop(millis());                  // We should call the LOOP function regularly.
+   if ( ledBuiltinOK && ! ledBuiltin.isSequencing() ) {    // If ledBuiltin was set up and is not sequencing any code
+       ledBuiltin.showDec(30, 8, 1);                       // display some number on BUILTIN led repeatedly.    
+   }
+   ledBuiltin.loop(millis());                              // We should call the LOOP function regularly.
 
    // run other non-blocking function here
+}
+
+// Before using this function to turn the LED on and off, the setup method will check if it is a valid
+// pointer to a correct function, and it should respond to a LED_FUNC_OK call returning true. 
+//
+// This function will return true only if one of these three commands are received, LED_ON,
+// LED_OFF, and LED_FUNC_OK. All other values will return false. 
+bool turnLedOnOff(uint8_t ctrlLED) {
+  bool funcOK = true;
+  if ( ctrlLED == LED_ON ) {
+     digitalWrite(LED_BUILTIN, HIGH);
+  } else if ( ctrlLED == LED_OFF ) {
+     digitalWrite(LED_BUILTIN, LOW);  
+  } else if ( ctrlLED != LED_FUNC_OK ) {
+     funcOK = false;
+  }
+  return( funcOK );
 }
 ```
