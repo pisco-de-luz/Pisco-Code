@@ -30,12 +30,12 @@ class PiscoCode {
 
                                PiscoCode(void);
                                // Defining all class members. 
-      void                     setup(bool (*ledOnOffFunc)(uint8_t ctrlLED));
-      void                     setup(bool (*ledOnOffFunc)(uint8_t ctrlLED), uint8_t dimPWM);                               
+      bool                     setup(bool (*ledOnOffFunc)(uint8_t ctrlLED));
+      bool                     setup(bool (*ledOnOffFunc)(uint8_t ctrlLED), uint8_t dimPWM);                               
       void                     loop(uint32_t Millis);
       uint8_t                  showDec(int32_t codeToShow, uint8_t pwm, uint8_t times);
       bool                     isSequencing(void);
-      bool                     switchLED(bool turnItON);
+
 
       
       enum Errors {                                                 // Errors codes returned from showDec, showHex, and showBin functions.
@@ -72,6 +72,9 @@ class PiscoCode {
     uint32_t                              startTimeLastPhase;                  // Start time of the last phase. 
     uint32_t                              currentPhaseDuration;                // Register the total milliseconds this phase should last.
     bool                                  isNegative;                          // It is true if the number to show is negative. 
+    bool                                  setupOK;
+    bool                                  isExternalLedFuncOk(void);
+    bool                                  switchLED(bool turnItON);
 
     // LedOnOff() - Pointer to an external function used to switch LED on and off. 
     // ------------------------------------------------------------------------------------------------
