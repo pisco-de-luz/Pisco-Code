@@ -86,13 +86,9 @@ void loop() {
 // LED_OFF, and LED_FUNC_OK. All other values will return false. 
 bool turnLedOnOff(uint8_t ctrlLED) {
   bool funcOK = true;
-  if ( ctrlLED == LED_ON ) {
-     digitalWrite(LED_BUILTIN, HIGH);
-  } else if ( ctrlLED == LED_OFF ) {
-     digitalWrite(LED_BUILTIN, LOW);  
-  } else if ( ctrlLED != LED_FUNC_OK ) {
-     funcOK = false;
-  }
+  if ( ctrlLED == LED_ON ) {              digitalWrite(LED_BUILTIN, HIGH);
+  } else if ( ctrlLED == LED_OFF ) {      digitalWrite(LED_BUILTIN, LOW);  
+  } else if ( ctrlLED != LED_FUNC_OK ) {  funcOK = false; }
   return( funcOK );
 }
 ```
