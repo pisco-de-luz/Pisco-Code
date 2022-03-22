@@ -17,7 +17,7 @@ PiscoCode::PiscoCode(void) {
 }
 
 bool PiscoCode::setup(bool (*LedOnOffFunc)(uint8_t ctrlLED)) {
-      currentPhase =           NOT_SEQUENCING;  
+      currentPhase =           PAUSED;  
       dimmedPWM =              initialDimmedPWM;                                 // The initial value for dimmed LED if not chosen.
       pwmCounter =             0;                                                // The counter's initial value is used to set the PWM levels' timing.
       LedOnOff =               LedOnOffFunc;                                     // Pointer to the LED activation function.
@@ -30,7 +30,7 @@ bool PiscoCode::setup(bool (*LedOnOffFunc)(uint8_t ctrlLED)) {
 
 bool PiscoCode::setup(bool (*LedOnOffFunc)(uint8_t ctrlLED), uint8_t dimPWM) {
       setupOK =                false;
-      currentPhase =           NOT_SEQUENCING;  
+      currentPhase =           PAUSED;  
       dimmedPWM =              dimPWM;                                           // The initial value for dimmed LED
       pwmCounter =             0;                                                // The counter's initial value is used to set the PWM levels' timing.
       LedOnOff =               LedOnOffFunc;                                     // Pointer to the LED activation function.
@@ -43,7 +43,7 @@ bool PiscoCode::setup(bool (*LedOnOffFunc)(uint8_t ctrlLED), uint8_t dimPWM) {
 
 // Function to check if there is a current sequence running. 
 bool PiscoCode::isSequencing(void) {
-   return( currentPhase != NOT_SEQUENCING );
+   return( currentPhase != PAUSED );
 }
 
 // Encapsulate the hardware-dependent LED function inside a method. 

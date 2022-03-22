@@ -49,7 +49,7 @@ class PiscoCode {
     private:
 
      enum CurrentPhases {
-        NOT_SEQUENCING =     10,
+        PAUSED =             10,
         START_SEQUENCE =     20,
         NEGATIVE_SIGN_ON =   30,
         NEGATIVE_SIGN_OFF =  40,

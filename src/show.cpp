@@ -3,7 +3,7 @@
 // Show decimal codes <codeToShow> using the <pwm> bright to blink repeating <times> times. 
 uint8_t PiscoCode::showDec(int32_t codeToShow, uint8_t pwm, uint8_t times) {
    bool   status = OK;                                                        // Set the initial status of this function as OK
-   if ( currentPhase == NOT_SEQUENCING && pwm > 0 && times > 0 ) {            // If it is not sequencing and pwm and times are set
+   if ( currentPhase == PAUSED && pwm > 0 && times > 0 ) {                    // If it is not sequencing and pwm and times are set
       isNegative = false;
       if ( codeToShow < 0 ) {                                                 // Check if the code is negative
          isNegative = true;                                                   // Set the isNegative variable to true
@@ -37,7 +37,7 @@ uint8_t PiscoCode::showDec(int32_t codeToShow, uint8_t pwm, uint8_t times) {
       currentPhase = START_SEQUENCE;                                           // Defines the currentPhase to start sequence. 
       startTimeLastPhase = 0;                                                  // As we are starting a new sequence, the start time of the last phase is zero. 
       currentPhaseDuration = mSec_betweenDigits;                               // Set the duration of this start sequence equal to mSec_betweenDigits.
-   } else if ( currentPhase != NOT_SEQUENCING ) {                              // If it was not possible to start a new sequence and the currentPhase is sequencing.
+   } else if ( currentPhase != PAUSED ) {                                      // If it was not possible to start a new sequence and the currentPhase is sequencing.
       status = SEQUENCE_RUNNING;
    } else {
       status = FAILED;
