@@ -40,7 +40,8 @@ class PiscoCode {
       
       enum Errors {                                                 // Errors codes returned from showDec, showHex, and showBin functions.
          OK = 0,                                                    // The Pisco Code was accepted and will soon start sequencing. 
-         SEQUENCE_RUNNING = 1                                       // The PiscoCode was rejected because another sequencing is running.
+         SEQUENCE_RUNNING = 1,                                      // The PiscoCode was rejected because another sequencing is running.
+         FAILED = 2                                                 // Some errors occurred. 
       };
 
 
