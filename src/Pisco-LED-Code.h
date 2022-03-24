@@ -64,24 +64,25 @@ class PiscoCode {
         END_SEQUENCE =      100
      };
 
-    uint8_t                               digitToShow[MAX_DIGITS];             // Separated digits to be displayed.
-    int8_t                                blinksToShow[MAX_DIGITS];            // The number of blinks is still pending to be displayed.
-    uint8_t                               currentDigit;                        // Current digit to show. 
-    uint8_t                               lessSignificantDigit;                // The less significant digit to be displayed.
-    uint8_t                               pwmSequence;                         // PWM value of the most bright light the LED should blink. 
-    uint8_t                               _pwmSequence;                         // PWM value of the most bright light the LED should blink. 
-    uint8_t                               pwmCounter;                          // PWM counter from zero to pwmMax was used to set the PWM levels' timing.              
-    uint8_t                               sequenceTimes;                       // Register the number of times we should repeat the PiscoCode. 
-    uint8_t                               _sequenceTimes;                      // Copied from sequenceTimes variable always when a new code starts been shown. 
-    uint8_t                               currentPhase;                        // The current phase we are working on now. 
-    uint8_t                               dimmedPWM;                           // PWM value of the dimmed light the LED should stay on during the hole sequence. 
-    uint8_t                               _dimmedPWM;                          // PWM value of the dimmed light the LED should stay on during the hole sequence. 
-    uint8_t                               minNumDigits;                        // Minimum number of digits should be show.
-    uint32_t                              startTimeLastPhase;                  // Start time of the last phase. 
-    uint32_t                              currentPhaseDuration;                // Register the total milliseconds this phase should last.
-    bool                                  isNegative;                          // It is true if the number to show is negative. 
-    bool                                  isExternalLedFuncOk(void);
-    bool                                  switchLED(bool turnItON);
+    uint8_t                           digitToShow[MAX_DIGITS];             // Separated digits to be displayed.
+    int8_t                            blinksToShow[MAX_DIGITS];            // The number of blinks is still pending to be displayed.
+    uint8_t                           currentDigit;                        // Current digit to show. 
+    uint8_t                           lessSignificantDigit;                // The less significant digit to be displayed.
+    uint8_t                           pwmSequence;                         // PWM value of the most bright light the LED should blink. 
+    uint8_t                           _pwmSequence;                         // PWM value of the most bright light the LED should blink. 
+    uint8_t                           pwmCounter;                          // PWM counter from zero to pwmMax was used to set the PWM levels' timing.              
+    uint8_t                           sequenceTimes;                       // Register the number of times we should repeat the PiscoCode. 
+    uint8_t                           _sequenceTimes;                      // Copied from sequenceTimes variable always when a new code starts been shown. 
+    uint8_t                           currentPhase;                        // The current phase we are working on now. 
+    uint8_t                           dimmedPWM;                           // PWM value of the dimmed light the LED should stay on during the hole sequence. 
+    uint8_t                           _dimmedPWM;                          // PWM value of the dimmed light the LED should stay on during the hole sequence. 
+    uint8_t                           minNumDigits;                        // Minimum number of digits should be show.
+    uint32_t                          startTimeLastPhase;                  // Start time of the last phase. 
+    uint32_t                          currentPhaseDuration;                // Register the total milliseconds this phase should last.
+    bool                              isNegative;                          // It is true if the number to show is negative. 
+    bool                              isExternalLedFuncOk(void);
+    bool                              switchLED(bool turnItON);
+    bool                              currentPhaseFinished(uint32_t millis);
 
     // LedOnOff() - Pointer to an external function used to switch LED on and off. 
     // ------------------------------------------------------------------------------------------------
