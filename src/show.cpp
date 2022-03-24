@@ -1,22 +1,24 @@
 #include "show.h"
 
 // Show decimal codes <codeToShow> using the <pwm> bright to blink repeating <times> times. 
-uint8_t PiscoCode::showDec(int32_t codeToShow, uint8_t pwm, uint8_t times) {
-   bool   status = OK;                                                        // Set the initial status of this function as OK
-   if ( currentPhase == PAUSED && pwm > 0 && times > 0 ) {                    // If it is not sequencing and pwm and times are set
+uint8_t PiscoCode::showDec(int32_t codeToShow) {
+   bool   status = OK;                                    // Set the initial status of this function as OK
+
+   _sequenceTimes = sequenceTimes+1;                      // Always have the last value of pwmSequence just after show functions starts a new sequence.
+   _pwmSequence = pwmSequence;                            // Always have the last value of pwmSequence just after show functions starts a new sequence.
+   _dimmedPWM = dimmedPWM;                                // Always have the last value of pwmSequence just after show functions starts a new sequence.
+   if ( currentPhase == PAUSED && _pwmSequence > 0 ) {    // If it is not sequencing and pwmSequencewm and sequenceTimes are set
       isNegative = false;
-      if ( codeToShow < 0 ) {                                                 // Check if the code is negative
-         isNegative = true;                                                   // Set the isNegative variable to true
-         codeToShow = -codeToShow;                                            // and invert the code signal.
+      if ( codeToShow < 0 ) {                             // Check if the code is negative
+         isNegative = true;                               // Set the isNegative variable to true
+         codeToShow = -codeToShow;                        // and invert the code signal.
       }
        
-      if ( pwm > pwmMax ) {                                                   // Ensure that the pwm variable has a valid value.
-         pwm = pwmMax;                                                        // Setting to the maximum limit. 
+      if ( _pwmSequence > pwmMax ) {                      // Ensure that the pwm variable has a valid value.
+         _pwmSequence = pwmMax;                           // Setting to the maximum limit. 
       }
-      pwmSequence = pwm;                                                      // Set the PWM value that will blink during the sequence. 
-      sequenceTimes = times;                                                  // Set how many times the sequence will show.  
 
-      currentDigit = (MAX_DIGITS - 1);                                        // Set the currentDigit to the least significative one.
+      currentDigit = (MAX_DIGITS - 1);                    // Set the currentDigit to the least significative one.      
 
       // We will separate each digit to show in digitToShow[] array.
       // Likewise, we will define how many times the LED should blink
@@ -35,6 +37,8 @@ uint8_t PiscoCode::showDec(int32_t codeToShow, uint8_t pwm, uint8_t times) {
       lessSignificantDigit = currentDigit;                                     // Set the less significant digit to be displayed.
 
       currentPhase = START_SEQUENCE;                                           // Defines the currentPhase to start sequence. 
+//      repeatedTimes = 0;                                                       // Always start a new sequence as zero. 
+
       startTimeLastPhase = 0;                                                  // As we are starting a new sequence, the start time of the last phase is zero. 
       currentPhaseDuration = mSec_betweenDigits;                               // Set the duration of this start sequence equal to mSec_betweenDigits.
    } else if ( currentPhase != PAUSED ) {                                      // If it was not possible to start a new sequence and the currentPhase is sequencing.

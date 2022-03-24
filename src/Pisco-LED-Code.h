@@ -31,10 +31,12 @@ class PiscoCode {
                                PiscoCode(void);
                                // Defining all class members. 
       bool                     setup(bool (*ledOnOffFunc)(uint8_t ctrlLED));
-      bool                     setup(bool (*ledOnOffFunc)(uint8_t ctrlLED), uint8_t dimPWM);                               
       void                     loop(uint32_t Millis);
-      uint8_t                  showDec(int32_t codeToShow, uint8_t pwm, uint8_t times);
+      uint8_t                  showDec(int32_t codeToShow);
       bool                     isSequencing(void);
+      void                     setPWM(uint8_t pwm);
+      void                     setDimPWM(uint8_t dimPWM);
+      void                     setRepeat(uint8_t times);
 
 
       
@@ -66,10 +68,14 @@ class PiscoCode {
     uint8_t                               currentDigit;                        // Current digit to show. 
     uint8_t                               lessSignificantDigit;                // The less significant digit to be displayed.
     uint8_t                               pwmSequence;                         // PWM value of the most bright light the LED should blink. 
+    uint8_t                               _pwmSequence;                         // PWM value of the most bright light the LED should blink. 
     uint8_t                               pwmCounter;                          // PWM counter from zero to pwmMax was used to set the PWM levels' timing.              
     uint8_t                               sequenceTimes;                       // Register the number of times we should repeat the PiscoCode. 
+    uint8_t                               _sequenceTimes;                      // Copied from sequenceTimes variable always when a new code starts been shown. 
+    //uint8_t                               repeatedTimes;                       // Register the number of times we have already repeated.
     uint8_t                               currentPhase;                        // The current phase we are working on now. 
     uint8_t                               dimmedPWM;                           // PWM value of the dimmed light the LED should stay on during the hole sequence. 
+    uint8_t                               _dimmedPWM;                          // PWM value of the dimmed light the LED should stay on during the hole sequence. 
     uint32_t                              startTimeLastPhase;                  // Start time of the last phase. 
     uint32_t                              currentPhaseDuration;                // Register the total milliseconds this phase should last.
     bool                                  isNegative;                          // It is true if the number to show is negative. 

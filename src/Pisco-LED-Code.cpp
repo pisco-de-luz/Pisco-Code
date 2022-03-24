@@ -4,11 +4,14 @@
 PiscoCode::PiscoCode(void) {
    currentDigit =               0;       // Current digit to show. 
    lessSignificantDigit =       0;       // The less significant digit to be displayed.
-   pwmSequence =                0;       // PWM value of the most bright light the LED should blink. 
+   pwmSequence =           pwmMax;       // PWM value of the most bright light the LED should blink. 
+   _pwmSequence =     pwmSequence;       // Always have the last value of pwmSequence just after show functions starts a new sequence.
    pwmCounter =                 0;       // PWM counter from zero to pwmMax was used to set the PWM levels' timing.              
-   sequenceTimes =              0;       // Register the number of times we should repeat the PiscoCode. 
-   currentPhase =               0;       // The current phase we are working on now. 
-   dimmedPWM =                  0;       // PWM value of the dimmed light the LED should stay on during the hole sequence. 
+   sequenceTimes =              0;       // Register the number of times we should repeat the PiscoCode. 1=repeat once (mean it will show the code twice)
+   _sequenceTimes = sequenceTimes;       // Always have the last value of sequenceTimes just after show functions starts a new sequence.
+   currentPhase =          PAUSED;       // The current phase we are working on now. 
+   dimmedPWM =   initialDimmedPWM;       // PWM value of the dimmed light the LED should stay on during the hole sequence. 
+   _dimmedPWM =         dimmedPWM;       // Always have the last value of dimmedPWM just after show functions starts a new sequence.
    startTimeLastPhase =         0;       // Start time of the last phase. 
    currentPhaseDuration =       0;       // Register the total milliseconds this phase should last.
    isNegative =             false;       // It is true if the number to show is negative. 
@@ -18,20 +21,6 @@ PiscoCode::PiscoCode(void) {
 
 bool PiscoCode::setup(bool (*LedOnOffFunc)(uint8_t ctrlLED)) {
       currentPhase =           PAUSED;  
-      dimmedPWM =              initialDimmedPWM;                                 // The initial value for dimmed LED if not chosen.
-      pwmCounter =             0;                                                // The counter's initial value is used to set the PWM levels' timing.
-      LedOnOff =               LedOnOffFunc;                                     // Pointer to the LED activation function.
-      if ( isExternalLedFuncOk() ) {                                             // If the external LED activation function is working correctly.
-         setupOK = true;                                                         // Set the return variable as OK
-         (void)switchLED(TURN_LED_OFF);                                          // Turn the LED off
-      }
-      return( setupOK );
-}
-
-bool PiscoCode::setup(bool (*LedOnOffFunc)(uint8_t ctrlLED), uint8_t dimPWM) {
-      setupOK =                false;
-      currentPhase =           PAUSED;  
-      dimmedPWM =              dimPWM;                                           // The initial value for dimmed LED
       pwmCounter =             0;                                                // The counter's initial value is used to set the PWM levels' timing.
       LedOnOff =               LedOnOffFunc;                                     // Pointer to the LED activation function.
       if ( isExternalLedFuncOk() ) {                                             // If the external LED activation function is working correctly.
@@ -45,6 +34,22 @@ bool PiscoCode::setup(bool (*LedOnOffFunc)(uint8_t ctrlLED), uint8_t dimPWM) {
 bool PiscoCode::isSequencing(void) {
    return( currentPhase != PAUSED );
 }
+
+// Define the new value of default pwm.
+void PiscoCode::setPWM(uint8_t pwm) {
+   pwmSequence = pwm;
+}
+
+// Define the new value of default dimmed pwm.
+void PiscoCode::setDimPWM(uint8_t dimPWM) {
+   dimmedPWM = dimPWM;
+}
+
+// Define how many times the code should repeat.
+void PiscoCode::setRepeat(uint8_t times) {
+   sequenceTimes = times;
+}
+
 
 // Encapsulate the hardware-dependent LED function inside a method. 
 bool PiscoCode::switchLED(bool turnItON) {
