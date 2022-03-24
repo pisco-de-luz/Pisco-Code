@@ -72,14 +72,12 @@ class PiscoCode {
     uint8_t                               pwmCounter;                          // PWM counter from zero to pwmMax was used to set the PWM levels' timing.              
     uint8_t                               sequenceTimes;                       // Register the number of times we should repeat the PiscoCode. 
     uint8_t                               _sequenceTimes;                      // Copied from sequenceTimes variable always when a new code starts been shown. 
-    //uint8_t                               repeatedTimes;                       // Register the number of times we have already repeated.
     uint8_t                               currentPhase;                        // The current phase we are working on now. 
     uint8_t                               dimmedPWM;                           // PWM value of the dimmed light the LED should stay on during the hole sequence. 
     uint8_t                               _dimmedPWM;                          // PWM value of the dimmed light the LED should stay on during the hole sequence. 
     uint32_t                              startTimeLastPhase;                  // Start time of the last phase. 
     uint32_t                              currentPhaseDuration;                // Register the total milliseconds this phase should last.
     bool                                  isNegative;                          // It is true if the number to show is negative. 
-    bool                                  setupOK;
     bool                                  isExternalLedFuncOk(void);
     bool                                  switchLED(bool turnItON);
 

@@ -16,13 +16,13 @@ PiscoCode::PiscoCode(void) {
    currentPhaseDuration =       0;       // Register the total milliseconds this phase should last.
    isNegative =             false;       // It is true if the number to show is negative. 
    LedOnOff =             nullptr;       // Initialize this function pointer to null.
-   setupOK =                false;
 }
 
 bool PiscoCode::setup(bool (*LedOnOffFunc)(uint8_t ctrlLED)) {
-      currentPhase =           PAUSED;  
-      pwmCounter =             0;                                                // The counter's initial value is used to set the PWM levels' timing.
-      LedOnOff =               LedOnOffFunc;                                     // Pointer to the LED activation function.
+      bool setupOK =         false;
+      currentPhase =        PAUSED;  
+      pwmCounter =               0;                                              // The counter's initial value is used to set the PWM levels' timing.
+      LedOnOff =      LedOnOffFunc;                                              // Pointer to the LED activation function.
       if ( isExternalLedFuncOk() ) {                                             // If the external LED activation function is working correctly.
          setupOK = true;                                                         // Set the return variable as OK
          (void)switchLED(TURN_LED_OFF);                                          // Turn the LED off
