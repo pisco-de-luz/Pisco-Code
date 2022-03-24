@@ -18,7 +18,7 @@ const uint32_t            mSec_veryShortBlink =       440;          // Set the L
 const uint32_t            mSec_betweenBlink =         350;          // Set the pause duration between blinks in milliseconds.
 const uint32_t            mSec_betweenDigits =       1300;          // Set the pause duration between digits in milliseconds.
 const uint32_t            mSec_betweenCodes =        1500;          // Set the pause duration between Codes in milliseconds.
-const uint8_t             MAX_DIGITS =                  5;          // The maximum number of digits a sequence will process.
+const uint8_t             MAX_DIGITS =                 10;          // The maximum number of digits a sequence will process.
 const uint8_t             initialDimmedPWM =            0;          // The default PWM set value for the dimmed phase of the sequence.
 const uint8_t             pwmMax  =                    15;          // The maximum value the PWM scale could have beginning with zero.
 
@@ -37,6 +37,7 @@ class PiscoCode {
       void                     setPWM(uint8_t pwm);
       void                     setDimPWM(uint8_t dimPWM);
       void                     setRepeat(uint8_t times);
+      void                     setMinDigits(uint8_t minDigits);
 
 
       
@@ -75,6 +76,7 @@ class PiscoCode {
     uint8_t                               currentPhase;                        // The current phase we are working on now. 
     uint8_t                               dimmedPWM;                           // PWM value of the dimmed light the LED should stay on during the hole sequence. 
     uint8_t                               _dimmedPWM;                          // PWM value of the dimmed light the LED should stay on during the hole sequence. 
+    uint8_t                               minNumDigits;                        // Minimum number of digits should be show.
     uint32_t                              startTimeLastPhase;                  // Start time of the last phase. 
     uint32_t                              currentPhaseDuration;                // Register the total milliseconds this phase should last.
     bool                                  isNegative;                          // It is true if the number to show is negative. 

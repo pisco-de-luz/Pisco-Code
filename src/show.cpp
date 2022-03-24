@@ -4,9 +4,9 @@
 uint8_t PiscoCode::showDec(int32_t codeToShow) {
    bool   status = OK;                                    // Set the initial status of this function as OK
 
-   _sequenceTimes = sequenceTimes+1;                      // Always have the last value of pwmSequence just after show functions starts a new sequence.
-   _pwmSequence = pwmSequence;                            // Always have the last value of pwmSequence just after show functions starts a new sequence.
-   _dimmedPWM = dimmedPWM;                                // Always have the last value of pwmSequence just after show functions starts a new sequence.
+   _sequenceTimes =      sequenceTimes+1;                 // Always have the last value of sequenceTimes just after show functions starts a new sequence.
+   _pwmSequence =            pwmSequence;                 // Always have the last value of pwmSequence just after show functions starts a new sequence.
+   _dimmedPWM =                dimmedPWM;                 // Always have the last value of dimmedPWM just after show functions starts a new sequence.
    if ( currentPhase == PAUSED && _pwmSequence > 0 ) {    // If it is not sequencing and pwmSequencewm and sequenceTimes are set
       isNegative = false;
       if ( codeToShow < 0 ) {                             // Check if the code is negative
@@ -34,11 +34,11 @@ uint8_t PiscoCode::showDec(int32_t codeToShow) {
          if ( digitToShow[dig] > 0 ) { currentDigit = dig; }                   // Update the currentDigit variable if the current digit is greater than zero.
          codeToShow /= 10;                                                     // Removes the least significant digit from the code to display.
       }
+      if ( minNumDigits > 0 && minNumDigits < MAX_DIGITS ) {                 // If the variable minNumDigits is set
+         currentDigit = (MAX_DIGITS - minNumDigits);                          // define the minimum number of digits to show in this sequence.
+      }
       lessSignificantDigit = currentDigit;                                     // Set the less significant digit to be displayed.
-
       currentPhase = START_SEQUENCE;                                           // Defines the currentPhase to start sequence. 
-//      repeatedTimes = 0;                                                       // Always start a new sequence as zero. 
-
       startTimeLastPhase = 0;                                                  // As we are starting a new sequence, the start time of the last phase is zero. 
       currentPhaseDuration = mSec_betweenDigits;                               // Set the duration of this start sequence equal to mSec_betweenDigits.
    } else if ( currentPhase != PAUSED ) {                                      // If it was not possible to start a new sequence and the currentPhase is sequencing.

@@ -12,6 +12,7 @@ PiscoCode::PiscoCode(void) {
    currentPhase =          PAUSED;       // The current phase we are working on now. 
    dimmedPWM =   initialDimmedPWM;       // PWM value of the dimmed light the LED should stay on during the hole sequence. 
    _dimmedPWM =         dimmedPWM;       // Always have the last value of dimmedPWM just after show functions starts a new sequence.
+   minNumDigits =               0;       // Define the default value of the minimum number of digits to show.
    startTimeLastPhase =         0;       // Start time of the last phase. 
    currentPhaseDuration =       0;       // Register the total milliseconds this phase should last.
    isNegative =             false;       // It is true if the number to show is negative. 
@@ -48,6 +49,11 @@ void PiscoCode::setDimPWM(uint8_t dimPWM) {
 // Define how many times the code should repeat.
 void PiscoCode::setRepeat(uint8_t times) {
    sequenceTimes = times;
+}
+
+// Define the minimum number of digits to show.
+void PiscoCode::setMinDigits(uint8_t minDigits) {
+   minNumDigits = minDigits;
 }
 
 
