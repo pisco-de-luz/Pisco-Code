@@ -1,152 +1,159 @@
 #include "loop.h"
 
+// Millis is a 32 bits counter that should increment every one millisecond.
 void PiscoCode::loop(uint32_t Millis) {  
-     if ( pwmCounter == 0 ) {
+     if ( pwmCounter == 0 ) {                       
         if ( currentPhase == PAUSED ) {
-           (void)switchLED(TURN_LED_OFF);
+           (void)switchLED(TURN_LED_OFF);                                  // Turns the LED off at the begining.
         }
      }
-     if ( currentPhase != PAUSED ) {                                                                 // Indica que há sinalizacao a fazer
-        if ( pwmCounter == 0 && currentPhaseDuration != mSec_veryShortBlink && currentPhase != REPEAT_SEQUENCE &&                     // Está no inicio do ciclo de pwm, e o digito não é o zero e não está repetindo o codigo e...
-             currentPhase != FINAL_PAUSE ) {                                                                                       // não está na pausa final
-           if ( ! switchLED(TURN_LED_ON) ) {                                                                        // If we could not turn the LED on or off, then
-              currentPhase = PAUSED;                                                                        // Stop sequencing
+     if ( currentPhase != PAUSED ) {                                       // There is a sequence to show.
+        if ( pwmCounter == 0 &&                                            // If we are at the begining of the PWM phase and
+             currentPhaseDuration != mSec_Blink4DigitZero &&               // it is not the digit zero and
+             currentPhase != REPEAT_SEQUENCE &&                            // it is not the repeat phase and
+             currentPhase != FINAL_PAUSE ) {                               // it is not the final phase
+           if ( ! switchLED(TURN_LED_ON) ) {                               // Turn the LED on and if we could not turn the LED on, then
+              currentPhase = PAUSED;                                       // Stop sequencing
            }
         } 
 
         switch (currentPhase) {
-            case START_SEQUENCE:
-                 if ( startTimeLastPhase == 0 ) { startTimeLastPhase = Millis; }                                                    // No inicio do processo, quando a sinalizacao é criada, o startTimeLastPhase é zerado.
-                 if ( pwmCounter == _dimmedPWM  ) {                                                                                // Está no pwm de fundo desejado    
-                    if ( ! switchLED(TURN_LED_OFF) ) {                                                                        // If we could not turn the LED on or off, then
-                       currentPhase = PAUSED;                                                                        // Stop sequencing
+            case START_SEQUENCE:                                           // The first phase that all sequence starts. 
+                 if ( startTimeLastPhase == 0 ) {                          // If the start time of the last phase was not defined
+                     startTimeLastPhase = Millis;                          // Set it to Millis
+                 }
+                 if ( pwmCounter == _dimmedPWM  ) {                        // If we reach the PWM value for the dimmed LED, be turned off. 
+                    if ( ! switchLED(TURN_LED_OFF) ) {                     // If we could not turn the LED on or off, then
+                       currentPhase = PAUSED;                              // Stop sequencing
                     }
                  }
-                 if ( currentPhaseFinished(Millis) ) {                          // Tempo da etapa atual esgotado
-                    if ( isNegative ) {
-                       currentPhase = NEGATIVE_SIGN_ON;                                                                                // Altera a etapa atual para ligar o LED      
-                       currentPhaseDuration = mSec_longBlink*4;
+                 if ( currentPhaseFinished(Millis) ) {                     // If the current phase has just finished then 
+                    if ( isNegative ) {                                    // If the code is negative
+                       currentPhase = NEGATIVE_SIGN_ON;                    // Change the current phase to NEGATIVE_SIGN_ON
+                       currentPhaseDuration = mSec_negativeLongBlink;      // Set the duration of this new phase      
                     } else {
-                       currentPhase = READ_NEXT_DIGIT;                                                                                // Altera a etapa atual para ligar o LED  
+                       currentPhase = READ_NEXT_DIGIT;                     // Change the current phase to READ_NEXT_DIGIT
                     }               
-                    startTimeLastPhase = Millis;                                                                                      // Registra inicio de uma nova etapa                  
+                    startTimeLastPhase = Millis;                           // Set it to Millis
                  }
                  break;
             case NEGATIVE_SIGN_ON:
-                 if ( pwmCounter == _pwmSequence  ) {                                                                                // Está no pwm de fundo desejado    
-                    if ( ! switchLED(TURN_LED_OFF) ) {                                                                        // If we could not turn the LED on or off, then
-                       currentPhase = PAUSED;                                                                        // Stop sequencing
+                 if ( pwmCounter == _pwmSequence  ) {                      // If the PWM phase to turn the led off was reached.
+                    if ( ! switchLED(TURN_LED_OFF) ) {                     // If we could not turn the LED on or off, then
+                       currentPhase = PAUSED;                              // Stop sequencing
                     }
                  }                
-                 if ( currentPhaseFinished(Millis) ) {                          // Tempo da etapa atual esgotado
-                     currentPhase = NEGATIVE_SIGN_OFF;                                                                                   // Finaliza de vez a sinalização                      
-                     currentPhaseDuration = mSec_longBlink*4;
-                     startTimeLastPhase = Millis;                                                                                      // Registra inicio de uma nova etapa                  
+                 if ( currentPhaseFinished(Millis) ) {                     // If the current phase has just finished then 
+                     currentPhase = NEGATIVE_SIGN_OFF;                     // Change the current phase to NEGATIVE_SIGN_OFF
+                     currentPhaseDuration = mSec_negativeLongBlink;        // Set the duration of this new phase
+                     startTimeLastPhase = Millis;                          // Set it to Millis
                  }
                  break;
             case NEGATIVE_SIGN_OFF:
-                 if ( pwmCounter == _dimmedPWM  ) {                                                                                       // Está no pwm de fundo desejado    
-                    if ( ! switchLED(TURN_LED_OFF) ) {                                                                        // If we could not turn the LED on or off, then
-                       currentPhase = PAUSED;                                                                        // Stop sequencing
+                 if ( pwmCounter == _dimmedPWM  ) {                        // If we reach the PWM value for the dimmed LED be turned off then
+                    if ( ! switchLED(TURN_LED_OFF) ) {                     // If we could not turn the LED on or off, then
+                       currentPhase = PAUSED;                              // Stop sequencing
                     }
                  }                
-                 if ( currentPhaseFinished(Millis) ) {                          // Tempo da etapa atual esgotado
-                     currentPhase = READ_NEXT_DIGIT;                                                                                   // Finaliza de vez a sinalização                      
-                     currentPhaseDuration = mSec_betweenDigits;
-                     startTimeLastPhase = Millis;                                                                                      // Registra inicio de uma nova etapa                  
+                 if ( currentPhaseFinished(Millis) ) {                     // If the current phase has just finished then 
+                     currentPhase = READ_NEXT_DIGIT;                       // Change the current phase to READ_NEXT_DIGIT
+                     currentPhaseDuration = mSec_betweenDigits;            // Set the duration of this new phase
+                     startTimeLastPhase = Millis;                          // Set it to Millis
                  }
                  break;
             case READ_NEXT_DIGIT:
-                 if ( currentDigit == MAX_DIGITS && _sequenceTimes-- ) {                                                             // Indica que não há mais digitos para showDec, final do codigo
-                    currentPhase = END_SEQUENCE;                                                                                // Desativa sinalização.
-                    currentPhaseDuration = mSec_betweenDigits;                                                                           // Seta a duração atual para tempo apagado entre dígitos
-                    startTimeLastPhase = Millis;                                                                                      // Registra inicio de uma nova etapa                  
-                 } else {                                                                                                               // Indica que há números para piscar
-                    currentPhaseDuration = mSec_shortBlink;                                                                               // Seta quantos uSec será a duração do pisco longo
-                    if ( blinksToShow[currentDigit] == 0 ) {                                                                          // Indica que esse digito iniciou em zero e deve ter um pisco super curto
-                       currentPhaseDuration = mSec_veryShortBlink;                                                                        // Ativar pisco super curto pois digito é igual a zero
+                 if ( currentDigit == MAX_DIGITS && _sequenceTimes-- ) {   // Indicates that there are no more digits to display at the end of the sequence.
+                    currentPhase = END_SEQUENCE;                           // Change the current phase to END_SEQUENCE
+                    currentPhaseDuration = mSec_betweenDigits;             // Set the duration of this new phase
+                    startTimeLastPhase = Millis;                           // Set it to Millis
+                 } else {                                                  // Indicates that there are more digits to display.
+                    currentPhaseDuration = mSec_shortBlink;                // Set the duration of this new phase
+                    if ( blinksToShow[currentDigit] == 0 ) {               // If the current digit is zero then
+                       currentPhaseDuration = mSec_Blink4DigitZero;        // Set the duration of this new phase
                     }
-                    
-                    currentPhase = SEQUENCING_ON;                                                                                       // Altera a etapa atual para ligar o LED
-                    startTimeLastPhase = Millis;                                                                                         // Registra inicio de uma nova etapa
+                    currentPhase = SEQUENCING_ON;                          // Change the current phase to SEQUENCING_ON
+                    startTimeLastPhase = Millis;                           // Set it to Millis
                  }
                  break;
             case SEQUENCING_ON:
-                 if ( pwmCounter == _pwmSequence  ) {                                                                          // Está no pwm do brilho desejado    
-                    if ( ! switchLED(TURN_LED_OFF) ) {                                                                        // If we could not turn the LED on or off, then
-                       currentPhase = PAUSED;                                                                        // Stop sequencing
+                 if ( pwmCounter == _pwmSequence  ) {                      // If the PWM phase to turn the led off was reached.
+                    if ( ! switchLED(TURN_LED_OFF) ) {                     // If we could not turn the LED on or off, then
+                       currentPhase = PAUSED;                              // Stop sequencing
                     }
                  }
-                 if ( currentPhaseFinished(Millis) ) {                          // Tempo da etapa atual esgotado
-                    LedOnOff(LED_OFF);
-                    currentPhase = SEQUENCING_OFF;                                                                                      // Altera a etapa atual para desligar o LED
-                    startTimeLastPhase = Millis;                                                                                         // Registra inicio de uma nova etapa
-                    blinksToShow[currentDigit]--;                                                                                     // Decrementa a quantidade de piscos do digito atual
-                    if ( blinksToShow[currentDigit] > 0 ) {                                                                           // Indica que ainda não mudou para outro digito
-                       currentPhaseDuration = mSec_betweenBlink;                                                                            // Seta a duração atual para tempo apagado entre piscos              
-                    } else {
-                       currentPhaseDuration = mSec_betweenDigits;                                                                           // Seta a duração atual para tempo apagado entre dígitos
+                 if ( currentPhaseFinished(Millis) ) {                     // If the current phase has just finished then 
+                    if ( ! switchLED(TURN_LED_OFF) ) {                     // If we could not turn the LED on or off, then
+                       currentPhase = PAUSED;                              // Stop sequencing
+                    }
+                    currentPhase = SEQUENCING_OFF;                         // Change the current phase to SEQUENCING_OFF
+                    startTimeLastPhase = Millis;                           // Set it to Millis
+                    blinksToShow[currentDigit]--;                          // Decrement the number of blinks is left for the current digit finish.
+                    if ( blinksToShow[currentDigit] > 0 ) {                // If we did not finish blinking this digit, then
+                       currentPhaseDuration = mSec_betweenBlink;           // Set the duration of this new phase
+                    } else {                                               // If we have already finished blinking this digit. 
+                       currentPhaseDuration = mSec_betweenDigits;          // Set the duration of this new phase
                     }
                  }
                  break;
             case SEQUENCING_OFF:
-                 if ( pwmCounter == _dimmedPWM  ) {                                                                                // Está no pwm de fundo desejado    
-                    if ( ! switchLED(TURN_LED_OFF) ) {                                                                        // If we could not turn the LED on or off, then
-                       currentPhase = PAUSED;                                                                        // Stop sequencing
+                 if ( pwmCounter == _dimmedPWM  ) {                        // If we reach the PWM value for the dimmed LED be turned off then
+                    if ( ! switchLED(TURN_LED_OFF) ) {                     // If we could not turn the LED on or off, then
+                       currentPhase = PAUSED;                              // Stop sequencing
                     }
                  }                
-                 if ( currentPhaseFinished(Millis) ) {                          // Tempo da etapa atual esgotado
-                    if ( blinksToShow[currentDigit] > 0 ) {                                                                           // Indica que ainda não mudou para outro digito
-                       currentPhase = SEQUENCING_ON;                                                                                    // Altera a etapa atual para ligar o LED
-                       startTimeLastPhase = Millis;                                                                                      // Registra inicio de uma nova etapa
-                          currentPhaseDuration = mSec_shortBlink;                                                                          // Seta quantos uSec será a duração do pisco longo
-                    } else {                 
-                       if ( currentDigit < MAX_DIGITS) {
-                          currentDigit++;                                                                                                // Pula para o próximo digito.
+                 if ( currentPhaseFinished(Millis) ) {                     // If the current phase has just finished then 
+                    if ( blinksToShow[currentDigit] > 0 ) {                // If we did not finish blinking this digit, then
+                       currentPhase = SEQUENCING_ON;                       // Change the current phase to SEQUENCING_ON
+                       startTimeLastPhase = Millis;                        // Set it to Millis
+                          currentPhaseDuration = mSec_shortBlink;          // Set the duration of this new phase
+                    } else {                                               // If we have already finished blinking this digit. 
+                       if ( currentDigit < MAX_DIGITS) {                   // If currentDigit variable is still less than the maximum number of digits allowed.
+                          currentDigit++;                                  // Increments the currentDigit variable.
                        }
-                       currentPhase = READ_NEXT_DIGIT;                                                                                // Altera a etapa atual para ligar o LED
-                       startTimeLastPhase = Millis;                                                                                      // Registra inicio de uma nova etapa                  
+                       currentPhase = READ_NEXT_DIGIT;                     // Change the current phase to READ_NEXT_DIGIT
+                       startTimeLastPhase = Millis;                        // Set it to Millis
                     }
                  }
                  break;
             case END_SEQUENCE:
-                 if ( pwmCounter == _dimmedPWM  ) {                                                                                // Está no pwm de fundo desejado    
-                    if ( ! switchLED(TURN_LED_OFF) ) {                                                                        // If we could not turn the LED on or off, then
-                       currentPhase = PAUSED;                                                                        // Stop sequencing
+                 if ( pwmCounter == _dimmedPWM  ) {                        // If we reach the PWM value for the dimmed LED be turned off then
+                    if ( ! switchLED(TURN_LED_OFF) ) {                     // If we could not turn the LED on or off, then
+                       currentPhase = PAUSED;                              // Stop sequencing
                     }
                  }                
-                 if ( currentPhaseFinished(Millis) ) {                          // Tempo da etapa atual esgotado
-                     if ( _sequenceTimes == 0 ) {
-                        currentPhase = FINAL_PAUSE;                                                                                   // Finaliza de vez a sinalização                      
-                        currentPhaseDuration = mSec_betweenDigits;
-                     } else {
-                        currentPhase = REPEAT_SEQUENCE;                                                                                // Finaliza de vez a sinalização                      
-                        currentPhaseDuration = mSec_betweenCodes;                                                                          // Seta quantos uSec será a duração entre códigos
+                 if ( currentPhaseFinished(Millis) ) {                     // If the current phase has just finished then 
+                     if ( _sequenceTimes == 0 ) {                          // If we have already repeated the number of times chosen.
+                        currentPhase = FINAL_PAUSE;                        // Change the current phase to FINAL_PAUSE
+                        currentPhaseDuration = mSec_betweenDigits;         // Set the duration of this new phase
+                     } else {                                              // If we still need to repeat once again.
+                        currentPhase = REPEAT_SEQUENCE;                    // Change the current phase to REPEAT_SEQUENCE
+                        currentPhaseDuration = mSec_betweenCodes;          // Set the duration of this new phase
                      }
-                     startTimeLastPhase = Millis;                                                                                      // Registra inicio de uma nova etapa                  
+                     startTimeLastPhase = Millis;                          // Set it to Millis
                  }
                  break;
             case FINAL_PAUSE:
-                 if ( currentPhaseFinished(Millis) ) {                          // Tempo da etapa atual esgotado
-                    currentPhase = PAUSED;                                                                                // Finaliza de vez a sinalização                      
-                    startTimeLastPhase = Millis;                                                                                      // Registra inicio de uma nova etapa                  
+                 if ( currentPhaseFinished(Millis) ) {                     // If the current phase has just finished then 
+                    currentPhase = PAUSED;                                 // Stop sequencing
+                    startTimeLastPhase = Millis;                           // Set it to Millis
                  }
                  break;
              case REPEAT_SEQUENCE:
-                 if ( currentPhaseFinished(Millis) ) {                          // Tempo da etapa atual esgotado
-                    for(int8_t dig=(MAX_DIGITS - 1); dig>=0 ; dig--) {
-                        blinksToShow[dig] = digitToShow[dig];                                                                          // Copia os valores para a variavel blinksToShow
+                 if ( currentPhaseFinished(Millis) ) {                     // If the current phase has just finished then 
+                    for(int8_t dig=(MAX_DIGITS - 1); dig>=0 ; dig--) {     // For each digit
+                        blinksToShow[dig] = digitToShow[dig];              // Refuel the variable blinksToShow with the original values.
                     }
-                    currentDigit = lessSignificantDigit;
-                    currentPhase = START_SEQUENCE;                                                                                            // Armazena a nova etapa
-                    startTimeLastPhase = Millis;                                                                                       // Registra inicio de uma nova etapa
-                    currentPhaseDuration = mSec_betweenDigits;                                                                           // Seta a duração atual para tempo apagado entre dígitos
+                    currentDigit = lessSignificantDigit;                   // Set the currentDigit variable to the first digit to show
+                    currentPhase = START_SEQUENCE;                         // Change the current phase to START_SEQUENCE to start a new repeated cycle.
+                    startTimeLastPhase = Millis;                           // Set it to Millis
+                    currentPhaseDuration = mSec_betweenDigits;             // Set the duration of this new phase
                  }
                  break;
                 
         }
      }
-     if ( pwmCounter++ > pwmMax ) {
+     // Increment the pwmCounter variable on every loop until it reaches pwmMax when it is restart it to zero. 
+     if ( pwmCounter++ > pwmMax ) {                                         
          pwmCounter = 0;
      }
 }
