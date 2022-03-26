@@ -1,7 +1,7 @@
 #include "show.h"
 
 // Show decimal codes <codeToShow> using the <pwm> bright to blink repeating <times> times. 
-uint8_t PiscoCode::showDec(int32_t codeToShow) {
+uint8_t PiscoCode::showCode(int32_t codeToShow, uint8_t base) {
    bool   status = OK;                                    // Set the initial status of this function as OK
 
    _sequenceTimes =      sequenceTimes+1;                 // Always have the last value of sequenceTimes just after show functions starts a new sequence.
@@ -29,10 +29,10 @@ uint8_t PiscoCode::showDec(int32_t codeToShow) {
       //          digitToShow[MAX_DIGITS - 3] = 7 and blinksToShow[MAX_DIGITS - 3] = 7
       //          currentDigit = lessSignificantDigit = (MAX_DIGITS - 3);
       for(int8_t dig=(MAX_DIGITS - 1); dig>=0 ; dig--) {                       // For each possible digit
-         digitToShow[dig] =  (codeToShow % 10);                                // Get the least significant digit of the code. 
+         digitToShow[dig] =  (codeToShow % base);                                // Get the least significant digit of the code. 
          blinksToShow[dig] = digitToShow[dig];                                 // Set how many times the LED should blink to represent this digit. 
          if ( digitToShow[dig] > 0 ) { currentDigit = dig; }                   // Update the currentDigit variable if the current digit is greater than zero.
-         codeToShow /= 10;                                                     // Removes the least significant digit from the code to display.
+         codeToShow /= base;                                                     // Removes the least significant digit from the code to display.
       }
       if ( minNumDigits > 0 && minNumDigits < MAX_DIGITS ) {                 // If the variable minNumDigits is set
          currentDigit = (MAX_DIGITS - minNumDigits);                          // define the minimum number of digits to show in this sequence.

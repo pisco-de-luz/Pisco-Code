@@ -32,7 +32,7 @@ class PiscoCode {
                                // Defining all class members. 
       bool                     setup(bool (*ledOnOffFunc)(uint8_t ctrlLED));
       void                     loop(uint32_t Millis);
-      uint8_t                  showDec(int32_t codeToShow);
+      uint8_t                  showCode(int32_t codeToShow, uint8_t base);
       bool                     isSequencing(void);
       void                     setPWM(uint8_t pwm);
       void                     setDimPWM(uint8_t dimPWM);

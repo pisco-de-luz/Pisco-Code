@@ -30,14 +30,14 @@ bool           ledBuiltinOK;       // It is safe to show codes with ledBuiltin?
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);                               // initialize digital pin LED_BUILTIN as an output.                  
   if ( ledBuiltinOK = ledBuiltin.setup(&turnLedOnOff) ) {     // calling the PiscoCode class constructor.
-     ledBuiltin.showDec(1024);                                // display the 1024 number on BUILTIN led.  
+     ledBuiltin.showCode(12,2);                                // display the 1024 number on BUILTIN led.  
   }
 }
 
 
 void loop() {
    if ( ledBuiltinOK && ! ledBuiltin.isSequencing() ) {       // If ledBuiltin was set up and is not sequencing any code
-       ledBuiltin.showDec(millis()/5000);                     // display some number on BUILTIN led repeatedly.    
+       ledBuiltin.showCode(millis()/5000,10);                     // display some number on BUILTIN led repeatedly.    
    }
    ledBuiltin.loop(millis());                                 // We should call the LOOP function regularly.
 
