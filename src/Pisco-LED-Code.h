@@ -7,20 +7,6 @@
 #include "loop.h"
 #include "show.h"
 
-const uint8_t             LED_ON =                      0;
-const uint8_t             LED_OFF =                     1;
-const uint8_t             LED_FUNC_OK =               100;
-const bool                TURN_LED_ON =              true;
-const bool                TURN_LED_OFF =            false;
-const uint32_t            mSec_negativeLongBlink =   1800;          // Set the LED's duration during a long blink in milliseconds.
-const uint32_t            mSec_shortBlink =           350;          // Set the LED's duration during a short blink in milliseconds.
-const uint32_t            mSec_Blink4DigitZero =      440;          // Set the LED's duration during a very short blink in milliseconds. It has to be less than longBlink and shortBlink
-const uint32_t            mSec_betweenBlink =         350;          // Set the pause duration between blinks in milliseconds.
-const uint32_t            mSec_betweenDigits =       1300;          // Set the pause duration between digits in milliseconds.
-const uint32_t            mSec_betweenCodes =        1500;          // Set the pause duration between Codes in milliseconds.
-const uint8_t             MAX_DIGITS =                 10;          // The maximum number of digits a sequence will process.
-const uint8_t             initialDimmedPWM =            0;          // The default PWM set value for the dimmed phase of the sequence.
-const uint8_t             pwmMax  =                    15;          // The maximum value the PWM scale could have beginning with zero.
 
 
 
@@ -38,6 +24,13 @@ class PiscoCode {
       void                     setDimPWM(uint8_t dimPWM);
       void                     setRepeat(uint8_t times);
       void                     setMinDigits(uint8_t minDigits);
+      static const uint8_t     LED_ON =                      0;
+      static const uint8_t     LED_OFF =                     1;
+      static const uint8_t     LED_FUNC_OK =               100;
+      static const uint8_t     BINARY =                      2;
+      static const uint8_t     OCTAL =                       8;
+      static const uint8_t     DECIMAL =                    10;
+      static const uint8_t     HEXADECIMAL =                16;
 
 
       
@@ -63,6 +56,20 @@ class PiscoCode {
         REPEAT_SEQUENCE =    90,
         END_SEQUENCE =      100
      };
+
+static const bool                TURN_LED_ON =              true;
+static const bool                TURN_LED_OFF =            false;
+static const uint32_t            mSec_negativeLongBlink =   1800;          // Set the LED's duration during a long blink in milliseconds.
+static const uint32_t            mSec_shortBlink =           350;          // Set the LED's duration during a short blink in milliseconds.
+static const uint32_t            mSec_Blink4DigitZero =      440;          // Set the LED's duration during a very short blink in milliseconds. It has to be less than longBlink and shortBlink
+static const uint32_t            mSec_betweenBlink =         350;          // Set the pause duration between blinks in milliseconds.
+static const uint32_t            mSec_betweenDigits =       1700;          // Set the pause duration between digits in milliseconds.
+static const uint32_t            mSec_betweenCodes =        1500;          // Set the pause duration between Codes in milliseconds.
+static const uint8_t             MAX_DIGITS =                 10;          // The maximum number of digits a sequence will process.
+static const uint8_t             initialDimmedPWM =            0;          // The default PWM set value for the dimmed phase of the sequence.
+static const uint8_t             pwmMax  =                    15;          // The maximum value the PWM scale could have beginning with zero.
+
+
 
     uint8_t                           digitToShow[MAX_DIGITS];             // Separated digits to be displayed.
     int8_t                            blinksToShow[MAX_DIGITS];            // The number of blinks is still pending to be displayed.
