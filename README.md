@@ -41,6 +41,7 @@ For example, in the graphic below, code 120 is shown. As you can see, once the s
 
 As an additional example, the graphic below shows what Pisco Code 002 would look like.
 
+![Pisco-Code-002-144x144.gif](https://github.com/pisco-de-luz/Pisco-LED-Code/blob/b1c607510b4095d7174fb170666a0196a63d295a/graphics/Pisco-Code-002-144x144.gif)
 ![pisco-code-002.png](https://github.com/andreviegas/Pisco-LED-Code/blob/9d276453b1f99df96e158106dcbb28b7e36d6daf/graphics/pisco-code-002.png)
 
 # Binary and Hexadecimal Values
