@@ -56,6 +56,7 @@ As some variables can contain negative values, in their case the temperature ins
 
 Below is an example of the value -12 being shown. Note the long blink at the beginning.  
 
+![Pisco-Code-Negative12-144x144.gif](https://github.com/pisco-de-luz/Pisco-LED-Code/blob/347a2f6999becbef7c22bfab5b0d4cb3d843b71c/graphics/Pisco-Code-Negative12-144x144.gif)
 ![pisco-code-12-negative.png](https://github.com/andreviegas/Pisco-LED-Code/blob/d46fea2847a2d3f49e9fccbcebee1c75f28df785/graphics/pisco-code-12-negative.png)
 
 # Usage
