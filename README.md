@@ -26,6 +26,7 @@ The basic idea of this project is to create a mechanism to display digits, using
 
 As can be seen in the graphic below, the working principle of the Pisco Code is practically the same. The only difference is that before starting the blinking sequence, the LED is dimmed and it is turned off only after the code has all been "displayed".
 
+![Video-Code-121-132x132.gif](https://github.com/pisco-de-luz/Pisco-LED-Code/blob/d0bb059eef8c726219ba4b1a40f07471f648127f/graphics/Video-Code-121-132x132.gif) 
 ![pisco-code-121.png](https://github.com/andreviegas/Pisco-LED-Code/blob/2d7ab53852a28b9fdf24be6b03f43a6450f9fef0/graphics/pisco-code-121.png)
 
 This simple change makes the code easier to read, allowing the observer to know when the sequence starts. For example, when the LED is off and remains dimmed for a few seconds and starts blinking, the observer knows that a new series has just begun.
