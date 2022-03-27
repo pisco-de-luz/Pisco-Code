@@ -36,6 +36,7 @@ This simple change makes the code easier to read, allowing the observer to know 
 In addition to the benefit mentioned above, this solution also created the possibility of representing the zero digit, in any position of the code to be displayed.
 For example, in the graphic below, code 120 is shown. As you can see, once the sequence of codes starts with the LED partially on, the blinks with maximum brightness show numbers between 1-9 while a single blink, turning off the LED, signals the digit zero.
 
+![Pisco-Code-120-144x144.gif](https://github.com/pisco-de-luz/Pisco-LED-Code/blob/ba3e80ebc5cc06cf77d8f8e30f36b71e3b5d880f/graphics/Pisco-Code-120-144x144.gif)
 ![pisco-code-120.png](https://github.com/andreviegas/Pisco-LED-Code/blob/9d276453b1f99df96e158106dcbb28b7e36d6daf/graphics/pisco-code-120.png)
 
 As an additional example, the graphic below shows what Pisco Code 002 would look like.
