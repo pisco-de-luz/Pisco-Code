@@ -142,7 +142,7 @@ bool turnLed2_OnOff(uint8_t ctrlLED) {
 
 ## Calling the Object setup() function.
 
-The setup() function has two main proposes. The first one is to register the pointer to the hardware abstraction function into PiscoCode::LedOnOff private variable. The second task is to certify that the pointer is valid and it is pointing to a function that seems to be working as it should. 
+The setup() function has two main task. The first one is to register the pointer to the hardware abstraction function into PiscoCode::LedOnOff private variable. The second task is to certify that the pointer is valid and it is pointing to a function that seems to be working as it should. 
 
 It receives a pointer to this abstraction function and returns TRUE if everything works ok. Otherwise, it returns FALSE, indicating that the setup process of this object failed. 
 

@@ -74,7 +74,8 @@ bool PiscoCode::switchLED(bool turnItON) {
 // to check if the function pointer is valid and working as it should. 
 bool PiscoCode::isExternalLedFuncOk(void) {
    bool statusFuncOK = true;                                                        // Start the return variable as OK
-   if ( LedOnOff != nullptr ) {                                                     // If the pointer to the external LED function is not null (good sign)
+   if ( LedOnOff != nullptr &&                                                      // If the pointer to the external LED function is not null (good sign) and
+        LedOnOff(LED_FUNC_OK) == true) {                                            // calling the function with the LED_FUNC_OK code returned true as it should.
       for(uint8_t ctrlLED=0;ctrlLED < 255;ctrlLED++) {                              // Call this function with all possible values to check if it is working correctly
          if ( ctrlLED != LED_ON && ctrlLED != LED_OFF && ctrlLED != LED_FUNC_OK &&  // If the ctrlLED codes are out of the valid options and ​ 
              LedOnOff(ctrlLED) == true ) {                                          // calling the function with an invalid code return true. 
