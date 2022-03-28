@@ -97,3 +97,16 @@ bool turnLedOnOff(uint8_t ctrlLED) {
   return( funcOK );
 }
 ```
+# Using on Arduino IDE
+To install, copy the Pisco-LED-Code folder into your arduino sketchbook-libraries folder. More detailed instruction are [here](http://arduino.cc/en/Guide/Libraries).
+
+# Basic Configuration
+To use this library, you first need to include the header file and create a PiscoCode object.
+
+```C++
+#include "Pisco-LED-Code.h"
+
+PiscoCode      ledBuiltin;         // declare an object of class PiscoCode
+```
+
+
