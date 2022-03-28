@@ -7,11 +7,9 @@
 #include "loop.h"
 #include "show.h"
 
-
-
-
-
+// CONSTRUCTORS
 class PiscoCode {
+    // PUBLIC MEMBER FUNCTIONS
     public:
 
                                PiscoCode(void);
@@ -41,7 +39,7 @@ class PiscoCode {
       };
 
 
-
+    // PRIVATE MEMBER FUNCTIONS
     private:
 
      enum CurrentPhases {
