@@ -12,7 +12,7 @@ class PiscoCode {
     // PUBLIC MEMBER FUNCTIONS
     public:
 
-                               PiscoCode(void);
+                               PiscoCode(void);                                // Constructor 
                                // Defining all class members. 
       bool                     setup(bool (*ledOnOffFunc)(uint8_t ctrlLED));
       void                     loop(uint32_t Millis);

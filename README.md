@@ -65,21 +65,21 @@ Below is an example of the value -12 being shown. Note the long blink at the beg
 ```C++
 #include "Pisco-LED-Code.h"
 
-PiscoCode      ledBuiltin;         // declare an object of class PiscoCode
-bool           ledBuiltinOK;       // It is safe to show codes with ledBuiltin?
+PiscoCode      ledBuiltin;                                        // declare an object of class PiscoCode
+bool           ledBuiltinOK;                                      // It is safe to show codes with ledBuiltin?
 
 void setup() {
-  pinMode(LED_BUILTIN, OUTPUT);                               // initialize digital pin LED_BUILTIN as an output.                  
-  if ( ledBuiltinOK = ledBuiltin.setup(&turnLedOnOff, 2) ) {  // calling the PiscoCode class constructor.
-     ledBuiltin.showDec(1024, 15, 2);                         // display the 1024 number on BUILTIN led.  
+  pinMode(LED_BUILTIN, OUTPUT);                                   // initialize digital pin LED_BUILTIN as an output.                  
+  if ( ledBuiltinOK = ledBuiltin.setup(&turnLedOnOff) ) {         // calling the PiscoCode class constructor.
+     ledBuiltin.showCode(1024, PiscoCode::DECIMAL);               // display the 1024 number on BUILTIN led.  
   }
 }
 
 void loop() {
-   if ( ledBuiltinOK && ! ledBuiltin.isSequencing() ) {    // If ledBuiltin was set up and is not sequencing any code
-       ledBuiltin.showDec(30, 8, 1);                       // display some number on BUILTIN led repeatedly.    
+   if ( ledBuiltinOK && ! ledBuiltin.isSequencing() ) {           // If ledBuiltin was set up and is not sequencing any code
+      ledBuiltin.showCode(millis()/1000, PiscoCode::HEXADECIMAL); // display some number on BUILTIN led repeatedly.    
    }
-   ledBuiltin.loop(millis());                              // We should call the LOOP function regularly.
+   ledBuiltin.loop(millis());                                     // We should call the LOOP function regularly.
 
    // run other non-blocking function here
 }
@@ -101,7 +101,9 @@ bool turnLedOnOff(uint8_t ctrlLED) {
 To install, copy the Pisco-LED-Code folder into your arduino sketchbook-libraries folder. More detailed instruction are [here](http://arduino.cc/en/Guide/Libraries).
 
 # Basic Configuration
-To use this library, you first need to include the header file and create one or more PiscoCode objects.
+You first need to include the header file and create one or more PiscoCode objects to use this library.
+
+## Initial Class setup
 
 ```C++
 #include "Pisco-LED-Code.h"
@@ -110,4 +112,50 @@ PiscoCode      ledOne;         // declare an object of class PiscoCode
 PiscoCode      ledTwo;         // declare an object of class PiscoCode
 ```
 
+Before we call the setup method, we have to create a local function that will be passed as a pointer to work as a layer abstraction to the hardware that we 
+will use to turn the LED on and off. 
+
+## Functions of Hardware Abstraction Examples
+
+This function should return TRUE only if one of these three commands are received, PiscoCode::LED_ON, PiscoCode::LED_OFF, and PiscoCode::LED_FUNC_OK. All other values should return FALSE. 
+
+When the caller passes PiscoCode::LED_ON, the function should turn the LED on and return TRUE if everything works well. Likewise, when the caller passes PiscoCode::LED_OFF, it should turn the LED off and return TRUE.
+
+
+```C++
+bool turnLed1_OnOff(uint8_t ctrlLED) {
+  bool funcOK = true;
+  if ( ctrlLED == PiscoCode::LED_ON ) {              digitalWrite(LED1_PORT, HIGH);
+  } else if ( ctrlLED == PiscoCode::LED_OFF ) {      digitalWrite(LED1_PORT, LOW);  
+  } else if ( ctrlLED != PiscoCode::LED_FUNC_OK ) {  funcOK = false; }
+  return( funcOK );
+}
+
+bool turnLed2_OnOff(uint8_t ctrlLED) {
+  bool funcOK = true;
+  if ( ctrlLED == PiscoCode::LED_ON ) {              digitalWrite(LED2_PORT, HIGH);
+  } else if ( ctrlLED == PiscoCode::LED_OFF ) {      digitalWrite(LED2_PORT, LOW);  
+  } else if ( ctrlLED != PiscoCode::LED_FUNC_OK ) {  funcOK = false; }
+  return( funcOK );
+}
+```
+
+## Calling the Object setup() function.
+
+The setup() function has two main proposes. The first one is to register the pointer to the hardware abstraction function into PiscoCode::LedOnOff private variable. The second task is to certify that the pointer is valid and it is pointing to a function that seems to be working as it should. 
+
+It receives a pointer to this abstraction function and returns TRUE if everything works ok. Otherwise, it returns FALSE, indicating that the setup process of this object failed. 
+
+```C++
+// Global variables
+bool           ledOneOK;       // It is safe to show codes with ledOne?
+bool           ledTwoOK;       // It is safe to show codes with ledTwo?
+
+void setup() {
+  pinMode(LED1_PORT, OUTPUT);                                 // initialize digital pin LED1_PORT as an output.                  
+  pinMode(LED2_PORT, OUTPUT);                                 // initialize digital pin LED2_PORT as an output.    
+  ledOneOK = ledOne.setup(&turnLed1_OnOff);                   // calling the PiscoCode setup function.
+  ledTwoOK = ledTwo.setup(&turnLed2_OnOff);                   // calling the PiscoCode setup function.
+}
+```
 
