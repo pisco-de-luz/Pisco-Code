@@ -167,23 +167,39 @@ The showCode() function needs two arguments, the "code-to-show" and the "base" t
 
 | Argument               | Description                                            |
 | :---:                  | :---                                                   |
-| code-to-show (int32_t) | Integer number between -9999999999 and 9999999999 to show in the LED setup during this object initialization.  |
+| code-to-show (int32_t) | Integer number between -9999999999 and 9999999999 to show in the LED that was set up during this object initialization.  |
 | base (uint8_t)         | This function will show the code passed in the first argument using one of the following base systems. PiscoCode::BINARY, PiscoCode::OCTAL, PiscoCode::DECIMAL or PiscoCode::HEXADECIMAL  |
 
 ### Status Code Returned
 
 | Status Code            | Description                                            |
 | :---:                  | :---                                                   |
-| OK                     | This function accepted the code-to-show and base passed as arguments and will start showing shortly. |
+| OK                     | This function accepted the code-to-show and base passed as arguments and will start showing the code shortly. |
 | SEQUENCE_RUNNING       | This function is still working in the previous code and can not accept any new tasks. |
 | FAILED                 | Something went wrong, and this function failed to accept this code. |
 
+### Simple calling Examples
+
+```C++
+// If we could start showing Pisco Code 1024 on ledOne
+if ( ledOne.showCode(1024, PiscoCode::DECIMAL) == PiscoCode::OK ) {
+   // Do something
+} 
+// Trying to start showing Pisco Code 13 in binary on ledTwo 
+uint8_t statusLedTwo = ledTwo.showCode(13, PiscoCode::BINARY);
+// If we could not
+if ( statusLedTwo != PiscoCode::OK ) {
+   // Do something
+}
+```
 
 ### Custom Settings
 Before calling the showCode() function, it is possible to change some characteristics to fit your needs better. 
 
 The LED could have sixteen bright levels using a PWM-controlled software mechanism. From zero (less bright) to 15 (maximum bright). We need to set two brightness levels to Pisco Code works, one for the dimmed phase and another for the blink phase. 
-When creating the Pisco Code object, these values are set to zero and fifteen, respectively. 
+
+When creating the Pisco Code object, these values are zero and fifteen, respectively. 
+
 We can use these two functions below to change it.
 
 ```C++
@@ -191,10 +207,26 @@ ledOne.setDimPWM(3);    // Define the new value of default dimmed pwm.
 ledOne.setPWM(10);      // Define the new value of default pwm.
 ```
 
-We can also change the others two options, the minimum number of digits to show and how many times the Pisco Code should repeat. In the example below, we will set the Pisco Code to have at least four digits and repeat it twice. 
+We can also change the others two options, the minimum number of digits to show and how many times the Pisco Code should repeat. 
+
+In the example below, we will set the Pisco Code to have at least four digits and repeat it twice. 
 
 ```C++
-ledOne.setRepeat(1);       // Define how many times the code should repeat. As we set it to one, indicate that we want it to show twice.
-ledOne.setMinDigits(4);    // Define the minimum number of digits to show. If the code is 12, the system will show 0012.
+// Define how many times the code should repeat. As we set it to one, indicate that we want it to show twice.
+ledOne.setRepeat(1);       
+
+// Define the minimum number of digits to show. If the code is 12, the system will show 0012.
+ledOne.setMinDigits(4);    
 ```
+
+## More Public Functions
+As some Pisco Code are big or need to be repeated many times, it could take a while to finish the whole process. 
+So, we create a function to check if the current process is still running or has already been finished. 
+
+```C++
+if ( ! ledOne.isSequencing() ) {   // If ledOne is not sequencing any more
+                                   // We can call ledOne.showCode() again to show new values
+}
+```
+
 

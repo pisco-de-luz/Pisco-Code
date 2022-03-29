@@ -85,9 +85,9 @@ static const uint8_t             pwmMax  =                    15;          // Th
     uint32_t                          startTimeLastPhase;                  // Start time of the last phase. 
     uint32_t                          currentPhaseDuration;                // Register the total milliseconds this phase should last.
     bool                              isNegative;                          // It is true if the number to show is negative. 
-    bool                              isExternalLedFuncOk(void);
-    bool                              switchLED(bool turnItON);
-    bool                              currentPhaseFinished(uint32_t millis);
+    bool                              _isExternalLedFuncOk(void);
+    bool                              _switchLED(bool turnItON);
+    bool                              _currentPhaseFinished(uint32_t millis);
 
     // LedOnOff() - Pointer to an external function used to switch LED on and off. 
     // ------------------------------------------------------------------------------------------------

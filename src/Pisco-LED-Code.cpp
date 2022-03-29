@@ -24,9 +24,9 @@ bool PiscoCode::setup(bool (*LedOnOffFunc)(uint8_t ctrlLED)) {
       currentPhase =        PAUSED;  
       pwmCounter =               0;                                              // The counter's initial value is used to set the PWM levels' timing.
       LedOnOff =      LedOnOffFunc;                                              // Pointer to the LED activation function.
-      if ( isExternalLedFuncOk() ) {                                             // If the external LED activation function is working correctly.
+      if ( _isExternalLedFuncOk() ) {                                             // If the external LED activation function is working correctly.
          setupOK = true;                                                         // Set the return variable as OK
-         (void)switchLED(TURN_LED_OFF);                                          // Turn the LED off
+         (void)_switchLED(TURN_LED_OFF);                                          // Turn the LED off
       }
       return( setupOK );
 }
@@ -58,7 +58,7 @@ void PiscoCode::setMinDigits(uint8_t minDigits) {
 
 
 // Encapsulate the hardware-dependent LED function inside a method. 
-bool PiscoCode::switchLED(bool turnItON) {
+bool PiscoCode::_switchLED(bool turnItON) {
    // Check if the hardware dependent LED function is working correctly. 
    if ( LedOnOff != nullptr &&                                  // If the function pointer are set and
         LedOnOff(LED_FUNC_OK) ) {                               // it seems to be working correctly.
@@ -72,7 +72,7 @@ bool PiscoCode::switchLED(bool turnItON) {
 
 // As we depend on an external function to turn the LED on and off, it is prudent
 // to check if the function pointer is valid and working as it should. 
-bool PiscoCode::isExternalLedFuncOk(void) {
+bool PiscoCode::_isExternalLedFuncOk(void) {
    bool statusFuncOK = true;                                                        // Start the return variable as OK
    if ( LedOnOff != nullptr &&                                                      // If the pointer to the external LED function is not null (good sign) and
         LedOnOff(LED_FUNC_OK) == true) {                                            // calling the function with the LED_FUNC_OK code returned true as it should.

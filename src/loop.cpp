@@ -4,7 +4,7 @@
 void PiscoCode::loop(uint32_t Millis) {  
      if ( pwmCounter == 0 ) {                       
         if ( currentPhase == PAUSED ) {
-           (void)switchLED(TURN_LED_OFF);                                  // Turns the LED off at the begining.
+           (void)_switchLED(TURN_LED_OFF);                                 // Turns the LED off at the begining.
         }
      }
      if ( currentPhase != PAUSED ) {                                       // There is a sequence to show.
@@ -12,7 +12,7 @@ void PiscoCode::loop(uint32_t Millis) {
              currentPhaseDuration != mSec_Blink4DigitZero &&               // it is not the digit zero and
              currentPhase != REPEAT_SEQUENCE &&                            // it is not the repeat phase and
              currentPhase != FINAL_PAUSE ) {                               // it is not the final phase
-           if ( ! switchLED(TURN_LED_ON) ) {                               // Turn the LED on and if we could not turn the LED on, then
+           if ( ! _switchLED(TURN_LED_ON) ) {                              // Turn the LED on and if we could not turn the LED on, then
               currentPhase = PAUSED;                                       // Stop sequencing
            }
         } 
@@ -23,11 +23,11 @@ void PiscoCode::loop(uint32_t Millis) {
                      startTimeLastPhase = Millis;                          // Set it to Millis
                  }
                  if ( pwmCounter == _dimmedPWM  ) {                        // If we reach the PWM value for the dimmed LED, be turned off. 
-                    if ( ! switchLED(TURN_LED_OFF) ) {                     // If we could not turn the LED on or off, then
+                    if ( ! _switchLED(TURN_LED_OFF) ) {                    // If we could not turn the LED on or off, then
                        currentPhase = PAUSED;                              // Stop sequencing
                     }
                  }
-                 if ( currentPhaseFinished(Millis) ) {                     // If the current phase has just finished then 
+                 if ( _currentPhaseFinished(Millis) ) {                    // If the current phase has just finished then 
                     if ( isNegative ) {                                    // If the code is negative
                        currentPhase = NEGATIVE_SIGN_ON;                    // Change the current phase to NEGATIVE_SIGN_ON
                        currentPhaseDuration = mSec_negativeLongBlink;      // Set the duration of this new phase      
@@ -39,11 +39,11 @@ void PiscoCode::loop(uint32_t Millis) {
                  break;
             case NEGATIVE_SIGN_ON:
                  if ( pwmCounter == _pwmSequence  ) {                      // If the PWM phase to turn the led off was reached.
-                    if ( ! switchLED(TURN_LED_OFF) ) {                     // If we could not turn the LED on or off, then
+                    if ( ! _switchLED(TURN_LED_OFF) ) {                    // If we could not turn the LED on or off, then
                        currentPhase = PAUSED;                              // Stop sequencing
                     }
                  }                
-                 if ( currentPhaseFinished(Millis) ) {                     // If the current phase has just finished then 
+                 if ( _currentPhaseFinished(Millis) ) {                    // If the current phase has just finished then 
                      currentPhase = NEGATIVE_SIGN_OFF;                     // Change the current phase to NEGATIVE_SIGN_OFF
                      currentPhaseDuration = mSec_negativeLongBlink;        // Set the duration of this new phase
                      startTimeLastPhase = Millis;                          // Set it to Millis
@@ -51,11 +51,11 @@ void PiscoCode::loop(uint32_t Millis) {
                  break;
             case NEGATIVE_SIGN_OFF:
                  if ( pwmCounter == _dimmedPWM  ) {                        // If we reach the PWM value for the dimmed LED be turned off then
-                    if ( ! switchLED(TURN_LED_OFF) ) {                     // If we could not turn the LED on or off, then
+                    if ( ! _switchLED(TURN_LED_OFF) ) {                    // If we could not turn the LED on or off, then
                        currentPhase = PAUSED;                              // Stop sequencing
                     }
                  }                
-                 if ( currentPhaseFinished(Millis) ) {                     // If the current phase has just finished then 
+                 if ( _currentPhaseFinished(Millis) ) {                    // If the current phase has just finished then 
                      currentPhase = READ_NEXT_DIGIT;                       // Change the current phase to READ_NEXT_DIGIT
                      currentPhaseDuration = mSec_betweenDigits;            // Set the duration of this new phase
                      startTimeLastPhase = Millis;                          // Set it to Millis
@@ -77,12 +77,12 @@ void PiscoCode::loop(uint32_t Millis) {
                  break;
             case SEQUENCING_ON:
                  if ( pwmCounter == _pwmSequence  ) {                      // If the PWM phase to turn the led off was reached.
-                    if ( ! switchLED(TURN_LED_OFF) ) {                     // If we could not turn the LED on or off, then
+                    if ( ! _switchLED(TURN_LED_OFF) ) {                    // If we could not turn the LED on or off, then
                        currentPhase = PAUSED;                              // Stop sequencing
                     }
                  }
-                 if ( currentPhaseFinished(Millis) ) {                     // If the current phase has just finished then 
-                    if ( ! switchLED(TURN_LED_OFF) ) {                     // If we could not turn the LED on or off, then
+                 if ( _currentPhaseFinished(Millis) ) {                    // If the current phase has just finished then 
+                    if ( ! _switchLED(TURN_LED_OFF) ) {                    // If we could not turn the LED on or off, then
                        currentPhase = PAUSED;                              // Stop sequencing
                     }
                     currentPhase = SEQUENCING_OFF;                         // Change the current phase to SEQUENCING_OFF
@@ -97,11 +97,11 @@ void PiscoCode::loop(uint32_t Millis) {
                  break;
             case SEQUENCING_OFF:
                  if ( pwmCounter == _dimmedPWM  ) {                        // If we reach the PWM value for the dimmed LED be turned off then
-                    if ( ! switchLED(TURN_LED_OFF) ) {                     // If we could not turn the LED on or off, then
+                    if ( ! _switchLED(TURN_LED_OFF) ) {                    // If we could not turn the LED on or off, then
                        currentPhase = PAUSED;                              // Stop sequencing
                     }
                  }                
-                 if ( currentPhaseFinished(Millis) ) {                     // If the current phase has just finished then 
+                 if ( _currentPhaseFinished(Millis) ) {                    // If the current phase has just finished then 
                     if ( blinksToShow[currentDigit] > 0 ) {                // If we did not finish blinking this digit, then
                        currentPhase = SEQUENCING_ON;                       // Change the current phase to SEQUENCING_ON
                        startTimeLastPhase = Millis;                        // Set it to Millis
@@ -117,11 +117,11 @@ void PiscoCode::loop(uint32_t Millis) {
                  break;
             case END_SEQUENCE:
                  if ( pwmCounter == _dimmedPWM  ) {                        // If we reach the PWM value for the dimmed LED be turned off then
-                    if ( ! switchLED(TURN_LED_OFF) ) {                     // If we could not turn the LED on or off, then
+                    if ( ! _switchLED(TURN_LED_OFF) ) {                    // If we could not turn the LED on or off, then
                        currentPhase = PAUSED;                              // Stop sequencing
                     }
                  }                
-                 if ( currentPhaseFinished(Millis) ) {                     // If the current phase has just finished then 
+                 if ( _currentPhaseFinished(Millis) ) {                    // If the current phase has just finished then 
                      if ( _sequenceTimes == 0 ) {                          // If we have already repeated the number of times chosen.
                         currentPhase = FINAL_PAUSE;                        // Change the current phase to FINAL_PAUSE
                         currentPhaseDuration = mSec_betweenDigits;         // Set the duration of this new phase
@@ -133,13 +133,13 @@ void PiscoCode::loop(uint32_t Millis) {
                  }
                  break;
             case FINAL_PAUSE:
-                 if ( currentPhaseFinished(Millis) ) {                     // If the current phase has just finished then 
+                 if ( _currentPhaseFinished(Millis) ) {                    // If the current phase has just finished then 
                     currentPhase = PAUSED;                                 // Stop sequencing
                     startTimeLastPhase = Millis;                           // Set it to Millis
                  }
                  break;
              case REPEAT_SEQUENCE:
-                 if ( currentPhaseFinished(Millis) ) {                     // If the current phase has just finished then 
+                 if ( _currentPhaseFinished(Millis) ) {                    // If the current phase has just finished then 
                     for(int8_t dig=(MAX_DIGITS - 1); dig>=0 ; dig--) {     // For each digit
                         blinksToShow[dig] = digitToShow[dig];              // Refuel the variable blinksToShow with the original values.
                     }
@@ -160,7 +160,7 @@ void PiscoCode::loop(uint32_t Millis) {
 
 // If true, it indicates that it has already passed the time duration of the 
 // current phase, and the PWM phase to turn the led off was reached.
-bool PiscoCode::currentPhaseFinished(uint32_t Millis) {
+bool PiscoCode::_currentPhaseFinished(uint32_t Millis) {
    return( ((uint32_t)(Millis - startTimeLastPhase) > currentPhaseDuration) &&  
             pwmCounter == _pwmSequence );
 }
