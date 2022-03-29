@@ -159,3 +159,42 @@ void setup() {
 }
 ```
 
+## Showing PiscoCodes, calling showCode() Function
+The showCode() function needs two arguments, the "code-to-show" and the "base" to use. It will return three possible status codes.
+
+
+### Arguments
+
+| Argument               | Description                                            |
+| :---:                  | :---                                                   |
+| code-to-show (int32_t) | Integer number between -9999999999 and 9999999999 to show in the LED setup during this object initialization.  |
+| base (uint8_t)         | This function will show the code passed in the first argument using one of the following base systems. PiscoCode::BINARY, PiscoCode::OCTAL, PiscoCode::DECIMAL or PiscoCode::HEXADECIMAL  |
+
+### Status Code Returned
+
+| Status Code            | Description                                            |
+| :---:                  | :---                                                   |
+| OK                     | This function accepted the code-to-show and base passed as arguments and will start showing shortly. |
+| SEQUENCE_RUNNING       | This function is still working in the previous code and can not accept any new tasks. |
+| FAILED                 | Something went wrong, and this function failed to accept this code. |
+
+
+### Custom Settings
+Before calling the showCode() function, it is possible to change some characteristics to fit your needs better. 
+
+The LED could have sixteen bright levels using a PWM-controlled software mechanism. From zero (less bright) to 15 (maximum bright). We need to set two brightness levels to Pisco Code works, one for the dimmed phase and another for the blink phase. 
+When creating the Pisco Code object, these values are set to zero and fifteen, respectively. 
+We can use these two functions below to change it.
+
+```C++
+ledOne.setDimPWM(3);    // Define the new value of default dimmed pwm. 
+ledOne.setPWM(10);      // Define the new value of default pwm.
+```
+
+We can also change the others two options, the minimum number of digits to show and how many times the Pisco Code should repeat. In the example below, we will set the Pisco Code to have at least four digits and repeat it twice. 
+
+```C++
+ledOne.setRepeat(1);       // Define how many times the code should repeat. As we set it to one, indicate that we want it to show twice.
+ledOne.setMinDigits(4);    // Define the minimum number of digits to show. If the code is 12, the system will show 0012.
+```
+
