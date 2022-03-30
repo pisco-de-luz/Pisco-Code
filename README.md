@@ -220,6 +220,9 @@ ledOne.setMinDigits(4);
 ```
 
 ## More Public Functions
+
+### isSequencing()
+
 As some Pisco Code are big or need to be repeated many times, it could take a while to finish the whole process. 
 So, we create a function to check if the current process is still running or has already been finished. 
 
@@ -229,4 +232,13 @@ if ( ! ledOne.isSequencing() ) {   // If ledOne is not sequencing any more
 }
 ```
 
+The Pisco Code is a nom blocking library that works using three main functions. 
+
+The first one is setup() that we have to call as soon as we want to start using our object.
+After that, the second most crucial function is loop(). We should call it repeatedly at least 1000 times per second.  
+The last function we need to call is showCode(), the function that starts the whole sequencing of blinks to show the desired code. 
+
+As we have already shown how to use the setup() and showCode() functions, now we will start describing the mechanisms behind the loop() process. 
+
+### loop()
 
