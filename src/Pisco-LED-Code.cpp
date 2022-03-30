@@ -57,17 +57,23 @@ void PiscoCode::setMinDigits(uint8_t minDigits) {
 }
 
 
-// Encapsulate the hardware-dependent LED function inside a method. 
+/* Encapsulate the hardware-dependent LED function inside a method. */
 bool PiscoCode::_switchLED(bool turnItON) {
-   // Check if the hardware dependent LED function is working correctly. 
-   if ( LedOnOff != nullptr &&                                  // If the function pointer are set and
-        LedOnOff(LED_FUNC_OK) ) {                               // it seems to be working correctly.
+   /* The only way this function will return true is if it returns from LedOnOff external function */
+   bool statusFuncOK = false;                               
+
+   /* Check if the hardware dependent LED function is working correctly. 
+    * If the function pointer is not null (are correctly set) */
+   if ( LedOnOff != nullptr ) {
       if ( turnItON ) {                                         // If we want to turn it ON
-         LedOnOff(LED_ON);                                      // Turn the LED ON
+         statusFuncOK = LedOnOff(LED_ON);                       // Turn the LED ON
       } else { 
-         LedOnOff(LED_OFF);                                     // Turn the LED OFF
+         statusFuncOK = LedOnOff(LED_OFF);                      // Turn the LED OFF
       }
+   } else {                                                     // Indicates that the external function pointer is null
+      statusFuncOK = false;
    }
+   return(statusFuncOK)
 }
 
 // As we depend on an external function to turn the LED on and off, it is prudent

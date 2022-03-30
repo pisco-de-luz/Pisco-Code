@@ -15,7 +15,6 @@ class PiscoCode {
                                PiscoCode(void);                                // Constructor 
                                // Defining all class members. 
       bool                     setup(bool (*ledOnOffFunc)(uint8_t ctrlLED));
-      //void                     loop(uint32_t Millis);
       void                     loop(uint8_t loopCounter);
       uint8_t                  showCode(int32_t codeToShow, uint8_t base);
       bool                     isSequencing(void);
@@ -118,14 +117,11 @@ static const uint8_t       pwmMax  =                    15;          // The maxi
     uint8_t                           dimmedPWM;                           // PWM value of the dimmed light the LED should stay on during the hole sequence. 
     uint8_t                           _dimmedPWM;                          // PWM value of the dimmed light the LED should stay on during the hole sequence. 
     uint8_t                           minNumDigits;                        // Minimum number of digits should be show.
-    //uint32_t                          startTimeLastPhase;                  // Start time of the last phase. 
-    //uint32_t                          currentPhaseDuration;                // Register the total milliseconds this phase should last.
     uint8_t                           startTimeLastPhase;                  // Start time of the last phase. 
     uint8_t                           currentPhaseDuration;                // Register the total milliseconds this phase should last.
     bool                              isNegative;                          // It is true if the number to show is negative. 
     bool                              _isExternalLedFuncOk(void);
     bool                              _switchLED(bool turnItON);
-    //bool                              _currentPhaseFinished(uint32_t millis);
     bool                              _currentPhaseFinished(uint8_t loopCounter);
 
     // LedOnOff() - Pointer to an external function used to switch LED on and off. 

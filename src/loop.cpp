@@ -1,7 +1,6 @@
 #include "loop.h"
 
-// loopCounter is a 32 bits counter that should increment every one loopCounterecond.
-//void PiscoCode::loop(uint32_t loopCounter) {  
+/* loopCounter is a 8 bits counter that should increment every 64 milliseconds. */
 void PiscoCode::loop(uint8_t loopCounter) {  
      if ( pwmCounter == 0 ) {                       
         if ( currentPhase == PAUSED ) {
