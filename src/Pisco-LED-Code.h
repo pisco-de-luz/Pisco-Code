@@ -15,7 +15,8 @@ class PiscoCode {
                                PiscoCode(void);                                // Constructor 
                                // Defining all class members. 
       bool                     setup(bool (*ledOnOffFunc)(uint8_t ctrlLED));
-      void                     loop(uint32_t Millis);
+      //void                     loop(uint32_t Millis);
+      void                     loop(uint8_t loopCounter);
       uint8_t                  showCode(int32_t codeToShow, uint8_t base);
       bool                     isSequencing(void);
       void                     setPWM(uint8_t pwm);
@@ -55,17 +56,52 @@ class PiscoCode {
         END_SEQUENCE =      100
      };
 
-static const bool                TURN_LED_ON =              true;
-static const bool                TURN_LED_OFF =            false;
-static const uint32_t            mSec_negativeLongBlink =   1800;          // Set the LED's duration during a long blink in milliseconds.
-static const uint32_t            mSec_shortBlink =           350;          // Set the LED's duration during a short blink in milliseconds.
-static const uint32_t            mSec_Blink4DigitZero =      440;          // Set the LED's duration during a very short blink in milliseconds. It has to be less than longBlink and shortBlink
-static const uint32_t            mSec_betweenBlink =         350;          // Set the pause duration between blinks in milliseconds.
-static const uint32_t            mSec_betweenDigits =       1700;          // Set the pause duration between digits in milliseconds.
-static const uint32_t            mSec_betweenCodes =        1500;          // Set the pause duration between Codes in milliseconds.
-static const uint8_t             MAX_DIGITS =                 10;          // The maximum number of digits a sequence will process.
-static const uint8_t             initialDimmedPWM =            0;          // The default PWM set value for the dimmed phase of the sequence.
-static const uint8_t             pwmMax  =                    15;          // The maximum value the PWM scale could have beginning with zero.
+static const bool          TURN_LED_ON =              true;
+static const bool          TURN_LED_OFF =            false;
+
+/* Set how many milliseconds the loop counter increments. 
+ *  This counter increments every 64ms and overflows after around 16.3 seconds. */
+static const uint32_t      mSec_perLoopCounter =        64;
+
+/* Set the LED's duration for a long blink in milliseconds. */
+static const uint32_t      mSec_negativeLongBlink =   1800;      
+
+/* Set the LED's duration for a long blink in loop counter. */
+static const uint8_t       loopC_negativeLongBlink =  mSec_negativeLongBlink / mSec_perLoopCounter;  
+
+/* Set the LED's duration for a short blink in milliseconds. */
+static const uint32_t      mSec_shortBlink =           350;
+
+/* Set the LED's duration for a short blink in loop counter. */
+static const uint8_t       loopC_shortBlink =           mSec_shortBlink / mSec_perLoopCounter;
+
+/* Set the LED's duration when blinking, indicating the zero digit in milliseconds.  */
+static const uint32_t      mSec_Blink4DigitZero =      440;
+
+/* Set the LED's duration when blinking, indicating the zero digit in loop counter.  */
+static const uint8_t       loopC_Blink4DigitZero =      mSec_Blink4DigitZero / mSec_perLoopCounter;
+
+/* Set the pause duration between blinks in milliseconds. */
+static const uint32_t      mSec_betweenBlink =         350;
+
+/* Set the pause duration between blinks in loop counter. */
+static const uint8_t       loopC_betweenBlink =         mSec_betweenBlink / mSec_perLoopCounter;
+
+/* Set the pause duration between digits in milliseconds. */
+static const uint32_t      mSec_betweenDigits =       1700; 
+
+/* Set the pause duration between digits in loop counter. */
+static const uint8_t       loopC_betweenDigits =       mSec_betweenDigits / mSec_perLoopCounter; 
+
+/* Set the pause duration between Codes in milliseconds. */
+static const uint32_t      mSec_betweenCodes =        1500; 
+
+/* Set the pause duration between Codes in loop counter. */
+static const uint8_t       loopC_betweenCodes =        mSec_betweenCodes / mSec_perLoopCounter; 
+
+static const uint8_t       MAX_DIGITS =                 10;          // The maximum number of digits a sequence will process.
+static const uint8_t       initialDimmedPWM =            0;          // The default PWM set value for the dimmed phase of the sequence.
+static const uint8_t       pwmMax  =                    15;          // The maximum value the PWM scale could have beginning with zero.
 
 
 
@@ -82,12 +118,15 @@ static const uint8_t             pwmMax  =                    15;          // Th
     uint8_t                           dimmedPWM;                           // PWM value of the dimmed light the LED should stay on during the hole sequence. 
     uint8_t                           _dimmedPWM;                          // PWM value of the dimmed light the LED should stay on during the hole sequence. 
     uint8_t                           minNumDigits;                        // Minimum number of digits should be show.
-    uint32_t                          startTimeLastPhase;                  // Start time of the last phase. 
-    uint32_t                          currentPhaseDuration;                // Register the total milliseconds this phase should last.
+    //uint32_t                          startTimeLastPhase;                  // Start time of the last phase. 
+    //uint32_t                          currentPhaseDuration;                // Register the total milliseconds this phase should last.
+    uint8_t                           startTimeLastPhase;                  // Start time of the last phase. 
+    uint8_t                           currentPhaseDuration;                // Register the total milliseconds this phase should last.
     bool                              isNegative;                          // It is true if the number to show is negative. 
     bool                              _isExternalLedFuncOk(void);
     bool                              _switchLED(bool turnItON);
-    bool                              _currentPhaseFinished(uint32_t millis);
+    //bool                              _currentPhaseFinished(uint32_t millis);
+    bool                              _currentPhaseFinished(uint8_t loopCounter);
 
     // LedOnOff() - Pointer to an external function used to switch LED on and off. 
     // ------------------------------------------------------------------------------------------------

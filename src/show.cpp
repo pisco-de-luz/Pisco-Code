@@ -40,7 +40,7 @@ uint8_t PiscoCode::showCode(int32_t codeToShow, uint8_t base) {
       lessSignificantDigit = currentDigit;                                     // Set the less significant digit to be displayed.
       currentPhase = START_SEQUENCE;                                           // Defines the currentPhase to start sequence. 
       startTimeLastPhase = 0;                                                  // As we are starting a new sequence, the start time of the last phase is zero. 
-      currentPhaseDuration = mSec_betweenDigits;                               // Set the duration of this start sequence equal to mSec_betweenDigits.
+      currentPhaseDuration = loopC_betweenDigits;                              // Set the duration of this start sequence equal to loopC_betweenDigits.
    } else if ( currentPhase != PAUSED ) {                                      // If it was not possible to start a new sequence and the currentPhase is sequencing.
       status = SEQUENCE_RUNNING;
    } else {
