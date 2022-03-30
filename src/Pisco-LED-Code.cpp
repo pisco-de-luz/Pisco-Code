@@ -73,7 +73,7 @@ bool PiscoCode::_switchLED(bool turnItON) {
    } else {                                                     // Indicates that the external function pointer is null
       statusFuncOK = false;
    }
-   return(statusFuncOK)
+   return(statusFuncOK);
 }
 
 // As we depend on an external function to turn the LED on and off, it is prudent
