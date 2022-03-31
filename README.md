@@ -40,7 +40,11 @@ For example, in the graphic below, code 120 is shown. As you can see, once the s
 ![Pisco-Code-120-144x144.gif](https://github.com/pisco-de-luz/Pisco-LED-Code/blob/ba3e80ebc5cc06cf77d8f8e30f36b71e3b5d880f/graphics/Pisco-Code-120-144x144.gif)
 <img src="https://github.com/andreviegas/Pisco-LED-Code/blob/9d276453b1f99df96e158106dcbb28b7e36d6daf/graphics/pisco-code-120.png" height="144">
 
-As an additional example, the graphic below shows what Pisco Code 002 would look like.
+Sometimes, depending on the type of information we will show, it is necessary to guarantee a minimum number of digits. 
+
+For example, when we need to show the voltage value in the range of 0 - 5v with two decimal places like 0.02 volts, it is crucial to set the minimum number of the digit to 3. 
+
+With this method, we will infer where the decimal point is.
 
 ![Pisco-Code-002-144x144.gif](https://github.com/pisco-de-luz/Pisco-LED-Code/blob/b1c607510b4095d7174fb170666a0196a63d295a/graphics/Pisco-Code-002-144x144.gif)
 <img src="https://github.com/andreviegas/Pisco-LED-Code/blob/9d276453b1f99df96e158106dcbb28b7e36d6daf/graphics/pisco-code-002.png" height="144">
