@@ -246,3 +246,13 @@ As we have already shown how to use the setup() and showCode() functions, now we
 
 ### loop()
 
+The loop() function is the most complex algorithm in the whole class. It manages all the timing and dimerization of the Pisco Code one LED blink system. Once the others functions finish passing the information necessary to show the Pisco Code, like brightness, code, base system, times to repeat, etc., it starts the whole sequencing process. 
+
+As it is a nom blocking function, just a handful of line codes are executed and returned briefly. Each time it is called, based on the amount of time passed since the last call, the algorithm determines if it is necessary to turn the LED on, off, or do nothing. 
+
+To assess whether it has to turn the LED on or off, this function works in phases where each phase has its own time to live mechanism.  
+
+The diagram below shows how these phases and timing systems work. 
+
+![How-the-blink-system-programming-logic-works.png](https://github.com/pisco-de-luz/Pisco-LED-Code/blob/891cdfb109bb742c214caaf7e05f41714ec40f46/graphics/How-the-blink-system-programming-logic-works.png)
+
