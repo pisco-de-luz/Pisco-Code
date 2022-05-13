@@ -9,7 +9,7 @@ void PiscoCode::loop(uint8_t loopCounter) {
      }
      if ( currentPhase != PAUSED ) {                                       // There is a sequence to show.
         if ( pwmCounter == 0 &&                                            // If we are at the begining of the PWM phase and
-             currentPhaseDuration != loopC_Blink4DigitZero &&               // it is not the digit zero and
+             currentPhaseDuration != loopC_Blink4DigitZero &&              // it is not the digit zero and
              currentPhase != REPEAT_SEQUENCE &&                            // it is not the repeat phase and
              currentPhase != FINAL_PAUSE ) {                               // it is not the final phase
            if ( ! _switchLED(TURN_LED_ON) ) {                              // Turn the LED on and if we could not turn the LED on, then
@@ -20,14 +20,14 @@ void PiscoCode::loop(uint8_t loopCounter) {
         switch (currentPhase) {
             case START_SEQUENCE:                                           // The first phase that all sequence starts. 
                  if ( startTimeLastPhase == 0 ) {                          // If the start time of the last phase was not defined
-                     startTimeLastPhase = loopCounter;                          // Set it to loopCounter
+                     startTimeLastPhase = loopCounter;                     // Set it to loopCounter
                  }
                  if ( pwmCounter == _dimmedPWM  ) {                        // If we reach the PWM value for the dimmed LED, be turned off. 
                     if ( ! _switchLED(TURN_LED_OFF) ) {                    // If we could not turn the LED on or off, then
                        currentPhase = PAUSED;                              // Stop sequencing
                     }
                  }
-                 if ( _currentPhaseFinished(loopCounter) ) {                    // If the current phase has just finished then 
+                 if ( _currentPhaseFinished(loopCounter) ) {               // If the current phase has just finished then 
                     if ( isNegative ) {                                    // If the code is negative
                        currentPhase = NEGATIVE_SIGN_ON;                    // Change the current phase to NEGATIVE_SIGN_ON
                        currentPhaseDuration = loopC_negativeLongBlink;      // Set the duration of this new phase      
