@@ -1,6 +1,6 @@
 # Pisco LED Code
 
-The easiest way to show decimal or hexadecimal values using just a single LED. In addition, these values can be displayed as positive or negative when needed.
+The easiest way to show decimal or hexadecimal values using just a single LED or a vibrator device. In addition, these values can be displayed as positive or negative when needed.
 
 # Why
 
