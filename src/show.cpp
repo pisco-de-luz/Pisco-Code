@@ -2,7 +2,7 @@
 
 // Show decimal codes <codeToShow> using the <pwm> bright to blink repeating <times> times. 
 uint8_t PiscoCode::showCode(int32_t codeToShow, uint8_t base) {
-   bool   status = OK;                                    // Set the initial status of this function as OK
+   uint8_t   status = OK;                                 // Set the initial status of this function as OK
 
    _sequenceTimes =      sequenceTimes+1;                 // Always have the last value of sequenceTimes just after show functions starts a new sequence.
    _pwmSequence =            pwmSequence;                 // Always have the last value of pwmSequence just after show functions starts a new sequence.
