@@ -99,7 +99,7 @@ static const uint32_t      mSec_betweenCodes =        1500;
 static const uint8_t       loopC_betweenCodes =        mSec_betweenCodes / mSec_perLoopCounter; 
 
 static const uint8_t       MAX_DIGITS =                 10;          // The maximum number of digits a sequence will process.
-static const uint8_t       initialDimmedPWM =            0;          // The default PWM set value for the dimmed phase of the sequence.
+static const uint8_t       initialDimmedPWM =            1;          // The default PWM set value for the dimmed phase of the sequence.
 static const uint8_t       pwmMax  =                    15;          // The maximum value the PWM scale could have beginning with zero.
 
 
