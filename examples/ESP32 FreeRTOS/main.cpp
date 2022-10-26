@@ -54,7 +54,7 @@ extern "C" {
 
 void app_main() {    
     if ( (ledBuiltinOK = ledBuiltin.setup(&turnLedOnOff)) ) {                   // calling the PiscoCode class constructor.     
-       xTaskCreate(&led_pisco_code,"LED_PISCO_CODE",55120,NULL,5,NULL);
+       xTaskCreate(&led_pisco_code,"LED_PISCO_CODE",768,NULL,5,NULL);
     } 
     while (ledBuiltinOK) {
         // We must call the LOOP function regularly and pass as a parameter an 8-bit counter that
