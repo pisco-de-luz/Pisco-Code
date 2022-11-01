@@ -1,7 +1,7 @@
 #ifndef PISCO_CODE
 #define PISCO_CODE
 
-// Central include file for Pisco-LED-Code and defines the PiscoCode class.
+// Central include file for Pisco-Code and defines the PiscoCode class.
 
 #include <stdint.h>
 #include "loop.h"

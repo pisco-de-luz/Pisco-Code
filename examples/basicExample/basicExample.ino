@@ -1,12 +1,12 @@
-/* Pisco-LED-Code.ino
+/* Pisco-Code.ino
  * 
- * This sketch demonstrates how to use the Pisco-LED-Code
+ * This sketch demonstrates how to use the Pisco-Code
  * library to show decimal or hexadecimal values using just
  * a single LED. 
  * 
  * These values can be shown as positive or negative when needed.
  * 
- * The Pisco-LED-Code library is a nom blocking function that 
+ * The Pisco-Code library is a nom blocking function that 
  * should be called frequently from the loop function. 
  * 
  * Andre Viegas
@@ -15,7 +15,7 @@
 /**************************************************************************************
  * INCLUDE
  **************************************************************************************/
-#include "Pisco-LED-Code.h"
+#include "Pisco-Code.h"
 
 /**************************************************************************************
  * GLOBAL VARIABLES

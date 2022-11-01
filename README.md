@@ -16,7 +16,7 @@ To demonstrate numerical values between 1 and 20, for example, we can blink a st
 Another approach I found for larger numbers were creating sequences of blinks.
 
 Status LED showing the code 312 using a sequence of blinks.
-![code312.png](https://github.com/andreviegas/Pisco-LED-Code/blob/6c91251ed2d3033bc74d414339b4a64d40685235/graphics/code312.png)
+![code312.png](https://github.com/pisco-de-luz/Pisco-Code/blob/6c91251ed2d3033bc74d414339b4a64d40685235/graphics/code312.png)
 
 This approach works well for pre-defined codes that do not have a zero digit. It would be tricky to show the code 302, for example, and expect the observer to notice a more significant gap between the digits 3 and 2, thus concluding that it would be 302
 
@@ -26,8 +26,8 @@ The basic idea of this project is to create a mechanism to display digits, using
 
 As can be seen in the graphic below, the working principle of the Pisco Code is practically the same. The only difference is that before starting the blinking sequence, the LED will be partially on and it is turned off only after the code has all been "displayed".
 
-![Video-Code-121-132x132.gif](https://github.com/pisco-de-luz/Pisco-LED-Code/blob/d0bb059eef8c726219ba4b1a40f07471f648127f/graphics/Video-Code-121-132x132.gif) 
-<img src="https://github.com/andreviegas/Pisco-LED-Code/blob/2d7ab53852a28b9fdf24be6b03f43a6450f9fef0/graphics/pisco-code-121.png" height="132">
+![Video-Code-121-132x132.gif](https://github.com/pisco-de-luz/Pisco-Code/blob/d0bb059eef8c726219ba4b1a40f07471f648127f/graphics/Video-Code-121-132x132.gif) 
+<img src="https://github.com/pisco-de-luz/Pisco-Code/blob/2d7ab53852a28b9fdf24be6b03f43a6450f9fef0/graphics/pisco-code-121.png" height="132">
 
 
 This simple change makes the code easier to read, allowing the observer to know when the sequence starts. For example, when the LED is off and remains dimmed for a few seconds and starts blinking, the observer knows that a new series has just begun.
@@ -37,8 +37,8 @@ This simple change makes the code easier to read, allowing the observer to know 
 In addition to the benefit mentioned above, this solution also created the possibility of representing the zero digit, in any position of the code to be displayed.
 For example, in the graphic below, code 120 is shown. As you can see, once the sequence of codes starts with the LED partially on, the blinks with maximum brightness show numbers between 1-9 while a single blink, turning off the LED, signals the digit zero.
 
-![Pisco-Code-120-144x144.gif](https://github.com/pisco-de-luz/Pisco-LED-Code/blob/ba3e80ebc5cc06cf77d8f8e30f36b71e3b5d880f/graphics/Pisco-Code-120-144x144.gif)
-<img src="https://github.com/andreviegas/Pisco-LED-Code/blob/9d276453b1f99df96e158106dcbb28b7e36d6daf/graphics/pisco-code-120.png" height="144">
+![Pisco-Code-120-144x144.gif](https://github.com/pisco-de-luz/Pisco-Code/blob/ba3e80ebc5cc06cf77d8f8e30f36b71e3b5d880f/graphics/Pisco-Code-120-144x144.gif)
+<img src="https://github.com/pisco-de-luz/Pisco-Code/blob/9d276453b1f99df96e158106dcbb28b7e36d6daf/graphics/pisco-code-120.png" height="144">
 
 Sometimes, depending on the type of information we will show, it is necessary to guarantee a minimum number of digits. 
 
@@ -46,8 +46,8 @@ For example, when we need to show the voltage value in the range of 0 - 5v with 
 
 With this method, we will infer where the decimal point is.
 
-![Pisco-Code-002-144x144.gif](https://github.com/pisco-de-luz/Pisco-LED-Code/blob/b1c607510b4095d7174fb170666a0196a63d295a/graphics/Pisco-Code-002-144x144.gif)
-<img src="https://github.com/andreviegas/Pisco-LED-Code/blob/9d276453b1f99df96e158106dcbb28b7e36d6daf/graphics/pisco-code-002.png" height="144">
+![Pisco-Code-002-144x144.gif](https://github.com/pisco-de-luz/Pisco-Code/blob/b1c607510b4095d7174fb170666a0196a63d295a/graphics/Pisco-Code-002-144x144.gif)
+<img src="https://github.com/pisco-de-luz/Pisco-Code/blob/9d276453b1f99df96e158106dcbb28b7e36d6daf/graphics/pisco-code-002.png" height="144">
 
 # Binary and Hexadecimal Values
 
@@ -61,13 +61,13 @@ As some variables can contain negative values, in their case the temperature ins
 
 Below is an example of the value -12 being shown. Note the long blink at the beginning.  
 
-![Pisco-Code-Negative12-144x144.gif](https://github.com/pisco-de-luz/Pisco-LED-Code/blob/347a2f6999becbef7c22bfab5b0d4cb3d843b71c/graphics/Pisco-Code-Negative12-144x144.gif)
-<img src="https://github.com/andreviegas/Pisco-LED-Code/blob/d46fea2847a2d3f49e9fccbcebee1c75f28df785/graphics/pisco-code-12-negative.png" height="144">
+![Pisco-Code-Negative12-144x144.gif](https://github.com/pisco-de-luz/Pisco-Code/blob/347a2f6999becbef7c22bfab5b0d4cb3d843b71c/graphics/Pisco-Code-Negative12-144x144.gif)
+<img src="https://github.com/pisco-de-luz/Pisco-Code/blob/d46fea2847a2d3f49e9fccbcebee1c75f28df785/graphics/pisco-code-12-negative.png" height="144">
 
 # Usage
 
 ```C++
-#include "Pisco-LED-Code.h"
+#include "Pisco-Code.h"
 
 PiscoCode      ledBuiltin;                                        // declare an object of class PiscoCode
 bool           ledBuiltinOK;                                      // It is safe to show codes with ledBuiltin?
@@ -102,7 +102,7 @@ bool turnLedOnOff(uint8_t ctrlLED) {
 }
 ```
 # Using on Arduino IDE
-To install, copy the Pisco-LED-Code folder into your arduino sketchbook-libraries folder. More detailed instruction are [here](http://arduino.cc/en/Guide/Libraries).
+To install, copy the Pisco-Code folder into your arduino sketchbook-libraries folder. More detailed instruction are [here](http://arduino.cc/en/Guide/Libraries).
 
 # Basic Configuration
 You first need to include the header file and create one or more PiscoCode objects to use this library.
@@ -110,7 +110,7 @@ You first need to include the header file and create one or more PiscoCode objec
 ## Initial Class setup
 
 ```C++
-#include "Pisco-LED-Code.h"
+#include "Pisco-Code.h"
 
 PiscoCode      ledOne;         // declare an object of class PiscoCode
 PiscoCode      ledTwo;         // declare an object of class PiscoCode
@@ -254,5 +254,5 @@ To assess whether it has to turn the LED on or off, this function works in phase
 
 The diagram below shows how these phases and timing systems work. 
 
-![How-the-blink-system-programming-logic-works.png](https://github.com/pisco-de-luz/Pisco-LED-Code/blob/891cdfb109bb742c214caaf7e05f41714ec40f46/graphics/How-the-blink-system-programming-logic-works.png)
+![How-the-blink-system-programming-logic-works.png](https://github.com/pisco-de-luz/Pisco-Code/blob/891cdfb109bb742c214caaf7e05f41714ec40f46/graphics/How-the-blink-system-programming-logic-works.png)
 
