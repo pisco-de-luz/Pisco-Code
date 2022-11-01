@@ -1,4 +1,4 @@
-# Pisco LED Code
+# Pisco Code
 
 A way to show decimal or hexadecimal values using a single LED or a vibrator device. In addition, these values can be displayed as positive or negative when needed.
 
