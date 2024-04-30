@@ -143,7 +143,7 @@ void PiscoCode::loop(uint8_t loopCounter) {
                     for(int8_t dig=(MAX_DIGITS - 1); dig>=0 ; dig--) {     // For each digit
                         blinksToShow[dig] = digitToShow[dig];              // Refuel the variable blinksToShow with the original values.
                     }
-                    currentDigit = lessSignificantDigit;                   // Set the currentDigit variable to the first digit to show
+                    currentDigit = leastSignificantDigit;                   // Set the currentDigit variable to the first digit to show
                     currentPhase = START_SEQUENCE;                         // Change the current phase to START_SEQUENCE to start a new repeated cycle.
                     startTimeLastPhase = loopCounter;                           // Set it to loopCounter
                     currentPhaseDuration = loopC_betweenDigits;             // Set the duration of this new phase

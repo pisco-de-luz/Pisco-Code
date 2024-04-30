@@ -2,7 +2,7 @@
 
 PiscoCode::PiscoCode(void) {   
    currentDigit = 0;       
-   lessSignificantDigit = 0;       
+   leastSignificantDigit = 0;       
    currentPhase = PAUSED;       
    isNegative = false;       
    minNumDigits = 0;       

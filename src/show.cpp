@@ -27,7 +27,7 @@ uint8_t PiscoCode::showCode(int32_t codeToShow, uint8_t base) {
       //          digitToShow[MAX_DIGITS - 1] = 8 and blinksToShow[MAX_DIGITS - 1] = 8
       //          digitToShow[MAX_DIGITS - 2] = 6 and blinksToShow[MAX_DIGITS - 2] = 6
       //          digitToShow[MAX_DIGITS - 3] = 7 and blinksToShow[MAX_DIGITS - 3] = 7
-      //          currentDigit = lessSignificantDigit = (MAX_DIGITS - 3);
+      //          currentDigit = leastSignificantDigit = (MAX_DIGITS - 3);
       for(int8_t dig=(MAX_DIGITS - 1); dig>=0 ; dig--) {                       // For each possible digit
          digitToShow[dig] =  (codeToShow % base);                                // Get the least significant digit of the code. 
          blinksToShow[dig] = digitToShow[dig];                                 // Set how many times the LED should blink to represent this digit. 
@@ -37,7 +37,7 @@ uint8_t PiscoCode::showCode(int32_t codeToShow, uint8_t base) {
       if ( minNumDigits > 0 && minNumDigits < MAX_DIGITS ) {                 // If the variable minNumDigits is set
          currentDigit = (MAX_DIGITS - minNumDigits);                          // define the minimum number of digits to show in this sequence.
       }
-      lessSignificantDigit = currentDigit;                                     // Set the less significant digit to be displayed.
+      leastSignificantDigit = currentDigit;                                     // Set the less significant digit to be displayed.
       currentPhase = START_SEQUENCE;                                           // Defines the currentPhase to start sequence. 
       startTimeLastPhase = 0;                                                  // As we are starting a new sequence, the start time of the last phase is zero. 
       currentPhaseDuration = loopC_betweenDigits;                              // Set the duration of this start sequence equal to loopC_betweenDigits.

@@ -107,7 +107,7 @@ static const uint8_t       pwmMax  =                    15;          // The maxi
     uint8_t                           digitToShow[MAX_DIGITS];             // Separated digits to be displayed.
     int8_t                            blinksToShow[MAX_DIGITS];            // The number of blinks is still pending to be displayed.
     uint8_t                           currentDigit;                        // Current digit to show. 
-    uint8_t                           lessSignificantDigit;                // The less significant digit to be displayed.
+    uint8_t                           leastSignificantDigit;                // The less significant digit to be displayed.
     uint8_t                           pwmSequence;                         // PWM value of the most bright light the LED should blink. 
     uint8_t                           _pwmSequence;                         // PWM value of the most bright light the LED should blink. 
     uint8_t                           pwmCounter;                          // PWM counter from zero to pwmMax was used to set the PWM levels' timing.              
