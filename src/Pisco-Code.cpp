@@ -1,52 +1,63 @@
 #include "Pisco-Code.h"
 
-// The constructor
-PiscoCode::PiscoCode(void) {
-   currentDigit =               0;       // Current digit to show. 
-   lessSignificantDigit =       0;       // The less significant digit to be displayed.
-   pwmSequence =           pwmMax;       // PWM value of the most bright light the LED should blink. 
-   _pwmSequence =     pwmSequence;       // Always have the last value of pwmSequence just after show functions starts a new sequence.
-   pwmCounter =                 0;       // PWM counter from zero to pwmMax was used to set the PWM levels' timing.              
-   sequenceTimes =              0;       // Register the number of times we should repeat the PiscoCode. 1=repeat once (mean it will show the code twice)
-   _sequenceTimes = sequenceTimes;       // Always have the last value of sequenceTimes just after show functions starts a new sequence.
-   currentPhase =          PAUSED;       // The current phase we are working on now. 
-   dimmedPWM =   initialDimmedPWM;       // PWM value of the dimmed light the LED should stay on during the hole sequence. 
-   _dimmedPWM =         dimmedPWM;       // Always have the last value of dimmedPWM just after show functions starts a new sequence.
-   minNumDigits =               0;       // Define the default value of the minimum number of digits to show.
-   startTimeLastPhase =         0;       // Start time of the last phase. 
-   currentPhaseDuration =       0;       // Register the total milliseconds this phase should last.
-   isNegative =             false;       // It is true if the number to show is negative. 
-   LedOnOff =             nullptr;       // Initialize this function pointer to null.
+PiscoCode::PiscoCode(void) {   
+   currentDigit = 0;       
+   lessSignificantDigit = 0;       
+   currentPhase = PAUSED;       
+   isNegative = false;       
+   minNumDigits = 0;       
+
+   // Set the initial PWM sequence to the maximum value
+   pwmSequence = pwmMax;       
+   _pwmSequence = pwmSequence;       
+   pwmCounter = 0;       
+   sequenceTimes = 0;       
+   _sequenceTimes = sequenceTimes;       
+
+   // Set the initial dimmed PWM to the predefined initial value
+   dimmedPWM = initialDimmedPWM;       
+   _dimmedPWM = dimmedPWM;       
+
+   // Initialize the start time of the last phase to zero
+   startTimeLastPhase = 0;       
+   currentPhaseDuration = 0;       
+
+   // Initialize the LED function pointer to null
+   LedOnOff = nullptr;       
 }
 
 bool PiscoCode::setup(bool (*LedOnOffFunc)(uint8_t ctrlLED)) {
-      bool setupOK =         false;
-      currentPhase =        PAUSED;  
-      pwmCounter =               0;                                              // The counter's initial value is used to set the PWM levels' timing.
-      LedOnOff =      LedOnOffFunc;                                              // Pointer to the LED activation function.
-      if ( _isExternalLedFuncOk() ) {                                             // If the external LED activation function is working correctly.
-         setupOK = true;                                                         // Set the return variable as OK
-         (void)_switchLED(TURN_LED_OFF);                                          // Turn the LED off
-      }
-      return( setupOK );
+   
+   bool setupOK = false;
+   currentPhase = PAUSED;  
+   pwmCounter = 0; 
+
+   // Set the LED activation function
+   LedOnOff = LedOnOffFunc; 
+
+   // Check if the external LED activation function is working correctly
+   if ( _isExternalLedFuncOk() ) { 
+      setupOK = true; 
+      (void)_switchLED(TURN_LED_OFF); 
+   }
+
+   return setupOK;
 }
+
 
 // Function to check if there is a current sequence running. 
 bool PiscoCode::isSequencing(void) {
    return( currentPhase != PAUSED );
 }
 
-// Define the new value of default pwm.
 void PiscoCode::setPWM(uint8_t pwm) {
    pwmSequence = pwm;
 }
 
-// Define the new value of default dimmed pwm.
 void PiscoCode::setDimPWM(uint8_t dimPWM) {
    dimmedPWM = dimPWM;
 }
 
-// Define how many times the code should repeat.
 void PiscoCode::setRepeat(uint8_t times) {
    sequenceTimes = times;
 }
@@ -57,39 +68,60 @@ void PiscoCode::setMinDigits(uint8_t minDigits) {
 }
 
 
-/* Encapsulate the hardware-dependent LED function inside a method. */
+// This method encapsulates the hardware-dependent LED function.
 bool PiscoCode::_switchLED(bool turnItON) {
-   /* The only way this function will return true is if it returns from LedOnOff external function */
+   // Initialize the function status to false.
+   // The function will return true only if the LedOnOff external function returns true.
    bool statusFuncOK = false;                               
 
-   /* Check if the hardware dependent LED function is working correctly. 
-    * If the function pointer is not null (are correctly set) */
+   // Check if the hardware-dependent LED function is set correctly.
+   // If the function pointer is not null, it means it's set correctly.
    if ( LedOnOff != nullptr ) {
-      if ( turnItON ) {                                         // If we want to turn it ON
-         statusFuncOK = LedOnOff(LED_ON);                       // Turn the LED ON
-      } else { 
-         statusFuncOK = LedOnOff(LED_OFF);                      // Turn the LED OFF
+      // If the turnItON parameter is true, we want to turn the LED on.
+      if ( turnItON ) {
+         // Call the external function to turn the LED on.
+         // The return value of the external function is stored in statusFuncOK.
+         statusFuncOK = LedOnOff(LED_ON);
+      } else {
+         // Call the external function to turn the LED off.
+         // The return value of the external function is stored in statusFuncOK.
+         statusFuncOK = LedOnOff(LED_OFF);
       }
-   } else {                                                     // Indicates that the external function pointer is null
+   } else {
+      // If the function pointer is null, it means the external function is not set correctly.
+      // In this case, set the function status to false.
       statusFuncOK = false;
    }
+
+   // Return the function status.
+   // This will be true if the external function was called and returned true, and false otherwise.
    return(statusFuncOK);
 }
 
-// As we depend on an external function to turn the LED on and off, it is prudent
-// to check if the function pointer is valid and working as it should. 
+// This method checks if the external function for controlling the LED is working correctly.
 bool PiscoCode::_isExternalLedFuncOk(void) {
-   bool statusFuncOK = true;                                                        // Start the return variable as OK
-   if ( LedOnOff != nullptr &&                                                      // If the pointer to the external LED function is not null (good sign) and
-        LedOnOff(LED_FUNC_OK) == true) {                                            // calling the function with the LED_FUNC_OK code returned true as it should.
-      for(uint8_t ctrlLED=0;ctrlLED < 255;ctrlLED++) {                              // Call this function with all possible values to check if it is working correctly
-         if ( ctrlLED != LED_ON && ctrlLED != LED_OFF && ctrlLED != LED_FUNC_OK &&  // If the ctrlLED codes are out of the valid options and ​ 
-             LedOnOff(ctrlLED) == true ) {                                          // calling the function with an invalid code return true. 
-            statusFuncOK = false;                                                   // If we reach here, it indicates that something goes wrong.  
+   // Initialize the function status to true.
+   bool statusFuncOK = true;
+
+   // Check if the function pointer is not null (which is a good sign) and
+   // if calling the function with the LED_FUNC_OK code returns true (as it should).
+   if ( LedOnOff != nullptr && LedOnOff(LED_FUNC_OK) == true) {
+      // Call the external function with all possible values to check if it's working correctly.
+      for(uint8_t ctrlLED=0;ctrlLED < 255;ctrlLED++) {
+         // If the ctrlLED codes are not one of the valid options (LED_ON, LED_OFF, LED_FUNC_OK) and
+         // calling the function with an invalid code returns true, then something is wrong.
+         if ( ctrlLED != LED_ON && ctrlLED != LED_OFF && ctrlLED != LED_FUNC_OK && LedOnOff(ctrlLED) == true ) {
+            // Set the function status to false.
+            statusFuncOK = false;
          }
       }
-   } else {                                                                         // If the pointer to the external LED function is null
-      statusFuncOK = false;                                                         // Set the return variable as not OK
+   } else {
+      // If the function pointer is null, the external function is not set correctly.
+      // In this case, set the function status to false.
+      statusFuncOK = false;
    }
+
+   // Return the function status.
+   // This will be true if the external function was called and returned true for all valid codes, and false otherwise.
    return(statusFuncOK);
 }
