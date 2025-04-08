@@ -20,24 +20,24 @@
 /**************************************************************************************
  * GLOBAL VARIABLES
  **************************************************************************************/
-PiscoCode      ledBuiltin;         // declare an object of class PiscoCode
-bool           ledBuiltinOK;       // It is safe to show codes with ledBuiltin?
+PiscoCode      ledBuiltin;
+bool           ledBuiltinOK;
 
 /**************************************************************************************
  * SETUP/LOOP
  **************************************************************************************/
 
 void setup() {
-  pinMode(LED_BUILTIN, OUTPUT);                               // initialize digital pin LED_BUILTIN as an output.                  
-  if ( ledBuiltinOK = ledBuiltin.setup(&turnLedOnOff) ) {     // calling the PiscoCode class constructor.     
+  pinMode(LED_BUILTIN, OUTPUT);
+  if ( ledBuiltinOK = ledBuiltin.setup(&turnLedOnOff) ) {
      ledBuiltin.showCode(1024,PiscoCode::DECIMAL);            // display the 1024 number on BUILTIN led.  
   }
 }
 
 
 void loop() {
-   if ( ledBuiltinOK && ! ledBuiltin.isSequencing() ) {       // If ledBuiltin was set up and is not sequencing any code
-       ledBuiltin.showCode(millis()/1000,PiscoCode::DECIMAL); // display some number on BUILTIN led repeatedly.    
+   if ( ledBuiltinOK && ! ledBuiltin.isSequencing() ) {
+       ledBuiltin.showCode(millis()/1000,PiscoCode::DECIMAL);
    }
    ledBuiltin.loop( (millis()>>6) & 0xff );                   // We should call the LOOP function regularly.
    // run other non-blocking function here
@@ -45,7 +45,7 @@ void loop() {
 
 
 // Before using this function to turn the LED on and off, the caller will check if it is a valid
-// pointer to a correct function, and it should respond to a LED_FUNC_OK call returning true. 
+// function pointer, and it should respond to a LED_FUNC_OK call returning true. 
 //
 // This function will return true only if one of these three commands are received, LED_ON,
 // LED_OFF, and LED_FUNC_OK. All other values will return false. 
