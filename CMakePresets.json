@@ -1,0 +1,40 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": { "major": 3, "minor": 19, "patch": 0 },
+  
+    "configurePresets": [
+      {
+        "name":       "native",
+        "generator":  "Unix Makefiles",
+        "binaryDir":  "build/native",
+        "description":"Host build (gcc/g++)",
+        "cacheVariables": {
+          "CMAKE_C_FLAGS":   "-Wall -Wextra",
+          "CMAKE_CXX_FLAGS": "-Wall -Wextra"
+        }
+      },
+      {
+        "name":       "avr",
+        "generator":  "Unix Makefiles",
+        "binaryDir":  "build/avr",
+        "description":"Cross-compile for ATmega328p",
+        "toolchainFile":"cmake/toolchains/avr-gcc.cmake"
+      }
+    ],
+  
+    "buildPresets": [
+      {
+        "name":            "native",
+        "configurePreset": "native",
+        "description":     "Build the native configuration"
+        // you can also add "jobs": 4  to parallelize
+      },
+      {
+        "name":            "avr",
+        "configurePreset": "avr",
+        "description":     "Build the AVR configuration"
+      }
+    ]
+  }
+  
+  
