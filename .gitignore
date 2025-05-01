@@ -1,1 +1,3 @@
 *.dump
+# Top-level build folder
+/build/
