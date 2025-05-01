@@ -1,0 +1,44 @@
+# clang-format style for your spacecraft simulation project
+BasedOnStyle: LLVM
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+
+# Braces and layout
+BreakBeforeBraces: Allman
+AllowShortIfStatementsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: InlineOnly
+AllowShortLoopsOnASingleLine: false
+
+# Namespace formatting
+NamespaceIndentation: All
+IndentCaseLabels: true
+
+# Spaces and punctuation
+SpaceBeforeParens: ControlStatements
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+SpaceAfterCStyleCast: true
+
+# Sorting and includes
+SortIncludes: true
+IncludeBlocks: Preserve
+
+# C++ specific
+Cpp11BracedListStyle: true
+DerivePointerAlignment: false
+PointerAlignment: Left
+
+# Column and wrapping
+ColumnLimit: 100
+AlwaysBreakTemplateDeclarations: Yes
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+AlignTrailingComments: true
+
+# Naming rules (optional - informational only, clang-format doesn't enforce this)
+# You can enforce naming via clang-tidy if desired
+# VariableCase: camelCase
+# StructCase: PascalCase
+# FunctionCase: camelCase
+# EnumCase: PascalCase
