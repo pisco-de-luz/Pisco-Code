@@ -3,7 +3,7 @@
 /build/
 
 # just in case someone accidentally runs an in-source build…
-/CMakeFiles/
+CMakeFiles/
 /CMakeCache.txt
 /cmake_install.cmake
 /Makefile
