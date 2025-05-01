@@ -1,3 +1,10 @@
 *.dump
 # Top-level build folder
 /build/
+
+# just in case someone accidentally runs an in-source build…
+/CMakeFiles/
+/CMakeCache.txt
+/cmake_install.cmake
+/Makefile
+/*.marks
