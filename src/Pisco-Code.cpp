@@ -1,4 +1,4 @@
-#include "Pisco-Code.h"
+#include "Pisco-Code.hpp"
 
 PiscoCode::PiscoCode(void) {   
    currentDigit = 0;       

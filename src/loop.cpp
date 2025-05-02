@@ -1,4 +1,4 @@
-#include "loop.h"
+#include "loop.hpp"
 
 /* loopCounter is a 8 bits counter that should increment every 64 milliseconds. */
 void PiscoCode::loop(uint8_t loopCounter) {  

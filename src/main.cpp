@@ -11,7 +11,7 @@
 
 int main(int argc, char* argv[])
 {
-    printf("Hello, Pisco Code!\n");
+    printf("Hello, Pisco Code!\n\n");
 
     // Get the number to be shown in the LED
     int number = 0;

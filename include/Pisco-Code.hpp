@@ -4,8 +4,8 @@
 // Central include file for Pisco-Code and defines the PiscoCode class.
 
 #include <stdint.h>
-#include "loop.h"
-#include "show.h"
+#include "loop.hpp"
+#include "show.hpp"
 
 // CONSTRUCTORS
 class PiscoCode {

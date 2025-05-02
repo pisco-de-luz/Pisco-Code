@@ -1,4 +1,4 @@
-#include "show.h"
+#include "show.hpp"
 
 // Show decimal codes <codeToShow> using the <pwm> bright to blink repeating <times> times. 
 uint8_t PiscoCode::showCode(int32_t codeToShow, uint8_t base) {
