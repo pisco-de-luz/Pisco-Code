@@ -22,14 +22,21 @@ set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 
 add_subdirectory(${SRC_DIR})
-add_subdirectory(external/CppUTest)
 
 include_directories(${INCLUDE_DIR})
 
 # Pull in the AVR hex/bin logic only when cross-compiling for AVR
 if (CMAKE_SYSTEM_PROCESSOR STREQUAL "avr")
-  include(avr_outputs)
+include(avr_outputs)
 endif()
 
-enable_testing()
-add_subdirectory(test)
+# Only build and run tests on native (non-cross-compiled) builds
+if(NOT CMAKE_CROSSCOMPILING)
+    message(STATUS "Native build detected — enabling unit tests.")
+    add_subdirectory(external/CppUTest)
+    enable_testing()
+    add_subdirectory(test)
+else()
+    message(STATUS "Cross-compiling for ${CMAKE_SYSTEM_PROCESSOR} — skipping unit tests.")
+endif()
+

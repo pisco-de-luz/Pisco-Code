@@ -18,7 +18,9 @@
         "generator":  "Unix Makefiles",
         "binaryDir":  "build/avr",
         "description":"Cross-compile for ATmega328p",
-        "toolchainFile":"cmake/toolchains/avr-gcc.cmake"
+        "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "cmake/toolchains/avr-gcc.cmake"
+        }
       }
     ],
   
@@ -27,7 +29,6 @@
         "name":            "native",
         "configurePreset": "native",
         "description":     "Build the native configuration"
-        // you can also add "jobs": 4  to parallelize
       },
       {
         "name":            "avr",
