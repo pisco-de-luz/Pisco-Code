@@ -22,9 +22,14 @@ set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 
 add_subdirectory(${SRC_DIR})
+add_subdirectory(external/CppUTest)
+
 include_directories(${INCLUDE_DIR})
 
 # Pull in the AVR hex/bin logic only when cross-compiling for AVR
 if (CMAKE_SYSTEM_PROCESSOR STREQUAL "avr")
   include(avr_outputs)
 endif()
+
+enable_testing()
+add_subdirectory(test)

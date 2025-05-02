@@ -37,6 +37,8 @@ build_preset() {
   echo "[${preset}] Building..."
   cmake --build --preset "$preset"
   echo "[${preset}] Done."
+  echo "[${preset}] Testing..."
+  ctest --test-dir "build/${preset}" --output-on-failure
 }
 
 # Validate arguments
