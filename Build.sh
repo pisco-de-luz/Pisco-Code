@@ -32,10 +32,16 @@ print_usage() {
 # Helper: configure & build a preset
 build_preset() {
   local preset="$1"
-  echo "[${preset}] Configuring..."
-  cmake --preset "$preset"
+  local build_dir="build/${preset}"
+
+  if [[ ! -f "$build_dir/CMakeCache.txt" ]]; then
+    echo "[${preset}] Configuring..."
+    cmake --preset "$preset"
+  else
+    echo "[${preset}] Already configured. Skipping cmake --preset."
+  fi
   echo "[${preset}] Building..."
-  cmake --build --preset "$preset"
+  cmake --build --preset "$preset" --parallel
   echo "[${preset}] Done."
   if [[ "$preset" == "native" ]]; then
     echo "[${preset}] Testing..."
