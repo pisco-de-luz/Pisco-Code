@@ -27,11 +27,6 @@ include_directories(${INCLUDE_DIR})
 # Target-specific examples
 add_subdirectory(examples)
 
-# AVR-specific logic
-if(CMAKE_SYSTEM_PROCESSOR STREQUAL "avr")
-  include(avr_outputs) # only if still needed for hex/bin fallback logic
-endif()
-
 # Unit tests — only for host/native builds
 if(NOT CMAKE_CROSSCOMPILING)
   message(STATUS "Native build detected — enabling unit tests.")
