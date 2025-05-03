@@ -1,22 +1,24 @@
+# Toolchain file for AVR cross-compilation with ATmega328P
+
 set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_PROCESSOR avr)
 
-# Specify the AVR-GCC compiler
+# Toolchain binaries
 set(CMAKE_C_COMPILER avr-gcc)
 set(CMAKE_CXX_COMPILER avr-g++)
 
-# Add AVR-specific flags
-set(CMAKE_C_FLAGS "-mmcu=atmega328p -Wall -Wextra")
-set(CMAKE_CXX_FLAGS "-mmcu=atmega328p -Wall -Wextra")
+# CPU frequency
+set(F_CPU "16000000UL" CACHE STRING "CPU frequency")
 
-# Specify the linker flags
-set(CMAKE_EXE_LINKER_FLAGS "-mmcu=atmega328p")
+# Common flags
+set(MCU_FLAGS "-mmcu=atmega328p")
+set(OPT_FLAGS "-Os")
+set(WARN_FLAGS "-Wall -Wextra")
 
-# Ensure the output is an ELF file
-set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE 1)
+# Global flags
+set(CMAKE_C_FLAGS "${MCU_FLAGS} -DF_CPU=${F_CPU} ${OPT_FLAGS} ${WARN_FLAGS}" CACHE STRING "" FORCE)
+set(CMAKE_CXX_FLAGS "${MCU_FLAGS} -DF_CPU=${F_CPU} ${OPT_FLAGS} ${WARN_FLAGS}" CACHE STRING "" FORCE)
+set(CMAKE_EXE_LINKER_FLAGS "${MCU_FLAGS}" CACHE STRING "" FORCE)
 
-
-# Prevent CMake from searching for libraries and includes in the host system
-set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY NEVER)
-set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE NEVER)
+# Disable standard C library linkage (optional if using bare metal)
+set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)

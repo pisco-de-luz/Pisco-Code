@@ -22,6 +22,7 @@ set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 
 add_subdirectory(${SRC_DIR})
+add_subdirectory(examples/avr)
 
 include_directories(${INCLUDE_DIR})
 
@@ -39,4 +40,3 @@ if(NOT CMAKE_CROSSCOMPILING)
 else()
     message(STATUS "Cross-compiling for ${CMAKE_SYSTEM_PROCESSOR} — skipping unit tests.")
 endif()
-
