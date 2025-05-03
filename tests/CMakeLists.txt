@@ -1,4 +1,4 @@
-# test/CMakeLists.txt — Build and run CppUTest-based unit tests
+# tests/CMakeLists.txt — Build and run CppUTest-based unit tests
 file(GLOB TEST_SOURCES "*.cpp")
 
 add_executable(PiscoCodeTests ${TEST_SOURCES})
