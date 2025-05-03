@@ -1,4 +1,5 @@
 #include "Pisco-Code.hpp"
+#include <limits>
 
 PiscoCode::PiscoCode(void) {   
    currentDigit = 0;       
@@ -100,28 +101,17 @@ bool PiscoCode::_switchLED(bool turnItON) {
 
 // This method checks if the external function for controlling the LED is working correctly.
 bool PiscoCode::_isExternalLedFuncOk(void) {
-   // Initialize the function status to true.
+   constexpr uint16_t upperLimitToCheck = std::numeric_limits<uint8_t>::max() + 1;
    bool statusFuncOK = true;
-
-   // Check if the function pointer is not null (which is a good sign) and
-   // if calling the function with the LED_FUNC_OK code returns true (as it should).
    if ( LedOnOff != nullptr && LedOnOff(LED_FUNC_OK) == true) {
-      // Call the external function with all possible values to check if it's working correctly.
-      for(uint8_t ctrlLED=0;ctrlLED < 255;ctrlLED++) {
-         // If the ctrlLED codes are not one of the valid options (LED_ON, LED_OFF, LED_FUNC_OK) and
-         // calling the function with an invalid code returns true, then something is wrong.
+      for(uint16_t ctrlLED=0;ctrlLED < upperLimitToCheck;ctrlLED++) {
          if ( ctrlLED != LED_ON && ctrlLED != LED_OFF && ctrlLED != LED_FUNC_OK && LedOnOff(ctrlLED) == true ) {
-            // Set the function status to false.
             statusFuncOK = false;
          }
       }
    } else {
-      // If the function pointer is null, the external function is not set correctly.
-      // In this case, set the function status to false.
       statusFuncOK = false;
    }
 
-   // Return the function status.
-   // This will be true if the external function was called and returned true for all valid codes, and false otherwise.
    return(statusFuncOK);
 }
