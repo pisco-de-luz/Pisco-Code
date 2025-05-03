@@ -16,24 +16,39 @@ void MockLedControlLogger::clear() {
 
 void MockLedControlLogger::log(LedEvent ledEvent) {
     if (ledEvent == lastState_) {
-        ++durantion_;
-        return;  // Ignore duplicate timestamps
+        ++duration_;
+        return;  // Still in same state, extend current duration
     }
-    ++durantion_;
-    // Create a new LedStateChange object and add it to the events vector
-    LedStateChange ledStateChange;
-    ledStateChange.timestamp = currentTime_;
-    if ( LED_CALL_INVALID == lastState_ ) {
-        ledStateChange.state = ledEvent;
-    } else {
-        ledStateChange.state = lastState_;
+
+    // If lastState_ was valid, flush it to the log
+    if (lastState_ != LED_CALL_INVALID) {
+        LedStateChange stateChange;
+        stateChange.timestamp = currentTime_;
+        stateChange.state = lastState_;
+        stateChange.duration = duration_;
+        events_.push_back(stateChange);
+        printf("log()\t T=%d  STATE=%d  DURATION=%d\n", stateChange.timestamp, stateChange.state, stateChange.duration);
+        currentTime_ += duration_;
     }
-    ledStateChange.duration = durantion_;  // Duration is not used in this mock
-    printf("log()\t T=%d  STATE=%d  DURATION=%d\n", ledStateChange.timestamp, ledStateChange.state, ledStateChange.duration);
-    events_.push_back(ledStateChange);
-    currentTime_ += durantion_;
+
+    // Start counting new state
     lastState_ = ledEvent;
-    durantion_ = 0;  // Reset duration for the next event
+    duration_ = 1;
+}
+
+void MockLedControlLogger::flush() {
+    if (duration_ == 0 || lastState_ == LED_CALL_INVALID) return;
+
+    LedStateChange stateChange;
+    stateChange.timestamp = currentTime_;
+    stateChange.state = lastState_;
+    stateChange.duration = duration_;
+    events_.push_back(stateChange);
+    printf("flush()\t T=%d  STATE=%d  DURATION=%d\n", stateChange.timestamp, stateChange.state, stateChange.duration);
+    currentTime_ += duration_;
+    
+    duration_ = 0;
+    lastState_ = LED_CALL_INVALID;
 }
 
 bool MockLedControlLogger::handle(uint8_t ctrlLED) {
@@ -45,7 +60,7 @@ bool MockLedControlLogger::handle(uint8_t ctrlLED) {
         default:                       ledEvent = LED_CALL_FUNC_FAIL; 
     }
     
-    printf("ctrlLED=%d\t ledEvent=%d\n", ctrlLED, ledEvent);
+    //printf("ctrlLED=%d\t ledEvent=%d\n", ctrlLED, ledEvent);
     log(ledEvent);
     return (ledEvent == LED_CALL_ON || ledEvent == LED_CALL_OFF || ledEvent == LED_CALL_FUNC_OK);
 }

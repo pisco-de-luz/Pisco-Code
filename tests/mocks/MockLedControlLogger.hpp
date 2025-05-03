@@ -29,12 +29,12 @@ public:
     bool handle(uint8_t ctrlLED);
     void clear();
     const std::vector<LedStateChange>& getEvents() const;
+    void flush();
 
 private:
     void log(LedEvent ev);
-
     Timestamp currentTime_{0};
-    StateDuration durantion_{0};
+    StateDuration duration_{1};
     LedEvent lastState_{LED_CALL_INVALID};
     std::vector<LedStateChange> events_{};
 };

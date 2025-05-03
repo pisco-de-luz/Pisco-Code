@@ -103,7 +103,7 @@ bool PiscoCode::_switchLED(bool turnItON) {
 bool PiscoCode::_isExternalLedFuncOk(void) {
    constexpr uint16_t upperLimitToCheck = std::numeric_limits<uint8_t>::max() + 1;
    bool statusFuncOK = true;
-   if ( LedOnOff != nullptr && LedOnOff(LED_FUNC_OK) == true) {
+   if ( LedOnOff != nullptr) {
       for(uint16_t ctrlLED=0;ctrlLED < upperLimitToCheck;ctrlLED++) {
          const bool ledFuncReturnTrue = LedOnOff(ctrlLED);
          if ( ledFuncReturnTrue && ctrlLED != LED_ON && ctrlLED != LED_OFF && ctrlLED != LED_FUNC_OK ) {
