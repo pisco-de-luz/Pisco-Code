@@ -1,8 +1,12 @@
-add_executable(basic_example
-    basic_example.cpp
+include(${CMAKE_CURRENT_LIST_DIR}/avr_example_macros.cmake)
+
+add_avr_example(basic_example
+  SOURCE basic_example.cpp
+  MCU atmega328p
 )
 
-target_link_libraries(basic_example
-    PiscoCodeCore
-)
+# add_avr_example(one_led_clock
+#   SOURCE one_led_clock.cpp
+#   MCU atmega328p
+# )
 

@@ -3,7 +3,7 @@
 # // Description: Main CMake file for the PiscoCode project.
 # // Author:      Andre Viegas
 # // Date:        2025.04
-# // Version:     1.0
+# // Version:     1.1
 # //--------------------------------------------------------------------------------------------
 
 cmake_minimum_required(VERSION 3.10)
@@ -14,29 +14,30 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-
 list(APPEND CMAKE_MODULE_PATH
      "${CMAKE_SOURCE_DIR}/cmake/modules")
 
-set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
+set(SRC_DIR     ${CMAKE_SOURCE_DIR}/src)
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 
+# Core library
 add_subdirectory(${SRC_DIR})
-add_subdirectory(examples/avr)
-
 include_directories(${INCLUDE_DIR})
 
-# Pull in the AVR hex/bin logic only when cross-compiling for AVR
-if (CMAKE_SYSTEM_PROCESSOR STREQUAL "avr")
-include(avr_outputs)
+# Target-specific examples
+add_subdirectory(examples)
+
+# AVR-specific logic
+if(CMAKE_SYSTEM_PROCESSOR STREQUAL "avr")
+  include(avr_outputs) # only if still needed for hex/bin fallback logic
 endif()
 
-# Only build and run tests on native (non-cross-compiled) builds
+# Unit tests — only for host/native builds
 if(NOT CMAKE_CROSSCOMPILING)
-    message(STATUS "Native build detected — enabling unit tests.")
-    add_subdirectory(external/CppUTest)
-    enable_testing()
-    add_subdirectory(test)
+  message(STATUS "Native build detected — enabling unit tests.")
+  add_subdirectory(external/CppUTest)
+  enable_testing()
+  add_subdirectory(test)
 else()
-    message(STATUS "Cross-compiling for ${CMAKE_SYSTEM_PROCESSOR} — skipping unit tests.")
+  message(STATUS "Cross-compiling for ${CMAKE_SYSTEM_PROCESSOR} — skipping unit tests.")
 endif()
