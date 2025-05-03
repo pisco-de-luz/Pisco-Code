@@ -72,5 +72,15 @@ fi
 say "🧪 Running unit tests..."
 ctest --test-dir build/native -R PiscoCodeTests  --output-on-failure || { fail "❌ Unit tests failed"; exit 1; }
 
+if [[ -x "scripts/Upload.sh" ]]; then
+  say "🚀 Upload script found — testing upload (dry-run) for: $EXAMPLE"
+  ./scripts/Upload.sh "$EXAMPLE" --dry-run || {
+    fail "❌ Upload dry-run failed for $EXAMPLE"
+    exit 1
+  }
+else
+  say "⚠️ Upload script not found — skipping upload test for $EXAMPLE"
+fi
+
 echo ""
 good "🎉 Build system test PASSED — all checks completed successfully."
