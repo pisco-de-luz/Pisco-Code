@@ -6,22 +6,26 @@
 #include "Pisco-Code.hpp"
 
 enum LedEvent : uint8_t {
+    LED_CALL_INVALID = 0,
     LED_CALL_ON,
     LED_CALL_OFF,
     LED_CALL_FUNC_OK,
-    LED_CALL_INVALID
+    LED_CALL_FUNC_FAIL
 };
 
+using Timestamp = uint32_t;
+using StateDuration = uint16_t;
 struct LedStateChange {
-    uint8_t time;
-    LedEvent state;
+    Timestamp timestamp{0};
+    LedEvent state{LED_CALL_INVALID};
+    StateDuration duration{0};
 };
 
 class MockLedControlLogger {
 public:
     MockLedControlLogger();
 
-    void setTime(uint8_t currTime);
+    void setTime(Timestamp currTime);
     bool handle(uint8_t ctrlLED);
     void clear();
     const std::vector<LedStateChange>& getEvents() const;
@@ -29,8 +33,10 @@ public:
 private:
     void log(LedEvent ev);
 
-    uint8_t currentTime;
-    std::vector<LedStateChange> events;
+    Timestamp currentTime_{0};
+    StateDuration durantion_{0};
+    LedEvent lastState_{LED_CALL_INVALID};
+    std::vector<LedStateChange> events_{};
 };
 
 #endif

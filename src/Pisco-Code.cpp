@@ -105,13 +105,13 @@ bool PiscoCode::_isExternalLedFuncOk(void) {
    bool statusFuncOK = true;
    if ( LedOnOff != nullptr && LedOnOff(LED_FUNC_OK) == true) {
       for(uint16_t ctrlLED=0;ctrlLED < upperLimitToCheck;ctrlLED++) {
-         if ( ctrlLED != LED_ON && ctrlLED != LED_OFF && ctrlLED != LED_FUNC_OK && LedOnOff(ctrlLED) == true ) {
+         const bool ledFuncReturnTrue = LedOnOff(ctrlLED);
+         if ( ledFuncReturnTrue && ctrlLED != LED_ON && ctrlLED != LED_OFF && ctrlLED != LED_FUNC_OK ) {
             statusFuncOK = false;
          }
       }
    } else {
       statusFuncOK = false;
    }
-
    return(statusFuncOK);
 }
