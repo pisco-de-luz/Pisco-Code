@@ -1,6 +1,7 @@
 # tests/CMakeLists.txt — Build and run CppUTest-based unit tests
 file(GLOB TEST_SOURCES "*.cpp")
-set(MOCK_SOURCES mocks/MockLedControl.cpp)
+set(MOCK_SOURCES mocks/MockLedControlLogger.cpp)
+
 
 add_executable(PiscoCodeTests 
     ${TEST_SOURCES}
