@@ -8,23 +8,23 @@ function(add_avr_example TARGET_NAME)
   find_program(AVR_OBJCOPY avr-objcopy REQUIRED)
   find_program(AVRDUDE     avrdude     REQUIRED)
 
-  set(HEX_FILE  ${CMAKE_CURRENT_BINARY_DIR}/${TARGET_NAME}.hex)
-  set(ELF_FILE  ${CMAKE_CURRENT_BINARY_DIR}/${TARGET_NAME})
+  set(HEX_FILE ${CMAKE_CURRENT_BINARY_DIR}/${TARGET_NAME}.hex)
+  set(ELF_FILE ${CMAKE_CURRENT_BINARY_DIR}/${TARGET_NAME})
 
+  # POST-BUILD: generate .hex whenever executable is built
   add_custom_command(
-    OUTPUT ${HEX_FILE}
+    TARGET ${TARGET_NAME}
+    POST_BUILD
     COMMAND ${AVR_OBJCOPY} -O ihex -R .eeprom ${ELF_FILE} ${HEX_FILE}
-    DEPENDS ${TARGET_NAME}
-    COMMENT "→ Generating HEX for ${TARGET_NAME}"
+    COMMENT "→ Generating HEX: ${HEX_FILE}"
+    VERBATIM
   )
-
-  add_custom_target(${TARGET_NAME}_hex ALL DEPENDS ${HEX_FILE})
 
   set(AVR_PORT "/dev/ttyACM0" CACHE STRING "AVR upload port")
   set(AVR_BAUD "19200"        CACHE STRING "AVR upload baud")
 
   add_custom_target(${TARGET_NAME}_upload
-    DEPENDS ${TARGET_NAME}_hex
+    DEPENDS ${TARGET_NAME}
     COMMAND ${AVRDUDE}
       -v
       -p ${EX_MCU}
