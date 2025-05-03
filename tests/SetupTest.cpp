@@ -1,12 +1,19 @@
 #include "CppUTest/TestHarness.h"
 #include "Pisco-Code.hpp"
 #include "mocks/MockLedControlLogger.hpp"
+// Required for std::numeric_limits — clang-tidy false positive
 #include <limits>
+#include <cstdint>
+#include <memory>
 
 // This is the simulated LED HAL function passed to setup() during unit testing.
-static MockLedControlLogger* logger = nullptr;
-static bool ledMockHAL(uint8_t ctrlLED) {
-    return logger ? logger->handle(ctrlLED) : false;
+namespace {
+    std::unique_ptr<MockLedControlLogger> logger;
+
+    // Simulated LED HAL function passed to setup()
+    bool ledMockHAL(uint8_t ctrlLED) {
+        return logger ? logger->handle(ctrlLED) : false;
+    }
 }
 
 TEST_GROUP(SetupTest)
@@ -14,29 +21,29 @@ TEST_GROUP(SetupTest)
     PiscoCode code;
 
     void setup() {
-        logger = new MockLedControlLogger();
+        logger = std::make_unique<MockLedControlLogger>();
     }
 
     void teardown() {
-        delete logger;
-        logger = nullptr;
+        logger.reset();  // optional: happens automatically
     }
 };
 
 TEST(SetupTest, ValidFunctionPointer_ShouldReturnTrue)
 {
-    bool result = code.setup(&ledMockHAL);
-    CHECK_TRUE(result);
+    const bool Result = code.setup(&ledMockHAL);
+    CHECK_TRUE(Result);
 }
 
 TEST(SetupTest, ShouldHaveExpectedNumberOfCalls)
 {
     code.setup(&ledMockHAL);
 
-    constexpr uint16_t totalPossible = std::numeric_limits<uint8_t>::max() + 1;
-    constexpr uint16_t accepted = 3; // LED_ON, LED_OFF, LED_FUNC_OK
-    constexpr uint16_t expected = 1 /* FUNC_OK */ + (totalPossible - accepted) + 1 /* TURN_LED_OFF */;
-    CHECK_EQUAL(expected, logger->getEvents().size());
+    constexpr uint16_t TotalPossible = std::numeric_limits<uint8_t>::max() + 1;
+    constexpr uint16_t Accepted = 3; // LED_ON, LED_OFF, LED_FUNC_OK
+    // Expect: 1 (FUNC_OK) + all invalids + 1 (TURN_LED_OFF)
+    constexpr uint16_t Expected = 1 + (TotalPossible - Accepted) + 1;
+    CHECK_EQUAL(Expected, static_cast<uint16_t>(logger->getEvents().size()));
 }
 
 TEST(SetupTest, FirstEventShouldBeFuncOk)
@@ -63,13 +70,13 @@ TEST(SetupTest, ShouldHaveExactly253InvalidCalls)
         if (entry.state == LED_CALL_INVALID) ++count;
     }
 
-    constexpr uint16_t totalPossible = std::numeric_limits<uint8_t>::max() + 1;
-    constexpr uint16_t accepted = 3;
-    CHECK_EQUAL(totalPossible - accepted, count);
+    constexpr uint16_t TotalPossible = std::numeric_limits<uint8_t>::max() + 1;
+    constexpr uint16_t Accepted = 3;
+    CHECK_EQUAL(TotalPossible - Accepted, count);
 }
 
 TEST(SetupTest, NullFunctionPointer_ShouldReturnFalse)
 {
-    bool result = code.setup(nullptr);
-    CHECK_FALSE(result);
+    const bool Result = code.setup(nullptr);
+    CHECK_FALSE(Result);
 }
