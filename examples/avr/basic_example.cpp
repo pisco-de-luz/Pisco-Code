@@ -19,11 +19,12 @@
 #include <util/delay.h>
 #include "Pisco-Code.hpp"
 
-// // LED pin (ATmega328P: PB5 = digital pin 13)
-// #define LED_BUILTIN_PIN PB5
-
-// Nano’s TX LED is on PD1 = digital pin 1
-#define LED_BUILTIN_PIN PD1
+/**************************************************************************************
+ * DEFINES
+ **************************************************************************************/
+#define LED_PORT   PORTD
+#define LED_DDR    DDRD
+#define LED_PIN    PD1    // TX‐LED on Nano
 
 PiscoCode ledBuiltin;
 bool ledBuiltinOK = false;
@@ -33,10 +34,10 @@ bool turnLedOnOff(uint8_t ctrlLED) {
     bool funcOK = true;
     switch (ctrlLED) {
         case PiscoCode::LED_ON:
-            PORTB |= (1 << LED_BUILTIN_PIN);  // Set pin high
-            break;
+            LED_PORT &= ~(1 << LED_PIN);
+        break;
         case PiscoCode::LED_OFF:
-            PORTB &= ~(1 << LED_BUILTIN_PIN); // Set pin low
+            LED_PORT |=  (1 << LED_PIN);
             break;
         case PiscoCode::LED_FUNC_OK:
             break;  // Nothing to do, just acknowledge
@@ -49,10 +50,11 @@ bool turnLedOnOff(uint8_t ctrlLED) {
 
 int main() {
     // Set LED pin as output
-    DDRB |= (1 << LED_BUILTIN_PIN);
+    LED_DDR |= (1 << LED_PIN);
 
     // Setup PiscoCode instance
     ledBuiltinOK = ledBuiltin.setup(&turnLedOnOff);
+    ledBuiltin.setDimPWM(5);
 
     uint32_t fakeMillis = 0;
 
