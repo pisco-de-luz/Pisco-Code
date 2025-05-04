@@ -144,8 +144,7 @@ std::string MockLedControlLogger::traceLogToString() const
             const Timestamp overlapEnd   = std::min(end, slotEnd);
             const Timestamp overlapDur   = overlapEnd - overlapStart;
 
-            if (entry.state == LED_CALL_ON && entry.duration < MAX_DURATION_TRACK &&
-                entry.duration > 0)
+            if (entry.state == LED_CALL_ON && entry.duration < MAX_DURATION_TRACK)
             {
                 ++histogram[entry.duration];
                 totalOnTime += overlapDur;
@@ -162,14 +161,14 @@ std::string MockLedControlLogger::traceLogToString() const
             else
             {
                 size_t maxIndex = 0;
-                for (size_t i = 1; i < MAX_DURATION_TRACK; ++i)
+                for (size_t i = 0; i < MAX_DURATION_TRACK; ++i)
                 {
                     if (histogram[i] > histogram[maxIndex])
                     {
                         maxIndex = i;
                     }
                 }
-
+                ++maxIndex;
                 result[slotIndex] = (maxIndex < 10) ? ('0' + maxIndex) : ('A' + maxIndex - 10);
             }
         }
