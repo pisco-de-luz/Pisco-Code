@@ -1,14 +1,10 @@
 #include "CppUTest/TestHarness.h"
 #include "Pisco-Code.hpp"
+#include "helpers/TestLoopRunner.hpp"
 #include "mocks/MockLedControlLogger.hpp"
 
 #include <cstdint>
-#include <limits>
-#include <memory>
 #include <string>
-// #include <map>
-#include <algorithm>
-#include <iomanip>
 namespace
 {
     std::unique_ptr<MockLedControlLogger> logger;
@@ -39,26 +35,55 @@ TEST_GROUP(LoopBehaviorTest)
 TEST(LoopBehaviorTest, ShouldHoldDimLightForDigitZero)
 {
     code.showCode(0, PiscoCode::DECIMAL);
-
-    constexpr uint8_t LOOP_COUNTER_TICKS     = 50;
-    constexpr uint8_t LOOP_CALLS_PER_COUNTER = 64;
-    Timestamp         loopCounter            = 0;
-
-    uint8_t fakeMillis = 0;
-
-    while (code.isSequencing())
-    {
-        for (uint8_t i = 0; i < LOOP_CALLS_PER_COUNTER; ++i)
-        {
-            logger->setTime(loopCounter++);
-            code.loop(fakeMillis);
-        }
-
-        ++fakeMillis;
-    }
-
-    logger->flush();
-
+    testutils::runSequencer(code, logger.get());
     const std::string trace = logger->traceLogToString();
+
     STRCMP_EQUAL("1M0S1L0M", trace.c_str());
+}
+
+TEST(LoopBehaviorTest, ShouldBlinkDigits_1_2_0)
+{
+    code.showCode(120, PiscoCode::DECIMAL);
+    testutils::runSequencer(code, logger.get());
+    const std::string trace = logger->traceLogToString();
+
+    STRCMP_EQUAL("1MgS1MgS1SgS1M0S1L0M", trace.c_str());
+}
+
+TEST(LoopBehaviorTest, ShouldBlinkNegativeSingleDigit)
+{
+    code.showCode(-2, PiscoCode::DECIMAL);
+    testutils::runSequencer(code, logger.get());
+    const std::string trace = logger->traceLogToString();
+
+    STRCMP_EQUAL("1MgM1MgS1SgS1L0M", trace.c_str());
+}
+
+TEST(LoopBehaviorTest, ShouldRepeatBlinkingSequenceTwice)
+{
+    code.setRepeat(2);
+    code.showCode(1, PiscoCode::DECIMAL);
+    testutils::runSequencer(code, logger.get());
+    const std::string trace = logger->traceLogToString();
+
+    STRCMP_EQUAL("1MgS1L0M1MgS1L0M1MgS1L0M", trace.c_str());
+}
+
+TEST(LoopBehaviorTest, ShouldEndInFinalPause)
+{
+    code.showCode(7, PiscoCode::DECIMAL); // Only one repeat
+    testutils::runSequencer(code, logger.get());
+    const std::string trace        = logger->traceLogToString();
+    const std::string lastTwoChars = trace.substr(trace.size() - 2, 2);
+
+    STRCMP_EQUAL("0M", lastTwoChars.c_str());
+}
+
+TEST(LoopBehaviorTest, ShouldHandleMixOfZeroAndOne)
+{
+    code.showCode(1010, PiscoCode::DECIMAL);
+    testutils::runSequencer(code, logger.get());
+    const std::string trace = logger->traceLogToString();
+
+    STRCMP_EQUAL("1MgS1M0S1MgS1M0S1L0M", trace.c_str());
 }
