@@ -50,7 +50,7 @@ TEST(LoopBehaviorTest, ShouldHoldDimLightForDigitZero)
     {
         for (uint8_t i = 0; i < LOOP_CALLS_PER_COUNTER; ++i)
         {
-            logger->setTime(loopCounter++); // Set the current time for the logger
+            logger->setTime(loopCounter++);
             code.loop(fakeMillis);
         }
 
@@ -58,19 +58,7 @@ TEST(LoopBehaviorTest, ShouldHoldDimLightForDigitZero)
     }
 
     logger->flush();
-    const auto& log = logger->getEvents();
 
-    uint16_t onCount  = 0;
-    uint16_t offCount = 0;
-    for (const auto& entry : log)
-    {
-        if (entry.state == LED_CALL_ON)
-            ++onCount;
-        if (entry.state == LED_CALL_OFF)
-            ++offCount;
-    }
-
-    std::string trace = logger->traceLogToString();
-    printf("PWM Timeline: %s\n", trace.c_str());
-    CHECK_EQUAL(10, onCount);
+    const std::string trace = logger->traceLogToString();
+    STRCMP_EQUAL("1M0S1L0M", trace.c_str());
 }

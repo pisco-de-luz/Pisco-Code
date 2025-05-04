@@ -173,6 +173,54 @@ std::string MockLedControlLogger::traceLogToString() const
             }
         }
     }
+    std::string compressed;
+    if (!result.empty())
+    {
+        char     current = result[0];
+        uint16_t count   = 1;
 
-    return result;
+        for (size_t i = 1; i < result.size(); ++i)
+        {
+            if (result[i] == current)
+            {
+                ++count;
+            }
+            else
+            {
+                // Emit previous group
+                compressed += current;
+                if (count < 11)
+                {
+                    compressed += 'S';
+                }
+                else if (count < 22)
+                {
+                    compressed += 'M';
+                }
+                else
+                {
+                    compressed += 'L';
+                }
+                current = result[i];
+                count   = 1;
+            }
+        }
+
+        // Emit last group
+        compressed += current;
+        if (count < 10)
+        {
+            compressed += 'S';
+        }
+        else if (count < 30)
+        {
+            compressed += 'M';
+        }
+        else
+        {
+            compressed += 'L';
+        }
+    }
+
+    return compressed;
 }
