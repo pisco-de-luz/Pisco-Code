@@ -34,6 +34,7 @@ public:
 private:
     void log(LedEvent ev);
     Timestamp currentTime_{0};
+    Timestamp lastTime_{0};
     StateDuration duration_{1};
     LedEvent lastState_{LED_CALL_INVALID};
     std::vector<LedStateChange> events_{};

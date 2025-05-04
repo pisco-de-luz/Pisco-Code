@@ -29,7 +29,7 @@ TEST_GROUP(LoopBehaviorTest)
     }
 };
 
-IGNORE_TEST(LoopBehaviorTest, ShouldHoldDimLightForDigitZero)
+TEST(LoopBehaviorTest, ShouldHoldDimLightForDigitZero)
 {
     code.setPWM(10);        // No max-bright blinks
     code.setDimPWM(5);     // Dim phase: LED should stay ON
@@ -37,26 +37,31 @@ IGNORE_TEST(LoopBehaviorTest, ShouldHoldDimLightForDigitZero)
     code.setMinDigits(1);  // Force display of single digit
     code.showCode(0, PiscoCode::DECIMAL);
 
-    constexpr uint8_t LOOP_COUNTER_TICKS = 20;
+    constexpr uint8_t LOOP_COUNTER_TICKS = 50;
     constexpr uint8_t LOOP_CALLS_PER_COUNTER = 64;
+    Timestamp loopCounter = 0;
 
-    uint8_t loopCounter = 0;
+    uint8_t fakeMillis = 0;
     for (uint8_t t = 0; t < LOOP_COUNTER_TICKS; ++t) {
-        //logger->setTime(loopCounter);
-
+        
         for (uint8_t i = 0; i < LOOP_CALLS_PER_COUNTER; ++i) {
-            code.loop(loopCounter);
+            logger->setTime(loopCounter++); // Set the current time for the logger
+            code.loop(fakeMillis);
         }
 
-        ++loopCounter;
+        ++fakeMillis;
     }
 
+    logger->flush();
     const auto& log = logger->getEvents();
 
     // Optional: print debug info
     for (const auto& entry : log) {
-        printf("T=%d  STATE=%d  DURATION=%d\n", entry.timestamp, entry.state, entry.duration);
+        if ( entry.duration > 1 ) {
+            printf("\nT=%d  STATE=%d  DURATION=%d", entry.timestamp, entry.state, entry.duration);
+        }
     }
+    printf("\n");
 
     uint16_t onCount = 0;
     uint16_t offCount = 0;

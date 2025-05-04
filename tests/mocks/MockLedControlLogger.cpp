@@ -16,38 +16,35 @@ void MockLedControlLogger::clear() {
 
 void MockLedControlLogger::log(LedEvent ledEvent) {
     if (ledEvent == lastState_) {
-        ++duration_;
         return;  // Still in same state, extend current duration
     }
 
     // If lastState_ was valid, flush it to the log
     if (lastState_ != LED_CALL_INVALID) {
         LedStateChange stateChange;
-        stateChange.timestamp = currentTime_;
+        stateChange.timestamp = lastTime_;
         stateChange.state = lastState_;
-        stateChange.duration = duration_;
+        stateChange.duration = currentTime_ - lastTime_;
         events_.push_back(stateChange);
-        printf("log()\t T=%d  STATE=%d  DURATION=%d\n", stateChange.timestamp, stateChange.state, stateChange.duration);
-        currentTime_ += duration_;
+        //printf("log()\t T=%d  STATE=%d  DURATION=%d\n", stateChange.timestamp, stateChange.state, stateChange.duration);
     }
 
     // Start counting new state
     lastState_ = ledEvent;
-    duration_ = 1;
+    lastTime_ = currentTime_;
 }
 
 void MockLedControlLogger::flush() {
-    if (duration_ == 0 || lastState_ == LED_CALL_INVALID) return;
+    if (lastState_ != LED_CALL_INVALID) {
+        LedStateChange stateChange;
+        stateChange.timestamp = lastTime_;
+        stateChange.state = lastState_;
+        stateChange.duration = currentTime_ - lastTime_;
+        events_.push_back(stateChange);
+        //printf("flush()\t T=%d  STATE=%d  DURATION=%d\n", stateChange.timestamp, stateChange.state, stateChange.duration);
+    }
 
-    LedStateChange stateChange;
-    stateChange.timestamp = currentTime_;
-    stateChange.state = lastState_;
-    stateChange.duration = duration_;
-    events_.push_back(stateChange);
-    printf("flush()\t T=%d  STATE=%d  DURATION=%d\n", stateChange.timestamp, stateChange.state, stateChange.duration);
-    currentTime_ += duration_;
-    
-    duration_ = 0;
+    lastTime_ = currentTime_;
     lastState_ = LED_CALL_INVALID;
 }
 
