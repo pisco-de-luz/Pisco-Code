@@ -86,7 +86,7 @@ bool failingHAL(uint8_t)
 TEST(SetupTest, ShouldPauseWhenSetupFails)
 {
     code.setup(&failingHAL);
-    code.showCode(7, PiscoCode::DECIMAL);
+    code.showCode(7, static_cast<uint8_t>(pisco::base_t::DECIMAL));
     testutils::runSequencer(code, logger.get());
 
     const std::string trace = logger->traceLogToString();

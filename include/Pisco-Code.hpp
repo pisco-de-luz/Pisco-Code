@@ -1,138 +1,111 @@
-#ifndef PISCO_CODE
-#define PISCO_CODE
-
-// Central include file for Pisco-Code and defines the PiscoCode class.
+#ifndef PISCO_CODE_HPP
+#define PISCO_CODE_HPP
 
 #include <stdint.h>
-#include "loop.hpp"
-#include "show.hpp"
 
-// CONSTRUCTORS
-class PiscoCode {
-    // PUBLIC MEMBER FUNCTIONS
-    public:
+namespace pisco
+{
 
-                               PiscoCode(void);                                // Constructor 
-                               // Defining all class members. 
-      bool                     setup(bool (*ledOnOffFunc)(uint8_t ctrlLED));
-      void                     loop(uint8_t loopCounter);
-      uint8_t                  showCode(int32_t codeToShow, uint8_t base);
-      bool                     isSequencing(void);
-      void                     setPWM(uint8_t pwm);
-      void                     setDimPWM(uint8_t dimPWM);
-      void                     setRepeat(uint8_t times);
-      void                     setMinDigits(uint8_t minDigits);
-      static const uint8_t     LED_ON =                      0;
-      static const uint8_t     LED_OFF =                     1;
-      static const uint8_t     LED_FUNC_OK =               100;
-      static const uint8_t     BINARY =                      2;
-      static const uint8_t     OCTAL =                       8;
-      static const uint8_t     DECIMAL =                    10;
-      static const uint8_t     HEXADECIMAL =                16;
+    constexpr uint8_t LED_ON      = 0;
+    constexpr uint8_t LED_OFF     = 1;
+    constexpr uint8_t LED_FUNC_OK = 100;
 
+    enum class base_t : uint8_t
+    {
+        BINARY      = 2,
+        OCTAL       = 8,
+        DECIMAL     = 10,
+        HEXADECIMAL = 16
+    };
 
-      
-      enum Errors {                                                 // Errors codes returned from showDec, showHex, and showBin functions.
-         OK = 0,                                                    // The Pisco Code was accepted and will soon start sequencing. 
-         SEQUENCE_RUNNING = 1,                                      // The PiscoCode was rejected because another sequencing is running.
-         FAILED = 2                                                 // Some errors occurred. 
-      };
+    enum class status_t : uint8_t
+    {
+        OK               = 0,
+        SEQUENCE_RUNNING = 1,
+        FAILED           = 2
+    };
 
+    enum class phase_t : uint8_t
+    {
+        PAUSED            = 10,
+        START_SEQUENCE    = 20,
+        NEGATIVE_SIGN_ON  = 30,
+        NEGATIVE_SIGN_OFF = 40,
+        READ_NEXT_DIGIT   = 50,
+        SEQUENCING_ON     = 60,
+        SEQUENCING_OFF    = 70,
+        FINAL_PAUSE       = 80,
+        REPEAT_SEQUENCE   = 90,
+        END_SEQUENCE      = 100
+    };
 
-    // PRIVATE MEMBER FUNCTIONS
-    private:
+    constexpr bool TURN_LED_ON  = true;
+    constexpr bool TURN_LED_OFF = false;
 
-     enum CurrentPhases {
-        PAUSED =             10,
-        START_SEQUENCE =     20,
-        NEGATIVE_SIGN_ON =   30,
-        NEGATIVE_SIGN_OFF =  40,
-        READ_NEXT_DIGIT =    50,
-        SEQUENCING_ON =      60,
-        SEQUENCING_OFF =     70,
-        FINAL_PAUSE =        80,
-        REPEAT_SEQUENCE =    90,
-        END_SEQUENCE =      100
-     };
+    constexpr uint32_t LOOP_INTERVAL_MS       = 64;
+    constexpr uint32_t NEGATIVE_BLINK_LONG_MS = 1800;
+    constexpr uint32_t SHORT_BLINK_MS         = 350;
+    constexpr uint32_t ZERO_DIGIT_BLINK_MS    = 440;
+    constexpr uint32_t BETWEEN_BLINK_MS       = 350;
+    constexpr uint32_t BETWEEN_DIGITS_MS      = 1700;
+    constexpr uint32_t BETWEEN_CODES_MS       = 1500;
 
-static const bool          TURN_LED_ON =              true;
-static const bool          TURN_LED_OFF =            false;
+    constexpr uint8_t MAX_DIGITS         = 10;
+    constexpr uint8_t INITIAL_DIMMED_PWM = 0;
+    constexpr uint8_t PWM_MAX            = 15;
 
-/* Set how many milliseconds the loop counter increments. 
- *  This counter increments every 64ms and overflows after around 16.3 seconds. */
-static const uint32_t      mSec_perLoopCounter =        64;
+    constexpr uint8_t to_loop_count(uint32_t ms)
+    {
+        return static_cast<uint8_t>(ms / LOOP_INTERVAL_MS);
+    }
 
-/* Set the LED's duration for a long blink in milliseconds. */
-static const uint32_t      mSec_negativeLongBlink =   1800;      
+} // namespace pisco
 
-/* Set the LED's duration for a long blink in loop counter. */
-static const uint8_t       loopC_negativeLongBlink =  mSec_negativeLongBlink / mSec_perLoopCounter;  
+class PiscoCode
+{
+  public:
+    PiscoCode();
 
-/* Set the LED's duration for a short blink in milliseconds. */
-static const uint32_t      mSec_shortBlink =           350;
+    bool    setup(bool (*led_func)(uint8_t));
+    void    loop(uint8_t loop_counter);
+    uint8_t showCode(int32_t value, uint8_t base);
 
-/* Set the LED's duration for a short blink in loop counter. */
-static const uint8_t       loopC_shortBlink =           mSec_shortBlink / mSec_perLoopCounter;
+    bool isSequencing() const;
 
-/* Set the LED's duration when blinking, indicating the zero digit in milliseconds.  */
-static const uint32_t      mSec_Blink4DigitZero =      440;
+    void setPwm(uint8_t pwm);
+    void setDimPwm(uint8_t dim_pwm);
+    void setRepeat(uint8_t times);
+    void setMinDigits(uint8_t min_digits);
 
-/* Set the LED's duration when blinking, indicating the zero digit in loop counter.  */
-static const uint8_t       loopC_Blink4DigitZero =      mSec_Blink4DigitZero / mSec_perLoopCounter;
+  private:
+    bool (*led_on_off_)(uint8_t) = nullptr;
 
-/* Set the pause duration between blinks in milliseconds. */
-static const uint32_t      mSec_betweenBlink =         350;
+    uint8_t digit_to_show_[pisco::MAX_DIGITS]  = {};
+    int8_t  blinks_to_show_[pisco::MAX_DIGITS] = {};
 
-/* Set the pause duration between blinks in loop counter. */
-static const uint8_t       loopC_betweenBlink =         mSec_betweenBlink / mSec_perLoopCounter;
+    uint8_t current_digit_           = 0;
+    uint8_t least_significant_digit_ = 0;
 
-/* Set the pause duration between digits in milliseconds. */
-static const uint32_t      mSec_betweenDigits =       1700; 
+    uint8_t pwm_sequence_       = pisco::PWM_MAX;
+    uint8_t pwm_sequence_cache_ = pisco::PWM_MAX;
+    uint8_t pwm_counter_        = 0;
 
-/* Set the pause duration between digits in loop counter. */
-static const uint8_t       loopC_betweenDigits =       mSec_betweenDigits / mSec_perLoopCounter; 
+    uint8_t sequence_times_       = 0;
+    uint8_t sequence_times_cache_ = 0;
 
-/* Set the pause duration between Codes in milliseconds. */
-static const uint32_t      mSec_betweenCodes =        1500; 
+    uint8_t current_phase_    = static_cast<uint8_t>(pisco::phase_t::PAUSED);
+    uint8_t dimmed_pwm_       = pisco::INITIAL_DIMMED_PWM;
+    uint8_t dimmed_pwm_cache_ = pisco::INITIAL_DIMMED_PWM;
 
-/* Set the pause duration between Codes in loop counter. */
-static const uint8_t       loopC_betweenCodes =        mSec_betweenCodes / mSec_perLoopCounter; 
+    uint8_t min_num_digits_         = 0;
+    uint8_t start_time_last_phase_  = 0;
+    uint8_t current_phase_duration_ = 0;
 
-static const uint8_t       MAX_DIGITS =                 10;          // The maximum number of digits a sequence will process.
-static const uint8_t       initialDimmedPWM =            0;          // The default PWM set value for the dimmed phase of the sequence.
-static const uint8_t       pwmMax  =                    15;          // The maximum value the PWM scale could have beginning with zero.
+    bool is_negative_ = false;
 
-
-
-    uint8_t                           digitToShow[MAX_DIGITS];             // Separated digits to be displayed.
-    int8_t                            blinksToShow[MAX_DIGITS];            // The number of blinks is still pending to be displayed.
-    uint8_t                           currentDigit;                        // Current digit to show. 
-    uint8_t                           leastSignificantDigit;                // The less significant digit to be displayed.
-    uint8_t                           pwmSequence;                         // PWM value of the most bright light the LED should blink. 
-    uint8_t                           _pwmSequence;                         // PWM value of the most bright light the LED should blink. 
-    uint8_t                           pwmCounter;                          // PWM counter from zero to pwmMax was used to set the PWM levels' timing.              
-    uint8_t                           sequenceTimes;                       // Register the number of times we should repeat the PiscoCode. 
-    uint8_t                           _sequenceTimes;                      // Copied from sequenceTimes variable always when a new code starts been shown. 
-    uint8_t                           currentPhase;                        // The current phase we are working on now. 
-    uint8_t                           dimmedPWM;                           // PWM value of the dimmed light the LED should stay on during the hole sequence. 
-    uint8_t                           _dimmedPWM;                          // PWM value of the dimmed light the LED should stay on during the hole sequence. 
-    uint8_t                           minNumDigits;                        // Minimum number of digits should be show.
-    uint8_t                           startTimeLastPhase;                  // Start time of the last phase. 
-    uint8_t                           currentPhaseDuration;                // Register the total milliseconds this phase should last.
-    bool                              isNegative;                          // It is true if the number to show is negative. 
-    bool                              _isExternalLedFuncOk(void);
-    bool                              _switchLED(bool turnItON);
-    bool                              _currentPhaseFinished(uint8_t loopCounter);
-
-    // LedOnOff() - Pointer to an external function used to switch LED on and off. 
-    // ------------------------------------------------------------------------------------------------
-    // Before using this function to turn the LED on and off, the caller will check if it is a valid
-    // pointer to a correct function, and it should respond to a LED_FUNC_OK call returning true. 
-    //
-    // This function will return true only if one of these three commands are received, LED_ON,
-    // LED_OFF, and LED_FUNC_OK. All other values will return false. 
-    bool                                  (*LedOnOff)(uint8_t);                // Pointer variable to the LED activation function. 
-     
+    bool isExternalLedFuncOk() const;
+    bool switchLed(bool on);
+    bool isCurrentPhaseFinished(uint8_t loop_counter) const;
 };
 
-#endif
+#endif // PISCO_CODE_HPP

@@ -33,13 +33,13 @@ bool turnLedOnOff(uint8_t ctrlLED)
     bool funcOK = true;
     switch (ctrlLED)
     {
-        case PiscoCode::LED_ON:
+        case pisco::LED_ON:
             LED_PORT &= ~(1 << LED_PIN);
             break;
-        case PiscoCode::LED_OFF:
+        case pisco::LED_OFF:
             LED_PORT |= (1 << LED_PIN);
             break;
-        case PiscoCode::LED_FUNC_OK:
+        case pisco::LED_FUNC_OK:
             break; // Nothing to do, just acknowledge
         default:
             funcOK = false;
@@ -76,23 +76,24 @@ int main()
 
     // Setup PiscoCode instance
     ledBuiltinOK = ledBuiltin.setup(&turnLedOnOff);
-    ledBuiltin.setDimPWM(5);
+    ledBuiltin.setDimPwm(5);
 
     uint32_t fakeMillis = 0;
 
     if (ledBuiltinOK)
     {
-        ledBuiltin.showCode(14, PiscoCode::DECIMAL);
+        ledBuiltin.showCode(14, static_cast<uint8_t>(pisco::base_t::DECIMAL));
     }
 
-    ledBuiltin.setMinDigits(5);
     while (true)
     {
         if (ledBuiltinOK && !ledBuiltin.isSequencing() &&
             fakeMillis <= static_cast<uint32_t>(INT32_MAX))
         {
             // Convert fakeMillis to a 5-digit HHHMM representation
-            ledBuiltin.showCode(millisToBCDTime(fakeMillis), PiscoCode::DECIMAL);
+            ledBuiltin.setMinDigits(3); // Guarantee 3 digits to represent H:MM
+            ledBuiltin.showCode(millisToBCDTime(fakeMillis),
+                                static_cast<uint8_t>(pisco::base_t::DECIMAL));
         }
 
         // Call loop function with a counter based on 64ms steps

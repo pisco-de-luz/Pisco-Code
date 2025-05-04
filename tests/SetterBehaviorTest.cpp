@@ -35,7 +35,7 @@ TEST_GROUP(SetterTest)
 
 TEST(SetterTest, ShouldUseDefaultPwmLevel)
 {
-    code.showCode(1, PiscoCode::DECIMAL);
+    code.showCode(1, static_cast<uint8_t>(pisco::base_t::DECIMAL));
     testutils::runSequencer(code, logger.get());
 
     const std::string trace = logger->traceLogToString();
@@ -44,8 +44,8 @@ TEST(SetterTest, ShouldUseDefaultPwmLevel)
 
 TEST(SetterTest, ShouldUseCustomPwmLevel)
 {
-    code.setPWM(6);
-    code.showCode(1, PiscoCode::DECIMAL);
+    code.setPwm(6);
+    code.showCode(1, static_cast<uint8_t>(pisco::base_t::DECIMAL));
     testutils::runSequencer(code, logger.get());
 
     const std::string trace = logger->traceLogToString();
@@ -54,8 +54,8 @@ TEST(SetterTest, ShouldUseCustomPwmLevel)
 
 TEST(SetterTest, ShouldRejectTooHighPwmLevel)
 {
-    code.setPWM(255); // Out of range
-    code.showCode(1, PiscoCode::DECIMAL);
+    code.setPwm(255); // Out of range
+    code.showCode(1, static_cast<uint8_t>(pisco::base_t::DECIMAL));
     testutils::runSequencer(code, logger.get());
 
     const std::string trace = logger->traceLogToString();
@@ -65,8 +65,8 @@ TEST(SetterTest, ShouldRejectTooHighPwmLevel)
 
 TEST(SetterTest, ShouldAffectLedOnDuration)
 {
-    code.setPWM(3);
-    code.showCode(1, PiscoCode::DECIMAL);
+    code.setPwm(3);
+    code.showCode(1, static_cast<uint8_t>(pisco::base_t::DECIMAL));
     testutils::runSequencer(code, logger.get());
 
     const std::string trace = logger->traceLogToString();
@@ -75,7 +75,7 @@ TEST(SetterTest, ShouldAffectLedOnDuration)
 
 TEST(SetterTest, ShouldUseDefaultDimPwmLevel)
 {
-    code.showCode(0, PiscoCode::DECIMAL);
+    code.showCode(0, static_cast<uint8_t>(pisco::base_t::DECIMAL));
     testutils::runSequencer(code, logger.get());
 
     const std::string trace = logger->traceLogToString();
@@ -84,8 +84,8 @@ TEST(SetterTest, ShouldUseDefaultDimPwmLevel)
 
 TEST(SetterTest, ShouldSetDimLevelAffectingIdle)
 {
-    code.setDimPWM(4);
-    code.showCode(0, PiscoCode::DECIMAL);
+    code.setDimPwm(4);
+    code.showCode(0, static_cast<uint8_t>(pisco::base_t::DECIMAL));
     testutils::runSequencer(code, logger.get());
 
     const std::string trace = logger->traceLogToString();
@@ -94,8 +94,8 @@ TEST(SetterTest, ShouldSetDimLevelAffectingIdle)
 
 TEST(SetterTest, ShouldRejectTooHighDimPwmLevel)
 {
-    code.setDimPWM(255); // Out of range
-    code.showCode(0, PiscoCode::DECIMAL);
+    code.setDimPwm(255); // Out of range
+    code.showCode(0, static_cast<uint8_t>(pisco::base_t::DECIMAL));
     testutils::runSequencer(code, logger.get());
 
     const std::string trace = logger->traceLogToString();
@@ -104,9 +104,9 @@ TEST(SetterTest, ShouldRejectTooHighDimPwmLevel)
 
 TEST(SetterTest, ShouldNotAffectBlinkPwm)
 {
-    code.setPWM(9);
-    code.setDimPWM(2);
-    code.showCode(2, PiscoCode::DECIMAL);
+    code.setPwm(9);
+    code.setDimPwm(2);
+    code.showCode(2, static_cast<uint8_t>(pisco::base_t::DECIMAL));
     testutils::runSequencer(code, logger.get());
 
     const std::string trace = logger->traceLogToString();
@@ -117,7 +117,7 @@ TEST(SetterTest, ShouldNotAffectBlinkPwm)
 TEST(SetterTest, ShouldPadWithLeadingZeros)
 {
     code.setMinDigits(4);
-    code.showCode(12, PiscoCode::DECIMAL); // Expect: 0012
+    code.showCode(12, static_cast<uint8_t>(pisco::base_t::DECIMAL)); // Expect: 0012
     testutils::runSequencer(code, logger.get());
 
     const std::string trace = logger->traceLogToString();
@@ -126,8 +126,8 @@ TEST(SetterTest, ShouldPadWithLeadingZeros)
 
 TEST(SetterTest, ShouldNotPadIfNotNeeded)
 {
-    code.setMinDigits(2);                   // force 2 digits
-    code.showCode(123, PiscoCode::DECIMAL); // Will blink number 23 only
+    code.setMinDigits(2);                                             // force 2 digits
+    code.showCode(123, static_cast<uint8_t>(pisco::base_t::DECIMAL)); // Will blink number 23 only
     testutils::runSequencer(code, logger.get());
 
     const std::string trace = logger->traceLogToString();
@@ -137,7 +137,7 @@ TEST(SetterTest, ShouldNotPadIfNotNeeded)
 TEST(SetterTest, ShouldHandleSingleDigitZero)
 {
     code.setMinDigits(1);
-    code.showCode(0, PiscoCode::DECIMAL);
+    code.showCode(0, static_cast<uint8_t>(pisco::base_t::DECIMAL));
     testutils::runSequencer(code, logger.get());
 
     const std::string trace = logger->traceLogToString();
@@ -147,7 +147,7 @@ TEST(SetterTest, ShouldHandleSingleDigitZero)
 TEST(SetterTest, ShouldRejectTooHighMinDigits)
 {
     code.setMinDigits(99); // Exceeds MAX_DIGITS
-    code.showCode(1, PiscoCode::DECIMAL);
+    code.showCode(1, static_cast<uint8_t>(pisco::base_t::DECIMAL));
     testutils::runSequencer(code, logger.get());
 
     const std::string trace = logger->traceLogToString();

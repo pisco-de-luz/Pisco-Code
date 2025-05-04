@@ -1,51 +1,60 @@
 #include "show.hpp"
 
-// Show decimal codes <codeToShow> using the <pwm> bright to blink repeating <times> times. 
-uint8_t PiscoCode::showCode(int32_t codeToShow, uint8_t base) {
-   bool   status = OK;                                    // Set the initial status of this function as OK
+uint8_t PiscoCode::showCode(int32_t value, uint8_t base)
+{
+    uint8_t status = static_cast<uint8_t>(pisco::status_t::OK);
 
-   _sequenceTimes =      sequenceTimes+1;                 // Always have the last value of sequenceTimes just after show functions starts a new sequence.
-   _pwmSequence =            pwmSequence;                 // Always have the last value of pwmSequence just after show functions starts a new sequence.
-   _dimmedPWM =                dimmedPWM;                 // Always have the last value of dimmedPWM just after show functions starts a new sequence.
-   if ( currentPhase == PAUSED && _pwmSequence > 0 ) {    // If it is not sequencing and pwmSequencewm and sequenceTimes are set
-      isNegative = false;
-      if ( codeToShow < 0 ) {                             // Check if the code is negative
-         isNegative = true;                               // Set the isNegative variable to true
-         codeToShow = -codeToShow;                        // and invert the code signal.
-      }
-       
-      if ( _pwmSequence > pwmMax ) {                      // Ensure that the pwm variable has a valid value.
-         _pwmSequence = pwmMax;                           // Setting to the maximum limit. 
-      }
+    sequence_times_cache_ = sequence_times_ + 1;
+    pwm_sequence_cache_   = pwm_sequence_;
+    dimmed_pwm_cache_     = dimmed_pwm_;
 
-      currentDigit = (MAX_DIGITS - 1);                    // Set the currentDigit to the least significative one.      
+    if (current_phase_ == static_cast<uint8_t>(pisco::phase_t::PAUSED) && pwm_sequence_cache_ > 0)
+    {
+        is_negative_ = false;
+        if (value < 0)
+        {
+            is_negative_ = true;
+            value        = -value;
+        }
 
-      // We will separate each digit to show in digitToShow[] array.
-      // Likewise, we will define how many times the LED should blink
-      // in blinksToShow[] array.
-      // Example: if codeToShow = 768
-      //          digitToShow[MAX_DIGITS - 1] = 8 and blinksToShow[MAX_DIGITS - 1] = 8
-      //          digitToShow[MAX_DIGITS - 2] = 6 and blinksToShow[MAX_DIGITS - 2] = 6
-      //          digitToShow[MAX_DIGITS - 3] = 7 and blinksToShow[MAX_DIGITS - 3] = 7
-      //          currentDigit = leastSignificantDigit = (MAX_DIGITS - 3);
-      for(int8_t dig=(MAX_DIGITS - 1); dig>=0 ; dig--) {                       // For each possible digit
-         digitToShow[dig] =  (codeToShow % base);                                // Get the least significant digit of the code. 
-         blinksToShow[dig] = digitToShow[dig];                                 // Set how many times the LED should blink to represent this digit. 
-         if ( digitToShow[dig] > 0 ) { currentDigit = dig; }                   // Update the currentDigit variable if the current digit is greater than zero.
-         codeToShow /= base;                                                     // Removes the least significant digit from the code to display.
-      }
-      if ( minNumDigits > 0 && minNumDigits < MAX_DIGITS ) {                 // If the variable minNumDigits is set
-         currentDigit = (MAX_DIGITS - minNumDigits);                          // define the minimum number of digits to show in this sequence.
-      }
-      leastSignificantDigit = currentDigit;                                     // Set the less significant digit to be displayed.
-      currentPhase = START_SEQUENCE;                                           // Defines the currentPhase to start sequence. 
-      startTimeLastPhase = 0;                                                  // As we are starting a new sequence, the start time of the last phase is zero. 
-      currentPhaseDuration = loopC_betweenDigits;                              // Set the duration of this start sequence equal to loopC_betweenDigits.
-   } else if ( currentPhase != PAUSED ) {                                      // If it was not possible to start a new sequence and the currentPhase is sequencing.
-      status = SEQUENCE_RUNNING;
-   } else {
-      status = FAILED;
-   }
-   return(status);
+        if (pwm_sequence_cache_ > pisco::PWM_MAX)
+        {
+            pwm_sequence_cache_ = pisco::PWM_MAX;
+        }
+
+        current_digit_ = pisco::MAX_DIGITS - 1;
+
+        for (int8_t i = static_cast<int8_t>(pisco::MAX_DIGITS) - 1; i >= 0; --i)
+        {
+            digit_to_show_[i]  = static_cast<uint8_t>(value % base);
+            blinks_to_show_[i] = static_cast<int8_t>(digit_to_show_[i]);
+
+            if (digit_to_show_[i] > 0)
+            {
+                current_digit_ = static_cast<uint8_t>(i);
+            }
+
+            value /= base;
+        }
+
+        if (min_num_digits_ > 0 && min_num_digits_ < pisco::MAX_DIGITS)
+        {
+            current_digit_ = pisco::MAX_DIGITS - min_num_digits_;
+        }
+
+        least_significant_digit_ = current_digit_;
+        current_phase_           = static_cast<uint8_t>(pisco::phase_t::START_SEQUENCE);
+        start_time_last_phase_   = 0;
+        current_phase_duration_  = pisco::to_loop_count(pisco::BETWEEN_DIGITS_MS);
+    }
+    else if (current_phase_ != static_cast<uint8_t>(pisco::phase_t::PAUSED))
+    {
+        status = static_cast<uint8_t>(pisco::status_t::SEQUENCE_RUNNING);
+    }
+    else
+    {
+        status = static_cast<uint8_t>(pisco::status_t::FAILED);
+    }
+
+    return status;
 }
-

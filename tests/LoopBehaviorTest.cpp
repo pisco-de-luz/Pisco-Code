@@ -34,7 +34,7 @@ TEST_GROUP(LoopBehaviorTest)
 
 TEST(LoopBehaviorTest, ShouldHoldDimLightForDigitZero)
 {
-    code.showCode(0, PiscoCode::DECIMAL);
+    code.showCode(0, static_cast<uint8_t>(pisco::base_t::DECIMAL));
     testutils::runSequencer(code, logger.get());
     const std::string trace = logger->traceLogToString();
 
@@ -43,7 +43,7 @@ TEST(LoopBehaviorTest, ShouldHoldDimLightForDigitZero)
 
 TEST(LoopBehaviorTest, ShouldBlinkDigits_1_2_0)
 {
-    code.showCode(120, PiscoCode::DECIMAL);
+    code.showCode(120, static_cast<uint8_t>(pisco::base_t::DECIMAL));
     testutils::runSequencer(code, logger.get());
     const std::string trace = logger->traceLogToString();
 
@@ -52,7 +52,7 @@ TEST(LoopBehaviorTest, ShouldBlinkDigits_1_2_0)
 
 TEST(LoopBehaviorTest, ShouldBlinkNegativeSingleDigit)
 {
-    code.showCode(-2, PiscoCode::DECIMAL);
+    code.showCode(-2, static_cast<uint8_t>(pisco::base_t::DECIMAL));
     testutils::runSequencer(code, logger.get());
     const std::string trace = logger->traceLogToString();
 
@@ -62,7 +62,7 @@ TEST(LoopBehaviorTest, ShouldBlinkNegativeSingleDigit)
 TEST(LoopBehaviorTest, ShouldRepeatBlinkingSequenceTwice)
 {
     code.setRepeat(2);
-    code.showCode(1, PiscoCode::DECIMAL);
+    code.showCode(1, static_cast<uint8_t>(pisco::base_t::DECIMAL));
     testutils::runSequencer(code, logger.get());
     const std::string trace = logger->traceLogToString();
 
@@ -71,7 +71,7 @@ TEST(LoopBehaviorTest, ShouldRepeatBlinkingSequenceTwice)
 
 TEST(LoopBehaviorTest, ShouldEndInFinalPause)
 {
-    code.showCode(7, PiscoCode::DECIMAL); // Only one repeat
+    code.showCode(7, static_cast<uint8_t>(pisco::base_t::DECIMAL)); // Only one repeat
     testutils::runSequencer(code, logger.get());
     const std::string trace        = logger->traceLogToString();
     const std::string lastTwoChars = trace.substr(trace.size() - 2, 2);
@@ -81,7 +81,7 @@ TEST(LoopBehaviorTest, ShouldEndInFinalPause)
 
 TEST(LoopBehaviorTest, ShouldHandleMixOfZeroAndOne)
 {
-    code.showCode(1010, PiscoCode::DECIMAL);
+    code.showCode(1010, static_cast<uint8_t>(pisco::base_t::DECIMAL));
     testutils::runSequencer(code, logger.get());
     const std::string trace = logger->traceLogToString();
 

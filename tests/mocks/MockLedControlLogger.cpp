@@ -69,13 +69,13 @@ bool MockLedControlLogger::handle(uint8_t ctrlLED)
     LedEvent ledEvent{LED_CALL_INVALID};
     switch (ctrlLED)
     {
-        case PiscoCode::LED_ON:
+        case pisco::LED_ON:
             ledEvent = LED_CALL_ON;
             break;
-        case PiscoCode::LED_OFF:
+        case pisco::LED_OFF:
             ledEvent = LED_CALL_OFF;
             break;
-        case PiscoCode::LED_FUNC_OK:
+        case pisco::LED_FUNC_OK:
             ledEvent = LED_CALL_FUNC_OK;
             break;
         default:

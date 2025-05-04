@@ -35,7 +35,7 @@ TEST_GROUP(BaseEncodingTest)
 
 TEST(BaseEncodingTest, ShouldShowDecimal_12345)
 {
-    code.showCode(12345, PiscoCode::DECIMAL);
+    code.showCode(12345, static_cast<uint8_t>(pisco::base_t::DECIMAL));
     testutils::runSequencer(code, logger.get());
 
     const std::string trace = logger->traceLogToString();
@@ -44,7 +44,7 @@ TEST(BaseEncodingTest, ShouldShowDecimal_12345)
 
 TEST(BaseEncodingTest, ShouldShowBinary_5)
 {
-    code.showCode(5, PiscoCode::BINARY); // binary: 101
+    code.showCode(5, static_cast<uint8_t>(pisco::base_t::BINARY)); // binary: 101
     testutils::runSequencer(code, logger.get());
 
     const std::string trace = logger->traceLogToString();
@@ -53,7 +53,7 @@ TEST(BaseEncodingTest, ShouldShowBinary_5)
 
 TEST(BaseEncodingTest, ShouldShowHex_255)
 {
-    code.showCode(255, PiscoCode::HEXADECIMAL); // hex: FF
+    code.showCode(255, static_cast<uint8_t>(pisco::base_t::HEXADECIMAL)); // hex: FF
     testutils::runSequencer(code, logger.get());
 
     const std::string trace = logger->traceLogToString();
@@ -64,7 +64,7 @@ TEST(BaseEncodingTest, ShouldShowHex_255)
 
 TEST(BaseEncodingTest, ShouldShowOctal_28)
 {
-    code.showCode(28, PiscoCode::OCTAL); // octal: 34
+    code.showCode(28, static_cast<uint8_t>(pisco::base_t::OCTAL)); // octal: 34
     testutils::runSequencer(code, logger.get());
 
     const std::string trace = logger->traceLogToString();

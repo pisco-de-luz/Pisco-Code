@@ -2,149 +2,84 @@
 #include <limits.h>
 #include <stdint.h>
 
-PiscoCode::PiscoCode(void)
+PiscoCode::PiscoCode()
+    : current_digit_{0}, least_significant_digit_{0},
+      current_phase_{static_cast<uint8_t>(pisco::phase_t::PAUSED)}, is_negative_{false},
+      min_num_digits_{0}, pwm_sequence_{pisco::PWM_MAX}, pwm_sequence_cache_{pisco::PWM_MAX},
+      pwm_counter_{0}, sequence_times_{0}, sequence_times_cache_{0},
+      dimmed_pwm_{pisco::INITIAL_DIMMED_PWM}, dimmed_pwm_cache_{pisco::INITIAL_DIMMED_PWM},
+      start_time_last_phase_{0}, current_phase_duration_{0}, led_on_off_{nullptr}
 {
-    currentDigit          = 0;
-    leastSignificantDigit = 0;
-    currentPhase          = PAUSED;
-    isNegative            = false;
-    minNumDigits          = 0;
-
-    // Set the initial PWM sequence to the maximum value
-    pwmSequence    = pwmMax;
-    _pwmSequence   = pwmSequence;
-    pwmCounter     = 0;
-    sequenceTimes  = 0;
-    _sequenceTimes = sequenceTimes;
-
-    // Set the initial dimmed PWM to the predefined initial value
-    dimmedPWM  = initialDimmedPWM;
-    _dimmedPWM = dimmedPWM;
-
-    // Initialize the start time of the last phase to zero
-    startTimeLastPhase   = 0;
-    currentPhaseDuration = 0;
-
-    // Initialize the LED function pointer to null
-    LedOnOff = nullptr;
 }
 
-bool PiscoCode::setup(bool (*LedOnOffFunc)(uint8_t ctrlLED))
+bool PiscoCode::setup(bool (*led_func)(uint8_t))
 {
+    led_on_off_    = led_func;
+    current_phase_ = static_cast<uint8_t>(pisco::phase_t::PAUSED);
+    pwm_counter_   = 0;
 
-    bool setupOK = false;
-    currentPhase = PAUSED;
-    pwmCounter   = 0;
-
-    // Set the LED activation function
-    LedOnOff = LedOnOffFunc;
-
-    // Check if the external LED activation function is working correctly
-    if (_isExternalLedFuncOk())
+    if (isExternalLedFuncOk())
     {
-        setupOK = true;
-        (void) _switchLED(TURN_LED_OFF);
+        (void) switchLed(pisco::TURN_LED_OFF);
+        return true;
     }
 
-    return setupOK;
+    return false;
 }
 
-// Function to check if there is a current sequence running.
-bool PiscoCode::isSequencing(void)
+bool PiscoCode::isSequencing() const
 {
-    return (currentPhase != PAUSED);
+    return current_phase_ != static_cast<uint8_t>(pisco::phase_t::PAUSED);
 }
 
-void PiscoCode::setPWM(uint8_t pwm)
+void PiscoCode::setPwm(uint8_t pwm)
 {
-    if (pwm > pwmMax)
-    {
-        pwm = pwmMax;
-    }
-    pwmSequence = pwm;
+    pwm_sequence_ = (pwm > pisco::PWM_MAX) ? pisco::PWM_MAX : pwm;
 }
 
-void PiscoCode::setDimPWM(uint8_t dimPWM)
+void PiscoCode::setDimPwm(uint8_t dim_pwm)
 {
-    if (dimPWM > pwmMax)
-    {
-        dimPWM = pwmMax;
-    }
-    dimmedPWM = dimPWM;
+    dimmed_pwm_ = (dim_pwm > pisco::PWM_MAX) ? pisco::PWM_MAX : dim_pwm;
 }
 
 void PiscoCode::setRepeat(uint8_t times)
 {
-    sequenceTimes = times;
+    sequence_times_ = times;
 }
 
-// Define the minimum number of digits to show.
-void PiscoCode::setMinDigits(uint8_t minDigits)
+void PiscoCode::setMinDigits(uint8_t min_digits)
 {
-    if (minDigits > MAX_DIGITS)
-    {
-        minDigits = MAX_DIGITS;
-    }
-    minNumDigits = minDigits;
+    min_num_digits_ = (min_digits > pisco::MAX_DIGITS) ? pisco::MAX_DIGITS : min_digits;
 }
 
-// This method encapsulates the hardware-dependent LED function.
-bool PiscoCode::_switchLED(bool turnItON)
+bool PiscoCode::switchLed(bool turn_on)
 {
-    // Initialize the function status to false.
-    // The function will return true only if the LedOnOff external function returns true.
-    bool statusFuncOK = false;
-
-    // Check if the hardware-dependent LED function is set correctly.
-    // If the function pointer is not null, it means it's set correctly.
-    if (LedOnOff != nullptr)
+    if (led_on_off_ == nullptr)
     {
-        // If the turnItON parameter is true, we want to turn the LED on.
-        if (turnItON)
-        {
-            // Call the external function to turn the LED on.
-            // The return value of the external function is stored in statusFuncOK.
-            statusFuncOK = LedOnOff(LED_ON);
-        }
-        else
-        {
-            // Call the external function to turn the LED off.
-            // The return value of the external function is stored in statusFuncOK.
-            statusFuncOK = LedOnOff(LED_OFF);
-        }
-    }
-    else
-    {
-        // If the function pointer is null, it means the external function is not set correctly.
-        // In this case, set the function status to false.
-        statusFuncOK = false;
+        return false;
     }
 
-    // Return the function status.
-    // This will be true if the external function was called and returned true, and false otherwise.
-    return (statusFuncOK);
+    uint8_t command = turn_on ? pisco::LED_ON : pisco::LED_OFF;
+    return led_on_off_(command);
 }
 
-// This method checks if the external function for controlling the LED is working correctly.
-bool PiscoCode::_isExternalLedFuncOk(void)
+bool PiscoCode::isExternalLedFuncOk() const
 {
-    constexpr uint16_t UPPER_LIMIT_TO_CHECK = UINT8_MAX + 1;
-    bool               statusFuncOK         = true;
-    if (LedOnOff != nullptr)
+    constexpr uint16_t UPPER_LIMIT = UINT8_MAX + 1;
+    if (led_on_off_ == nullptr)
     {
-        for (uint16_t ctrlLED = 0; ctrlLED < UPPER_LIMIT_TO_CHECK; ctrlLED++)
+        return false;
+    }
+
+    for (uint16_t ctrl = 0; ctrl < UPPER_LIMIT; ++ctrl)
+    {
+        const bool led_func_return_true = led_on_off_(static_cast<uint8_t>(ctrl));
+        if (led_func_return_true && ctrl != pisco::LED_ON && ctrl != pisco::LED_OFF &&
+            ctrl != pisco::LED_FUNC_OK)
         {
-            const bool ledFuncReturnTrue = LedOnOff(ctrlLED);
-            if (ledFuncReturnTrue && ctrlLED != LED_ON && ctrlLED != LED_OFF &&
-                ctrlLED != LED_FUNC_OK)
-            {
-                statusFuncOK = false;
-            }
+            return false;
         }
     }
-    else
-    {
-        statusFuncOK = false;
-    }
-    return (statusFuncOK);
+
+    return true;
 }
