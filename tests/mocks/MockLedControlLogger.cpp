@@ -169,7 +169,7 @@ std::string MockLedControlLogger::traceLogToString() const
                     }
                 }
                 ++maxIndex;
-                result[slotIndex] = (maxIndex < 10) ? ('0' + maxIndex) : ('A' + maxIndex - 10);
+                result[slotIndex] = (maxIndex < 10) ? ('0' + maxIndex) : ('a' + maxIndex - 10);
             }
         }
     }
