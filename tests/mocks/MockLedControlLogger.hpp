@@ -4,6 +4,7 @@
 #include <vector>
 #include <cstdint>
 #include "Pisco-Code.hpp"
+#include <string>
 
 enum LedEvent : uint8_t {
     LED_CALL_INVALID = 0,
@@ -29,7 +30,9 @@ public:
     bool handle(uint8_t ctrlLED);
     void clear();
     const std::vector<LedStateChange>& getEvents() const;
-    void flush();
+       void flush();
+    void setTraceResolution(Timestamp resolutionMs); // default: 100
+    std::string traceLogToString() const;
 
 private:
     void log(LedEvent ev);
@@ -38,6 +41,7 @@ private:
     StateDuration duration_{1};
     LedEvent lastState_{LED_CALL_INVALID};
     std::vector<LedStateChange> events_{};
+    Timestamp traceResolutionMs_{100}; 
 };
 
 #endif
