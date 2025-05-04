@@ -1,5 +1,6 @@
 #include "CppUTest/TestHarness.h"
 #include "Pisco-Code.hpp"
+#include "helpers/TestLoopRunner.hpp"
 #include "mocks/MockLedControlLogger.hpp"
 
 #include <cstdint>
@@ -75,4 +76,19 @@ TEST(SetupTest, NullFunctionPointer_ShouldReturnFalse)
 {
     const bool result = code.setup(nullptr);
     CHECK_FALSE(result);
+}
+
+bool failingHAL(uint8_t)
+{
+    return false;
+}
+
+TEST(SetupTest, ShouldPauseWhenSetupFails)
+{
+    code.setup(&failingHAL);
+    code.showCode(7, PiscoCode::DECIMAL);
+    testutils::runSequencer(code, logger.get());
+
+    const std::string trace = logger->traceLogToString();
+    STRCMP_EQUAL("", trace.c_str()); // Nothing should happen
 }
