@@ -1,5 +1,6 @@
 #include "Pisco-Code.hpp"
-#include <limits>
+#include <limits.h>
+#include <stdint.h>
 
 PiscoCode::PiscoCode(void)
 {
@@ -127,11 +128,11 @@ bool PiscoCode::_switchLED(bool turnItON)
 // This method checks if the external function for controlling the LED is working correctly.
 bool PiscoCode::_isExternalLedFuncOk(void)
 {
-    constexpr uint16_t upperLimitToCheck = std::numeric_limits<uint8_t>::max() + 1;
-    bool               statusFuncOK      = true;
+    constexpr uint16_t UPPER_LIMIT_TO_CHECK = UINT8_MAX + 1;
+    bool               statusFuncOK         = true;
     if (LedOnOff != nullptr)
     {
-        for (uint16_t ctrlLED = 0; ctrlLED < upperLimitToCheck; ctrlLED++)
+        for (uint16_t ctrlLED = 0; ctrlLED < UPPER_LIMIT_TO_CHECK; ctrlLED++)
         {
             const bool ledFuncReturnTrue = LedOnOff(ctrlLED);
             if (ledFuncReturnTrue && ctrlLED != LED_ON && ctrlLED != LED_OFF &&
