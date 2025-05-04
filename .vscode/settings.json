@@ -1,9 +1,9 @@
 {
-        "C_Cpp.clang_format_path": "/usr/bin/clang-format",
+    "C_Cpp.clang_format_path": "/usr/bin/clang-format",
     "C_Cpp.codeAnalysis.clangTidy.enabled": true,
     "C_Cpp.codeAnalysis.clangTidy.path": "/usr/bin/clang-tidy",
     "C_Cpp.codeAnalysis.runAutomatically": true,
-    "C_Cpp.default.compileCommands": "${workspaceFolder}/build/compile_commands.json",
+    "C_Cpp.default.compileCommands": "${workspaceFolder}/build/native/compile_commands.json",
     "editor.formatOnSave": true,
     "workbench.editor.tabSizing": "shrink",
     "editor.codeActionsOnSave": {

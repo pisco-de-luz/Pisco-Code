@@ -3,7 +3,9 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/include/**",
+                "/usr/lib/avr/include/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang-18",
