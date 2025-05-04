@@ -1,0 +1,40 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug Selected Executable",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/native/${input:ExecutableToDebug}",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb",
+        "miDebuggerPath": "/usr/bin/gdb",
+        "setupCommands": [
+          {
+            "description": "Enable pretty-printing for gdb",
+            "text": "-enable-pretty-printing",
+            "ignoreFailures": true
+          }
+        ],
+        "preLaunchTask": "build",
+        "internalConsoleOptions": "openOnSessionStart"
+      }
+    ],
+    "inputs": [
+      {
+        "id": "ExecutableToDebug",
+        "type": "pickString",
+        "description": "Choose the executable to debug",
+        "options": [
+          "tests/PiscoCodeTests",
+          "basicExample",
+          "OneLedClock"
+        ]
+      }
+    ]
+  }
+  
