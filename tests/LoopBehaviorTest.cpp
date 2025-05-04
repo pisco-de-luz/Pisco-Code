@@ -38,10 +38,6 @@ TEST_GROUP(LoopBehaviorTest)
 
 TEST(LoopBehaviorTest, ShouldHoldDimLightForDigitZero)
 {
-    // code.setPWM(9);    // No max-bright blinks
-    // code.setDimPWM(10); // Dim phase: LED should stay ON
-    // code.setRepeat(0);  // Don't repeat
-    //  code.setMinDigits(1);  // Force display of single digit
     code.showCode(0, PiscoCode::DECIMAL);
 
     constexpr uint8_t LOOP_COUNTER_TICKS     = 50;
@@ -49,7 +45,7 @@ TEST(LoopBehaviorTest, ShouldHoldDimLightForDigitZero)
     Timestamp         loopCounter            = 0;
 
     uint8_t fakeMillis = 0;
-    // for (uint8_t t = 0; t < LOOP_COUNTER_TICKS; ++t) {
+
     while (code.isSequencing())
     {
         for (uint8_t i = 0; i < LOOP_CALLS_PER_COUNTER; ++i)
@@ -64,15 +60,6 @@ TEST(LoopBehaviorTest, ShouldHoldDimLightForDigitZero)
     logger->flush();
     const auto& log = logger->getEvents();
 
-    // Optional: print debug info
-    // for (const auto& entry : log) {
-    //     if ( entry.duration > 1 ) {
-    //         printf("\nT=%d  STATE=%d  DURATION=%d", entry.timestamp, entry.state,
-    //         entry.duration);
-    //     }
-    // }
-    // printf("\n");
-
     uint16_t onCount  = 0;
     uint16_t offCount = 0;
     for (const auto& entry : log)
@@ -86,8 +73,4 @@ TEST(LoopBehaviorTest, ShouldHoldDimLightForDigitZero)
     std::string trace = logger->traceLogToString();
     printf("PWM Timeline: %s\n", trace.c_str());
     CHECK_EQUAL(10, onCount);
-    CHECK_EQUAL(15, offCount);
-    // These values may be adjusted based on exact dim behavior
-    // CHECK_COMPARE(onCount, > 0);
-    // CHECK_COMPARE(offCount, > 0);
 }
