@@ -25,13 +25,17 @@ CheckOptions:
   - key: readability-identifier-naming.FunctionCase
     value: camelBack
   - key: readability-identifier-naming.VariableCase
-    value: camelBack
-  - key: readability-identifier-naming.ConstantCase
-    value: camelBack
-  - key: readability-identifier-naming.ConstexprVariableCase
-    value: UPPER_CASE
+    value: lower_case
+  - key: readability-identifier-naming.LocalConstantCase
+    value: lower_case
   - key: readability-identifier-naming.PrivateMemberSuffix
     value: _
+  - key: readability-identifier-naming.ConstantCase
+    value: UPPER_CASE
+  - key: readability-identifier-naming.ConstexprVariableCase
+    value: UPPER_CASE
+  - key: readability-identifier-naming.EnumConstantCase
+    value: UPPER_CASE
   - key: cppcoreguidelines-avoid-do-while.IgnoreMacros
     value: true
   - key: cppcoreguidelines-avoid-non-const-global-variables.IgnoreMacros
@@ -40,5 +44,3 @@ CheckOptions:
     value: true
   - key: readability-identifier-naming.IgnoreMacros
     value: true
-  - key: readability-identifier-naming.EnumConstantCase
-    value: UPPER_CASE
