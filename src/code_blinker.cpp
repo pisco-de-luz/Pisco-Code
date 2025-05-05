@@ -44,7 +44,7 @@ namespace pisco
         repeats_total_           = repeats;
         repeats_remaining_       = repeats;
 
-        transitionTo(Phase::Start, to_loop_count(BETWEEN_DIGITS_MS));
+        transitionTo(Phase::Start, to_loop_count(BETWEEN_DIGITS_MS), 0);
         return true;
     }
 
@@ -53,7 +53,7 @@ namespace pisco
         if (!controller_)
             return;
 
-        controller_->update(loop_counter);
+        controller_->update(pwm_counter_);
 
         static constexpr struct
         {
@@ -79,6 +79,10 @@ namespace pisco
                 break;
             }
         }
+        if (++pwm_counter_ > PWM_MAX)
+        {
+            pwm_counter_ = 0;
+        }
     }
 
     bool CodeBlinker::isRunning() const
@@ -86,16 +90,17 @@ namespace pisco
         return current_phase_ != Phase::Paused;
     }
 
-    void CodeBlinker::transitionTo(Phase next, uint8_t duration)
+    void CodeBlinker::transitionTo(Phase next, uint8_t duration, uint8_t loop_counter)
     {
         current_phase_  = next;
         phase_duration_ = duration;
-        start_time_     = 0;
+        start_time_     = loop_counter;
     }
 
     bool CodeBlinker::phaseElapsed(uint8_t loop_counter) const
     {
-        return static_cast<uint8_t>(loop_counter - start_time_) > phase_duration_;
+        return static_cast<uint8_t>(loop_counter - start_time_) > phase_duration_ &&
+               pwm_counter_ == peak_level_;
     }
 
     bool CodeBlinker::hasMoreBlinks() const
@@ -131,7 +136,8 @@ namespace pisco
         {
             transitionTo(is_negative_ ? Phase::NegativeOn : Phase::ReadNextDigit,
                          is_negative_ ? to_loop_count(NEGATIVE_BLINK_LONG_MS)
-                                      : to_loop_count(BETWEEN_DIGITS_MS));
+                                      : to_loop_count(BETWEEN_DIGITS_MS),
+                         loop_counter);
         }
     }
 
@@ -140,7 +146,7 @@ namespace pisco
         controller_->setBlinkMode(BlinkMode::Pulse);
         if (phaseElapsed(loop_counter))
         {
-            transitionTo(Phase::NegativeOff, to_loop_count(NEGATIVE_BLINK_LONG_MS));
+            transitionTo(Phase::NegativeOff, to_loop_count(NEGATIVE_BLINK_LONG_MS), loop_counter);
         }
     }
 
@@ -149,7 +155,7 @@ namespace pisco
         controller_->setBlinkMode(BlinkMode::Dimmed);
         if (phaseElapsed(loop_counter))
         {
-            transitionTo(Phase::ReadNextDigit, to_loop_count(BETWEEN_DIGITS_MS));
+            transitionTo(Phase::ReadNextDigit, to_loop_count(BETWEEN_DIGITS_MS), loop_counter);
         }
     }
 
@@ -157,13 +163,13 @@ namespace pisco
     {
         if (current_digit_ >= MAX_DIGITS && shouldRepeat())
         {
-            transitionTo(Phase::End, to_loop_count(BETWEEN_DIGITS_MS));
+            transitionTo(Phase::End, to_loop_count(BETWEEN_DIGITS_MS), loop_counter);
         }
         else
         {
             uint8_t duration = hasMoreBlinks() ? to_loop_count(SHORT_BLINK_MS)
                                                : to_loop_count(ZERO_DIGIT_BLINK_MS);
-            transitionTo(Phase::PulseOn, duration);
+            transitionTo(Phase::PulseOn, duration, loop_counter);
         }
     }
 
@@ -173,8 +179,10 @@ namespace pisco
         if (phaseElapsed(loop_counter))
         {
             controller_->turnOff();
-            transitionTo(Phase::PulseOff, hasMoreBlinks() ? to_loop_count(BETWEEN_BLINK_MS)
-                                                          : to_loop_count(BETWEEN_DIGITS_MS));
+            transitionTo(Phase::PulseOff,
+                         hasMoreBlinks() ? to_loop_count(BETWEEN_BLINK_MS)
+                                         : to_loop_count(BETWEEN_DIGITS_MS),
+                         loop_counter);
         }
     }
 
@@ -186,7 +194,7 @@ namespace pisco
             if (hasMoreBlinks())
             {
                 --blink_counts_[current_digit_];
-                transitionTo(Phase::PulseOn, to_loop_count(SHORT_BLINK_MS));
+                transitionTo(Phase::PulseOn, to_loop_count(SHORT_BLINK_MS), loop_counter);
             }
             else
             {
@@ -194,7 +202,7 @@ namespace pisco
                 {
                     ++current_digit_;
                 }
-                transitionTo(Phase::ReadNextDigit, to_loop_count(BETWEEN_DIGITS_MS));
+                transitionTo(Phase::ReadNextDigit, to_loop_count(BETWEEN_DIGITS_MS), loop_counter);
             }
         }
     }
@@ -206,7 +214,7 @@ namespace pisco
         {
             if (repeats_remaining_ == 0)
             {
-                transitionTo(Phase::FinalPause, to_loop_count(BETWEEN_DIGITS_MS));
+                transitionTo(Phase::FinalPause, to_loop_count(BETWEEN_DIGITS_MS), loop_counter);
             }
             else
             {
@@ -215,7 +223,7 @@ namespace pisco
                     blink_counts_[i] = digits_[i];
                 }
                 current_digit_ = least_significant_digit_;
-                transitionTo(Phase::Start, to_loop_count(BETWEEN_CODES_MS));
+                transitionTo(Phase::Start, to_loop_count(BETWEEN_CODES_MS), loop_counter);
             }
         }
     }
@@ -224,7 +232,7 @@ namespace pisco
     {
         if (phaseElapsed(loop_counter))
         {
-            transitionTo(Phase::Paused, 0);
+            transitionTo(Phase::Paused, 0, loop_counter);
         }
     }
 

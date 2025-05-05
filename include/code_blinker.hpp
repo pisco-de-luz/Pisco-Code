@@ -32,7 +32,7 @@ namespace pisco
             FinalPause
         };
 
-        void transitionTo(Phase next, uint8_t duration);
+        void transitionTo(Phase next, uint8_t duration, uint8_t loop_counter);
         bool phaseElapsed(uint8_t loop_counter) const;
 
         bool hasMoreBlinks() const;
@@ -65,6 +65,7 @@ namespace pisco
 
         bool    is_negative_  = false;
         uint8_t peak_level_   = PWM_MAX;
+        uint8_t pwm_counter_  = 0;
         uint8_t dimmed_level_ = INITIAL_DIMMED_PWM;
     };
 

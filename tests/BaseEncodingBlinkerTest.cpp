@@ -17,13 +17,13 @@ TEST_GROUP(BaseEncodingBlinkerTest)
 
 TEST(BaseEncodingBlinkerTest, CanShowDecimal42)
 {
-    controller.setDimmedLevel(3);
-    bool started = blinker.showCode(42, base_t::DECIMAL, 0, 1);
+    controller.setDimmedLevel(1);
+    bool started = blinker.showCode(120, base_t::DECIMAL, 0, 1);
     CHECK_TRUE(started);
 
     runSequencer(&blinker, &logger);
 
-    STRCMP_EQUAL("--__----__--_--_--", logger.traceLogToString().c_str());
+    STRCMP_EQUAL("2MgS2MgS2SgS2M0S2L0M", logger.traceLogToString().c_str());
 }
 
 IGNORE_TEST(BaseEncodingBlinkerTest, CanShowZero)
