@@ -33,6 +33,7 @@ namespace pisco
     constexpr uint32_t BETWEEN_BLINK_MS       = 350;
     constexpr uint32_t BETWEEN_DIGITS_MS      = 1700;
     constexpr uint32_t BETWEEN_CODES_MS       = 1500;
+    constexpr uint32_t END_PHASE_MS           = 2150;
 
     // Conversion from ms to loop ticks
     constexpr uint8_t to_loop_count(uint32_t ms)
