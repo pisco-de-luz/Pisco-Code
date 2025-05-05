@@ -27,7 +27,7 @@ class MockLedControllerAdapter : public pisco::LedController
         if (!logger_)
             return;
 
-        if (pwm_counter == 0)
+        if (pwm_counter == 0 && mode_ != pisco::BlinkMode::None)
         {
             logger_->handle(pisco::LED_ON);
         }
