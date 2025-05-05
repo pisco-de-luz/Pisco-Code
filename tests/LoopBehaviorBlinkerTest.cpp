@@ -1,0 +1,60 @@
+#include "CppUTest/TestHarness.h"
+#include "code_blinker.hpp"
+#include "helpers/TestLoopRunner.hpp"
+#include "mocks/MockLedControlLogger.hpp"
+#include "mocks/MockLedControllerAdapter.hpp"
+#include "pisco_constants.hpp"
+
+using namespace pisco;
+using testutils::runSequencer;
+
+TEST_GROUP(LoopBehaviorBlinkerTest)
+{
+    MockLedControlLogger     logger;
+    MockLedControllerAdapter controller{&logger};
+    CodeBlinker              blinker{&controller};
+};
+
+TEST(LoopBehaviorBlinkerTest, ShouldHoldDimLightForDigitZero)
+{
+    blinker.showCode(0, base_t::DECIMAL, 0, 1);
+    runSequencer(&blinker, &logger);
+    STRCMP_EQUAL("4M0S4L0M", logger.traceLogToString().c_str());
+}
+
+TEST(LoopBehaviorBlinkerTest, ShouldBlinkDigits_1_2_0)
+{
+    blinker.showCode(120, base_t::DECIMAL, 0, 1);
+    runSequencer(&blinker, &logger);
+    STRCMP_EQUAL("4MgS4MgS4SgS4M0S4L0M", logger.traceLogToString().c_str());
+}
+
+TEST(LoopBehaviorBlinkerTest, ShouldBlinkNegativeSingleDigit)
+{
+    blinker.showCode(-2, base_t::DECIMAL, 0, 1);
+    runSequencer(&blinker, &logger);
+    STRCMP_EQUAL("4MgM4MgS4SgS4L0M", logger.traceLogToString().c_str());
+}
+
+TEST(LoopBehaviorBlinkerTest, ShouldRepeatBlinkingSequenceTwice)
+{
+    blinker.showCode(1, base_t::DECIMAL, 0, 2);
+    runSequencer(&blinker, &logger);
+    STRCMP_EQUAL("4MgS4L0M4MgS4L0M4MgS4L0M", logger.traceLogToString().c_str());
+}
+
+TEST(LoopBehaviorBlinkerTest, ShouldEndInFinalPause)
+{
+    blinker.showCode(7, base_t::DECIMAL, 0, 1);
+    runSequencer(&blinker, &logger);
+    std::string trace   = logger.traceLogToString();
+    std::string lastTwo = trace.substr(trace.size() - 2, 2);
+    STRCMP_EQUAL("0M", lastTwo.c_str());
+}
+
+TEST(LoopBehaviorBlinkerTest, ShouldHandleMixOfZeroAndOne)
+{
+    blinker.showCode(1010, base_t::DECIMAL, 0, 1);
+    runSequencer(&blinker, &logger);
+    STRCMP_EQUAL("4MgS4M0S4MgS4M0S4L0M", logger.traceLogToString().c_str());
+}
