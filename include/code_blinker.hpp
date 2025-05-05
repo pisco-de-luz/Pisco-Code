@@ -29,7 +29,8 @@ namespace pisco
             PulseOn,
             PulseOff,
             End,
-            FinalPause
+            FinalPause,
+            ZeroDigit,
         };
 
         void transitionTo(Phase next, uint8_t duration, uint8_t loop_counter);
@@ -46,6 +47,7 @@ namespace pisco
         void handleReadNextDigit(uint8_t loop_counter);
         void handlePulseOn(uint8_t loop_counter);
         void handlePulseOff(uint8_t loop_counter);
+        void handleZeroDigit(uint8_t loop_counter);
         void handleEnd(uint8_t loop_counter);
         void handleFinalPause(uint8_t loop_counter);
 
