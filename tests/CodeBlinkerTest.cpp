@@ -4,75 +4,80 @@
 
 using namespace pisco;
 
-// namespace
-// {
+namespace
+{
 
-//     class MockLedController : public LedController
-//     {
-//       public:
-//         void setPeakLevel(uint8_t level) override
-//         {
-//             peak_calls++;
-//             last_peak = level;
-//         }
-//         void setDimmedLevel(uint8_t level) override
-//         {
-//             dimmed_calls++;
-//             last_dimmed = level;
-//         }
-//         void turnOff() override { off_calls++; }
+    class MockLedController : public LedController
+    {
+      public:
+        void setPeakLevel(uint8_t level) override
+        {
+            peak_calls++;
+            last_peak = level;
+        }
 
-//         int     peak_calls   = 0;
-//         int     dimmed_calls = 0;
-//         int     off_calls    = 0;
-//         uint8_t last_peak    = 0;
-//         uint8_t last_dimmed  = 0;
-//     };
+        void setDimmedLevel(uint8_t level) override
+        {
+            dimmed_calls++;
+            last_dimmed = level;
+        }
 
-// } // namespace
+        void turnOff() override { off_calls++; }
 
-// TEST_GROUP(CodeBlinkerGroup)
-// {
-//     MockLedController controller;
-//     CodeBlinker*      blinker;
+        void setBlinkMode(BlinkMode mode) override { blink_mode = mode; }
 
-//     void setup() override
-//     {
-//         blinker = new CodeBlinker(&controller);
-//     }
+        int       peak_calls   = 0;
+        int       dimmed_calls = 0;
+        int       off_calls    = 0;
+        uint8_t   last_peak    = 0;
+        uint8_t   last_dimmed  = 0;
+        BlinkMode blink_mode   = BlinkMode::None;
+    };
 
-//     void teardown() override
-//     {
-//         delete blinker;
-//     }
-// };
+} // namespace
 
-// TEST(CodeBlinkerGroup, InitiallyPaused)
-// {
-//     CHECK_FALSE(blinker->isRunning());
-// }
+TEST_GROUP(CodeBlinkerGroup)
+{
+    MockLedController controller;
+    CodeBlinker*      blinker;
 
-// TEST(CodeBlinkerGroup, ShowCodeStartsSequence)
-// {
-//     bool result = blinker->showCode(42, base_t::DECIMAL, 2, 1);
-//     CHECK_TRUE(result);
-//     CHECK_TRUE(blinker->isRunning());
-// }
+    void setup() override
+    {
+        blinker = new CodeBlinker(&controller);
+    }
 
-// TEST(CodeBlinkerGroup, LoopTriggersDimmedStart)
-// {
-//     blinker->showCode(5, base_t::DECIMAL, 1, 1);
-//     blinker->loop(1); // simulate loop trigger
-//     CHECK_EQUAL(1, controller.dimmed_calls);
-//     CHECK_EQUAL(INITIAL_DIMMED_PWM, controller.last_dimmed);
-// }
+    void teardown() override
+    {
+        delete blinker;
+    }
+};
 
-// TEST(CodeBlinkerGroup, LoopEventuallyTurnsOff)
-// {
-//     blinker->showCode(1, base_t::DECIMAL, 1, 1);
-//     for (uint8_t i = 0; i < 255; ++i)
-//     {
-//         blinker->loop(i);
-//     }
-//     CHECK(controller.off_calls > 0);
-// }
+TEST(CodeBlinkerGroup, InitiallyPaused)
+{
+    CHECK_FALSE(blinker->isRunning());
+}
+
+TEST(CodeBlinkerGroup, ShowCodeStartsSequence)
+{
+    bool result = blinker->showCode(42, base_t::DECIMAL, 2, 1);
+    CHECK_TRUE(result);
+    CHECK_TRUE(blinker->isRunning());
+}
+
+TEST(CodeBlinkerGroup, LoopTriggersDimmedStart)
+{
+    blinker->showCode(5, base_t::DECIMAL, 1, 1);
+    blinker->loop(1); // simulate loop trigger
+    CHECK_EQUAL(1, controller.dimmed_calls);
+    CHECK_EQUAL(INITIAL_DIMMED_PWM, controller.last_dimmed);
+}
+
+TEST(CodeBlinkerGroup, LoopEventuallyTurnsOff)
+{
+    blinker->showCode(1, base_t::DECIMAL, 1, 1);
+    for (uint8_t i = 0; i < 255; ++i)
+    {
+        blinker->loop(i);
+    }
+    CHECK(controller.off_calls > 0);
+}

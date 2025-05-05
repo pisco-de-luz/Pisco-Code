@@ -35,3 +35,38 @@ TEST(BaseEncodingBlinkerTest, CanShowZero)
 
     STRCMP_EQUAL("4M0S4L0M", logger.traceLogToString().c_str());
 }
+
+TEST(BaseEncodingBlinkerTest, CanShowDecimal12345)
+{
+    bool started = blinker.showCode(12345, base_t::DECIMAL, 0, 1);
+    CHECK_TRUE(started);
+    runSequencer(&blinker, &logger);
+    STRCMP_EQUAL("4MgS4MgS4SgS4MgS4SgS4SgS4MgS4SgS4SgS4SgS4MgS4SgS4SgS4SgS4SgS4L0M",
+                 logger.traceLogToString().c_str());
+}
+
+TEST(BaseEncodingBlinkerTest, CanShowBinary5)
+{
+    bool started = blinker.showCode(5, base_t::BINARY, 0, 1); // binary: 101
+    CHECK_TRUE(started);
+    runSequencer(&blinker, &logger);
+    STRCMP_EQUAL("4MgS4M0S4MgS4L0M", logger.traceLogToString().c_str());
+}
+
+TEST(BaseEncodingBlinkerTest, CanShowHex255)
+{
+    bool started = blinker.showCode(255, base_t::HEXADECIMAL, 0, 1); // hex: FF
+    CHECK_TRUE(started);
+    runSequencer(&blinker, &logger);
+    STRCMP_EQUAL("4MgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4MgS4SgS4SgS4SgS4SgS4SgS1"
+                 "SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4L0M",
+                 logger.traceLogToString().c_str());
+}
+
+TEST(BaseEncodingBlinkerTest, CanShowOctal28)
+{
+    bool started = blinker.showCode(28, base_t::OCTAL, 0, 1); // octal: 34
+    CHECK_TRUE(started);
+    runSequencer(&blinker, &logger);
+    STRCMP_EQUAL("4MgS4SgS4SgS4MgS4SgS4SgS4SgS4L0M", logger.traceLogToString().c_str());
+}
