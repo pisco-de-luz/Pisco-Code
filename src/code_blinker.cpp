@@ -86,6 +86,16 @@ namespace pisco
         }
     }
 
+    void CodeBlinker::setPeakLevel(uint8_t level)
+    {
+        peak_level_ = (level > PWM_MAX) ? PWM_MAX : level;
+    }
+
+    void CodeBlinker::setDimmedLevel(uint8_t level)
+    {
+        dimmed_level_ = (level > PWM_MAX) ? PWM_MAX : level;
+    }
+
     bool CodeBlinker::isRunning() const
     {
         return current_phase_ != Phase::Paused;

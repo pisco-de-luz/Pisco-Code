@@ -17,6 +17,8 @@ namespace pisco
         bool showCode(int32_t code, base_t base, uint8_t min_digits, uint8_t repeats);
         void loop(uint8_t loop_counter);
         bool isRunning() const;
+        void setPeakLevel(uint8_t level);
+        void setDimmedLevel(uint8_t level);
 
       private:
         enum class Phase : uint8_t
