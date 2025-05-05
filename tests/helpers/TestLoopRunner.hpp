@@ -3,6 +3,7 @@
 
 #include "../mocks/MockLedControlLogger.hpp"
 #include "Pisco-Code.hpp"
+#include "code_blinker.hpp"
 #include <cstdint>
 
 namespace testutils
@@ -17,7 +18,7 @@ namespace testutils
         Timestamp loopCounter = 0;
         uint8_t   fakeMillis  = 0;
 
-        while (code.isSequencing()) // && loopCounter < MAX_SEQUENCING_LOOP)
+        while (code.isSequencing() && loopCounter < MAX_SEQUENCING_LOOP)
         {
             for (uint8_t i = 0; i < LOOP_CALLS_PER_COUNTER; ++i)
             {
@@ -25,6 +26,27 @@ namespace testutils
                 code.loop(fakeMillis);
             }
 
+            ++fakeMillis;
+        }
+
+        logger->flush();
+    }
+
+    // New version compatible with CodeBlinker
+    inline void runSequencer(pisco::CodeBlinker* blinker, MockLedControlLogger* logger)
+    {
+        constexpr uint8_t  LOOP_CALLS_PER_COUNTER = 64;
+        constexpr uint32_t MAX_SEQUENCING_LOOP    = 64000UL;
+        uint32_t           loopCounter            = 0;
+        uint8_t            fakeMillis             = 0;
+
+        while (blinker->isRunning() && loopCounter < MAX_SEQUENCING_LOOP)
+        {
+            for (uint8_t i = 0; i < LOOP_CALLS_PER_COUNTER; ++i)
+            {
+                logger->setTime(loopCounter++);
+                blinker->loop(fakeMillis);
+            }
             ++fakeMillis;
         }
 
