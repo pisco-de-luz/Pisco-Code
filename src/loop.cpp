@@ -1,4 +1,5 @@
 #include "loop.hpp"
+#include "Pisco-Code.hpp"
 
 void PiscoCode::loop(uint8_t loop_counter)
 {
