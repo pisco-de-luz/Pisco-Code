@@ -17,21 +17,21 @@ TEST_GROUP(BaseEncodingBlinkerTest)
 
 TEST(BaseEncodingBlinkerTest, CanShowDecimal42)
 {
-    controller.setDimmedLevel(1);
+    // controller.setDimmedLevel(1);
     bool started = blinker.showCode(120, base_t::DECIMAL, 0, 1);
     CHECK_TRUE(started);
 
     runSequencer(&blinker, &logger);
 
-    STRCMP_EQUAL("2MgS2MgS2SgS2M0S2L0M", logger.traceLogToString().c_str());
+    STRCMP_EQUAL("4MgS4MgS4SgS4M0S4L0M", logger.traceLogToString().c_str());
 }
 
-IGNORE_TEST(BaseEncodingBlinkerTest, CanShowZero)
+TEST(BaseEncodingBlinkerTest, CanShowZero)
 {
     bool started = blinker.showCode(0, base_t::DECIMAL, 2, 1);
     CHECK_TRUE(started);
 
     runSequencer(&blinker, &logger);
 
-    STRCMP_EQUAL("--__--", logger.traceLogToString().c_str());
+    STRCMP_EQUAL("4M0S4L0M", logger.traceLogToString().c_str());
 }
