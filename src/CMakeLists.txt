@@ -23,6 +23,8 @@ add_library(PiscoCodeCore
     ${SRC_DIR}/Pisco-Code.cpp
     ${SRC_DIR}/loop.cpp
     ${SRC_DIR}/show.cpp
+    ${SRC_DIR}/code_blinker.cpp
+    ${SRC_DIR}/software_pwm_led_controller.cpp
 )
 
 target_include_directories(PiscoCodeCore PUBLIC
