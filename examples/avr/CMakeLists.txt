@@ -1,5 +1,6 @@
 include(${CMAKE_CURRENT_LIST_DIR}/avr_example_macros.cmake)
 
+
 add_avr_example(basic_example
   SOURCE basic_example.cpp
   MCU atmega328p

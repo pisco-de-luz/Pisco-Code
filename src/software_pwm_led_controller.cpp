@@ -1,4 +1,4 @@
-#include "led_controller.hpp"
+#include "software_pwm_led_controller.hpp"
 #include "pisco_constants.hpp"
 
 namespace pisco
@@ -6,6 +6,11 @@ namespace pisco
 
     SoftwarePwmLedController::SoftwarePwmLedController()
         : peak_level_(15), dimmed_level_(0), led_control_(nullptr)
+    {
+    }
+    SoftwarePwmLedController::SoftwarePwmLedController(bool (*led_func)(uint8_t))
+        : led_control_(led_func), peak_level_(PWM_MAX), dimmed_level_(INITIAL_DIMMED_PWM),
+          mode_(BlinkMode::None)
     {
     }
 
