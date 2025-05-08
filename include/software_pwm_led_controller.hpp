@@ -10,12 +10,12 @@ namespace pisco
     class SoftwarePwmLedController : public LedController
     {
       public:
-        explicit SoftwarePwmLedController(bool (*ledFunc)(uint8_t));
+        explicit SoftwarePwmLedController(bool (*led_func)(uint8_t));
         explicit SoftwarePwmLedController();
         void attachLedControl(bool (*led_func)(uint8_t));
 
-        void setPeakLevel(uint8_t value) override;
-        void setDimmedLevel(uint8_t value) override;
+        void setPeakLevel(uint8_t level) override;
+        void setDimmedLevel(uint8_t level) override;
         void setBlinkMode(BlinkMode mode) override;
         void turnOff() override;
         void update(uint8_t pwm_counter) override;
