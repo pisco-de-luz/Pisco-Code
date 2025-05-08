@@ -12,6 +12,7 @@ namespace pisco
       public:
         explicit SoftwarePwmLedController(bool (*led_func)(uint8_t));
         explicit SoftwarePwmLedController();
+        ~SoftwarePwmLedController();
         void attachLedControl(bool (*led_func)(uint8_t));
 
         void setPeakLevel(uint8_t level) override;
