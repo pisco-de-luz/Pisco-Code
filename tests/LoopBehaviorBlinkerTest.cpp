@@ -58,3 +58,14 @@ TEST(LoopBehaviorBlinkerTest, ShouldHandleMixOfZeroAndOne)
     runSequencer(&blinker, &logger);
     STRCMP_EQUAL("4MgS4M0S4MgS4M0S4L0M", logger.traceLogToString().c_str());
 }
+
+TEST(LoopBehaviorBlinkerTest, ShouldStartAndEndWithLedOff)
+{
+    blinker.showCode(1, base_t::DECIMAL, 0, 1);
+    runSequencer(&blinker, &logger);
+    const std::string trace = logger.traceLogToString();
+
+    // Ensure the trace starts and ends with 0M (off periods)
+    CHECK_TRUE(trace.substr(0, 2) == "0M");
+    CHECK_TRUE(trace.substr(trace.size() - 2, 2) == "0M");
+}
