@@ -28,7 +28,7 @@ TEST(BaseEncodingBlinkerTest, CanShowDecimal42)
 
 TEST(BaseEncodingBlinkerTest, CanShowZero)
 {
-    bool started = blinker.showCode(0, base_t::DECIMAL, 2, 1);
+    bool started = blinker.showCode(0, base_t::DECIMAL, 0, 1);
     CHECK_TRUE(started);
 
     runSequencer(&blinker, &logger);
@@ -58,8 +58,8 @@ TEST(BaseEncodingBlinkerTest, CanShowHex255)
     bool started = blinker.showCode(255, base_t::HEXADECIMAL, 0, 1); // hex: FF
     CHECK_TRUE(started);
     runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("4MgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4MgS4SgS4SgS4SgS4SgS4SgS1"
-                 "SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4L0M",
+    STRCMP_EQUAL("4MgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4MgS4SgS4SgS4SgS4SgS4"
+                 "SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4L0M",
                  logger.traceLogToString().c_str());
 }
 

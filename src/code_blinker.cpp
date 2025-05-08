@@ -44,6 +44,9 @@ namespace pisco
         repeats_total_           = repeats;
         repeats_remaining_       = repeats;
 
+        controller_->setDimmedLevel(dimmed_level_);
+        controller_->setPeakLevel(peak_level_);
+
         transitionTo(Phase::Start, to_loop_count(BETWEEN_DIGITS_MS), 0);
         return true;
     }
@@ -67,6 +70,7 @@ namespace pisco
             {Phase::PulseOn, &CodeBlinker::handlePulseOn},
             {Phase::PulseOff, &CodeBlinker::handlePulseOff},
             {Phase::End, &CodeBlinker::handleEnd},
+            {Phase::Repeat, &CodeBlinker::handleRepeat},
             {Phase::FinalPause, &CodeBlinker::handleFinalPause},
             {Phase::Paused, &CodeBlinker::handlePaused},
             {Phase::ZeroDigit, &CodeBlinker::handleZeroDigit},
@@ -137,6 +141,7 @@ namespace pisco
 
     void CodeBlinker::handlePaused(uint8_t)
     {
+        controller_->setBlinkMode(BlinkMode::None);
         controller_->turnOff();
     }
 
@@ -228,6 +233,16 @@ namespace pisco
         }
     }
 
+    void CodeBlinker::handleRepeat(uint8_t loop_counter)
+    {
+        controller_->setBlinkMode(BlinkMode::None);
+        controller_->turnOff();
+        if (phaseElapsed(loop_counter))
+        {
+            transitionTo(Phase::Start, to_loop_count(BETWEEN_DIGITS_MS), loop_counter);
+        }
+    }
+
     void CodeBlinker::handleZeroDigit(uint8_t loop_counter)
     {
         controller_->setBlinkMode(BlinkMode::None);
@@ -235,12 +250,12 @@ namespace pisco
         if (phaseElapsed(loop_counter))
         {
 
-            if (hasMoreDigits())
-            {
-                ++current_digit_;
-            }
+            // if (hasMoreDigits())
+            // {
+            //     ++current_digit_;
+            // }
 
-            transitionTo(Phase::ReadNextDigit, to_loop_count(BETWEEN_DIGITS_MS), loop_counter);
+            transitionTo(Phase::PulseOff, to_loop_count(BETWEEN_DIGITS_MS), loop_counter);
         }
     }
 
@@ -260,7 +275,7 @@ namespace pisco
                     blink_counts_[i] = digits_[i];
                 }
                 current_digit_ = least_significant_digit_;
-                transitionTo(Phase::Start, to_loop_count(BETWEEN_CODES_MS), loop_counter);
+                transitionTo(Phase::Repeat, to_loop_count(BETWEEN_CODES_MS), loop_counter);
             }
         }
     }

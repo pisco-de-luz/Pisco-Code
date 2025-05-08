@@ -40,7 +40,7 @@ TEST(LoopBehaviorBlinkerTest, ShouldRepeatBlinkingSequenceTwice)
 {
     blinker.showCode(1, base_t::DECIMAL, 0, 2);
     runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("4MgS4L0M4MgS4L0M4MgS4L0M", logger.traceLogToString().c_str());
+    STRCMP_EQUAL("4MgS4L0M4MgS4L0M", logger.traceLogToString().c_str());
 }
 
 TEST(LoopBehaviorBlinkerTest, ShouldEndInFinalPause)

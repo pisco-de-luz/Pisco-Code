@@ -9,8 +9,7 @@ namespace pisco
     {
     }
     SoftwarePwmLedController::SoftwarePwmLedController(bool (*led_func)(uint8_t))
-        : led_control_(led_func), peak_level_(PWM_MAX), dimmed_level_(INITIAL_DIMMED_PWM),
-          mode_(BlinkMode::None)
+        : led_control_(led_func)
     {
     }
 
@@ -54,7 +53,7 @@ namespace pisco
             return;
         }
 
-        if (pwm_counter == 0)
+        if (pwm_counter == 0 && mode_ != pisco::BlinkMode::None)
         {
             led_control_(LED_ON);
         }

@@ -31,6 +31,7 @@ namespace pisco
             PulseOn,
             PulseOff,
             End,
+            Repeat,
             FinalPause,
             ZeroDigit,
         };
@@ -51,6 +52,7 @@ namespace pisco
         void handlePulseOff(uint8_t loop_counter);
         void handleZeroDigit(uint8_t loop_counter);
         void handleEnd(uint8_t loop_counter);
+        void handleRepeat(uint8_t loop_counter);
         void handleFinalPause(uint8_t loop_counter);
 
         LedController* controller_ = nullptr;

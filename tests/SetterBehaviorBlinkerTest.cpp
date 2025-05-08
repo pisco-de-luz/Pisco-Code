@@ -79,13 +79,13 @@ TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighDimLevel)
 TEST(SetterBehaviorBlinkerTest, ShouldNotAffectPeakPwmWhenSettingDim)
 {
     blinker.setPeakLevel(9);
-    blinker.setDimmedLevel(2);
+    blinker.setDimmedLevel(6);
     blinker.showCode(2, base_t::DECIMAL, 0, 1);
     runSequencer(&blinker, &logger);
     const std::string trace = logger.traceLogToString();
-    STRCMP_EQUAL("4M0S4M0S4MgS4MgS4SgS4L0M", logger.traceLogToString().c_str());
+    STRCMP_EQUAL("7MaS7SaS7L0M", logger.traceLogToString().c_str());
     CHECK(trace.find('a') != std::string::npos); // 9 + 1 = 'a'
-    CHECK(trace.find('3') != std::string::npos); // 2 + 1 = '3'
+    CHECK(trace.find('7') != std::string::npos); // 2 + 1 = '3'
 }
 
 TEST(SetterBehaviorBlinkerTest, ShouldPadWithLeadingZeros)

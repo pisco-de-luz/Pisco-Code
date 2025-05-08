@@ -55,17 +55,23 @@ int main()
     CodeBlinker              blinker(&ledController);
 
     // Configure blinking behavior
-    blinker.setDimmedLevel(5);
+    blinker.setDimmedLevel(1);
 
-    uint32_t fakeMillis = 0;
+    uint32_t fakeMillis = 3660000UL; // 1 hour, 1 minute, 0 seconds
 
-    blinker.showCode(14, base_t::DECIMAL, 3, 1);
+    blinker.showCode(13, base_t::DECIMAL, 0, 1);
+    while (blinker.isRunning())
+    {
+        blinker.loop(fakeMillis++ >> 6);
+        _delay_ms(1);
+    }
 
     while (true)
     {
         if (!blinker.isRunning() && fakeMillis <= static_cast<uint32_t>(INT32_MAX))
         {
             int32_t bcdTime = millisToBCDTime(fakeMillis);
+            blinker.setDimmedLevel(7);
             blinker.showCode(bcdTime, base_t::DECIMAL, 3, 1);
         }
 
