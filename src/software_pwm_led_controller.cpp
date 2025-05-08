@@ -37,7 +37,7 @@ namespace pisco
 
     void SoftwarePwmLedController::turnOff()
     {
-        if (led_control_)
+        if (led_control_ != nullptr)
         {
             (void) led_control_(pisco::LED_OFF);
         }
@@ -45,8 +45,10 @@ namespace pisco
 
     void SoftwarePwmLedController::update(uint8_t pwm_counter)
     {
-        if (!led_control_)
+        if (led_control_ == nullptr)
+        {
             return;
+        }
 
         if (pwm_counter == 0)
         {
