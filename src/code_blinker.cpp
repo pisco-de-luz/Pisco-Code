@@ -47,7 +47,7 @@ namespace pisco
         controller_->setDimmedLevel(dimmed_level_);
         controller_->setPeakLevel(peak_level_);
 
-        transitionTo(Phase::Start, to_loop_count(BETWEEN_DIGITS_MS), 0);
+        transitionTo(Phase::Repeat, to_loop_count(BETWEEN_DIGITS_MS), 0);
         return true;
     }
 
