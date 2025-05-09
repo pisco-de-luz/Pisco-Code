@@ -53,14 +53,38 @@ namespace pisco
             return;
         }
 
-        if (pwm_counter == 0 && mode_ != pisco::BlinkMode::None)
+        switch (mode_)
         {
-            led_control_(LED_ON);
-        }
-        else if ((mode_ == pisco::BlinkMode::Pulse && pwm_counter == peak_level_) ||
-                 (mode_ == pisco::BlinkMode::Dimmed && pwm_counter == dimmed_level_))
-        {
-            led_control_(LED_OFF);
+            case pisco::BlinkMode::Pulse:
+                if (pwm_counter == 0)
+                {
+                    led_control_(LED_ON);
+                }
+                else if (pwm_counter == peak_level_)
+                {
+                    led_control_(LED_OFF);
+                }
+                break;
+
+            case pisco::BlinkMode::Dimmed:
+                if (pwm_counter == 0)
+                {
+                    led_control_(LED_ON);
+                }
+                else if (pwm_counter == dimmed_level_)
+                {
+                    led_control_(LED_OFF);
+                }
+                break;
+
+            case pisco::BlinkMode::None:
+            default:
+                if (pwm_counter == 0)
+                {
+                    // Ensure LED is OFF during idle periods
+                    led_control_(LED_OFF);
+                }
+                break;
         }
     }
 

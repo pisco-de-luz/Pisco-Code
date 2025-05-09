@@ -139,6 +139,20 @@ namespace pisco
         return true;
     }
 
+    bool CodeBlinker::isLedBeingUsedNow() const
+    {
+        switch (current_phase_)
+        {
+            case Phase::Paused:
+            case Phase::FinalPause:
+            case Phase::Repeat:
+            case Phase::ZeroDigit: // <-- include here
+                return false;
+            default:
+                return true;
+        }
+    }
+
     void CodeBlinker::handlePaused(uint8_t)
     {
         controller_->setBlinkMode(BlinkMode::None);
@@ -283,6 +297,7 @@ namespace pisco
     void CodeBlinker::handleFinalPause(uint8_t loop_counter)
     {
         controller_->setBlinkMode(BlinkMode::None);
+        controller_->turnOff();
         if (phaseElapsed(loop_counter))
         {
             transitionTo(Phase::Paused, 0, loop_counter);

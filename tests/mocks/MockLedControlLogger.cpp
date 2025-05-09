@@ -22,6 +22,11 @@ void MockLedControlLogger::setTime(Timestamp currTime)
     currentTime_ = currTime;
 }
 
+void MockLedControlLogger::setBlinker(pisco::CodeBlinker* blinker)
+{
+    blinker_ = blinker;
+}
+
 void MockLedControlLogger::clear()
 {
     events_.clear();
@@ -41,6 +46,13 @@ void MockLedControlLogger::log(LedEvent ledEvent)
         stateChange.timestamp = lastTime_;
         stateChange.state     = lastState_;
         stateChange.duration  = currentTime_ - lastTime_;
+
+        // Capture context if blinker is set
+        if (blinker_ != nullptr)
+        {
+            stateChange.isLedBeingUsedNow = blinker_->isLedBeingUsedNow();
+            stateChange.isRunning         = blinker_->isRunning();
+        }
         events_.push_back(stateChange);
     }
 

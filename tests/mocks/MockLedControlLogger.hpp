@@ -2,6 +2,7 @@
 #define MOCK_LED_CONTROL_LOGGER_HPP
 
 // #include "Pisco-Code.hpp"
+#include "code_blinker.hpp"
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -22,12 +23,15 @@ struct LedStateChange
     Timestamp     timestamp{0};
     LedEvent      state{LED_CALL_INVALID};
     StateDuration duration{0};
+    bool          isLedBeingUsedNow{false};
+    bool          isRunning{false};
 };
 
 class MockLedControlLogger
 {
   public:
     MockLedControlLogger();
+    void setBlinker(pisco::CodeBlinker* blinker);
 
     void                               setTime(Timestamp currTime);
     bool                               handle(uint8_t ctrlLED);
@@ -45,6 +49,7 @@ class MockLedControlLogger
     LedEvent                    lastState_{LED_CALL_INVALID};
     std::vector<LedStateChange> events_{};
     Timestamp                   traceResolutionMs_{100};
+    pisco::CodeBlinker*         blinker_{nullptr};
 };
 
 #endif

@@ -5,6 +5,8 @@
 #include "led_controller.hpp"
 #include "pisco_constants.hpp"
 
+#include <iostream>
+
 class MockLedControllerAdapter : public pisco::LedController
 {
   public:
@@ -31,14 +33,38 @@ class MockLedControllerAdapter : public pisco::LedController
             return;
         }
 
-        if (pwm_counter == 0 && mode_ != pisco::BlinkMode::None)
+        switch (mode_)
         {
-            logger_->handle(pisco::LED_ON);
-        }
-        else if ((mode_ == pisco::BlinkMode::Pulse && pwm_counter == peak_level_) ||
-                 (mode_ == pisco::BlinkMode::Dimmed && pwm_counter == dimmed_level_))
-        {
-            logger_->handle(pisco::LED_OFF);
+            case pisco::BlinkMode::Pulse:
+                if (pwm_counter == 0)
+                {
+                    logger_->handle(pisco::LED_ON);
+                }
+                else if (pwm_counter == peak_level_)
+                {
+                    logger_->handle(pisco::LED_OFF);
+                }
+                break;
+
+            case pisco::BlinkMode::Dimmed:
+                if (pwm_counter == 0)
+                {
+                    logger_->handle(pisco::LED_ON);
+                }
+                else if (pwm_counter == dimmed_level_)
+                {
+                    logger_->handle(pisco::LED_OFF);
+                }
+                break;
+
+            case pisco::BlinkMode::None:
+            default:
+                if (pwm_counter == 0)
+                {
+                    // Ensure LED is OFF during idle periods
+                    logger_->handle(pisco::LED_OFF);
+                }
+                break;
         }
     }
 

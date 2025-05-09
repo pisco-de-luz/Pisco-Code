@@ -69,3 +69,19 @@ TEST(LoopBehaviorBlinkerTest, ShouldStartAndEndWithLedOff)
     CHECK_TRUE(trace.substr(0, 2) == "0M");
     CHECK_TRUE(trace.substr(trace.size() - 2, 2) == "0M");
 }
+
+TEST(LoopBehaviorBlinkerTest, ShouldNotTurnOnLedDuringIdlePhases)
+{
+    blinker.showCode(1, base_t::DECIMAL, 0, 1);
+    logger.setBlinker(&blinker);
+
+    runSequencer(&blinker, &logger);
+
+    for (const auto& e : logger.getEvents())
+    {
+        if (e.state == LED_CALL_ON && !e.isLedBeingUsedNow)
+        {
+            FAIL("LED turned ON during an idle phase");
+        }
+    }
+}
