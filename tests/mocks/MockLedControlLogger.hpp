@@ -39,7 +39,8 @@ class MockLedControlLogger
     const std::vector<LedStateChange>& getEvents() const;
     void                               flush();
     void                               setTraceResolution(Timestamp resolutionMs); // default: 100
-    std::string                        traceLogToString() const;
+    std::string getNextPulseCodeString(uint8_t pulseCode, Timestamp duration) const;
+    std::string traceLogToString() const;
 
   private:
     void                        log(LedEvent ev);
