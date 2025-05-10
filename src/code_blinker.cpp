@@ -11,28 +11,29 @@ namespace pisco
 
     bool CodeBlinker::showCode(int32_t code, base_t base, uint8_t min_digits, uint8_t repeats)
     {
-        if (!controller_ || current_phase_ != Phase::Paused || repeats == 0 || peak_level_ == 0)
+        if (!controller_ || current_phase_ != Phase::Idle || repeats == 0 || peak_level_ == 0)
         {
             return false;
         }
 
-        is_negative_ = (code < 0);
+        is_negative_             = (code < 0);
+        int32_t value_to_display = code;
         if (is_negative_)
         {
-            code = -code;
+            value_to_display = -code;
         }
 
         current_digit_ = MAX_DIGITS - 1;
 
         for (int8_t i = MAX_DIGITS - 1; i >= 0; --i)
         {
-            digits_[i]       = static_cast<uint8_t>(code % static_cast<uint8_t>(base));
+            digits_[i]       = static_cast<uint8_t>(value_to_display % static_cast<uint8_t>(base));
             blink_counts_[i] = static_cast<int8_t>(digits_[i]);
             if (digits_[i] > 0)
             {
                 current_digit_ = static_cast<uint8_t>(i);
             }
-            code /= static_cast<uint8_t>(base);
+            value_to_display /= static_cast<uint8_t>(base);
         }
 
         if (min_digits > 0 && min_digits < MAX_DIGITS)
@@ -47,7 +48,7 @@ namespace pisco
         controller_->setDimmedLevel(dimmed_level_);
         controller_->setPeakLevel(peak_level_);
 
-        transitionTo(Phase::Repeat, to_loop_count(BETWEEN_DIGITS_MS), 0);
+        transitionTo(Phase::PauseBeforeStart, to_loop_count(BETWEEN_DIGITS_MS), 0);
         return true;
     }
 
@@ -63,17 +64,18 @@ namespace pisco
             Phase id;
             void (CodeBlinker::*handler)(uint8_t);
         } phase_table[] = {
-            {Phase::Start, &CodeBlinker::handleStart},
-            {Phase::NegativeOn, &CodeBlinker::handleNegativeOn},
-            {Phase::NegativeOff, &CodeBlinker::handleNegativeOff},
-            {Phase::ReadNextDigit, &CodeBlinker::handleReadNextDigit},
-            {Phase::PulseOn, &CodeBlinker::handlePulseOn},
-            {Phase::PulseOff, &CodeBlinker::handlePulseOff},
-            {Phase::End, &CodeBlinker::handleEnd},
-            {Phase::Repeat, &CodeBlinker::handleRepeat},
-            {Phase::FinalPause, &CodeBlinker::handleFinalPause},
-            {Phase::Paused, &CodeBlinker::handlePaused},
-            {Phase::ZeroDigit, &CodeBlinker::handleZeroDigit},
+            {Phase::PauseBeforeStart, &CodeBlinker::handlePauseBeforeStart},
+            {Phase::BeginDigit, &CodeBlinker::handleBeginDigit},
+            {Phase::DisplayNegativeSign, &CodeBlinker::handleDisplayNegativeSign},
+            {Phase::PauseAfterNegative, &CodeBlinker::handlePauseAfterNegative},
+            {Phase::LoadNextDigit, &CodeBlinker::handleLoadNextDigit},
+            {Phase::EmitBlink, &CodeBlinker::handleEmitBlink},
+            {Phase::PauseBetweenBlinks, &CodeBlinker::handlePauseBetweenBlinks},
+            {Phase::EndOfDigitCycle, &CodeBlinker::handleEndOfDigitCycle},
+            {Phase::PrepareRepeat, &CodeBlinker::handlePauseBeforeStart},
+            {Phase::PauseAfterFinish, &CodeBlinker::handlePauseAfterFinish},
+            {Phase::Idle, &CodeBlinker::handleIdle},
+            {Phase::DisplayZero, &CodeBlinker::handleDisplayZero},
         };
 
         for (const auto& entry : phase_table)
@@ -102,7 +104,7 @@ namespace pisco
 
     bool CodeBlinker::isRunning() const
     {
-        return current_phase_ != Phase::Paused;
+        return current_phase_ != Phase::Idle;
     }
 
     void CodeBlinker::transitionTo(Phase next, uint8_t duration, uint8_t loop_counter)
@@ -143,72 +145,73 @@ namespace pisco
     {
         switch (current_phase_)
         {
-            case Phase::Paused:
-            case Phase::FinalPause:
-            case Phase::Repeat:
-            case Phase::ZeroDigit: // <-- include here
+            case Phase::PrepareRepeat:
+            case Phase::PauseAfterFinish:
+            case Phase::Idle:
+            case Phase::DisplayZero:
+                // LED is not being used
                 return false;
             default:
                 return true;
         }
     }
 
-    void CodeBlinker::handlePaused(uint8_t)
+    void CodeBlinker::handleIdle(uint8_t)
     {
         controller_->setBlinkMode(BlinkMode::None);
         controller_->turnOff();
     }
 
-    void CodeBlinker::handleStart(uint8_t loop_counter)
+    void CodeBlinker::handleBeginDigit(uint8_t loop_counter)
     {
         controller_->setBlinkMode(BlinkMode::Dimmed);
         if (phaseElapsed(loop_counter))
         {
-            transitionTo(is_negative_ ? Phase::NegativeOn : Phase::ReadNextDigit,
+            transitionTo(is_negative_ ? Phase::DisplayNegativeSign : Phase::LoadNextDigit,
                          is_negative_ ? to_loop_count(NEGATIVE_BLINK_LONG_MS)
                                       : to_loop_count(BETWEEN_DIGITS_MS),
                          loop_counter);
         }
     }
 
-    void CodeBlinker::handleNegativeOn(uint8_t loop_counter)
-    {
-        controller_->setBlinkMode(BlinkMode::Pulse);
-        if (phaseElapsed(loop_counter))
-        {
-            transitionTo(Phase::NegativeOff, to_loop_count(NEGATIVE_BLINK_LONG_MS), loop_counter);
-        }
-    }
-
-    void CodeBlinker::handleNegativeOff(uint8_t loop_counter)
-    {
-        controller_->setBlinkMode(BlinkMode::Dimmed);
-        if (phaseElapsed(loop_counter))
-        {
-            transitionTo(Phase::ReadNextDigit, to_loop_count(BETWEEN_DIGITS_MS), loop_counter);
-        }
-    }
-
-    void CodeBlinker::handleReadNextDigit(uint8_t loop_counter)
+    void CodeBlinker::handleLoadNextDigit(uint8_t loop_counter)
     {
         if (current_digit_ >= MAX_DIGITS && shouldRepeat())
         {
-            transitionTo(Phase::End, to_loop_count(END_PHASE_MS), loop_counter);
+            transitionTo(Phase::EndOfDigitCycle, to_loop_count(END_PHASE_MS), loop_counter);
         }
         else
         {
             if (blink_counts_[current_digit_] == 0)
             {
-                transitionTo(Phase::ZeroDigit, to_loop_count(ZERO_DIGIT_BLINK_MS), loop_counter);
+                transitionTo(Phase::DisplayZero, to_loop_count(ZERO_DIGIT_BLINK_MS), loop_counter);
             }
             else
             {
-                transitionTo(Phase::PulseOn, to_loop_count(SHORT_BLINK_MS), loop_counter);
+                transitionTo(Phase::EmitBlink, to_loop_count(SHORT_BLINK_MS), loop_counter);
             }
         }
     }
+    void CodeBlinker::handleDisplayNegativeSign(uint8_t loop_counter)
+    {
+        controller_->setBlinkMode(BlinkMode::Pulse);
+        if (phaseElapsed(loop_counter))
+        {
+            transitionTo(Phase::PauseAfterNegative, to_loop_count(NEGATIVE_BLINK_LONG_MS),
+                         loop_counter);
+        }
+    }
 
-    void CodeBlinker::handlePulseOn(uint8_t loop_counter)
+    void CodeBlinker::handlePauseAfterNegative(uint8_t loop_counter)
+    {
+        controller_->setBlinkMode(BlinkMode::Dimmed);
+        if (phaseElapsed(loop_counter))
+        {
+            transitionTo(Phase::LoadNextDigit, to_loop_count(BETWEEN_DIGITS_MS), loop_counter);
+        }
+    }
+
+    void CodeBlinker::handleEmitBlink(uint8_t loop_counter)
     {
         controller_->setBlinkMode(BlinkMode::Pulse);
         // if (pwm_counter_ == peak_level_)
@@ -220,21 +223,21 @@ namespace pisco
         {
             controller_->turnOff();
             --blink_counts_[current_digit_];
-            transitionTo(Phase::PulseOff,
+            transitionTo(Phase::PauseBetweenBlinks,
                          hasMoreBlinks() ? to_loop_count(BETWEEN_BLINK_MS)
                                          : to_loop_count(BETWEEN_DIGITS_MS),
                          loop_counter);
         }
     }
 
-    void CodeBlinker::handlePulseOff(uint8_t loop_counter)
+    void CodeBlinker::handlePauseBetweenBlinks(uint8_t loop_counter)
     {
         controller_->setBlinkMode(BlinkMode::Dimmed);
         if (phaseElapsed(loop_counter))
         {
             if (hasMoreBlinks())
             {
-                transitionTo(Phase::PulseOn, to_loop_count(SHORT_BLINK_MS), loop_counter);
+                transitionTo(Phase::EmitBlink, to_loop_count(SHORT_BLINK_MS), loop_counter);
             }
             else
             {
@@ -242,45 +245,40 @@ namespace pisco
                 {
                     ++current_digit_;
                 }
-                transitionTo(Phase::ReadNextDigit, to_loop_count(BETWEEN_DIGITS_MS), loop_counter);
+                transitionTo(Phase::LoadNextDigit, to_loop_count(BETWEEN_DIGITS_MS), loop_counter);
             }
         }
     }
 
-    void CodeBlinker::handleRepeat(uint8_t loop_counter)
+    void CodeBlinker::handlePauseBeforeStart(uint8_t loop_counter)
     {
         controller_->setBlinkMode(BlinkMode::None);
         controller_->turnOff();
         if (phaseElapsed(loop_counter))
         {
-            transitionTo(Phase::Start, to_loop_count(BETWEEN_DIGITS_MS), loop_counter);
+            transitionTo(Phase::BeginDigit, to_loop_count(BETWEEN_DIGITS_MS), loop_counter);
         }
     }
 
-    void CodeBlinker::handleZeroDigit(uint8_t loop_counter)
+    void CodeBlinker::handleDisplayZero(uint8_t loop_counter)
     {
         controller_->setBlinkMode(BlinkMode::None);
         controller_->turnOff();
         if (phaseElapsed(loop_counter))
         {
-
-            // if (hasMoreDigits())
-            // {
-            //     ++current_digit_;
-            // }
-
-            transitionTo(Phase::PulseOff, to_loop_count(BETWEEN_DIGITS_MS), loop_counter);
+            transitionTo(Phase::PauseBetweenBlinks, to_loop_count(BETWEEN_DIGITS_MS), loop_counter);
         }
     }
 
-    void CodeBlinker::handleEnd(uint8_t loop_counter)
+    void CodeBlinker::handleEndOfDigitCycle(uint8_t loop_counter)
     {
         controller_->setBlinkMode(BlinkMode::Dimmed);
         if (phaseElapsed(loop_counter))
         {
             if (repeats_remaining_ == 0)
             {
-                transitionTo(Phase::FinalPause, to_loop_count(BETWEEN_CODES_MS), loop_counter);
+                transitionTo(Phase::PauseAfterFinish, to_loop_count(BETWEEN_CODES_MS),
+                             loop_counter);
             }
             else
             {
@@ -289,18 +287,18 @@ namespace pisco
                     blink_counts_[i] = digits_[i];
                 }
                 current_digit_ = least_significant_digit_;
-                transitionTo(Phase::Repeat, to_loop_count(BETWEEN_CODES_MS), loop_counter);
+                transitionTo(Phase::PrepareRepeat, to_loop_count(BETWEEN_CODES_MS), loop_counter);
             }
         }
     }
 
-    void CodeBlinker::handleFinalPause(uint8_t loop_counter)
+    void CodeBlinker::handlePauseAfterFinish(uint8_t loop_counter)
     {
         controller_->setBlinkMode(BlinkMode::None);
         controller_->turnOff();
         if (phaseElapsed(loop_counter))
         {
-            transitionTo(Phase::Paused, 0, loop_counter);
+            transitionTo(Phase::Idle, 0, loop_counter);
         }
     }
 
