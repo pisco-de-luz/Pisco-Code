@@ -140,7 +140,6 @@ std::string MockLedControlLogger::traceLogToString() const
 
                 led_blink_pattern_.append(last_pwm_level, duration_without_pwm_changed);
 
-                result += getNextPulseCodeString(last_pwm_level, duration_without_pwm_changed);
                 last_pwm_level                   = pwm_level;
                 last_timestamp_pwm_level_changed = next_duty_cycle_timestamp;
             }
@@ -151,52 +150,6 @@ std::string MockLedControlLogger::traceLogToString() const
 
     led_blink_pattern_.append(last_pwm_level, duration_without_pwm_changed);
 
-    result += getNextPulseCodeString(last_pwm_level, duration_without_pwm_changed);
+    result = led_blink_pattern_.tracePatternToString();
     return result;
-}
-
-// void MockLedControlLogger::appendToLedBlinkPattern(LedLevel level, StateDuration duration) const
-// {
-//     led_blink_pattern_.led_level_usage.at(level) += 1;
-//     if (level > 0)
-//     {
-//         if (led_blink_pattern_.dimmed_level > 0)
-//         {
-//         }
-//     }
-//     led_blink_pattern_.led_events.push_back({level, duration});
-// }
-
-std::string MockLedControlLogger::getNextPulseCodeString(uint8_t   pulseCode,
-                                                         Timestamp duration) const
-{
-    std::string token;
-
-    // if (blinker_ != nullptr)
-    // {
-    //     stateChange.isLedBeingUsedNow = blinker_->isLedBeingUsedNow();
-    //     stateChange.isRunning         = blinker_->isRunning();
-    // }
-    if (pulseCode < 10)
-    {
-        token += static_cast<char>('0' + pulseCode);
-    }
-    else
-    {
-        token += static_cast<char>('a' + pulseCode - 10);
-    }
-    if (duration < 1100)
-    {
-        token += "S";
-    }
-    else if (duration < 2200)
-    {
-        token += "M";
-    }
-    else
-    {
-        token += "L";
-    }
-
-    return token;
 }

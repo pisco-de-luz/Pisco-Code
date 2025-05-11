@@ -5,6 +5,7 @@
 #include "pisco_constants.hpp"
 #include <cstdint>
 #include <set>
+#include <string>
 #include <vector>
 
 using pisco::LedLevel;
@@ -27,6 +28,7 @@ class LedBlinkPattern
     LedLevel                             getDimmedLevel() const { return dimmed_level_; }
     LedLevel                             getPulseLevel() const { return pulse_level_; }
     const std::vector<LedLevelDuration>& getEvents() const { return led_events_; }
+    std::string                          tracePatternToString() const;
 
   private:
     bool                          pattern_is_valid_{true};
