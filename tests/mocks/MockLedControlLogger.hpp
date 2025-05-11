@@ -2,7 +2,10 @@
 #define MOCK_LED_CONTROL_LOGGER_HPP
 
 // #include "Pisco-Code.hpp"
+#include "LedBlinkPattern.hpp"
 #include "code_blinker.hpp"
+#include "pisco_constants.hpp"
+#include <array>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -16,8 +19,9 @@ enum LedEvent : uint8_t
     LED_CALL_FUNC_FAIL
 };
 
-using Timestamp     = uint32_t;
-using StateDuration = uint16_t;
+using pisco::LedLevel;
+using pisco::StateDuration;
+using pisco::Timestamp;
 struct LedStateChange
 {
     Timestamp     timestamp{0};
@@ -26,6 +30,20 @@ struct LedStateChange
     bool          isLedBeingUsedNow{false};
     bool          isRunning{false};
 };
+
+// struct LedLevelDuration
+// {
+//     LedLevel      led_level{0};
+//     StateDuration duration{0};
+// };
+// struct LedBlinkPattern
+// {
+//     bool                                     pattern_is_valid{true};
+//     LedLevel                                 dimmed_level{0};
+//     LedLevel                                 pulse_level{0};
+//     std::array<LedLevel, pisco::PWM_MAX + 1> led_level_usage{};
+//     std::vector<LedLevelDuration>            led_events{};
+// };
 
 class MockLedControlLogger
 {
@@ -39,14 +57,17 @@ class MockLedControlLogger
     const std::vector<LedStateChange>& getEvents() const;
     void                               flush();
     void                               setTraceResolution(Timestamp resolutionMs); // default: 100
+
     std::string getNextPulseCodeString(uint8_t pulseCode, Timestamp duration) const;
     std::string traceLogToString() const;
+    void        appendToLedBlinkPattern(LedLevel level, StateDuration duration) const;
 
   private:
     void                        log(LedEvent ev);
     Timestamp                   currentTime_{0};
     Timestamp                   lastTime_{0};
     StateDuration               duration_{1};
+    mutable LedBlinkPattern     led_blink_pattern_{};
     LedEvent                    lastState_{LED_CALL_INVALID};
     std::vector<LedStateChange> events_{};
     Timestamp                   traceResolutionMs_{100};
