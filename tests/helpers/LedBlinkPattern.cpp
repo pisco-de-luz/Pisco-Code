@@ -1,6 +1,10 @@
 #include "LedBlinkPattern.hpp"
+#include <algorithm>
+#include <array>
 #include <cstdint>
+#include <set>
 #include <string>
+#include <vector>
 
 void LedBlinkPattern::reset()
 {
@@ -69,14 +73,27 @@ std::string LedBlinkPattern::tracePatternToString() const
             return "!";
         }
 
-        uint8_t count = 1;
-        if (event.duration > 2200)
-            count = 5;
-        else if (event.duration > 1100)
-            count = 3;
+        const uint8_t count = getRepeatCount(event.duration);
 
         result.append(count, symbol);
     }
 
     return result;
+}
+
+bool LedBlinkPattern::isValid() const
+{
+    return pattern_is_valid_ && used_levels_.size() == 2;
+}
+
+uint8_t LedBlinkPattern::getRepeatCount(StateDuration duration) const
+{
+    auto it = std::upper_bound(traceRepeatRules.begin(), traceRepeatRules.end(), duration,
+                               [](StateDuration value, const TraceRepeatRule& rule)
+                               { return value < rule.min_duration; });
+
+    if (it == traceRepeatRules.begin())
+        return traceRepeatRules.front().repeat_count;
+
+    return std::prev(it)->repeat_count;
 }
