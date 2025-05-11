@@ -20,6 +20,10 @@ namespace pisco
         HEXADECIMAL = 16
     };
 
+    using Timestamp     = uint32_t;
+    using StateDuration = uint16_t;
+    using LedLevel      = uint8_t;
+
     // LED brightness control
     constexpr uint8_t MAX_DIGITS         = 10;
     constexpr uint8_t INITIAL_DIMMED_PWM = 3;
