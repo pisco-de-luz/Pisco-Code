@@ -31,13 +31,16 @@ namespace pisco
 
     // Loop timing constants
     constexpr uint32_t LOOP_INTERVAL_MS       = 64;
+    constexpr uint32_t INIT_PHASE_MS          = 2000;
+    constexpr uint32_t INIT_DIMMED_PHASE_MS   = 1300;
+    constexpr uint32_t END_DIMMED_PHASE_MS    = 300;
     constexpr uint32_t NEGATIVE_BLINK_LONG_MS = 1800;
     constexpr uint32_t SHORT_BLINK_MS         = 350;
     constexpr uint32_t ZERO_DIGIT_BLINK_MS    = 440;
     constexpr uint32_t BETWEEN_BLINK_MS       = 350;
-    constexpr uint32_t BETWEEN_DIGITS_MS      = 1700;
+    constexpr uint32_t BETWEEN_DIGITS_MS      = 1200;
     constexpr uint32_t BETWEEN_CODES_MS       = 1500;
-    constexpr uint32_t END_PHASE_MS           = 2150;
+    constexpr uint32_t END_PHASE_MS           = 2000;
 
     // Conversion from ms to loop ticks
     constexpr uint8_t to_loop_count(uint32_t ms)
