@@ -59,7 +59,7 @@ int main()
 
     uint32_t fakeMillis = 3660000UL; // 1 hour, 1 minute, 0 seconds
 
-    blinker.showCode(13, base_t::DECIMAL, 0, 3);
+    blinker.showCode(102, base_t::DECIMAL, 0, 3);
     while (blinker.isRunning())
     {
         blinker.loop(fakeMillis++ >> 6);
