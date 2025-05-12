@@ -82,10 +82,10 @@ namespace pisco
 
         LedController* controller_ = nullptr;
 
-        uint8_t current_digit_            = 0;
-        uint8_t least_significant_digit_  = 0;
-        int8_t  blink_counts_[MAX_DIGITS] = {};
-        uint8_t digits_[MAX_DIGITS]       = {};
+        NumDigits current_digit_            = 0;
+        NumDigits least_significant_digit_  = 0;
+        int8_t    blink_counts_[MAX_DIGITS] = {};
+        uint8_t   digits_[MAX_DIGITS]       = {};
 
         uint8_t         repeats_total_     = 0;
         mutable uint8_t repeats_remaining_ = 0;
