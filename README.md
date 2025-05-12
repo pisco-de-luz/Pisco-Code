@@ -75,7 +75,7 @@ bool           ledBuiltinOK;                                      // It is safe 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);                                   // initialize digital pin LED_BUILTIN as an output.                  
   if ( ledBuiltinOK = ledBuiltin.setup(&turnLedOnOff) ) {         // calling the PiscoCode class constructor.
-     ledBuiltin.showCode(1024, static_cast<uint8_t>(pisco::base_t::DECIMAL));               // display the 1024 number on BUILTIN led.  
+     ledBuiltin.showCode(1024, static_cast<uint8_t>(pisco::NumberBase::DECIMAL));               // display the 1024 number on BUILTIN led.  
   }
 }
 
@@ -172,7 +172,7 @@ The showCode() function needs two arguments, the "code-to-show" and the "base" t
 | Argument               | Description                                            |
 | :---:                  | :---                                                   |
 | code-to-show (int32_t) | Integer number between -9999999999 and 9999999999 to show in the LED that was set up during this object initialization.  |
-| base (uint8_t)         | This function will show the code passed in the first argument using one of the following base systems. PiscoCode::BINARY, PiscoCode::OCTAL, static_cast<uint8_t>(pisco::base_t::DECIMAL) or PiscoCode::HEXADECIMAL  |
+| base (uint8_t)         | This function will show the code passed in the first argument using one of the following base systems. PiscoCode::BINARY, PiscoCode::OCTAL, static_cast<uint8_t>(pisco::NumberBase::DECIMAL) or PiscoCode::HEXADECIMAL  |
 
 ### Status Code Returned
 
@@ -186,7 +186,7 @@ The showCode() function needs two arguments, the "code-to-show" and the "base" t
 
 ```C++
 // If we could start showing Pisco Code 1024 on ledOne
-if ( ledOne.showCode(1024, static_cast<uint8_t>(pisco::base_t::DECIMAL)) == static_cast<uint8_t>(pisco::status_t::OK) ) {
+if ( ledOne.showCode(1024, static_cast<uint8_t>(pisco::NumberBase::DECIMAL)) == static_cast<uint8_t>(pisco::status_t::OK) ) {
    // Do something
 } 
 // Trying to start showing Pisco Code 13 in binary on ledTwo 
