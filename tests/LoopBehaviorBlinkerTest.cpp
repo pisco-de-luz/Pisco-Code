@@ -19,14 +19,14 @@ TEST(LoopBehaviorBlinkerTest, ShouldHoldDimLightForDigitZero)
 {
     blinker.showCode(0, base_t::DECIMAL, 0, 1);
     runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("4M0S4L0M", logger.traceLogToString().c_str());
+    STRCMP_EQUAL("___---_---___", logger.traceLogToString().c_str());
 }
 
 TEST(LoopBehaviorBlinkerTest, ShouldBlinkDigits_1_2_0)
 {
     blinker.showCode(120, base_t::DECIMAL, 0, 1);
     runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("4MgS4MgS4SgS4M0S4L0M", logger.traceLogToString().c_str());
+    STRCMP_EQUAL("___^^^-_^^^___", logger.traceLogToString().c_str());
 }
 
 TEST(LoopBehaviorBlinkerTest, ShouldBlinkNegativeSingleDigit)

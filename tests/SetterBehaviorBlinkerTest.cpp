@@ -102,16 +102,16 @@ TEST(SetterBehaviorBlinkerTest, ShouldNotPadIfNotNeeded)
     STRCMP_EQUAL("4MgS4SgS4MgS4SgS4SgS4L0M", logger.traceLogToString().c_str());
 }
 
+TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighMinDigits)
+{
+    blinker.showCode(1, base_t::DECIMAL, 99, 1);
+    runSequencer(&blinker, &logger);
+    STRCMP_EQUAL("___---^---___", logger.traceLogToString().c_str());
+}
+
 TEST(SetterBehaviorBlinkerTest, ShouldHandleSingleDigitZero)
 {
     blinker.showCode(0, base_t::DECIMAL, 1, 1);
     runSequencer(&blinker, &logger);
     STRCMP_EQUAL("4M0S4L0M", logger.traceLogToString().c_str());
-}
-
-TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighMinDigits)
-{
-    blinker.showCode(1, base_t::DECIMAL, 99, 1);
-    runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("4MgS4L0M", logger.traceLogToString().c_str());
 }

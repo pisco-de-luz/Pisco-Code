@@ -18,55 +18,60 @@ TEST_GROUP(BaseEncodingBlinkerTest)
 TEST(BaseEncodingBlinkerTest, CanShowDecimal42)
 {
     // controller.setDimmedLevel(1);
-    bool started = blinker.showCode(120, base_t::DECIMAL, 0, 1);
+    bool started = blinker.showCode(42, base_t::DECIMAL, 0, 1);
+    logger.setBlinker(&blinker);
     CHECK_TRUE(started);
 
     runSequencer(&blinker, &logger);
 
-    STRCMP_EQUAL("4MgS4MgS4SgS4M0S4L0M", logger.traceLogToString().c_str());
+    STRCMP_EQUAL("___---^-^-^-^---^-^---___", logger.traceLogToString().c_str());
 }
 
 TEST(BaseEncodingBlinkerTest, CanShowZero)
 {
     bool started = blinker.showCode(0, base_t::DECIMAL, 0, 1);
+    logger.setBlinker(&blinker);
     CHECK_TRUE(started);
 
     runSequencer(&blinker, &logger);
-
-    STRCMP_EQUAL("4M0S4L0M", logger.traceLogToString().c_str());
+    std::string expected = logger.traceLogToString();
+    STRCMP_EQUAL("___---_---___", expected.c_str());
 }
 
 TEST(BaseEncodingBlinkerTest, CanShowDecimal12345)
 {
     bool started = blinker.showCode(12345, base_t::DECIMAL, 0, 1);
+    logger.setBlinker(&blinker);
     CHECK_TRUE(started);
     runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("4MgS4MgS4SgS4MgS4SgS4SgS4MgS4SgS4SgS4SgS4MgS4SgS4SgS4SgS4SgS4L0M",
+    STRCMP_EQUAL("___---^---^-^---^-^-^---^-^-^-^---^-^-^-^-^---___",
                  logger.traceLogToString().c_str());
 }
 
 TEST(BaseEncodingBlinkerTest, CanShowBinary5)
 {
     bool started = blinker.showCode(5, base_t::BINARY, 0, 1); // binary: 101
+    logger.setBlinker(&blinker);
     CHECK_TRUE(started);
     runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("4MgS4M0S4MgS4L0M", logger.traceLogToString().c_str());
+    STRCMP_EQUAL("___---^---_---^---___", logger.traceLogToString().c_str());
 }
 
 TEST(BaseEncodingBlinkerTest, CanShowHex255)
 {
     bool started = blinker.showCode(255, base_t::HEXADECIMAL, 0, 1); // hex: FF
+    logger.setBlinker(&blinker);
     CHECK_TRUE(started);
     runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("4MgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4MgS4SgS4SgS4SgS4SgS4"
-                 "SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4SgS4L0M",
+    STRCMP_EQUAL("___---^-^-^-^-^-^-^-^-^-^-^-^-^-^-^---^-^-^-^-^-^-^-^-^-^-^-^-^-^-^---___",
                  logger.traceLogToString().c_str());
 }
 
 TEST(BaseEncodingBlinkerTest, CanShowOctal28)
 {
     bool started = blinker.showCode(28, base_t::OCTAL, 0, 1); // octal: 34
+    logger.setBlinker(&blinker);
     CHECK_TRUE(started);
     runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("4MgS4SgS4SgS4MgS4SgS4SgS4SgS4L0M", logger.traceLogToString().c_str());
+    STRCMP_EQUAL("___---^-^-^---^-^-^-^---___", logger.traceLogToString().c_str());
 }
