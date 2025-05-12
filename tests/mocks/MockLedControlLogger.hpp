@@ -1,7 +1,6 @@
 #ifndef MOCK_LED_CONTROL_LOGGER_HPP
 #define MOCK_LED_CONTROL_LOGGER_HPP
 
-// #include "Pisco-Code.hpp"
 #include "LedBlinkPattern.hpp"
 #include "code_blinker.hpp"
 #include "pisco_constants.hpp"
@@ -21,7 +20,7 @@ enum class LedEvent : uint8_t
 
 using pisco::LedLevel;
 using pisco::Timestamp;
-using TracerCode = std::string;
+using TraceCode = std::string;
 struct LedStateChange
 {
     Timestamp         timestamp{0};

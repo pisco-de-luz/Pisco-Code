@@ -1,5 +1,4 @@
 #include "MockLedControlLogger.hpp"
-// #include "LedBlinkPattern.hpp"
 #include "pisco_constants.hpp"
 
 #ifdef new
