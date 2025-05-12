@@ -41,7 +41,7 @@ void MockLedControlLogger::log(LedEvent ledEvent)
     }
 
     // If lastState_ was valid, flush it to the log
-    if (lastState_ != LED_CALL_INVALID)
+    if (lastState_ != LedEvent::Invalid)
     {
         LedStateChange stateChange;
         stateChange.timestamp = lastTime_;
@@ -64,7 +64,7 @@ void MockLedControlLogger::log(LedEvent ledEvent)
 
 void MockLedControlLogger::flush()
 {
-    if (lastState_ != LED_CALL_INVALID)
+    if (lastState_ != LedEvent::Invalid)
     {
         LedStateChange stateChange;
         stateChange.timestamp = lastTime_;
@@ -74,29 +74,29 @@ void MockLedControlLogger::flush()
     }
 
     lastTime_  = currentTime_;
-    lastState_ = LED_CALL_INVALID;
+    lastState_ = LedEvent::Invalid;
 }
 
 bool MockLedControlLogger::handle(uint8_t ctrlLED)
 {
-    LedEvent ledEvent{LED_CALL_INVALID};
+    LedEvent ledEvent{LedEvent::Invalid};
     switch (ctrlLED)
     {
-        case pisco::LED_ON:
-            ledEvent = LED_CALL_ON;
+        case static_cast<uint8_t>(pisco::LedControlCode::On):
+            ledEvent = LedEvent::On;
             break;
-        case pisco::LED_OFF:
-            ledEvent = LED_CALL_OFF;
+        case static_cast<uint8_t>(pisco::LedControlCode::Off):
+            ledEvent = LedEvent::Off;
             break;
-        case pisco::LED_FUNC_OK:
-            ledEvent = LED_CALL_FUNC_OK;
+        case static_cast<uint8_t>(pisco::LedControlCode::FuncOk):
+            ledEvent = LedEvent::FuncOk;
             break;
         default:
-            ledEvent = LED_CALL_FUNC_FAIL;
+            ledEvent = LedEvent::FuncFail;
     }
 
     log(ledEvent);
-    return (ledEvent == LED_CALL_ON || ledEvent == LED_CALL_OFF || ledEvent == LED_CALL_FUNC_OK);
+    return (ledEvent == LedEvent::On || ledEvent == LedEvent::Off || ledEvent == LedEvent::FuncOk);
 }
 
 const std::vector<LedStateChange>& MockLedControlLogger::getEvents() const
@@ -111,17 +111,17 @@ void MockLedControlLogger::setTraceResolution(Timestamp resolutionMs)
 
 std::string MockLedControlLogger::traceLogToString() const
 {
-    std::string   result{""};
-    Timestamp     next_duty_cycle_timestamp{0};
-    uint8_t       last_pwm_level{0};
-    Timestamp     last_timestamp_pwm_level_changed{0};
-    StateDuration duration_without_pwm_changed{0};
-    std::string   token;
+    std::string result{""};
+    Timestamp   next_duty_cycle_timestamp{0};
+    uint8_t     last_pwm_level{0};
+    Timestamp   last_timestamp_pwm_level_changed{0};
+    DurationMs  duration_without_pwm_changed{0};
+    std::string token;
     led_blink_pattern_.reset();
 
     for (const auto& event : events_)
     {
-        if (event.state == LED_CALL_ON && event.timestamp != next_duty_cycle_timestamp)
+        if (event.state == LedEvent::On && event.timestamp != next_duty_cycle_timestamp)
         {
             break; // Events vector is incorrect, stop processing
         }
@@ -129,7 +129,7 @@ std::string MockLedControlLogger::traceLogToString() const
         while (next_duty_cycle_timestamp < next_timestamp_event)
         {
             uint8_t pwm_level{0};
-            if (event.state == LED_CALL_ON)
+            if (event.state == LedEvent::On)
             {
                 pwm_level = event.duration;
             }
