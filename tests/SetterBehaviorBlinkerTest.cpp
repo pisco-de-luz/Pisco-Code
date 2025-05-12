@@ -53,19 +53,20 @@ TEST(SetterBehaviorBlinkerTest, ShouldAffectLedOnDuration)
 
 TEST(SetterBehaviorBlinkerTest, ShouldUseDefaultDimLevel)
 {
-    blinker.showCode(0, NumberBase::DECIMAL, 0, 1);
-    runSequencer(&blinker, &logger);
-    const std::string trace = logger.traceLogToString();
-    CHECK(trace.find('4') != std::string::npos); // Default dim = 1
-}
+    constexpr LedLevel    DIM_LEVEL_EXPECTED = pisco::DEFAULT_DIMMED_LEVEL;
+    constexpr BlinkCode   CODE_TO_TEST       = 102;
+    constexpr NumDigits   NUM_DIGITS         = 0;
+    constexpr RepeatTimes REPEATS            = 1;
 
-TEST(SetterBehaviorBlinkerTest, ShouldSetDimLevelAffectingIdle)
-{
-    blinker.setDimmedLevel(4);
-    blinker.showCode(0, NumberBase::DECIMAL, 0, 1);
+    blinker.showCode(CODE_TO_TEST, NumberBase::DECIMAL, NUM_DIGITS, REPEATS);
+    logger.setBlinker(&blinker);
     runSequencer(&blinker, &logger);
-    const std::string trace = logger.traceLogToString();
-    CHECK(trace.find('5') != std::string::npos);
+
+    const TracerCode actual_trace = logger.traceLogToString();
+    const LedLevel   dimmed_level = logger.getDimmedLevel();
+
+    STRCMP_EQUAL("___---^---_---^-^---___", actual_trace.c_str());
+    CHECK_EQUAL_TEXT(DIM_LEVEL_EXPECTED, dimmed_level, "Dimmed level should be default");
 }
 
 // Expect dimmed level to be clamped to safe default when above allowed maximum.
@@ -77,6 +78,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighDimLevel)
     constexpr BlinkCode   CODE_TO_TEST = 10;
     constexpr NumDigits   NUM_DIGITS   = 0;
     constexpr RepeatTimes REPEATS      = 1;
+
     blinker.setDimmedLevel(DIM_LEVEL_OVER_LIMIT);
     blinker.showCode(CODE_TO_TEST, NumberBase::DECIMAL, NUM_DIGITS, REPEATS);
     logger.setBlinker(&blinker);
@@ -91,12 +93,15 @@ TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighDimLevel)
 
 TEST(SetterBehaviorBlinkerTest, ShouldNotAffectPeakPwmWhenSettingDim)
 {
-    constexpr LedLevel PULSE_LEVEL_EXPECTED = 9;
-    constexpr LedLevel DIM_LEVEL_EXPECTED   = 6;
-    blinker.setPeakLevel(PULSE_LEVEL_EXPECTED);
-    blinker.setDimmedLevel(DIM_LEVEL_EXPECTED);
+    constexpr LedLevel    PULSE_LEVEL_EXPECTED = pisco::DEFAULT_PULSE_LEVEL;
+    constexpr LedLevel    DIM_LEVEL_EXPECTED   = 1;
+    constexpr BlinkCode   CODE_TO_TEST         = 2;
+    constexpr NumDigits   NUM_DIGITS           = 0;
+    constexpr RepeatTimes REPEATS              = 1;
 
-    blinker.showCode(2, NumberBase::DECIMAL, 0, 1);
+    blinker.setDimmedLevel(DIM_LEVEL_EXPECTED);
+    blinker.showCode(CODE_TO_TEST, NumberBase::DECIMAL, NUM_DIGITS, REPEATS);
+    logger.setBlinker(&blinker);
     runSequencer(&blinker, &logger);
 
     const std::string actual_trace = logger.traceLogToString();
@@ -104,8 +109,17 @@ TEST(SetterBehaviorBlinkerTest, ShouldNotAffectPeakPwmWhenSettingDim)
     const LedLevel    dimmed_level = logger.getDimmedLevel();
 
     STRCMP_EQUAL("___---^-^---___", actual_trace.c_str());
-    CHECK_EQUAL(PULSE_LEVEL_EXPECTED, pulse_level);
-    CHECK_EQUAL(DIM_LEVEL_EXPECTED, dimmed_level);
+    CHECK_EQUAL_TEXT(DIM_LEVEL_EXPECTED, dimmed_level, "Dimmed level was not changed correctly");
+    CHECK_EQUAL_TEXT(PULSE_LEVEL_EXPECTED, pulse_level, "Dimmed level affected Pulse Level");
+}
+
+TEST(SetterBehaviorBlinkerTest, ShouldSetDimLevelAffectingIdle)
+{
+    blinker.setDimmedLevel(4);
+    blinker.showCode(0, NumberBase::DECIMAL, 0, 1);
+    runSequencer(&blinker, &logger);
+    const std::string trace = logger.traceLogToString();
+    CHECK(trace.find('5') != std::string::npos);
 }
 
 TEST(SetterBehaviorBlinkerTest, ShouldPadWithLeadingZeros)
