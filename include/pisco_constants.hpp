@@ -1,28 +1,33 @@
 #ifndef PISCO_CONSTANTS_HPP
 #define PISCO_CONSTANTS_HPP
 
+#include "pisco_types.hpp"
 #include <stdint.h>
 
 namespace pisco
 {
 
+    enum class LedControlCode : uint8_t
+    {
+        On       = 0,
+        Off      = 1,
+        FuncOk   = 100,
+        FuncFail = 101 // optional, used in Mock logger
+    };
+
     // LED control codes
-    constexpr uint8_t LED_ON      = 0;
-    constexpr uint8_t LED_OFF     = 1;
-    constexpr uint8_t LED_FUNC_OK = 100;
+    constexpr LedControlCode LED_ON      = LedControlCode::On;
+    constexpr LedControlCode LED_OFF     = LedControlCode::Off;
+    constexpr LedControlCode LED_FUNC_OK = LedControlCode::FuncOk;
 
     // Encoding bases
-    enum class base_t : uint8_t
+    enum class NumberBase : uint8_t
     {
         BINARY      = 2,
         OCTAL       = 8,
         DECIMAL     = 10,
         HEXADECIMAL = 16
     };
-
-    using Timestamp     = uint32_t;
-    using StateDuration = uint16_t;
-    using LedLevel      = uint8_t;
 
     // LED brightness control
     constexpr uint8_t MAX_DIGITS         = 10;
