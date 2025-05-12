@@ -19,16 +19,16 @@ enum class LedEvent : uint8_t
     FuncFail
 };
 
-using pisco::DurationMs;
 using pisco::LedLevel;
 using pisco::Timestamp;
+using TracerCode = std::string;
 struct LedStateChange
 {
-    Timestamp  timestamp{0};
-    LedEvent   state{LedEvent::Invalid};
-    DurationMs duration{0};
-    bool       isLedBeingUsedNow{false};
-    bool       isRunning{false};
+    Timestamp         timestamp{0};
+    LedEvent          state{LedEvent::Invalid};
+    pisco::DurationMs duration{0};
+    bool              isLedBeingUsedNow{false};
+    bool              isRunning{false};
 };
 
 class MockLedControlLogger
@@ -52,7 +52,7 @@ class MockLedControlLogger
     void                        log(LedEvent ev);
     Timestamp                   currentTime_{0};
     Timestamp                   lastTime_{0};
-    DurationMs                  duration_{1};
+    pisco::DurationMs           duration_{1};
     mutable LedBlinkPattern     led_blink_pattern_{};
     LedEvent                    lastState_{LedEvent::Invalid};
     std::vector<LedStateChange> events_{};

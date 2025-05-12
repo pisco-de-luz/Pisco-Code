@@ -30,9 +30,11 @@ namespace pisco
     };
 
     // LED brightness control
-    constexpr NumDigits MAX_DIGITS         = 10;
-    constexpr uint8_t   INITIAL_DIMMED_PWM = 3;
-    constexpr uint8_t   PWM_MAX            = 15;
+    constexpr NumDigits MAX_DIGITS           = 10;
+    constexpr uint8_t   DEFAULT_DIMMED_LEVEL = 3;
+    constexpr uint8_t   PWM_MAX              = 15;
+    constexpr LedLevel  MIN_PULSE_DIMMED_GAP = 2;
+    constexpr uint8_t   DEFAULT_PULSE_LEVEL  = PWM_MAX;
 
     // Loop timing constants
     constexpr uint32_t LOOP_INTERVAL_MS       = 64;

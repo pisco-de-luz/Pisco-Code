@@ -4,6 +4,7 @@
 #include "mocks/MockLedControlLogger.hpp"
 #include "mocks/MockLedControllerAdapter.hpp"
 #include "pisco_constants.hpp"
+#include "pisco_types.hpp"
 
 using namespace pisco;
 using testutils::runSequencer;
@@ -67,19 +68,25 @@ TEST(SetterBehaviorBlinkerTest, ShouldSetDimLevelAffectingIdle)
     CHECK(trace.find('5') != std::string::npos);
 }
 
+// Expect dimmed level to be clamped to safe default when above allowed maximum.
 TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighDimLevel)
 {
-    constexpr LedLevel DIM_LEVEL_OVER_LIMIT = 6;
-    constexpr int32_t  CODE_TO_TEST         = 10;
-    constexpr uint8_t  NUM_DIGITS           = 0;
-    constexpr uint8_t  REPEATS              = 1;
+    constexpr LedLevel DIM_LEVEL_OVER_LIMIT = 255;
+    constexpr LedLevel DIM_LEVEL_EXPECTED =
+        pisco::DEFAULT_PULSE_LEVEL - pisco::MIN_PULSE_DIMMED_GAP;
+    constexpr BlinkCode   CODE_TO_TEST = 10;
+    constexpr NumDigits   NUM_DIGITS   = 0;
+    constexpr RepeatTimes REPEATS      = 1;
     blinker.setDimmedLevel(DIM_LEVEL_OVER_LIMIT);
     blinker.showCode(CODE_TO_TEST, NumberBase::DECIMAL, NUM_DIGITS, REPEATS);
     logger.setBlinker(&blinker);
-
     runSequencer(&blinker, &logger);
-    const std::string trace = logger.traceLogToString();
-    CHECK(trace.find('0') != std::string::npos);
+
+    const TracerCode actual_trace = logger.traceLogToString();
+    const LedLevel   dimmed_level = logger.getDimmedLevel();
+
+    STRCMP_EQUAL("___---^---_---___", actual_trace.c_str());
+    CHECK_TEXT(dimmed_level == DIM_LEVEL_EXPECTED, "Dimmed level was not clamped correctly");
 }
 
 TEST(SetterBehaviorBlinkerTest, ShouldNotAffectPeakPwmWhenSettingDim)

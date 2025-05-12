@@ -71,7 +71,7 @@ class MockLedControllerAdapter : public pisco::LedController
   private:
     MockLedControlLogger* logger_       = nullptr;
     uint8_t               peak_level_   = pisco::PWM_MAX;
-    uint8_t               dimmed_level_ = pisco::INITIAL_DIMMED_PWM;
+    uint8_t               dimmed_level_ = pisco::DEFAULT_DIMMED_LEVEL;
     pisco::BlinkMode      mode_         = pisco::BlinkMode::None;
 };
 

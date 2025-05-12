@@ -95,9 +95,9 @@ namespace pisco
         Phase   current_phase_  = Phase::Idle;
 
         bool    is_negative_  = false;
-        uint8_t peak_level_   = PWM_MAX;
+        uint8_t peak_level_   = DEFAULT_PULSE_LEVEL;
         uint8_t pwm_counter_  = 0;
-        uint8_t dimmed_level_ = INITIAL_DIMMED_PWM;
+        uint8_t dimmed_level_ = DEFAULT_DIMMED_LEVEL;
     };
 
 } // namespace pisco

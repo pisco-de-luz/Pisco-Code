@@ -1,4 +1,6 @@
 #include "code_blinker.hpp"
+#include "pisco_constants.hpp"
+#include "pisco_types.hpp"
 #include "software_pwm_led_controller.hpp"
 #include <avr/io.h>
 #include <stdint.h>
@@ -18,13 +20,13 @@ bool turnLedOnOff(uint8_t ctrlLED)
 {
     switch (ctrlLED)
     {
-        case LED_ON:
+        case static_cast<uint8_t>(pisco::LedControlCode::On):
             LED_PORT &= ~(1 << LED_PIN);
             return true;
-        case LED_OFF:
+        case static_cast<uint8_t>(pisco::LedControlCode::Off):
             LED_PORT |= (1 << LED_PIN);
             return true;
-        case LED_FUNC_OK:
+        case static_cast<uint8_t>(pisco::LedControlCode::FuncOk):
             return true;
         default:
             return false;
@@ -55,11 +57,11 @@ int main()
     CodeBlinker              blinker(&ledController);
 
     // Configure blinking behavior
-    blinker.setDimmedLevel(1);
+    blinker.setDimmedLevel(255);
 
     uint32_t fakeMillis = 3660000UL; // 1 hour, 1 minute, 0 seconds
 
-    blinker.showCode(102, NumberBase::DECIMAL, 0, 3);
+    blinker.showCode(12, NumberBase::DECIMAL, 0, 3);
     while (blinker.isRunning())
     {
         blinker.loop(fakeMillis++ >> 6);

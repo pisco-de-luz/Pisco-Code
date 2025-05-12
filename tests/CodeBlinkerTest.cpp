@@ -69,7 +69,7 @@ TEST(CodeBlinkerGroup, LoopTriggersDimmedStart)
     blinker->showCode(5, NumberBase::DECIMAL, 1, 1);
     blinker->loop(1); // simulate loop trigger
     CHECK_EQUAL(1, controller.dimmed_calls);
-    CHECK_EQUAL(INITIAL_DIMMED_PWM, controller.last_dimmed);
+    CHECK_EQUAL(DEFAULT_DIMMED_LEVEL, controller.last_dimmed);
 }
 
 TEST(CodeBlinkerGroup, LoopEventuallyTurnsOff)
