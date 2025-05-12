@@ -18,7 +18,7 @@ TEST_GROUP(BaseEncodingBlinkerTest)
 TEST(BaseEncodingBlinkerTest, CanShowDecimal42)
 {
     // controller.setDimmedLevel(1);
-    bool started = blinker.showCode(42, base_t::DECIMAL, 0, 1);
+    bool started = blinker.showCode(42, NumberBase::DECIMAL, 0, 1);
     logger.setBlinker(&blinker);
     CHECK_TRUE(started);
 
@@ -29,7 +29,7 @@ TEST(BaseEncodingBlinkerTest, CanShowDecimal42)
 
 TEST(BaseEncodingBlinkerTest, CanShowZero)
 {
-    bool started = blinker.showCode(0, base_t::DECIMAL, 0, 1);
+    bool started = blinker.showCode(0, NumberBase::DECIMAL, 0, 1);
     logger.setBlinker(&blinker);
     CHECK_TRUE(started);
 
@@ -40,7 +40,7 @@ TEST(BaseEncodingBlinkerTest, CanShowZero)
 
 TEST(BaseEncodingBlinkerTest, CanShowDecimal12345)
 {
-    bool started = blinker.showCode(12345, base_t::DECIMAL, 0, 1);
+    bool started = blinker.showCode(12345, NumberBase::DECIMAL, 0, 1);
     logger.setBlinker(&blinker);
     CHECK_TRUE(started);
     runSequencer(&blinker, &logger);
@@ -50,7 +50,7 @@ TEST(BaseEncodingBlinkerTest, CanShowDecimal12345)
 
 TEST(BaseEncodingBlinkerTest, CanShowBinary5)
 {
-    bool started = blinker.showCode(5, base_t::BINARY, 0, 1); // binary: 101
+    bool started = blinker.showCode(5, NumberBase::BINARY, 0, 1); // binary: 101
     logger.setBlinker(&blinker);
     CHECK_TRUE(started);
     runSequencer(&blinker, &logger);
@@ -59,7 +59,7 @@ TEST(BaseEncodingBlinkerTest, CanShowBinary5)
 
 TEST(BaseEncodingBlinkerTest, CanShowHex255)
 {
-    bool started = blinker.showCode(255, base_t::HEXADECIMAL, 0, 1); // hex: FF
+    bool started = blinker.showCode(255, NumberBase::HEXADECIMAL, 0, 1); // hex: FF
     logger.setBlinker(&blinker);
     CHECK_TRUE(started);
     runSequencer(&blinker, &logger);
@@ -69,7 +69,7 @@ TEST(BaseEncodingBlinkerTest, CanShowHex255)
 
 TEST(BaseEncodingBlinkerTest, CanShowOctal28)
 {
-    bool started = blinker.showCode(28, base_t::OCTAL, 0, 1); // octal: 34
+    bool started = blinker.showCode(28, NumberBase::OCTAL, 0, 1); // octal: 34
     logger.setBlinker(&blinker);
     CHECK_TRUE(started);
     runSequencer(&blinker, &logger);

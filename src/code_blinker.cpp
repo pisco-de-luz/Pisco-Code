@@ -9,7 +9,7 @@ namespace pisco
     {
     }
 
-    bool CodeBlinker::showCode(int32_t code, base_t base, uint8_t min_digits, uint8_t repeats)
+    bool CodeBlinker::showCode(int32_t code, NumberBase base, uint8_t num_digits, uint8_t repeats)
     {
         if (!controller_ || current_phase_ != Phase::Idle || repeats == 0 || peak_level_ == 0)
         {
@@ -36,9 +36,9 @@ namespace pisco
             value_to_display /= static_cast<uint8_t>(base);
         }
 
-        if (min_digits > 0 && min_digits < MAX_DIGITS)
+        if (num_digits > 0 && num_digits < MAX_DIGITS)
         {
-            current_digit_ = MAX_DIGITS - min_digits;
+            current_digit_ = MAX_DIGITS - num_digits;
         }
 
         least_significant_digit_ = current_digit_;

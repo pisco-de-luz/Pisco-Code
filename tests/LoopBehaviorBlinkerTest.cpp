@@ -17,35 +17,35 @@ TEST_GROUP(LoopBehaviorBlinkerTest)
 
 TEST(LoopBehaviorBlinkerTest, ShouldHoldDimLightForDigitZero)
 {
-    blinker.showCode(0, base_t::DECIMAL, 0, 1);
+    blinker.showCode(0, NumberBase::DECIMAL, 0, 1);
     runSequencer(&blinker, &logger);
     STRCMP_EQUAL("___---_---___", logger.traceLogToString().c_str());
 }
 
 TEST(LoopBehaviorBlinkerTest, ShouldBlinkDigits_1_2_0)
 {
-    blinker.showCode(120, base_t::DECIMAL, 0, 1);
+    blinker.showCode(120, NumberBase::DECIMAL, 0, 1);
     runSequencer(&blinker, &logger);
     STRCMP_EQUAL("___^^^-_^^^___", logger.traceLogToString().c_str());
 }
 
 TEST(LoopBehaviorBlinkerTest, ShouldBlinkNegativeSingleDigit)
 {
-    blinker.showCode(-2, base_t::DECIMAL, 0, 1);
+    blinker.showCode(-2, NumberBase::DECIMAL, 0, 1);
     runSequencer(&blinker, &logger);
     STRCMP_EQUAL("4MgM4MgS4SgS4L0M", logger.traceLogToString().c_str());
 }
 
 TEST(LoopBehaviorBlinkerTest, ShouldRepeatBlinkingSequenceTwice)
 {
-    blinker.showCode(1, base_t::DECIMAL, 0, 2);
+    blinker.showCode(1, NumberBase::DECIMAL, 0, 2);
     runSequencer(&blinker, &logger);
     STRCMP_EQUAL("4MgS4L0M4MgS4L0M", logger.traceLogToString().c_str());
 }
 
 TEST(LoopBehaviorBlinkerTest, ShouldEndInFinalPause)
 {
-    blinker.showCode(7, base_t::DECIMAL, 0, 1);
+    blinker.showCode(7, NumberBase::DECIMAL, 0, 1);
     runSequencer(&blinker, &logger);
     std::string trace   = logger.traceLogToString();
     std::string lastTwo = trace.substr(trace.size() - 2, 2);
@@ -54,14 +54,14 @@ TEST(LoopBehaviorBlinkerTest, ShouldEndInFinalPause)
 
 TEST(LoopBehaviorBlinkerTest, ShouldHandleMixOfZeroAndOne)
 {
-    blinker.showCode(1010, base_t::DECIMAL, 0, 1);
+    blinker.showCode(1010, NumberBase::DECIMAL, 0, 1);
     runSequencer(&blinker, &logger);
     STRCMP_EQUAL("4MgS4M0S4MgS4M0S4L0M", logger.traceLogToString().c_str());
 }
 
 TEST(LoopBehaviorBlinkerTest, ShouldStartAndEndWithLedOff)
 {
-    blinker.showCode(1, base_t::DECIMAL, 0, 1);
+    blinker.showCode(1, NumberBase::DECIMAL, 0, 1);
     runSequencer(&blinker, &logger);
     const std::string trace = logger.traceLogToString();
 
@@ -72,14 +72,14 @@ TEST(LoopBehaviorBlinkerTest, ShouldStartAndEndWithLedOff)
 
 TEST(LoopBehaviorBlinkerTest, ShouldNotTurnOnLedDuringIdlePhases)
 {
-    blinker.showCode(1, base_t::DECIMAL, 0, 1);
+    blinker.showCode(1, NumberBase::DECIMAL, 0, 1);
     logger.setBlinker(&blinker);
 
     runSequencer(&blinker, &logger);
 
     for (const auto& e : logger.getEvents())
     {
-        if (e.state == LED_CALL_ON && !e.isLedBeingUsedNow)
+        if (e.state == LedEvent::On && !e.isLedBeingUsedNow)
         {
             FAIL("LED turned ON during an idle phase");
         }

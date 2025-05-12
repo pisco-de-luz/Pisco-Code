@@ -17,7 +17,7 @@ TEST_GROUP(SetterBehaviorBlinkerTest)
 
 TEST(SetterBehaviorBlinkerTest, ShouldUseDefaultPwmLevel)
 {
-    blinker.showCode(1, base_t::DECIMAL, 0, 1);
+    blinker.showCode(1, NumberBase::DECIMAL, 0, 1);
     runSequencer(&blinker, &logger);
     const std::string trace = logger.traceLogToString();
     CHECK(trace.find('g') != std::string::npos); // Default peak PWM = 10
@@ -26,7 +26,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldUseDefaultPwmLevel)
 TEST(SetterBehaviorBlinkerTest, ShouldUseCustomPwmLevel)
 {
     blinker.setPeakLevel(6);
-    blinker.showCode(1, base_t::DECIMAL, 0, 1);
+    blinker.showCode(1, NumberBase::DECIMAL, 0, 1);
     runSequencer(&blinker, &logger);
     const std::string trace = logger.traceLogToString();
     CHECK(trace.find('7') != std::string::npos);
@@ -35,7 +35,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldUseCustomPwmLevel)
 TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighPwmLevel)
 {
     blinker.setPeakLevel(255); // Should cap to PWM_MAX
-    blinker.showCode(1, base_t::DECIMAL, 0, 1);
+    blinker.showCode(1, NumberBase::DECIMAL, 0, 1);
     runSequencer(&blinker, &logger);
     const std::string trace = logger.traceLogToString();
     CHECK(trace.find('g') != std::string::npos); // PWM_MAX = 15 = 'g'
@@ -44,7 +44,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighPwmLevel)
 TEST(SetterBehaviorBlinkerTest, ShouldAffectLedOnDuration)
 {
     blinker.setPeakLevel(3);
-    blinker.showCode(1, base_t::DECIMAL, 0, 1);
+    blinker.showCode(1, NumberBase::DECIMAL, 0, 1);
     runSequencer(&blinker, &logger);
     const std::string trace = logger.traceLogToString();
     CHECK(trace.find('4') != std::string::npos);
@@ -52,7 +52,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldAffectLedOnDuration)
 
 TEST(SetterBehaviorBlinkerTest, ShouldUseDefaultDimLevel)
 {
-    blinker.showCode(0, base_t::DECIMAL, 0, 1);
+    blinker.showCode(0, NumberBase::DECIMAL, 0, 1);
     runSequencer(&blinker, &logger);
     const std::string trace = logger.traceLogToString();
     CHECK(trace.find('4') != std::string::npos); // Default dim = 1
@@ -61,7 +61,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldUseDefaultDimLevel)
 TEST(SetterBehaviorBlinkerTest, ShouldSetDimLevelAffectingIdle)
 {
     blinker.setDimmedLevel(4);
-    blinker.showCode(0, base_t::DECIMAL, 0, 1);
+    blinker.showCode(0, NumberBase::DECIMAL, 0, 1);
     runSequencer(&blinker, &logger);
     const std::string trace = logger.traceLogToString();
     CHECK(trace.find('5') != std::string::npos);
@@ -69,8 +69,14 @@ TEST(SetterBehaviorBlinkerTest, ShouldSetDimLevelAffectingIdle)
 
 TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighDimLevel)
 {
-    blinker.setDimmedLevel(255);
-    blinker.showCode(0, base_t::DECIMAL, 0, 1);
+    constexpr LedLevel DIM_LEVEL_OVER_LIMIT = 6;
+    constexpr int32_t  CODE_TO_TEST         = 10;
+    constexpr uint8_t  NUM_DIGITS           = 0;
+    constexpr uint8_t  REPEATS              = 1;
+    blinker.setDimmedLevel(DIM_LEVEL_OVER_LIMIT);
+    blinker.showCode(CODE_TO_TEST, NumberBase::DECIMAL, NUM_DIGITS, REPEATS);
+    logger.setBlinker(&blinker);
+
     runSequencer(&blinker, &logger);
     const std::string trace = logger.traceLogToString();
     CHECK(trace.find('0') != std::string::npos);
@@ -78,40 +84,54 @@ TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighDimLevel)
 
 TEST(SetterBehaviorBlinkerTest, ShouldNotAffectPeakPwmWhenSettingDim)
 {
-    blinker.setPeakLevel(9);
-    blinker.setDimmedLevel(6);
-    blinker.showCode(2, base_t::DECIMAL, 0, 1);
+    constexpr LedLevel PULSE_LEVEL_EXPECTED = 9;
+    constexpr LedLevel DIM_LEVEL_EXPECTED   = 6;
+    blinker.setPeakLevel(PULSE_LEVEL_EXPECTED);
+    blinker.setDimmedLevel(DIM_LEVEL_EXPECTED);
+
+    blinker.showCode(2, NumberBase::DECIMAL, 0, 1);
     runSequencer(&blinker, &logger);
-    const std::string trace = logger.traceLogToString();
-    STRCMP_EQUAL("7MaS7SaS7L0M", logger.traceLogToString().c_str());
-    CHECK(trace.find('a') != std::string::npos); // 9 + 1 = 'a'
-    CHECK(trace.find('7') != std::string::npos); // 2 + 1 = '3'
+
+    const std::string actual_trace = logger.traceLogToString();
+    const LedLevel    pulse_level  = logger.getPulseLevel();
+    const LedLevel    dimmed_level = logger.getDimmedLevel();
+
+    STRCMP_EQUAL("___---^-^---___", actual_trace.c_str());
+    CHECK_EQUAL(PULSE_LEVEL_EXPECTED, pulse_level);
+    CHECK_EQUAL(DIM_LEVEL_EXPECTED, dimmed_level);
 }
 
 TEST(SetterBehaviorBlinkerTest, ShouldPadWithLeadingZeros)
 {
-    blinker.showCode(12, base_t::DECIMAL, 4, 1); // Expect: 0012
+    blinker.showCode(12, NumberBase::DECIMAL, 4, 1); // Expect: 0012
     runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("4M0S4M0S4MgS4MgS4SgS4L0M", logger.traceLogToString().c_str());
+    STRCMP_EQUAL("___---_---_---^---^-^---___", logger.traceLogToString().c_str());
 }
 
 TEST(SetterBehaviorBlinkerTest, ShouldNotPadIfNotNeeded)
 {
-    blinker.showCode(123, base_t::DECIMAL, 2, 1); // Expect: 23
+    blinker.showCode(23, NumberBase::DECIMAL, 2, 1); // Expect: 23
     runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("4MgS4SgS4MgS4SgS4SgS4L0M", logger.traceLogToString().c_str());
+    STRCMP_EQUAL("___---^-^---^-^-^---___", logger.traceLogToString().c_str());
+}
+
+TEST(SetterBehaviorBlinkerTest, ShouldTruncateToNumDigits)
+{
+    blinker.showCode(321, NumberBase::DECIMAL, 2, 1); // Expect: 21
+    runSequencer(&blinker, &logger);
+    STRCMP_EQUAL("___---^-^---^---___", logger.traceLogToString().c_str());
 }
 
 TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighMinDigits)
 {
-    blinker.showCode(1, base_t::DECIMAL, 99, 1);
+    blinker.showCode(1, NumberBase::DECIMAL, 99, 1);
     runSequencer(&blinker, &logger);
     STRCMP_EQUAL("___---^---___", logger.traceLogToString().c_str());
 }
 
 TEST(SetterBehaviorBlinkerTest, ShouldHandleSingleDigitZero)
 {
-    blinker.showCode(0, base_t::DECIMAL, 1, 1);
+    blinker.showCode(0, NumberBase::DECIMAL, 1, 1);
     runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("4M0S4L0M", logger.traceLogToString().c_str());
+    STRCMP_EQUAL("___---_---___", logger.traceLogToString().c_str());
 }

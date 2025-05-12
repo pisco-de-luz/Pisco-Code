@@ -42,7 +42,7 @@ namespace pisco
     {
         if (led_control_ != nullptr)
         {
-            (void) led_control_(pisco::LED_OFF);
+            (void) led_control_(static_cast<uint8_t>(LedControlCode::Off));
         }
     }
 
@@ -58,22 +58,22 @@ namespace pisco
             case pisco::BlinkMode::Pulse:
                 if (pwm_counter == 0)
                 {
-                    led_control_(LED_ON);
+                    led_control_(static_cast<uint8_t>(LedControlCode::On));
                 }
                 else if (pwm_counter == peak_level_)
                 {
-                    led_control_(LED_OFF);
+                    led_control_(static_cast<uint8_t>(LedControlCode::Off));
                 }
                 break;
 
             case pisco::BlinkMode::Dimmed:
                 if (pwm_counter == 0)
                 {
-                    led_control_(LED_ON);
+                    led_control_(static_cast<uint8_t>(LedControlCode::On));
                 }
                 else if (pwm_counter == dimmed_level_)
                 {
-                    led_control_(LED_OFF);
+                    led_control_(static_cast<uint8_t>(LedControlCode::Off));
                 }
                 break;
 
@@ -82,7 +82,7 @@ namespace pisco
                 if (pwm_counter == 0)
                 {
                     // Ensure LED is OFF during idle periods
-                    led_control_(LED_OFF);
+                    led_control_(static_cast<uint8_t>(LedControlCode::Off));
                 }
                 break;
         }

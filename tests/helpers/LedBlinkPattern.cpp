@@ -15,7 +15,7 @@ void LedBlinkPattern::reset()
     used_levels_.clear();
 }
 
-void LedBlinkPattern::append(LedLevel level, StateDuration duration)
+void LedBlinkPattern::append(LedLevel level, DurationMs duration)
 {
     led_events_.push_back({level, duration});
 
@@ -93,10 +93,10 @@ bool LedBlinkPattern::isValid() const
     return pattern_is_valid_ && used_levels_.size() == 2;
 }
 
-uint8_t LedBlinkPattern::getRepeatCount(StateDuration duration) const
+uint8_t LedBlinkPattern::getRepeatCount(DurationMs duration) const
 {
     auto it = std::upper_bound(traceRepeatRules.begin(), traceRepeatRules.end(), duration,
-                               [](StateDuration value, const TraceRepeatRule& rule)
+                               [](DurationMs value, const TraceRepeatRule& rule)
                                { return value < rule.min_duration; });
 
     if (it == traceRepeatRules.begin())

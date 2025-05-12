@@ -14,7 +14,7 @@ namespace pisco
       public:
         explicit CodeBlinker(LedController* controller);
 
-        bool showCode(int32_t code, base_t base, uint8_t min_digits, uint8_t repeats);
+        bool showCode(int32_t code, NumberBase base, uint8_t num_digits, uint8_t repeats);
         void loop(uint8_t loop_counter);
         bool isRunning() const;
         bool isLedBeingUsedNow() const;
