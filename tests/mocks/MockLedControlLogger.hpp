@@ -10,15 +10,6 @@
 #include <string>
 #include <vector>
 
-// enum LedEvent : uint8_t
-// {
-//     LED_CALL_INVALID = 0,
-//     LED_CALL_ON,
-//     LED_CALL_OFF,
-//     LED_CALL_FUNC_OK,
-//     LED_CALL_FUNC_FAIL
-// };
-
 enum class LedEvent : uint8_t
 {
     Invalid,
