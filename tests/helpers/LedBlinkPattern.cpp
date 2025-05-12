@@ -35,6 +35,13 @@ void LedBlinkPattern::append(LedLevel level, StateDuration duration)
         return;
     }
 
+    // Handle single non-zero level
+    if (used_levels_.size() == 1)
+    {
+        dimmed_level_ = *used_levels_.begin();
+        pulse_level_  = 0; // no pulse used
+    }
+
     // Only calculate levels *once* when we reach exactly 2 unique non-zero levels
     if (used_levels_.size() == 2)
     {
