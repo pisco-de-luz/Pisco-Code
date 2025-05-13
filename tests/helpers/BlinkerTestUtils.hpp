@@ -6,9 +6,12 @@
 #include "pisco_types.hpp"
 #include <cstdint>
 #include <optional>
+#include <string>
 
 namespace testutils
 {
+    using TraceCode = std::string;
+
     enum class TraceCheck
     {
         NotEnforced,
