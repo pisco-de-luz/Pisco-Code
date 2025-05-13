@@ -128,35 +128,65 @@ TEST(SetterBehaviorBlinkerTest, ShouldNotAffecLowestDimmedLevelWhenSettingPulseL
 
 TEST(SetterBehaviorBlinkerTest, ShouldPadWithLeadingZeros)
 {
-    blinker.showCode(12, NumberBase::DECIMAL, 4, 1); // Expect: 0012
-    runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("___---_---_---^---^-^---___", logger.traceLogToString().c_str());
+    const testutils::TestBlinkerCase test_case{
+        .code_pair   = testutils::CODE_0010,
+        .trace_check = testutils::TraceCheck::Enforced,
+        .numDigits   = 4,
+    };
+
+    testutils::checkBlinkerBehavior(blinker, logger, test_case);
 }
 
 TEST(SetterBehaviorBlinkerTest, ShouldNotPadIfNotNeeded)
 {
-    blinker.showCode(23, NumberBase::DECIMAL, 2, 1); // Expect: 23
-    runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("___---^-^---^-^-^---___", logger.traceLogToString().c_str());
+    const testutils::TestBlinkerCase test_case{
+        .code_pair   = testutils::CODE_12345,
+        .trace_check = testutils::TraceCheck::Enforced,
+        .numDigits   = 5,
+    };
+
+    testutils::checkBlinkerBehavior(blinker, logger, test_case);
 }
 
 TEST(SetterBehaviorBlinkerTest, ShouldTruncateToNumDigits)
 {
-    blinker.showCode(321, NumberBase::DECIMAL, 2, 1); // Expect: 21
-    runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("___---^-^---^---___", logger.traceLogToString().c_str());
+    const testutils::TestBlinkerCase test_case{
+        .code_pair   = testutils::CODE_12345,
+        .trace_check = testutils::TraceCheck::NotEnforced,
+        .numDigits   = 1,
+    };
+
+    testutils::checkBlinkerBehavior(blinker, logger, test_case);
+    const testutils::CodeTracePair trace_expected = testutils::CODE_5;
+    STRCMP_EQUAL(trace_expected.trace.c_str(), logger.traceLogToString().c_str());
 }
 
-TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighMinDigits)
+TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighNumDigits)
 {
-    blinker.showCode(1, NumberBase::DECIMAL, 99, 1);
-    runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("___---^---___", logger.traceLogToString().c_str());
+    const testutils::TestBlinkerCase test_case{
+        .trace_check = testutils::TraceCheck::Enforced,
+        .numDigits   = pisco::MAX_DIGITS + 1,
+    };
+
+    testutils::checkBlinkerBehavior(blinker, logger, test_case);
+}
+
+TEST(SetterBehaviorBlinkerTest, ShouldRejectTooLowNumDigits)
+{
+    const testutils::TestBlinkerCase test_case{
+        .trace_check = testutils::TraceCheck::Enforced,
+        .numDigits   = 0,
+    };
+
+    testutils::checkBlinkerBehavior(blinker, logger, test_case);
 }
 
 TEST(SetterBehaviorBlinkerTest, ShouldHandleSingleDigitZero)
 {
-    blinker.showCode(0, NumberBase::DECIMAL, 1, 1);
-    runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("___---_---___", logger.traceLogToString().c_str());
+    const testutils::TestBlinkerCase test_case{
+        .code_pair   = testutils::CODE_0,
+        .trace_check = testutils::TraceCheck::Enforced,
+    };
+
+    testutils::checkBlinkerBehavior(blinker, logger, test_case);
 }

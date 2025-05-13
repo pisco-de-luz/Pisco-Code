@@ -18,15 +18,16 @@ namespace testutils
 
     // Commonly used trace patterns
     inline const CodeTracePair DEFAULT_CODE = {102, "___---^---_---^-^---___"};
-    inline const CodeTracePair CODE_10      = {10, "___---^---_---___"};
     inline const CodeTracePair CODE_2       = {2, "___---^-^---___"};
+    inline const CodeTracePair CODE_10      = {10, "___---^---_---___"};
+    inline const CodeTracePair CODE_0010    = {10, "___---_---_---^---_---___"};
     inline const CodeTracePair CODE_120     = {120, "___---^---^-^---_---___"};
     inline const CodeTracePair CODE_1010    = {1010, "___---^---_---^---_---___"};
     inline const CodeTracePair CODE_12345   = {12345,
                                                "___---^---^-^---^-^-^---^-^-^-^---^-^-^-^-^---___"};
     inline const CodeTracePair CODE_0       = {0, "___---_---___"};
     inline const CodeTracePair CODE_255     = {255, "___---^---_---^-^---___"};
-    inline const CodeTracePair CODE_5       = {5, "___---^---_---^---___"};
+    inline const CodeTracePair CODE_5       = {5, "___---^-^-^-^-^---___"};
     inline const CodeTracePair CODE_NEG_7   = {-7, "___---^^^-----^-^-^-^-^-^-^---___"};
 
     constexpr pisco::LedLevel LOWEST_DIMMED_LEVEL  = 1;
