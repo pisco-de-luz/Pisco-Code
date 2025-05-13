@@ -1,5 +1,7 @@
 #include "LedBlinkPattern.hpp"
 // #include "BlinkerTestUtils.hpp"
+#include "../helpers/tests_constants.hpp"
+#include "../helpers/tests_types.hpp"
 #include "pisco_types.hpp"
 #include <algorithm>
 #include <array>
@@ -56,14 +58,14 @@ void LedBlinkPattern::append(pisco::LedLevel level, pisco::DurationMs duration)
     }
 }
 
-std::string LedBlinkPattern::tracePatternToString() const
+testutils::TraceCode LedBlinkPattern::tracePatternToString() const
 {
     if (!pattern_is_valid_)
     {
         return "!";
     }
 
-    std::string result;
+    testutils::TraceCode result;
 
     for (const auto& event : led_events_)
     {
