@@ -1,5 +1,4 @@
 #include "LedBlinkPattern.hpp"
-// #include "BlinkerTestUtils.hpp"
 #include "../helpers/tests_constants.hpp"
 #include "../helpers/tests_types.hpp"
 #include "pisco_types.hpp"
@@ -60,38 +59,43 @@ void LedBlinkPattern::append(pisco::LedLevel level, pisco::DurationMs duration)
 
 testutils::TraceCode LedBlinkPattern::tracePatternToString() const
 {
+    using namespace testutils;
+
     if (!pattern_is_valid_)
     {
         return "!";
     }
 
-    testutils::TraceCode result;
+    TraceCode result{""};
 
     for (const auto& event : led_events_)
     {
-        char symbol = '?';
+        const TraceCode* symbol_ptr = nullptr;
 
         if (event.led_level == 0)
         {
-            symbol = '_';
+            symbol_ptr = &LED_OFF_CHARACTER;
         }
         else if (event.led_level == dimmed_level_)
         {
-            symbol = '-';
+            symbol_ptr = &LED_DIMMED_CHARACTER;
         }
         else if (event.led_level == pulse_level_)
         {
-            symbol = '^';
+            symbol_ptr = &LED_PULSE_CHARACTER;
         }
         else
         {
             // Unexpected level not in known 3 levels
-            return "!";
+            return "!Level";
         }
 
-        const uint8_t count = getRepeatCount(event.duration);
+        const auto count = getRepeatCount(event.duration);
 
-        result.append(count, symbol);
+        for (pisco::RepeatTimes i = 0; i < count; ++i)
+        {
+            result += *symbol_ptr;
+        }
     }
 
     return result;
