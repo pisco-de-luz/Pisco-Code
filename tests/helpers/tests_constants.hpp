@@ -1,8 +1,9 @@
 #pragma once
 
+#include <array>
+
 #include "pisco_constants.hpp"
 #include "tests_types.hpp"
-#include <array>
 
 namespace testutils
 {
@@ -31,5 +32,29 @@ namespace testutils
     constexpr pisco::LedLevel LOWEST_DIMMED_LEVEL  = 1;
     constexpr pisco::LedLevel HIGHEST_DIMMED_LEVEL = pisco::PWM_MAX - pisco::MIN_PULSE_DIMMED_GAP;
     constexpr pisco::LedLevel MID_DIMMED_LEVEL = (HIGHEST_DIMMED_LEVEL - LOWEST_DIMMED_LEVEL) / 2;
+    constexpr pisco::LedLevel TOO_HIGH_DIMMED_LEVEL = 255;
+    constexpr pisco::LedLevel TOO_LOW_DIMMED_LEVEL  = 0;
+
+    constexpr std::array<pisco::LedLevel, 5> ALL_DIMMED_LEVELS = {{
+        LOWEST_DIMMED_LEVEL,
+        HIGHEST_DIMMED_LEVEL,
+        MID_DIMMED_LEVEL,
+        TOO_HIGH_DIMMED_LEVEL,
+        TOO_LOW_DIMMED_LEVEL,
+    }};
+
+    constexpr pisco::LedLevel LOWEST_PULSE_LEVEL   = 1;
+    constexpr pisco::LedLevel HIGHEST_PULSE_LEVEL  = pisco::PWM_MAX;
+    constexpr pisco::LedLevel MID_PULSE_LEVEL      = (HIGHEST_PULSE_LEVEL - LOWEST_PULSE_LEVEL) / 2;
+    constexpr pisco::LedLevel TOO_HIGH_PULSE_LEVEL = 255;
+    constexpr pisco::LedLevel TOO_LOW_PULSE_LEVEL  = 0;
+
+    constexpr std::array<pisco::LedLevel, 5> ALL_PULSE_LEVELS = {{
+        LOWEST_PULSE_LEVEL,
+        HIGHEST_PULSE_LEVEL,
+        MID_PULSE_LEVEL,
+        TOO_HIGH_PULSE_LEVEL,
+        TOO_LOW_PULSE_LEVEL,
+    }};
 
 } // namespace testutils
