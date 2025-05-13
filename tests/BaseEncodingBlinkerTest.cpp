@@ -1,4 +1,5 @@
 #include "CppUTest/TestHarness.h"
+
 #include "code_blinker.hpp"
 #include "helpers/BlinkerTestUtils.hpp"
 #include "mocks/MockLedControlLogger.hpp"
@@ -15,63 +16,79 @@ TEST_GROUP(BaseEncodingBlinkerTest)
     CodeBlinker              blinker{&controller};
 };
 
-TEST(BaseEncodingBlinkerTest, CanShowDecimal42)
+TEST(BaseEncodingBlinkerTest, CanShowDecimal10)
 {
-    // controller.setDimmedLevel(1);
-    bool started = blinker.showCode(42, NumberBase::DECIMAL, 0, 1);
-    logger.setBlinker(&blinker);
-    CHECK_TRUE(started);
+    const testutils::TestBlinkerCase test_case{
+        .code_pair   = testutils::CODE_10,
+        .number_base = NumberBase::DECIMAL,
+        .trace_check = testutils::TraceCheck::Enforced,
+    };
 
-    runSequencer(&blinker, &logger);
-
-    STRCMP_EQUAL("___---^-^-^-^---^-^---___", logger.traceLogToString().c_str());
+    testutils::checkBlinkerBehavior(blinker, logger, test_case);
 }
 
 TEST(BaseEncodingBlinkerTest, CanShowZero)
 {
-    bool started = blinker.showCode(0, NumberBase::DECIMAL, 0, 1);
-    logger.setBlinker(&blinker);
-    CHECK_TRUE(started);
+    const testutils::TestBlinkerCase test_case{
+        .code_pair   = testutils::CODE_0,
+        .number_base = NumberBase::DECIMAL,
+        .trace_check = testutils::TraceCheck::Enforced,
+    };
 
-    runSequencer(&blinker, &logger);
-    std::string expected = logger.traceLogToString();
-    STRCMP_EQUAL("___---_---___", expected.c_str());
+    testutils::checkBlinkerBehavior(blinker, logger, test_case);
 }
 
 TEST(BaseEncodingBlinkerTest, CanShowDecimal12345)
 {
-    bool started = blinker.showCode(12345, NumberBase::DECIMAL, 0, 1);
-    logger.setBlinker(&blinker);
-    CHECK_TRUE(started);
-    runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("___---^---^-^---^-^-^---^-^-^-^---^-^-^-^-^---___",
-                 logger.traceLogToString().c_str());
+    const testutils::TestBlinkerCase test_case{
+        .code_pair   = testutils::CODE_12345,
+        .number_base = NumberBase::DECIMAL,
+        .trace_check = testutils::TraceCheck::Enforced,
+    };
+
+    testutils::checkBlinkerBehavior(blinker, logger, test_case);
 }
 
 TEST(BaseEncodingBlinkerTest, CanShowBinary5)
 {
-    bool started = blinker.showCode(5, NumberBase::BINARY, 0, 1); // binary: 101
-    logger.setBlinker(&blinker);
-    CHECK_TRUE(started);
-    runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("___---^---_---^---___", logger.traceLogToString().c_str());
+    const testutils::TestBlinkerCase test_case{
+        .code_pair   = testutils::CODE_BIN_5,
+        .number_base = NumberBase::BINARY,
+        .trace_check = testutils::TraceCheck::Enforced,
+    };
+
+    testutils::checkBlinkerBehavior(blinker, logger, test_case);
+}
+
+TEST(BaseEncodingBlinkerTest, CanShowBinaryNeg7)
+{
+    const testutils::TestBlinkerCase test_case{
+        .code_pair   = testutils::CODE_BIN_NEG_7,
+        .number_base = NumberBase::BINARY,
+        .trace_check = testutils::TraceCheck::Enforced,
+    };
+
+    testutils::checkBlinkerBehavior(blinker, logger, test_case);
 }
 
 TEST(BaseEncodingBlinkerTest, CanShowHex255)
 {
-    bool started = blinker.showCode(255, NumberBase::HEXADECIMAL, 0, 1); // hex: FF
-    logger.setBlinker(&blinker);
-    CHECK_TRUE(started);
-    runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("___---^-^-^-^-^-^-^-^-^-^-^-^-^-^-^---^-^-^-^-^-^-^-^-^-^-^-^-^-^-^---___",
-                 logger.traceLogToString().c_str());
+    const testutils::TestBlinkerCase test_case{
+        .code_pair   = testutils::CODE_HEX_255,
+        .number_base = NumberBase::HEXADECIMAL,
+        .trace_check = testutils::TraceCheck::Enforced,
+    };
+
+    testutils::checkBlinkerBehavior(blinker, logger, test_case);
 }
 
 TEST(BaseEncodingBlinkerTest, CanShowOctal28)
 {
-    bool started = blinker.showCode(28, NumberBase::OCTAL, 0, 1); // octal: 34
-    logger.setBlinker(&blinker);
-    CHECK_TRUE(started);
-    runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("___---^-^-^---^-^-^-^---___", logger.traceLogToString().c_str());
+    const testutils::TestBlinkerCase test_case{
+        .code_pair   = testutils::CODE_OCT_28,
+        .number_base = NumberBase::OCTAL,
+        .trace_check = testutils::TraceCheck::Enforced,
+    };
+
+    testutils::checkBlinkerBehavior(blinker, logger, test_case);
 }

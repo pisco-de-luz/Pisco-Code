@@ -151,14 +151,12 @@ TEST(SetterBehaviorBlinkerTest, ShouldNotPadIfNotNeeded)
 TEST(SetterBehaviorBlinkerTest, ShouldTruncateToNumDigits)
 {
     const testutils::TestBlinkerCase test_case{
-        .code_pair   = testutils::CODE_12345,
-        .trace_check = testutils::TraceCheck::NotEnforced,
-        .numDigits   = 1,
+        .code_pair   = testutils::CODE_12345_TRUNCATED_TO_2_DIGITS,
+        .trace_check = testutils::TraceCheck::Enforced,
+        .numDigits   = 2,
     };
 
     testutils::checkBlinkerBehavior(blinker, logger, test_case);
-    const testutils::CodeTracePair trace_expected = testutils::CODE_5;
-    STRCMP_EQUAL(trace_expected.trace.c_str(), logger.traceLogToString().c_str());
 }
 
 TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighNumDigits)
