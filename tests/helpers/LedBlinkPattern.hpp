@@ -2,6 +2,7 @@
 #ifdef new
 #undef new
 #endif
+// #include "../helpers/BlinkerTestUtils.hpp"
 #include "pisco_constants.hpp"
 #include <algorithm>
 #include <array>
@@ -43,7 +44,7 @@ class LedBlinkPattern
     LedLevel                             getPulseLevel() const { return pulse_level_; }
     const std::vector<LedLevelDuration>& getEvents() const { return led_events_; }
     std::string                          tracePatternToString() const;
-    uint8_t                              getRepeatCount(DurationMs duration) const;
+    pisco::RepeatTimes                   getRepeatCount(DurationMs duration) const;
 
   private:
     bool                          pattern_is_valid_{true};

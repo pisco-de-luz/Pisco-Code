@@ -47,12 +47,12 @@ namespace testutils
     inline const CodeTracePair CODE_5       = {5, "___---^---_---^---___"};
     inline const CodeTracePair CODE_NEG_7   = {-7, "___---^^^-----^-^-^-^-^-^-^---___"};
 
-    constexpr LedLevel     LOWEST_DIMMED_LEVEL  = 1;
-    constexpr LedLevel     HIGHEST_DIMMED_LEVEL = pisco::PWM_MAX - pisco::MIN_PULSE_DIMMED_GAP;
-    constexpr LedLevel     MID_DIMMED_LEVEL     = (HIGHEST_DIMMED_LEVEL - LOWEST_DIMMED_LEVEL) / 2;
-    inline const TraceCode LED_OFF_CHARACTER    = "_";
-    inline const TraceCode LED_ON_CHARACTER     = "^";
-    inline const TraceCode LED_DIMMED_CHARACTER = "-";
+    constexpr pisco::LedLevel LOWEST_DIMMED_LEVEL  = 1;
+    constexpr pisco::LedLevel HIGHEST_DIMMED_LEVEL = pisco::PWM_MAX - pisco::MIN_PULSE_DIMMED_GAP;
+    constexpr pisco::LedLevel MID_DIMMED_LEVEL  = (HIGHEST_DIMMED_LEVEL - LOWEST_DIMMED_LEVEL) / 2;
+    inline const TraceCode    LED_OFF_CHARACTER = "_";
+    inline const TraceCode    LED_ON_CHARACTER  = "^";
+    inline const TraceCode    LED_DIMMED_CHARACTER = "-";
 
     // Drives the loop for a maximum simulated time, default 64 seconds.
     inline void runSequencer(pisco::CodeBlinker* code, MockLedControlLogger* logger)
