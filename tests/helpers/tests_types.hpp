@@ -9,7 +9,7 @@ namespace testutils
 {
 
     using TraceCode     = std::string;
-    using TraceStrIndex = uint16_t;
+    using TraceStrIndex = int16_t;
 
     struct LedLevelDuration
     {
@@ -33,6 +33,15 @@ namespace testutils
     {
         NotEnforced,
         Enforced,
+    };
+
+    enum class LedEvent : uint8_t
+    {
+        Invalid,
+        On,
+        Off,
+        FuncOk,
+        FuncFail
     };
 
     struct TestBlinkerCase
