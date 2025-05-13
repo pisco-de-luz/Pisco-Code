@@ -1,7 +1,5 @@
 #include "LedBlinkPattern.hpp"
-#include "../helpers/tests_constants.hpp"
-#include "../helpers/tests_types.hpp"
-#include "pisco_types.hpp"
+
 #include <algorithm>
 #include <array>
 #include <cstdint>
@@ -9,6 +7,10 @@
 #include <set>
 #include <string>
 #include <vector>
+
+#include "../helpers/tests_constants.hpp"
+#include "../helpers/tests_types.hpp"
+#include "pisco_types.hpp"
 
 void LedBlinkPattern::reset()
 {
@@ -86,8 +88,7 @@ testutils::TraceCode LedBlinkPattern::tracePatternToString() const
         }
         else
         {
-            // Unexpected level not in known 3 levels
-            return "!Level";
+            return "Unexpected level — should never happen.";
         }
 
         const auto count = getRepeatCount(event.duration);

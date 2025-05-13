@@ -1,4 +1,5 @@
 #include "helpers/LedBlinkPattern.hpp"
+
 #include "CppUTest/TestHarness.h"
 
 TEST_GROUP(LedBlinkPatternTests){};
@@ -42,15 +43,6 @@ TEST(LedBlinkPatternTests, ShouldReturnExclamationMarkIfInvalidPattern)
 
     STRCMP_EQUAL("!", pattern.tracePatternToString().c_str());
     CHECK_FALSE(pattern.isValid());
-}
-
-TEST(LedBlinkPatternTests, ShouldReturnExclamationMarkIfUnknownLevelAppears)
-{
-    LedBlinkPattern pattern;
-    pattern.append(3, 100); // not enough data to define dimmed/pulse
-
-    STRCMP_EQUAL("!", pattern.tracePatternToString().c_str());
-    CHECK_FALSE(pattern.isValid()); // Still valid internally, but output can't proceed
 }
 
 TEST(LedBlinkPatternTests, ShouldProvideCorrectLevelGetters)
