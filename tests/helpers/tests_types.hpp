@@ -10,18 +10,17 @@ namespace testutils
 
     using TraceCode     = std::string;
     using TraceStrIndex = uint16_t;
-    using Timestamp     = pisco::Timestamp;
 
     struct LedLevelDuration
     {
-        pisco::LedLevel led_level{0};
-        Timestamp       duration{0};
+        pisco::LedLevel  led_level{0};
+        pisco::Timestamp duration{0};
     };
 
     struct TraceRepeatRule
     {
-        Timestamp min_duration;
-        uint8_t   repeat_count;
+        pisco::Timestamp min_duration;
+        uint8_t          repeat_count;
     };
 
     struct CodeTracePair
