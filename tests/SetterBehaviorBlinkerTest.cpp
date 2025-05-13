@@ -1,6 +1,7 @@
 #include "CppUTest/TestHarness.h"
 #include "code_blinker.hpp"
 #include "helpers/BlinkerTestUtils.hpp"
+#include "helpers/tests_types.hpp"
 #include "mocks/MockLedControlLogger.hpp"
 #include "mocks/MockLedControllerAdapter.hpp"
 #include "pisco_constants.hpp"
@@ -62,8 +63,8 @@ TEST(SetterBehaviorBlinkerTest, ShouldUseDefaultDimLevel)
     logger.setBlinker(&blinker);
     runSequencer(&blinker, &logger);
 
-    const TraceCode actual_trace = logger.traceLogToString();
-    const LedLevel  dimmed_level = logger.getDimmedLevel();
+    const testutils::TraceCode actual_trace = logger.traceLogToString();
+    const LedLevel             dimmed_level = logger.getDimmedLevel();
 
     STRCMP_EQUAL("___---^---_---^-^---___", actual_trace.c_str());
     CHECK_EQUAL_TEXT(DIM_LEVEL_EXPECTED, dimmed_level, "Dimmed level should be default");
