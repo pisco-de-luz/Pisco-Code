@@ -1,7 +1,6 @@
-#ifndef MOCK_LED_CONTROL_LOGGER_HPP
-#define MOCK_LED_CONTROL_LOGGER_HPP
+#pragma once
 
-#include "LedBlinkPattern.hpp"
+#include "../helpers/LedBlinkPattern.hpp"
 #include "code_blinker.hpp"
 #include "pisco_constants.hpp"
 #include <array>
@@ -59,5 +58,3 @@ class MockLedControlLogger
     Timestamp                   traceResolutionMs_{100};
     pisco::CodeBlinker*         blinker_{nullptr};
 };
-
-#endif
