@@ -1,6 +1,7 @@
 #include "CppUTest/TestHarness.h"
 #include "code_blinker.hpp"
 #include "helpers/BlinkerTestUtils.hpp"
+#include "helpers/tests_constants.hpp"
 #include "mocks/MockLedControlLogger.hpp"
 #include "mocks/MockLedControllerAdapter.hpp"
 #include "pisco_constants.hpp"
