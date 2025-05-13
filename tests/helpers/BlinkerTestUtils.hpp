@@ -1,5 +1,4 @@
-#ifndef TEST_LOOP_RUNNER_HPP
-#define TEST_LOOP_RUNNER_HPP
+#pragma once
 
 #include "../mocks/MockLedControlLogger.hpp"
 #include "code_blinker.hpp"
@@ -36,14 +35,21 @@ namespace testutils
     inline const CodeTracePair DEFAULT_CODE = {102, "___---^---_---^-^---___"};
     inline const CodeTracePair CODE_10      = {10, "___---^---_---___"};
     inline const CodeTracePair CODE_2       = {2, "___---^-^---___"};
-    inline const CodeTracePair CODE_120     = {120, "___^^^-_^^^___"};
+    inline const CodeTracePair CODE_120     = {120, "___---^---^-^---_---___"};
     inline const CodeTracePair CODE_1010    = {1010, "4MgS4M0S4MgS4M0S4L0M"};
     inline const CodeTracePair CODE_12345   = {12345,
                                                "___---^---^-^---^-^-^---^-^-^-^---^-^-^-^-^---___"};
     inline const CodeTracePair CODE_0       = {0, "___---_---___"};
     inline const CodeTracePair CODE_255     = {255, "___---^---_---^-^---___"};
     inline const CodeTracePair CODE_5       = {5, "___---^---_---^---___"};
-    inline const CodeTracePair CODE_NEG_7   = {-7, "4MgS4L0M"};
+    inline const CodeTracePair CODE_NEG_7   = {-7, "___---^^^-----^-^-^-^-^-^-^---___"};
+
+    constexpr LedLevel     LOWEST_DIMMED_LEVEL  = 1;
+    constexpr LedLevel     HIGHEST_DIMMED_LEVEL = pisco::PWM_MAX - pisco::MIN_PULSE_DIMMED_GAP;
+    constexpr LedLevel     MID_DIMMED_LEVEL     = (HIGHEST_DIMMED_LEVEL - LOWEST_DIMMED_LEVEL) / 2;
+    inline const TraceCode LED_OFF_CHARACTER    = "_";
+    inline const TraceCode LED_ON_CHARACTER     = "^";
+    inline const TraceCode LED_DIMMED_CHARACTER = "-";
 
     // Drives the loop for a maximum simulated time, default 64 seconds.
     inline void runSequencer(pisco::CodeBlinker* code, MockLedControlLogger* logger)
@@ -68,6 +74,28 @@ namespace testutils
         logger->flush();
     }
 
+    inline TraceCode repeatTracePattern(const TraceCode&   trace_code,
+                                        pisco::RepeatTimes repeat_count)
+    {
+        if (repeat_count <= 1 || trace_code.empty())
+            return {};
+
+        // Find trailing LED off pattern (represented by a sequence of '_')
+        const auto trail_off_start =
+            static_cast<TraceStrIndex>(trace_code.find_last_not_of(LED_OFF_CHARACTER) + 1);
+        if (trail_off_start == TraceCode::npos)
+            return "No trailing off pattern found";
+
+        const TraceCode leading_off = trace_code.substr(0, trail_off_start);
+        TraceCode       result      = leading_off;
+        for (pisco::RepeatTimes i = 1; i < repeat_count; ++i)
+        {
+            result += trace_code; // skip first repetition's trailing off
+        }
+
+        return result;
+    }
+
     // Check the behavior of the blinker against the expected values.
     inline void checkBlinkerBehavior(pisco::CodeBlinker& blinker, MockLedControlLogger& logger,
                                      const TestBlinkerCase& testCase)
@@ -84,6 +112,11 @@ namespace testutils
 
         const pisco::NumDigits   num_digits = testCase.numDigits.value_or(0);
         const pisco::RepeatTimes repeats    = testCase.repeats.value_or(1);
+
+        if (repeats > 1)
+        {
+            expected_trace = repeatTracePattern(expected_trace, repeats);
+        }
 
         blinker.showCode(code_to_show, pisco::NumberBase::DECIMAL, num_digits, repeats);
         logger.setBlinker(&blinker);
@@ -110,5 +143,3 @@ namespace testutils
     }
 
 } // namespace testutils
-
-#endif // TEST_LOOP_RUNNER_HPP

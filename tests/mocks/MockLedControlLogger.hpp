@@ -20,7 +20,8 @@ enum class LedEvent : uint8_t
 
 using pisco::LedLevel;
 using pisco::Timestamp;
-using TraceCode = std::string;
+using TraceCode     = std::string;
+using TraceStrIndex = int16_t;
 struct LedStateChange
 {
     Timestamp         timestamp{0};
