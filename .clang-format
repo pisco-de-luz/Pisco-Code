@@ -22,7 +22,25 @@ SpaceAfterCStyleCast: true
 
 # Sorting and includes
 SortIncludes: true
-IncludeBlocks: Preserve
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex:           '^"CppUTest/.*"'
+    Priority:        10  # Higher value = lower in the list
+    SortPriority:    0    # Optional: do not sort within category
+  - Regex:           '^"(llvm|llvm-c|clang|clang-c)/'
+    Priority:        20
+    SortPriority:    2
+    CaseSensitive:   true
+  - Regex:           '^((<|")(gtest|gmock|isl|json)/)'
+    Priority:        30
+  - Regex:           '<[[:alnum:].]+>'
+    Priority:        40
+  - Regex:           '"[[:alnum:].]+"'
+    Priority:        50    
+  - Regex:           '.*'
+    Priority:        100
+    SortPriority:    0
+
 
 # C++ specific
 Cpp11BracedListStyle: true
