@@ -8,7 +8,7 @@ namespace testutils
 
     // Trace character constants
     inline const TraceCode LED_OFF_CHARACTER    = "_";
-    inline const TraceCode LED_ON_CHARACTER     = "^";
+    inline const TraceCode LED_PULSE_CHARACTER  = "^";
     inline const TraceCode LED_DIMMED_CHARACTER = "-";
 
     // Duration-based repetition rules
