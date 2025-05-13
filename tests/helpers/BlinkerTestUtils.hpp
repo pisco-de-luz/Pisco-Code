@@ -1,14 +1,15 @@
 #pragma once
 
+#include <cstdint>
+#include <optional>
+#include <string>
+
 #include "../helpers/tests_constants.hpp"
 #include "../helpers/tests_types.hpp"
 #include "../mocks/MockLedControlLogger.hpp"
 #include "code_blinker.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
-#include <cstdint>
-#include <optional>
-#include <string>
 
 namespace testutils
 {
@@ -64,7 +65,8 @@ namespace testutils
         // constexpr pisco::BlinkCode CODE_WITH_PULSE_ZERO_AND_PULSES = 102;
         const CodeTracePair default_code_pair = DEFAULT_CODE;
         pisco::BlinkCode    code_to_show      = default_code_pair.code;
-        TraceCode           expected_trace    = default_code_pair.trace;
+
+        TraceCode expected_trace = default_code_pair.trace;
         if (testCase.code_pair.has_value())
         {
             code_to_show   = testCase.code_pair->code;
@@ -73,13 +75,14 @@ namespace testutils
 
         const pisco::NumDigits   num_digits = testCase.numDigits.value_or(0);
         const pisco::RepeatTimes repeats    = testCase.repeats.value_or(1);
+        const pisco::NumberBase  base = testCase.number_base.value_or(pisco::NumberBase::DECIMAL);
 
         if (repeats > 1)
         {
             expected_trace = repeatTracePattern(expected_trace, repeats);
         }
 
-        blinker.showCode(code_to_show, pisco::NumberBase::DECIMAL, num_digits, repeats);
+        blinker.showCode(code_to_show, base, num_digits, repeats);
         logger.setBlinker(&blinker);
         runSequencer(&blinker, &logger);
         const TraceCode actual_trace = logger.traceLogToString();

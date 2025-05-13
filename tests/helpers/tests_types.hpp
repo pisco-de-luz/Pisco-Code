@@ -1,9 +1,10 @@
 #pragma once
 
-#include "../../include/pisco_types.hpp"
 #include <cstdint>
 #include <optional>
 #include <string>
+
+#include "../../include/pisco_types.hpp"
 
 namespace testutils
 {
@@ -47,6 +48,7 @@ namespace testutils
     struct TestBlinkerCase
     {
         std::optional<CodeTracePair>      code_pair{std::nullopt};
+        std::optional<pisco::NumberBase>  number_base{std::nullopt};
         std::optional<TraceCheck>         trace_check{std::nullopt};
         std::optional<pisco::NumDigits>   numDigits{std::nullopt};
         std::optional<pisco::RepeatTimes> repeats{std::nullopt};
