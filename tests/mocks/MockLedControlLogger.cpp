@@ -1,7 +1,4 @@
 #include "MockLedControlLogger.hpp"
-#include "pisco_constants.hpp"
-#include "pisco_types.hpp"
-#include "tests_types.hpp"
 
 #include <algorithm>
 #include <cstdint>
@@ -10,6 +7,10 @@
 #include <map>
 #include <string>
 #include <vector>
+
+#include "pisco_constants.hpp"
+#include "pisco_types.hpp"
+#include "tests_types.hpp"
 
 MockLedControlLogger::MockLedControlLogger() : currentTime_(0)
 {

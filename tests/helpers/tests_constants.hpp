@@ -20,7 +20,7 @@ namespace testutils
     inline const CodeTracePair CODE_10      = {10, "___---^---_---___"};
     inline const CodeTracePair CODE_2       = {2, "___---^-^---___"};
     inline const CodeTracePair CODE_120     = {120, "___---^---^-^---_---___"};
-    inline const CodeTracePair CODE_1010    = {1010, "4MgS4M0S4MgS4M0S4L0M"};
+    inline const CodeTracePair CODE_1010    = {1010, "___---^---_---^---_---___"};
     inline const CodeTracePair CODE_12345   = {12345,
                                                "___---^---^-^---^-^-^---^-^-^-^---^-^-^-^-^---___"};
     inline const CodeTracePair CODE_0       = {0, "___---_---___"};

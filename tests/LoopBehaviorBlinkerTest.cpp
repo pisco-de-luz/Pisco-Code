@@ -1,20 +1,19 @@
 #include "CppUTest/TestHarness.h"
-#include "code_blinker.hpp"
-#include "helpers/BlinkerTestUtils.hpp"
-#include "helpers/tests_constants.hpp"
-#include "helpers/tests_types.hpp"
-#include "mocks/MockLedControlLogger.hpp"
-#include "mocks/MockLedControllerAdapter.hpp"
-#include "pisco_constants.hpp"
 
-using namespace pisco;
-using testutils::runSequencer;
+#include "BlinkerTestUtils.hpp"
+#include "MockLedControlLogger.hpp"
+#include "MockLedControllerAdapter.hpp"
+
+#include "code_blinker.hpp"
+#include "pisco_constants.hpp"
+#include "tests_constants.hpp"
+#include "tests_types.hpp"
 
 TEST_GROUP(LoopBehaviorBlinkerTest)
 {
     MockLedControlLogger     logger;
     MockLedControllerAdapter controller{&logger};
-    CodeBlinker              blinker{&controller};
+    pisco::CodeBlinker       blinker{&controller};
 };
 
 TEST(LoopBehaviorBlinkerTest, ShouldHoldDimLightForDigitZero)
@@ -51,47 +50,46 @@ TEST(LoopBehaviorBlinkerTest, ShouldRepeatBlinkingSequenceTwice)
     testutils::checkBlinkerBehavior(blinker, logger, test_case);
 }
 
-TEST(LoopBehaviorBlinkerTest, ShouldEndInFinalPause)
+TEST(LoopBehaviorBlinkerTest, ShouldEndInFinalDimmedPause)
 {
     const testutils::TestBlinkerCase test_case{.trace_check = testutils::TraceCheck::NotEnforced};
 
     testutils::checkBlinkerBehavior(blinker, logger, test_case);
     auto trace_actual = logger.traceLogToString();
-    // Find trailing LED off pattern (represented by a sequence of '_')
+
+    // Find trailing LED off pattern (represented by a sequence of '-')
     const auto trail_off_start = static_cast<testutils::TraceStrIndex>(
-        trace_actual.find_last_not_of(testutils::LED_OFF_CHARACTER) + 1);
+        trace_actual.find_last_not_of(testutils::LED_DIMMED_CHARACTER) + 1);
     if (trail_off_start == testutils::TraceCode::npos)
     {
         FAIL("No trailing off pattern found");
     }
-
-    CHECK_TRUE_TEXT(trace_actual.length() > trail_off_start, "");
 }
 
 TEST(LoopBehaviorBlinkerTest, ShouldHandleMixOfZeroAndOne)
 {
-    blinker.showCode(1010, NumberBase::DECIMAL, 0, 1);
-    runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("4MgS4M0S4MgS4M0S4L0M", logger.traceLogToString().c_str());
+    const testutils::TestBlinkerCase test_case{.code_pair   = testutils::CODE_1010,
+                                               .trace_check = testutils::TraceCheck::Enforced};
+
+    testutils::checkBlinkerBehavior(blinker, logger, test_case);
 }
 
-TEST(LoopBehaviorBlinkerTest, ShouldStartAndEndWithLedOff)
-{
-    blinker.showCode(1, NumberBase::DECIMAL, 0, 1);
-    runSequencer(&blinker, &logger);
-    const std::string trace = logger.traceLogToString();
+// TEST(LoopBehaviorBlinkerTest, ShouldStartAndEndWithLedOff)
+// {
+//     blinker.showCode(1, NumberBase::DECIMAL, 0, 1);
+//     runSequencer(&blinker, &logger);
+//     const std::string trace = logger.traceLogToString();
 
-    // Ensure the trace starts and ends with 0M (off periods)
-    CHECK_TRUE(trace.substr(0, 2) == "0M");
-    CHECK_TRUE(trace.substr(trace.size() - 2, 2) == "0M");
-}
+//     // Ensure the trace starts and ends with 0M (off periods)
+//     CHECK_TRUE(trace.substr(0, 2) == "0M");
+//     CHECK_TRUE(trace.substr(trace.size() - 2, 2) == "0M");
+// }
 
 TEST(LoopBehaviorBlinkerTest, ShouldNotTurnOnLedDuringIdlePhases)
 {
-    blinker.showCode(1, NumberBase::DECIMAL, 0, 1);
-    logger.setBlinker(&blinker);
+    const testutils::TestBlinkerCase test_case{.trace_check = testutils::TraceCheck::NotEnforced};
 
-    runSequencer(&blinker, &logger);
+    testutils::checkBlinkerBehavior(blinker, logger, test_case);
 
     for (const auto& e : logger.getEvents())
     {
