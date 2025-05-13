@@ -81,6 +81,7 @@
         "variant": "cpp",
         "format": "cpp",
         "__nullptr": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "__node_handle": "cpp"
     }
 }
