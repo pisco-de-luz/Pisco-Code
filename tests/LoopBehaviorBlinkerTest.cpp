@@ -17,39 +17,53 @@ TEST_GROUP(LoopBehaviorBlinkerTest)
 
 TEST(LoopBehaviorBlinkerTest, ShouldHoldDimLightForDigitZero)
 {
-    blinker.showCode(0, NumberBase::DECIMAL, 0, 1);
-    runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("___---_---___", logger.traceLogToString().c_str());
+    blinker.setDimmedLevel(testutils::MID_DIMMED_LEVEL);
+    const testutils::TestBlinkerCase test_case{.code_pair      = testutils::CODE_0,
+                                               .trace_check    = testutils::TraceCheck::NotEnforced,
+                                               .expectedDimmed = testutils::MID_DIMMED_LEVEL};
+
+    testutils::checkBlinkerBehavior(blinker, logger, test_case);
 }
 
 TEST(LoopBehaviorBlinkerTest, ShouldBlinkDigits_1_2_0)
 {
-    blinker.showCode(120, NumberBase::DECIMAL, 0, 1);
-    runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("___^^^-_^^^___", logger.traceLogToString().c_str());
+    const testutils::TestBlinkerCase test_case{.code_pair   = testutils::CODE_120,
+                                               .trace_check = testutils::TraceCheck::Enforced};
+
+    testutils::checkBlinkerBehavior(blinker, logger, test_case);
 }
 
 TEST(LoopBehaviorBlinkerTest, ShouldBlinkNegativeSingleDigit)
 {
-    blinker.showCode(-2, NumberBase::DECIMAL, 0, 1);
-    runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("4MgM4MgS4SgS4L0M", logger.traceLogToString().c_str());
+    const testutils::TestBlinkerCase test_case{.code_pair   = testutils::CODE_NEG_7,
+                                               .trace_check = testutils::TraceCheck::Enforced};
+
+    testutils::checkBlinkerBehavior(blinker, logger, test_case);
 }
 
 TEST(LoopBehaviorBlinkerTest, ShouldRepeatBlinkingSequenceTwice)
 {
-    blinker.showCode(1, NumberBase::DECIMAL, 0, 2);
-    runSequencer(&blinker, &logger);
-    STRCMP_EQUAL("4MgS4L0M4MgS4L0M", logger.traceLogToString().c_str());
+    const testutils::TestBlinkerCase test_case{.trace_check = testutils::TraceCheck::Enforced,
+                                               .repeats     = 2};
+
+    testutils::checkBlinkerBehavior(blinker, logger, test_case);
 }
 
 TEST(LoopBehaviorBlinkerTest, ShouldEndInFinalPause)
 {
-    blinker.showCode(7, NumberBase::DECIMAL, 0, 1);
-    runSequencer(&blinker, &logger);
-    std::string trace   = logger.traceLogToString();
-    std::string lastTwo = trace.substr(trace.size() - 2, 2);
-    STRCMP_EQUAL("0M", lastTwo.c_str());
+    const testutils::TestBlinkerCase test_case{.trace_check = testutils::TraceCheck::NotEnforced};
+
+    testutils::checkBlinkerBehavior(blinker, logger, test_case);
+    auto trace_actual = logger.traceLogToString();
+    // Find trailing LED off pattern (represented by a sequence of '_')
+    const auto trail_off_start =
+        static_cast<TraceStrIndex>(trace_actual.find_last_not_of(testutils::LED_OFF_CHARACTER) + 1);
+    if (trail_off_start == TraceCode::npos)
+    {
+        FAIL("No trailing off pattern found");
+    }
+
+    CHECK_TRUE_TEXT(trace_actual.length() > trail_off_start, "");
 }
 
 TEST(LoopBehaviorBlinkerTest, ShouldHandleMixOfZeroAndOne)

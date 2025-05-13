@@ -83,27 +83,6 @@ TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighDimLevel)
     testutils::checkBlinkerBehavior(blinker, logger, test_case);
 }
 
-// TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighDimLevel)
-// {
-//     constexpr LedLevel DIM_LEVEL_OVER_LIMIT = 255;
-//     constexpr LedLevel DIM_LEVEL_EXPECTED =
-//         pisco::DEFAULT_PULSE_LEVEL - pisco::MIN_PULSE_DIMMED_GAP;
-//     constexpr BlinkCode   CODE_TO_TEST = 10;
-//     constexpr NumDigits   NUM_DIGITS   = 0;
-//     constexpr RepeatTimes REPEATS      = 1;
-
-//     blinker.setDimmedLevel(DIM_LEVEL_OVER_LIMIT);
-//     blinker.showCode(CODE_TO_TEST, NumberBase::DECIMAL, NUM_DIGITS, REPEATS);
-//     logger.setBlinker(&blinker);
-//     runSequencer(&blinker, &logger);
-
-//     const TracerCode actual_trace = logger.traceLogToString();
-//     const LedLevel   dimmed_level = logger.getDimmedLevel();
-
-//     STRCMP_EQUAL("___---^---_---___", actual_trace.c_str());
-//     CHECK_TEXT(dimmed_level == DIM_LEVEL_EXPECTED, "Dimmed level was not clamped correctly");
-// }
-
 TEST(SetterBehaviorBlinkerTest, ShouldNotAffectPeakPwmWhenSettingDim)
 {
     constexpr LedLevel    PULSE_LEVEL_EXPECTED = pisco::DEFAULT_PULSE_LEVEL;
