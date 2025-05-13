@@ -2,6 +2,7 @@
 #include "code_blinker.hpp"
 #include "helpers/BlinkerTestUtils.hpp"
 #include "helpers/tests_constants.hpp"
+#include "helpers/tests_types.hpp"
 #include "mocks/MockLedControlLogger.hpp"
 #include "mocks/MockLedControllerAdapter.hpp"
 #include "pisco_constants.hpp"
@@ -57,9 +58,9 @@ TEST(LoopBehaviorBlinkerTest, ShouldEndInFinalPause)
     testutils::checkBlinkerBehavior(blinker, logger, test_case);
     auto trace_actual = logger.traceLogToString();
     // Find trailing LED off pattern (represented by a sequence of '_')
-    const auto trail_off_start =
-        static_cast<TraceStrIndex>(trace_actual.find_last_not_of(testutils::LED_OFF_CHARACTER) + 1);
-    if (trail_off_start == TraceCode::npos)
+    const auto trail_off_start = static_cast<testutils::TraceStrIndex>(
+        trace_actual.find_last_not_of(testutils::LED_OFF_CHARACTER) + 1);
+    if (trail_off_start == testutils::TraceCode::npos)
     {
         FAIL("No trailing off pattern found");
     }
@@ -94,7 +95,7 @@ TEST(LoopBehaviorBlinkerTest, ShouldNotTurnOnLedDuringIdlePhases)
 
     for (const auto& e : logger.getEvents())
     {
-        if (e.state == LedEvent::On && !e.isLedBeingUsedNow)
+        if (e.state == testutils::LedEvent::On && !e.isLedBeingUsedNow)
         {
             FAIL("LED turned ON during an idle phase");
         }
