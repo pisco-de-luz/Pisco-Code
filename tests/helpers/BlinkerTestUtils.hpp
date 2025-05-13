@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../helpers/tests_constants.hpp"
+#include "../helpers/tests_types.hpp"
 #include "../mocks/MockLedControlLogger.hpp"
 #include "code_blinker.hpp"
 #include "pisco_constants.hpp"
@@ -10,50 +12,6 @@
 
 namespace testutils
 {
-    using TraceCode = std::string;
-
-    enum class TraceCheck
-    {
-        NotEnforced,
-        Enforced,
-    };
-
-    struct CodeTracePair
-    {
-        pisco::BlinkCode code{0};
-        TraceCode        trace{};
-    };
-
-    struct TestBlinkerCase
-    {
-        std::optional<testutils::CodeTracePair> code_pair{std::nullopt};
-        testutils::TraceCheck                   trace_check{TraceCheck::NotEnforced};
-        std::optional<pisco::NumDigits>         numDigits{std::nullopt};
-        std::optional<pisco::RepeatTimes>       repeats{std::nullopt};
-        std::optional<pisco::LedLevel>          expectedDimmed{};
-        std::optional<pisco::LedLevel>          expectedPulse{};
-    };
-
-    // Example predefined codes
-    inline const CodeTracePair DEFAULT_CODE = {102, "___---^---_---^-^---___"};
-    inline const CodeTracePair CODE_10      = {10, "___---^---_---___"};
-    inline const CodeTracePair CODE_2       = {2, "___---^-^---___"};
-    inline const CodeTracePair CODE_120     = {120, "___---^---^-^---_---___"};
-    inline const CodeTracePair CODE_1010    = {1010, "4MgS4M0S4MgS4M0S4L0M"};
-    inline const CodeTracePair CODE_12345   = {12345,
-                                               "___---^---^-^---^-^-^---^-^-^-^---^-^-^-^-^---___"};
-    inline const CodeTracePair CODE_0       = {0, "___---_---___"};
-    inline const CodeTracePair CODE_255     = {255, "___---^---_---^-^---___"};
-    inline const CodeTracePair CODE_5       = {5, "___---^---_---^---___"};
-    inline const CodeTracePair CODE_NEG_7   = {-7, "___---^^^-----^-^-^-^-^-^-^---___"};
-
-    constexpr pisco::LedLevel LOWEST_DIMMED_LEVEL  = 1;
-    constexpr pisco::LedLevel HIGHEST_DIMMED_LEVEL = pisco::PWM_MAX - pisco::MIN_PULSE_DIMMED_GAP;
-    constexpr pisco::LedLevel MID_DIMMED_LEVEL  = (HIGHEST_DIMMED_LEVEL - LOWEST_DIMMED_LEVEL) / 2;
-    inline const TraceCode    LED_OFF_CHARACTER = "_";
-    inline const TraceCode    LED_ON_CHARACTER  = "^";
-    inline const TraceCode    LED_DIMMED_CHARACTER = "-";
-
     // Drives the loop for a maximum simulated time, default 64 seconds.
     inline void runSequencer(pisco::CodeBlinker* code, MockLedControlLogger* logger)
     {
