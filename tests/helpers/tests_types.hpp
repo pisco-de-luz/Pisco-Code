@@ -1,16 +1,19 @@
 #pragma once
 
+#include <array>
 #include <cstdint>
 #include <optional>
 #include <string>
 
-#include "../../include/pisco_types.hpp"
+#include "pisco_types.hpp"
 
 namespace testutils
 {
 
     using TraceCode     = std::string;
     using TraceStrIndex = int16_t;
+    using Index         = int32_t;
+    using Counter       = int32_t;
 
     struct LedLevelDuration
     {
@@ -54,6 +57,13 @@ namespace testutils
         std::optional<pisco::RepeatTimes> repeats{std::nullopt};
         std::optional<pisco::LedLevel>    expectedDimmed{};
         std::optional<pisco::LedLevel>    expectedPulse{};
+    };
+
+    struct CodeDigitInfo
+    {
+        bool                                   is_negative;
+        std::array<uint8_t, pisco::MAX_DIGITS> digits;
+        uint8_t                                first_nonzero_digit_index;
     };
 
 } // namespace testutils

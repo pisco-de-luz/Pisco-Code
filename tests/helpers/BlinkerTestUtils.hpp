@@ -58,6 +58,76 @@ namespace testutils
         return result;
     }
 
+    inline CodeDigitInfo convertCodeToDigits(pisco::BlinkCode code, pisco::NumberBase base,
+                                             pisco::NumDigits num_digits)
+    {
+        CodeDigitInfo result{};
+        result.is_negative        = (code < 0);
+        pisco::BlinkCode abs_code = result.is_negative ? -code : code;
+
+        uint8_t first_nonzero = pisco::MAX_DIGITS - 1;
+
+        for (Index i = pisco::MAX_DIGITS - 1; i >= 0; --i)
+        {
+            const auto digit = static_cast<uint8_t>(abs_code % static_cast<uint8_t>(base));
+            result.digits[i] = digit;
+            if (digit > 0)
+            {
+                first_nonzero = i;
+            }
+            abs_code /= static_cast<uint8_t>(base);
+        }
+
+        if (num_digits > 0 && num_digits < pisco::MAX_DIGITS)
+        {
+            result.first_nonzero_digit_index = pisco::MAX_DIGITS - num_digits;
+        }
+        else
+        {
+            result.first_nonzero_digit_index = first_nonzero;
+        }
+
+        return result;
+    }
+
+    inline TraceCode generateExpectedTrace(pisco::BlinkCode code, pisco::NumberBase base,
+                                           pisco::NumDigits   min_digits = 0,
+                                           pisco::RepeatTimes repeats    = 1)
+    {
+        const CodeDigitInfo info  = convertCodeToDigits(code, base, min_digits);
+        TraceCode           trace = "___";
+
+        for (Counter r = 0; r < repeats; ++r)
+        {
+            trace += "---";
+            if (info.is_negative)
+            {
+                trace += "^^^---";
+            }
+
+            for (Index index = info.first_nonzero_digit_index; index < pisco::MAX_DIGITS; ++index)
+            {
+                const Counter digit = info.digits[index];
+                if (digit == 0)
+                {
+                    trace += "_-";
+                }
+                else
+                {
+                    for (Counter j = 0; j < digit; ++j)
+                    {
+                        trace += "^-";
+                    }
+                }
+                trace += "--";
+            }
+
+            trace += "___";
+        }
+
+        return trace;
+    }
+
     // Check the behavior of the blinker against the expected values.
     inline void checkBlinkerBehavior(pisco::CodeBlinker& blinker, MockLedControlLogger& logger,
                                      const TestBlinkerCase& testCase)
@@ -66,21 +136,16 @@ namespace testutils
         const CodeTracePair default_code_pair = DEFAULT_CODE;
         pisco::BlinkCode    code_to_show      = default_code_pair.code;
 
-        TraceCode expected_trace = default_code_pair.trace;
-        if (testCase.code_pair.has_value())
-        {
-            code_to_show   = testCase.code_pair->code;
-            expected_trace = testCase.code_pair->trace;
-        }
-
         const pisco::NumDigits   num_digits = testCase.numDigits.value_or(0);
         const pisco::RepeatTimes repeats    = testCase.repeats.value_or(1);
         const pisco::NumberBase  base = testCase.number_base.value_or(pisco::NumberBase::DECIMAL);
 
-        if (repeats > 1)
+        if (testCase.code_pair.has_value())
         {
-            expected_trace = repeatTracePattern(expected_trace, repeats);
+            code_to_show = testCase.code_pair->code;
         }
+        TraceCode expected_trace = default_code_pair.trace;
+        expected_trace = testutils::generateExpectedTrace(code_to_show, base, num_digits, repeats);
 
         blinker.showCode(code_to_show, base, num_digits, repeats);
         logger.setBlinker(&blinker);

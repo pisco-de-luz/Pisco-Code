@@ -18,8 +18,8 @@ namespace testutils
 
     // Commonly used trace patterns
     inline const CodeTracePair DEFAULT_CODE   = {102, "___---^---_---^-^---___"};
-    inline const CodeTracePair CODE_NEG_7     = {-7, "___---^^^-----^-^-^-^-^-^-^---___"};
-    inline const CodeTracePair CODE_BIN_NEG_7 = {-7, "___---^^^-----^---^---^---___"};
+    inline const CodeTracePair CODE_NEG_7     = {-7, "___---^^^---^-^-^-^-^-^-^---___"};
+    inline const CodeTracePair CODE_BIN_NEG_7 = {-7, "___---^^^---^---^---^---___"};
     inline const CodeTracePair CODE_0         = {0, "___---_---___"};
     inline const CodeTracePair CODE_2         = {2, "___---^-^---___"};
     inline const CodeTracePair CODE_5         = {5, "___---^-^-^-^-^---___"};
