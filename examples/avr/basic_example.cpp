@@ -1,9 +1,10 @@
+#include <stdint.h>
+
 #include "code_blinker.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 #include "software_pwm_led_controller.hpp"
 #include <avr/io.h>
-#include <stdint.h>
 #include <util/delay.h>
 
 using namespace pisco;
@@ -57,11 +58,11 @@ int main()
     CodeBlinker              blinker(&ledController);
 
     // Configure blinking behavior
-    blinker.setDimmedLevel(255);
+    blinker.setDimmedLevel(3);
 
     uint32_t fakeMillis = 3660000UL; // 1 hour, 1 minute, 0 seconds
 
-    blinker.showCode(12, NumberBase::DECIMAL, 0, 3);
+    blinker.showCode(-12, NumberBase::DECIMAL, 0, 3);
     while (blinker.isRunning())
     {
         blinker.loop(fakeMillis++ >> 6);

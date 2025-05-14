@@ -1,8 +1,9 @@
 #ifndef PISCO_CONSTANTS_HPP
 #define PISCO_CONSTANTS_HPP
 
-#include "pisco_types.hpp"
 #include <stdint.h>
+
+#include "pisco_types.hpp"
 
 namespace pisco
 {
@@ -41,7 +42,7 @@ namespace pisco
     constexpr uint32_t INIT_PHASE_MS          = 2000;
     constexpr uint32_t INIT_DIMMED_PHASE_MS   = 1300;
     constexpr uint32_t END_DIMMED_PHASE_MS    = 300;
-    constexpr uint32_t NEGATIVE_BLINK_LONG_MS = 1800;
+    constexpr uint32_t NEGATIVE_BLINK_LONG_MS = 1100;
     constexpr uint32_t SHORT_BLINK_MS         = 350;
     constexpr uint32_t ZERO_DIGIT_BLINK_MS    = 440;
     constexpr uint32_t BETWEEN_BLINK_MS       = 350;

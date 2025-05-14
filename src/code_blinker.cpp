@@ -1,5 +1,6 @@
 // code_blinker.cpp
 #include "code_blinker.hpp"
+
 #include "pisco_constants.hpp"
 
 namespace pisco
@@ -227,7 +228,7 @@ namespace pisco
         controller_->setBlinkMode(BlinkMode::Dimmed);
         if (phaseElapsed(loop_counter))
         {
-            transitionTo(Phase::LoadNextDigit, to_loop_count(BETWEEN_DIGITS_MS), loop_counter);
+            transitionTo(Phase::LoadNextDigit, to_loop_count(BETWEEN_BLINK_MS), loop_counter);
         }
     }
 

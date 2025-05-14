@@ -15,5 +15,9 @@ namespace pisco
     using PwmCounter    = uint8_t;
     using PhaseDuration = uint8_t;
     using BlinkCode     = int32_t;
+    using Index8        = int8_t;
+    using Index16       = int16_t;
+    using Counter8      = int8_t;
+    using Counter16     = int16_t;
 
 } // namespace pisco
