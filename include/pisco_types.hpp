@@ -6,7 +6,7 @@ namespace pisco
 {
 
     using Timestamp     = uint32_t;
-    using DurationMs    = uint16_t;
+    using DurationMs    = uint32_t;
     using LedLevel      = uint8_t;
     using RepeatTimes   = uint8_t;
     using NumDigits     = uint8_t;

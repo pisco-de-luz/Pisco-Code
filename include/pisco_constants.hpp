@@ -30,12 +30,18 @@ namespace pisco
         HEXADECIMAL = 16
     };
 
-    // LED brightness control
-    constexpr NumDigits MAX_DIGITS           = 10;
-    constexpr uint8_t   DEFAULT_DIMMED_LEVEL = 3;
-    constexpr uint8_t   PWM_MAX              = 15;
-    constexpr LedLevel  MIN_PULSE_DIMMED_GAP = 2;
-    constexpr uint8_t   DEFAULT_PULSE_LEVEL  = PWM_MAX;
+    constexpr DigitValue to_value(NumberBase base)
+    {
+        return static_cast<DigitValue>(base);
+    }
+
+    // Maximum number of digits limited to 9 for 32-bit integer representation
+    constexpr NumDigits MAX_DIGITS = 9;
+
+    constexpr uint8_t  DEFAULT_DIMMED_LEVEL = 3;
+    constexpr uint8_t  PWM_MAX              = 15;
+    constexpr LedLevel MIN_PULSE_DIMMED_GAP = 2;
+    constexpr uint8_t  DEFAULT_PULSE_LEVEL  = PWM_MAX;
 
     // Loop timing constants
     constexpr uint32_t LOOP_INTERVAL_MS       = 64;
