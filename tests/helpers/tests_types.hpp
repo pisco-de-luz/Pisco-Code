@@ -27,12 +27,6 @@ namespace testutils
         uint8_t          repeat_count;
     };
 
-    struct CodeTracePair
-    {
-        pisco::BlinkCode code{0};
-        TraceCode        trace{};
-    };
-
     enum class TraceCheck
     {
         NotEnforced,
@@ -50,7 +44,7 @@ namespace testutils
 
     struct TestBlinkerCase
     {
-        std::optional<CodeTracePair>      code_pair{std::nullopt};
+        std::optional<pisco::BlinkCode>   blink_code{std::nullopt};
         std::optional<pisco::NumberBase>  number_base{std::nullopt};
         std::optional<TraceCheck>         trace_check{std::nullopt};
         std::optional<pisco::NumDigits>   numDigits{std::nullopt};

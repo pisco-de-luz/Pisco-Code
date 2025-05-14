@@ -129,7 +129,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldNotAffecLowestDimmedLevelWhenSettingPulseL
 TEST(SetterBehaviorBlinkerTest, ShouldPadWithLeadingZeros)
 {
     const testutils::TestBlinkerCase test_case{
-        .code_pair   = testutils::CODE_0010,
+        .blink_code  = testutils::CODE_0010,
         .trace_check = testutils::TraceCheck::Enforced,
         .numDigits   = 4,
     };
@@ -140,7 +140,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldPadWithLeadingZeros)
 TEST(SetterBehaviorBlinkerTest, ShouldNotPadIfNotNeeded)
 {
     const testutils::TestBlinkerCase test_case{
-        .code_pair   = testutils::CODE_12345,
+        .blink_code  = testutils::CODE_12345,
         .trace_check = testutils::TraceCheck::Enforced,
         .numDigits   = 5,
     };
@@ -151,7 +151,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldNotPadIfNotNeeded)
 TEST(SetterBehaviorBlinkerTest, ShouldTruncateToNumDigits)
 {
     const testutils::TestBlinkerCase test_case{
-        .code_pair   = testutils::CODE_12345_TRUNCATED_TO_2_DIGITS,
+        .blink_code  = testutils::CODE_12345_TRUNCATED_TO_2_DIGITS,
         .trace_check = testutils::TraceCheck::Enforced,
         .numDigits   = 2,
     };
@@ -182,7 +182,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldRejectTooLowNumDigits)
 TEST(SetterBehaviorBlinkerTest, ShouldHandleSingleDigitZero)
 {
     const testutils::TestBlinkerCase test_case{
-        .code_pair   = testutils::CODE_0,
+        .blink_code  = testutils::CODE_0,
         .trace_check = testutils::TraceCheck::Enforced,
     };
 

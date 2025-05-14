@@ -19,7 +19,7 @@ TEST_GROUP(LoopBehaviorBlinkerTest)
 TEST(LoopBehaviorBlinkerTest, ShouldHoldDimLightForDigitZero)
 {
     blinker.setDimmedLevel(testutils::MID_DIMMED_LEVEL);
-    const testutils::TestBlinkerCase test_case{.code_pair      = testutils::CODE_0,
+    const testutils::TestBlinkerCase test_case{.blink_code     = testutils::CODE_0,
                                                .trace_check    = testutils::TraceCheck::NotEnforced,
                                                .expectedDimmed = testutils::MID_DIMMED_LEVEL};
 
@@ -28,7 +28,7 @@ TEST(LoopBehaviorBlinkerTest, ShouldHoldDimLightForDigitZero)
 
 TEST(LoopBehaviorBlinkerTest, ShouldBlinkDigits_1_2_0)
 {
-    const testutils::TestBlinkerCase test_case{.code_pair   = testutils::CODE_120,
+    const testutils::TestBlinkerCase test_case{.blink_code  = testutils::CODE_120,
                                                .trace_check = testutils::TraceCheck::Enforced};
 
     testutils::checkBlinkerBehavior(blinker, logger, test_case);
@@ -36,7 +36,7 @@ TEST(LoopBehaviorBlinkerTest, ShouldBlinkDigits_1_2_0)
 
 TEST(LoopBehaviorBlinkerTest, ShouldBlinkNegativeSingleDigit)
 {
-    const testutils::TestBlinkerCase test_case{.code_pair   = testutils::CODE_NEG_7,
+    const testutils::TestBlinkerCase test_case{.blink_code  = testutils::CODE_NEG_7,
                                                .trace_check = testutils::TraceCheck::Enforced};
 
     testutils::checkBlinkerBehavior(blinker, logger, test_case);
@@ -68,22 +68,11 @@ TEST(LoopBehaviorBlinkerTest, ShouldEndInFinalDimmedPause)
 
 TEST(LoopBehaviorBlinkerTest, ShouldHandleMixOfZeroAndOne)
 {
-    const testutils::TestBlinkerCase test_case{.code_pair   = testutils::CODE_1010,
+    const testutils::TestBlinkerCase test_case{.blink_code  = testutils::CODE_1010,
                                                .trace_check = testutils::TraceCheck::Enforced};
 
     testutils::checkBlinkerBehavior(blinker, logger, test_case);
 }
-
-// TEST(LoopBehaviorBlinkerTest, ShouldStartAndEndWithLedOff)
-// {
-//     blinker.showCode(1, NumberBase::DECIMAL, 0, 1);
-//     runSequencer(&blinker, &logger);
-//     const std::string trace = logger.traceLogToString();
-
-//     // Ensure the trace starts and ends with 0M (off periods)
-//     CHECK_TRUE(trace.substr(0, 2) == "0M");
-//     CHECK_TRUE(trace.substr(trace.size() - 2, 2) == "0M");
-// }
 
 TEST(LoopBehaviorBlinkerTest, ShouldNotTurnOnLedDuringIdlePhases)
 {

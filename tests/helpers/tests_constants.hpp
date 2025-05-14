@@ -17,25 +17,22 @@ namespace testutils
     inline const std::array<TraceRepeatRule, 3> TRACE_REPEAT_RULES{{{0, 1}, {1101, 3}, {2201, 5}}};
 
     // Commonly used trace patterns
-    inline const CodeTracePair DEFAULT_CODE   = {102, "___---^---_---^-^---___"};
-    inline const CodeTracePair CODE_NEG_7     = {-7, "___---^^^---^-^-^-^-^-^-^---___"};
-    inline const CodeTracePair CODE_BIN_NEG_7 = {-7, "___---^^^---^---^---^---___"};
-    inline const CodeTracePair CODE_0         = {0, "___---_---___"};
-    inline const CodeTracePair CODE_2         = {2, "___---^-^---___"};
-    inline const CodeTracePair CODE_5         = {5, "___---^-^-^-^-^---___"};
-    inline const CodeTracePair CODE_BIN_5     = {5, "___---^---_---^---___"};
-    inline const CodeTracePair CODE_10        = {10, "___---^---_---___"};
-    inline const CodeTracePair CODE_0010      = {10, "___---_---_---^---_---___"};
-    inline const CodeTracePair CODE_OCT_28    = {28, "___---^-^-^---^-^-^-^---___"};
-    inline const CodeTracePair CODE_120       = {120, "___---^---^-^---_---___"};
-    inline const CodeTracePair CODE_255       = {255, "___---^---_---^-^---___"};
-    inline const CodeTracePair CODE_HEX_255   = {
-        255, "___---^-^-^-^-^-^-^-^-^-^-^-^-^-^-^---^-^-^-^-^-^-^-^-^-^-^-^-^-^-^---___"};
-    inline const CodeTracePair CODE_1010  = {1010, "___---^---_---^---_---___"};
-    inline const CodeTracePair CODE_12345 = {12345,
-                                             "___---^---^-^---^-^-^---^-^-^-^---^-^-^-^-^---___"};
-    inline const CodeTracePair CODE_12345_TRUNCATED_TO_2_DIGITS = {
-        12345, "___---^-^-^-^---^-^-^-^-^---___"};
+    inline constexpr pisco::BlinkCode DEFAULT_CODE                     = 102;
+    inline constexpr pisco::BlinkCode CODE_NEG_7                       = -7;
+    inline constexpr pisco::BlinkCode CODE_BIN_NEG_7                   = -7;
+    inline constexpr pisco::BlinkCode CODE_0                           = 0;
+    inline constexpr pisco::BlinkCode CODE_2                           = 2;
+    inline constexpr pisco::BlinkCode CODE_5                           = 5;
+    inline constexpr pisco::BlinkCode CODE_BIN_5                       = 5;
+    inline constexpr pisco::BlinkCode CODE_10                          = 10;
+    inline constexpr pisco::BlinkCode CODE_0010                        = 10;
+    inline constexpr pisco::BlinkCode CODE_OCT_28                      = 28;
+    inline constexpr pisco::BlinkCode CODE_120                         = 120;
+    inline constexpr pisco::BlinkCode CODE_255                         = 255;
+    inline constexpr pisco::BlinkCode CODE_HEX_255                     = 255;
+    inline constexpr pisco::BlinkCode CODE_1010                        = 1010;
+    inline constexpr pisco::BlinkCode CODE_12345                       = 12345;
+    inline constexpr pisco::BlinkCode CODE_12345_TRUNCATED_TO_2_DIGITS = 12345;
 
     constexpr pisco::LedLevel LOWEST_DIMMED_LEVEL  = 1;
     constexpr pisco::LedLevel HIGHEST_DIMMED_LEVEL = pisco::PWM_MAX - pisco::MIN_PULSE_DIMMED_GAP;

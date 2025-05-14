@@ -132,20 +132,17 @@ namespace testutils
     inline void checkBlinkerBehavior(pisco::CodeBlinker& blinker, MockLedControlLogger& logger,
                                      const TestBlinkerCase& testCase)
     {
-        // constexpr pisco::BlinkCode CODE_WITH_PULSE_ZERO_AND_PULSES = 102;
-        const CodeTracePair default_code_pair = DEFAULT_CODE;
-        pisco::BlinkCode    code_to_show      = default_code_pair.code;
-
-        const pisco::NumDigits   num_digits = testCase.numDigits.value_or(0);
-        const pisco::RepeatTimes repeats    = testCase.repeats.value_or(1);
+        pisco::BlinkCode         code_to_show = testCase.blink_code.value_or(DEFAULT_CODE);
+        const pisco::NumDigits   num_digits   = testCase.numDigits.value_or(0);
+        const pisco::RepeatTimes repeats      = testCase.repeats.value_or(1);
         const pisco::NumberBase  base = testCase.number_base.value_or(pisco::NumberBase::DECIMAL);
 
-        if (testCase.code_pair.has_value())
-        {
-            code_to_show = testCase.code_pair->code;
-        }
-        TraceCode expected_trace = default_code_pair.trace;
-        expected_trace = testutils::generateExpectedTrace(code_to_show, base, num_digits, repeats);
+        // if (testCase.code_pair.has_value())
+        // {
+        //     code_to_show = testCase.code_pair.value();
+        // }
+        TraceCode expected_trace =
+            testutils::generateExpectedTrace(code_to_show, base, num_digits, repeats);
 
         blinker.showCode(code_to_show, base, num_digits, repeats);
         logger.setBlinker(&blinker);

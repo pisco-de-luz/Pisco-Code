@@ -19,7 +19,7 @@ TEST_GROUP(BaseEncodingBlinkerTest)
 TEST(BaseEncodingBlinkerTest, CanShowDecimal10)
 {
     const testutils::TestBlinkerCase test_case{
-        .code_pair   = testutils::CODE_10,
+        .blink_code  = testutils::CODE_10,
         .number_base = NumberBase::DECIMAL,
         .trace_check = testutils::TraceCheck::Enforced,
     };
@@ -30,7 +30,7 @@ TEST(BaseEncodingBlinkerTest, CanShowDecimal10)
 TEST(BaseEncodingBlinkerTest, CanShowZero)
 {
     const testutils::TestBlinkerCase test_case{
-        .code_pair   = testutils::CODE_0,
+        .blink_code  = testutils::CODE_0,
         .number_base = NumberBase::DECIMAL,
         .trace_check = testutils::TraceCheck::Enforced,
     };
@@ -41,7 +41,7 @@ TEST(BaseEncodingBlinkerTest, CanShowZero)
 TEST(BaseEncodingBlinkerTest, CanShowDecimal12345)
 {
     const testutils::TestBlinkerCase test_case{
-        .code_pair   = testutils::CODE_12345,
+        .blink_code  = testutils::CODE_12345,
         .number_base = NumberBase::DECIMAL,
         .trace_check = testutils::TraceCheck::Enforced,
     };
@@ -52,7 +52,7 @@ TEST(BaseEncodingBlinkerTest, CanShowDecimal12345)
 TEST(BaseEncodingBlinkerTest, CanShowBinary5)
 {
     const testutils::TestBlinkerCase test_case{
-        .code_pair   = testutils::CODE_BIN_5,
+        .blink_code  = testutils::CODE_BIN_5,
         .number_base = NumberBase::BINARY,
         .trace_check = testutils::TraceCheck::Enforced,
     };
@@ -63,7 +63,7 @@ TEST(BaseEncodingBlinkerTest, CanShowBinary5)
 TEST(BaseEncodingBlinkerTest, CanShowBinaryNeg7)
 {
     const testutils::TestBlinkerCase test_case{
-        .code_pair   = testutils::CODE_BIN_NEG_7,
+        .blink_code  = testutils::CODE_BIN_NEG_7,
         .number_base = NumberBase::BINARY,
         .trace_check = testutils::TraceCheck::Enforced,
     };
@@ -74,7 +74,7 @@ TEST(BaseEncodingBlinkerTest, CanShowBinaryNeg7)
 TEST(BaseEncodingBlinkerTest, CanShowHex255)
 {
     const testutils::TestBlinkerCase test_case{
-        .code_pair   = testutils::CODE_HEX_255,
+        .blink_code  = testutils::CODE_HEX_255,
         .number_base = NumberBase::HEXADECIMAL,
         .trace_check = testutils::TraceCheck::Enforced,
     };
@@ -85,7 +85,7 @@ TEST(BaseEncodingBlinkerTest, CanShowHex255)
 TEST(BaseEncodingBlinkerTest, CanShowOctal28)
 {
     const testutils::TestBlinkerCase test_case{
-        .code_pair   = testutils::CODE_OCT_28,
+        .blink_code  = testutils::CODE_OCT_28,
         .number_base = NumberBase::OCTAL,
         .trace_check = testutils::TraceCheck::Enforced,
     };
