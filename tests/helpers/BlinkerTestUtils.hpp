@@ -18,7 +18,7 @@ namespace testutils
     {
         constexpr uint8_t   LOOP_CALLS_PER_COUNTER = 64;
         constexpr Timestamp MAX_SEQUENCING_LOOP =
-            64000UL; // Limit of 64 seconds to prevent infinite loop
+            3600000UL; // Limit simulation of 1h to prevent infinite loop
         Timestamp loop_counter = 0;
         uint8_t   fake_millis  = 0;
 
