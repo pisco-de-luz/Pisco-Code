@@ -28,3 +28,8 @@ TEST(HexadecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigits)
 {
     runSameDigitsUpToMaxDigitsForBase(NumberBase::HEXADECIMAL, blinker, logger);
 }
+
+TEST(HexadecimalSystematicHighLevelTests, ShouldBlinkSequentialUpDigitsUpToMaxDigits)
+{
+    runSequentialUpDigitsUpToMaxDigitsForBase(NumberBase::HEXADECIMAL, blinker, logger);
+}

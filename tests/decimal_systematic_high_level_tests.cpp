@@ -32,25 +32,7 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigits)
 // - Example: 1, 12, 123, 1234, ..., 123456789
 TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialUpDigitsUpToMaxDigits)
 {
-    const auto number_base = NumberBase::DECIMAL;
-
-    for (pisco::NumDigits num_digits = 1; num_digits <= pisco::MAX_DIGITS; ++num_digits)
-    {
-        logger.clear();
-        const testutils::GeneratePatternParams params{
-            .pattern     = testutils::PatternOption::SequencialUp,
-            .number_base = number_base,
-            .num_digits  = num_digits,
-        };
-        const pisco::BlinkCode           code_to_show = testutils::generatePatternOfDigits(params);
-        const testutils::TestBlinkerCase test_case{
-            .blink_code  = code_to_show,
-            .number_base = number_base,
-            .trace_check = testutils::TraceCheck::Enforced,
-        };
-
-        testutils::checkBlinkerBehavior(blinker, logger, test_case);
-    }
+    runSequentialUpDigitsUpToMaxDigitsForBase(NumberBase::DECIMAL, blinker, logger);
 }
 
 // - Example: 1, 21, 321, 4321, ..., 987654321
