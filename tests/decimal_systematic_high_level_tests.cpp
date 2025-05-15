@@ -38,9 +38,10 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialUpDigitsUpToMaxDigits
 // - Example: 1, 21, 321, 4321, ..., 987654321
 TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialDownDigitsUpToMaxDigits)
 {
-    const auto number_base = NumberBase::DECIMAL;
+    const auto             number_base = NumberBase::DECIMAL;
+    const pisco::NumDigits max_digits  = maxDigitsForBase(number_base);
 
-    for (pisco::NumDigits num_digits = 1; num_digits <= pisco::MAX_DIGITS; ++num_digits)
+    for (pisco::NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
         logger.clear();
         const testutils::GeneratePatternParams params{
@@ -61,9 +62,10 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialDownDigitsUpToMaxDigi
 
 TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialDigitsUpToMaxDigitsPaddedToMaxDigits)
 {
-    const auto number_base = NumberBase::DECIMAL;
+    const auto             number_base = NumberBase::DECIMAL;
+    const pisco::NumDigits max_digits  = maxDigitsForBase(number_base);
 
-    for (pisco::NumDigits num_digits = 1; num_digits <= pisco::MAX_DIGITS; ++num_digits)
+    for (pisco::NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
         logger.clear();
         const testutils::GeneratePatternParams params{
@@ -76,7 +78,7 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialDigitsUpToMaxDigitsPa
             .blink_code  = code_to_show,
             .number_base = number_base,
             .trace_check = testutils::TraceCheck::Enforced,
-            .numDigits   = pisco::MAX_DIGITS,
+            .numDigits   = max_digits,
         };
 
         testutils::checkBlinkerBehavior(blinker, logger, test_case);
@@ -85,13 +87,14 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialDigitsUpToMaxDigitsPa
 
 TEST(DecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedToMaxDigits)
 {
-    const auto number_base = NumberBase::DECIMAL;
+    const auto             number_base = NumberBase::DECIMAL;
+    const pisco::NumDigits max_digits  = maxDigitsForBase(number_base);
 
-    for (pisco::NumDigits num_digits = 1; num_digits <= pisco::MAX_DIGITS; ++num_digits)
+    for (pisco::NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
         logger.clear();
         const pisco::DigitValue digit_to_show =
-            ((pisco::MAX_DIGITS - num_digits) % (to_value(number_base) - 1)) + 1;
+            ((max_digits - num_digits) % (to_value(number_base) - 1)) + 1;
         const testutils::GeneratePatternParams params{
             .pattern     = testutils::PatternOption::SameDigit,
             .number_base = number_base,
@@ -104,7 +107,7 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedTo
             .blink_code  = code_to_show,
             .number_base = number_base,
             .trace_check = testutils::TraceCheck::Enforced,
-            .numDigits   = pisco::MAX_DIGITS,
+            .numDigits   = max_digits,
         };
 
         testutils::checkBlinkerBehavior(blinker, logger, test_case);
@@ -113,9 +116,10 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedTo
 
 TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialDigitsUpToMaxDigitsPaddedToHalfMaxDigits)
 {
-    const auto number_base = NumberBase::DECIMAL;
+    const auto             number_base = NumberBase::DECIMAL;
+    const pisco::NumDigits max_digits  = maxDigitsForBase(number_base);
 
-    for (pisco::NumDigits num_digits = 1; num_digits <= pisco::MAX_DIGITS; ++num_digits)
+    for (pisco::NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
         logger.clear();
         const testutils::GeneratePatternParams params{
@@ -128,7 +132,7 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialDigitsUpToMaxDigitsPa
             .blink_code  = code_to_show,
             .number_base = number_base,
             .trace_check = testutils::TraceCheck::Enforced,
-            .numDigits   = pisco::MAX_DIGITS / 2,
+            .numDigits   = max_digits / 2,
         };
 
         testutils::checkBlinkerBehavior(blinker, logger, test_case);
@@ -137,13 +141,14 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialDigitsUpToMaxDigitsPa
 
 TEST(DecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedToHalfMaxDigits)
 {
-    const auto number_base = NumberBase::DECIMAL;
+    const auto             number_base = NumberBase::DECIMAL;
+    const pisco::NumDigits max_digits  = maxDigitsForBase(number_base);
 
-    for (pisco::NumDigits num_digits = 1; num_digits <= pisco::MAX_DIGITS; ++num_digits)
+    for (pisco::NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
         logger.clear();
         const pisco::DigitValue digit_to_show =
-            ((pisco::MAX_DIGITS - num_digits) % (to_value(number_base) - 1)) + 1;
+            ((max_digits - num_digits) % (to_value(number_base) - 1)) + 1;
         const testutils::GeneratePatternParams params{
             .pattern     = testutils::PatternOption::SameDigit,
             .number_base = number_base,
@@ -156,7 +161,7 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedTo
             .blink_code  = code_to_show,
             .number_base = number_base,
             .trace_check = testutils::TraceCheck::Enforced,
-            .numDigits   = pisco::MAX_DIGITS / 2,
+            .numDigits   = max_digits / 2,
         };
 
         testutils::checkBlinkerBehavior(blinker, logger, test_case);
@@ -165,9 +170,10 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedTo
 
 TEST(DecimalSystematicHighLevelTests, ShouldBlinkFullPatternOfMaxBaseDigitUpToMaxDigits)
 {
-    const auto number_base = NumberBase::DECIMAL;
+    const auto             number_base = NumberBase::DECIMAL;
+    const pisco::NumDigits max_digits  = maxDigitsForBase(number_base);
 
-    for (pisco::NumDigits num_digits = 1; num_digits <= pisco::MAX_DIGITS; ++num_digits)
+    for (pisco::NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
         logger.clear();
         const testutils::GeneratePatternParams params{
@@ -190,9 +196,10 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkFullPatternOfMaxBaseDigitUpToMa
 
 TEST(DecimalSystematicHighLevelTests, ShouldRepeatBlinkOfMaxBaseDigitUpToMaxDigitsNineTimes)
 {
-    const auto number_base = NumberBase::DECIMAL;
+    const auto             number_base = NumberBase::DECIMAL;
+    const pisco::NumDigits max_digits  = maxDigitsForBase(number_base);
 
-    for (pisco::NumDigits num_digits = 1; num_digits <= pisco::MAX_DIGITS; ++num_digits)
+    for (pisco::NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
         logger.clear();
         const testutils::GeneratePatternParams params{

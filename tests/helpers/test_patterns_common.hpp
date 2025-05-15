@@ -14,8 +14,8 @@
 inline void runSameDigitsUpToMaxDigitsForBase(pisco::NumberBase base, pisco::CodeBlinker& blinker,
                                               MockLedControlLogger& logger)
 {
-    const auto max_digits = pisco::MAX_DIGITS;
-    const auto base_value = to_value(base);
+    const pisco::NumDigits max_digits = maxDigitsForBase(base);
+    const auto             base_value = to_value(base);
 
     for (pisco::NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
@@ -43,8 +43,8 @@ inline void runSequentialUpDigitsUpToMaxDigitsForBase(pisco::NumberBase     base
                                                       pisco::CodeBlinker&   blinker,
                                                       MockLedControlLogger& logger)
 {
-    const auto max_digits = pisco::MAX_DIGITS;
-    const auto base_value = to_value(base);
+    const pisco::NumDigits max_digits = maxDigitsForBase(base);
+    const auto             base_value = to_value(base);
 
     for (pisco::NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {

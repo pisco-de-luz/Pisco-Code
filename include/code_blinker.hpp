@@ -2,9 +2,11 @@
 #ifndef PISCO_CODE_BLINKER_HPP
 #define PISCO_CODE_BLINKER_HPP
 
+#include <stdint.h>
+
 #include "led_controller.hpp"
 #include "pisco_constants.hpp"
-#include <stdint.h>
+#include "pisco_types.hpp"
 
 namespace pisco
 {
@@ -82,10 +84,11 @@ namespace pisco
 
         LedController* controller_ = nullptr;
 
-        NumDigits current_digit_            = 0;
-        NumDigits least_significant_digit_  = 0;
-        int8_t    blink_counts_[MAX_DIGITS] = {};
-        uint8_t   digits_[MAX_DIGITS]       = {};
+        NumDigits current_digit_                     = 0;
+        NumDigits least_significant_digit_           = 0;
+        int8_t    blink_counts_[MAX_DIGITS_ABSOLUTE] = {};
+        uint8_t   digits_[MAX_DIGITS_ABSOLUTE]       = {};
+        NumDigits max_digits_                        = 0;
 
         uint8_t         repeats_total_     = 0;
         mutable uint8_t repeats_remaining_ = 0;

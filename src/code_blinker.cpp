@@ -23,10 +23,11 @@ namespace pisco
         {
             value_to_display = -code;
         }
+        max_digits_ = maxDigitsForBase(base);
 
-        current_digit_ = MAX_DIGITS - 1;
+        current_digit_ = max_digits_ - 1;
 
-        for (int8_t i = MAX_DIGITS - 1; i >= 0; --i)
+        for (int8_t i = max_digits_ - 1; i >= 0; --i)
         {
             digits_[i]       = static_cast<uint8_t>(value_to_display % static_cast<uint8_t>(base));
             blink_counts_[i] = static_cast<int8_t>(digits_[i]);
@@ -37,9 +38,9 @@ namespace pisco
             value_to_display /= static_cast<uint8_t>(base);
         }
 
-        if (num_digits > 0 && num_digits < MAX_DIGITS)
+        if (num_digits > 0 && num_digits < max_digits_)
         {
-            current_digit_ = MAX_DIGITS - num_digits;
+            current_digit_ = max_digits_ - num_digits;
         }
 
         least_significant_digit_ = current_digit_;
@@ -141,7 +142,7 @@ namespace pisco
 
     bool CodeBlinker::hasMoreDigits() const
     {
-        return current_digit_ < MAX_DIGITS;
+        return current_digit_ < max_digits_;
     }
 
     bool CodeBlinker::shouldRepeat() const
@@ -193,7 +194,7 @@ namespace pisco
         {
             // NOTE: Need to improve this logic to avoid miss interpretation
             // shouldRepeat() is checking and decreasing the counter BAD Design
-            if (current_digit_ >= MAX_DIGITS && shouldRepeat())
+            if (current_digit_ >= max_digits_ && shouldRepeat())
             {
                 transitionTo(Phase::EndOfDigitCycle, to_loop_count(END_DIMMED_PHASE_MS),
                              loop_counter);
@@ -298,7 +299,7 @@ namespace pisco
             }
             else
             {
-                for (int8_t i = MAX_DIGITS - 1; i >= 0; --i)
+                for (int8_t i = max_digits_ - 1; i >= 0; --i)
                 {
                     blink_counts_[i] = digits_[i];
                 }

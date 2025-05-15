@@ -65,9 +65,10 @@ namespace testutils
         result.is_negative        = (code < 0);
         pisco::BlinkCode abs_code = result.is_negative ? -code : code;
 
-        uint8_t first_nonzero = pisco::MAX_DIGITS - 1;
+        const pisco::NumDigits max_digits    = maxDigitsForBase(base);
+        uint8_t                first_nonzero = max_digits - 1;
 
-        for (Index i = pisco::MAX_DIGITS - 1; i >= 0; --i)
+        for (Index i = max_digits - 1; i >= 0; --i)
         {
             const auto digit = static_cast<uint8_t>(abs_code % static_cast<uint8_t>(base));
             result.digits[i] = digit;
@@ -78,9 +79,9 @@ namespace testutils
             abs_code /= static_cast<uint8_t>(base);
         }
 
-        if (num_digits > 0 && num_digits < pisco::MAX_DIGITS)
+        if (num_digits > 0 && num_digits < max_digits)
         {
-            result.first_nonzero_digit_index = pisco::MAX_DIGITS - num_digits;
+            result.first_nonzero_digit_index = max_digits - num_digits;
         }
         else
         {
@@ -94,8 +95,9 @@ namespace testutils
                                            pisco::NumDigits   min_digits = 0,
                                            pisco::RepeatTimes repeats    = 1)
     {
-        const CodeDigitInfo info  = convertCodeToDigits(code, base, min_digits);
-        TraceCode           trace = "___";
+        const CodeDigitInfo    info       = convertCodeToDigits(code, base, min_digits);
+        TraceCode              trace      = "___";
+        const pisco::NumDigits max_digits = maxDigitsForBase(base);
 
         for (Counter r = 0; r < repeats; ++r)
         {
@@ -105,7 +107,7 @@ namespace testutils
                 trace += "^^^---";
             }
 
-            for (Index index = info.first_nonzero_digit_index; index < pisco::MAX_DIGITS; ++index)
+            for (Index index = info.first_nonzero_digit_index; index < max_digits; ++index)
             {
                 const Counter digit = info.digits[index];
                 if (digit == 0)

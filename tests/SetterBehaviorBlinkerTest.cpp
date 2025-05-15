@@ -161,9 +161,10 @@ TEST(SetterBehaviorBlinkerTest, ShouldTruncateToNumDigits)
 
 TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighNumDigits)
 {
+    const pisco::NumDigits           max_digits = maxDigitsForBase(pisco::NumberBase::DECIMAL);
     const testutils::TestBlinkerCase test_case{
         .trace_check = testutils::TraceCheck::Enforced,
-        .numDigits   = pisco::MAX_DIGITS + 1,
+        .numDigits   = max_digits + 1,
     };
 
     testutils::checkBlinkerBehavior(blinker, logger, test_case);
