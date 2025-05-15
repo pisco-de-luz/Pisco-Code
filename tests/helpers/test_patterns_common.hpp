@@ -54,14 +54,14 @@ inline void runSequentialUpDigitsUpToMaxDigitsForBase(pisco::NumberBase     base
         const pisco::BlinkCode code = testutils::generatePatternOfDigits(
             {testutils::PatternOption::SequencialUp, base, num_digits});
 
-        // std::cout << "code: " << std::dec << code << "(dec), " << std::hex << code << "(hex), "
-        //           << std::oct << code << "(oct)" << std::endl;
         const testutils::TestBlinkerCase test_case{
             .blink_code  = code,
             .number_base = base,
             .trace_check = testutils::TraceCheck::Enforced,
         };
 
+        // std::cout << "code: " << std::dec << code << "(dec), " << std::hex << code << "(hex), "
+        //           << std::oct << code << "(oct)" << std::endl;
         checkBlinkerBehavior(blinker, logger, test_case);
     }
 }

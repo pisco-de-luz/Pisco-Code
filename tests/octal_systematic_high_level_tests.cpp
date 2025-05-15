@@ -16,19 +16,19 @@
 using namespace pisco;
 using testutils::runSequencer;
 
-TEST_GROUP(BinarySystematicHighLevelTests)
+TEST_GROUP(OctalSystematicHighLevelTests)
 {
     MockLedControlLogger     logger;
     MockLedControllerAdapter controller{&logger};
     CodeBlinker              blinker{&controller};
 };
 
-TEST(BinarySystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigits)
+TEST(OctalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigits)
 {
-    runSameDigitsUpToMaxDigitsForBase(NumberBase::BINARY, blinker, logger);
+    runSameDigitsUpToMaxDigitsForBase(NumberBase::OCTAL, blinker, logger);
 }
 
-TEST(BinarySystematicHighLevelTests, ShouldBlinkSequentialUpDigitsUpToMaxDigits)
+TEST(OctalSystematicHighLevelTests, ShouldBlinkSequentialUpDigitsUpToMaxDigits)
 {
-    runSequentialUpDigitsUpToMaxDigitsForBase(NumberBase::BINARY, blinker, logger);
+    runSequentialUpDigitsUpToMaxDigitsForBase(NumberBase::OCTAL, blinker, logger);
 }
