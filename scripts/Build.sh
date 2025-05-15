@@ -43,7 +43,7 @@ build_preset() {
 
   if [[ "$preset" == "native" ]]; then
     echo "[${preset}] Testing..."
-    ctest --test-dir "$build_dir" -R PiscoCodeTests --output-on-failure
+    ctest --test-dir "$build_dir" -R PiscoCodeTests  --verbose --output-on-failure
   fi
 
   echo "[${preset}] Done."
