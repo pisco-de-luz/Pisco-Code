@@ -60,4 +60,32 @@ namespace testutils
         uint8_t                                first_nonzero_digit_index;
     };
 
+    // PatternOption — Digit composition strategies used in test generation.
+    //
+    // SequencialUp
+    // - Example: 1, 12, 123, 1234, ..., 123456789
+    //
+    // SequencialDown
+    // - Example: 1, 21, 321, 4321, ..., 987654321
+    //
+    // DescendingFromMax (use the base-1 value to determine the max digit)
+    // - Example: 9, 98, 987, 9876, ..., 987654321
+    //
+    // SameDigit (use the digit value parameter to determine the digit)
+    // - Example: 9, 88, 777, ..., 111111111
+    enum class PatternOption
+    {
+        SequencialUp,
+        SequencialDown,
+        DescendingFromMax,
+        SameDigit,
+    };
+    struct GeneratePatternParams
+    {
+        PatternOption     pattern{PatternOption::SequencialUp};
+        pisco::NumberBase number_base{pisco::NumberBase::DECIMAL};
+        pisco::NumDigits  num_digits{};
+        pisco::DigitValue digit{0};
+    };
+
 } // namespace testutils

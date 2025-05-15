@@ -168,4 +168,36 @@ namespace testutils
         }
     }
 
+    // Generate a BlinkCode code using a pattern of digits
+    inline pisco::BlinkCode generatePatternOfDigits(const GeneratePatternParams& params)
+    {
+        pisco::BlinkCode code_to_show = 0;
+        for (Counter i = 0; i < params.num_digits; ++i)
+        {
+            pisco::DigitValue digit_to_show = 0;
+            switch (params.pattern)
+            {
+                case PatternOption::SequencialUp:
+                    digit_to_show = ((i + 1) % to_value(params.number_base));
+                    break;
+                case PatternOption::SequencialDown:
+                    digit_to_show = ((params.num_digits - i) % to_value(params.number_base));
+                    break;
+                case PatternOption::DescendingFromMax:
+                    digit_to_show =
+                        ((to_value(params.number_base) - i - 1) % to_value(params.number_base));
+                    break;
+                case PatternOption::SameDigit:
+                    digit_to_show = params.digit;
+                    break;
+                default:
+                    digit_to_show =
+                        0; // Make the generator return 0 if the pattern is not recognized
+                    break;
+            }
+            code_to_show = code_to_show * to_value(params.number_base) + digit_to_show;
+        }
+        return code_to_show;
+    }
+
 } // namespace testutils
