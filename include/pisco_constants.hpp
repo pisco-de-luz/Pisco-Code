@@ -8,7 +8,7 @@
 namespace pisco
 {
 
-    enum class LedControlCode : uint8_t
+    enum class LedControlCode : LedCodeType
     {
         On       = 0,
         Off      = 1,
@@ -22,7 +22,7 @@ namespace pisco
     constexpr LedControlCode LED_FUNC_OK = LedControlCode::FuncOk;
 
     // Encoding bases
-    enum class NumberBase : uint8_t
+    enum class NumberBase : BaseType
     {
         BINARY      = 2,
         OCTAL       = 8,

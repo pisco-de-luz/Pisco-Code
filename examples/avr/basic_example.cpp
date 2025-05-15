@@ -17,17 +17,17 @@ using namespace pisco;
 #define LED_PIN PD1 // TX‐LED on Nano
 
 // Hardware abstraction for LED control
-bool turnLedOnOff(uint8_t ctrlLED)
+bool turnLedOnOff(LedCodeType ctrlLED)
 {
     switch (ctrlLED)
     {
-        case static_cast<uint8_t>(pisco::LedControlCode::On):
+        case static_cast<LedCodeType>(LedControlCode::On):
             LED_PORT &= ~(1 << LED_PIN);
             return true;
-        case static_cast<uint8_t>(pisco::LedControlCode::Off):
+        case static_cast<LedCodeType>(LedControlCode::Off):
             LED_PORT |= (1 << LED_PIN);
             return true;
-        case static_cast<uint8_t>(pisco::LedControlCode::FuncOk):
+        case static_cast<LedCodeType>(LedControlCode::FuncOk):
             return true;
         default:
             return false;

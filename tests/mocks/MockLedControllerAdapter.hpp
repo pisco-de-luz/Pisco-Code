@@ -1,11 +1,12 @@
 #ifndef MOCK_LED_CONTROLLER_ADAPTER_HPP
 #define MOCK_LED_CONTROLLER_ADAPTER_HPP
 
+#include <iostream>
+
 #include "MockLedControlLogger.hpp"
+
 #include "led_controller.hpp"
 #include "pisco_constants.hpp"
-
-#include <iostream>
 
 class MockLedControllerAdapter : public pisco::LedController
 {
@@ -22,7 +23,7 @@ class MockLedControllerAdapter : public pisco::LedController
     {
         if (logger_ != nullptr)
         {
-            logger_->handle(static_cast<uint8_t>(pisco::LedControlCode::Off));
+            logger_->handle(static_cast<pisco::LedCodeType>(pisco::LedControlCode::Off));
         }
     }
 
@@ -38,22 +39,22 @@ class MockLedControllerAdapter : public pisco::LedController
             case pisco::BlinkMode::Pulse:
                 if (pwm_counter == 0)
                 {
-                    logger_->handle(static_cast<uint8_t>(pisco::LedControlCode::On));
+                    logger_->handle(static_cast<pisco::LedCodeType>(pisco::LedControlCode::On));
                 }
                 else if (pwm_counter == peak_level_)
                 {
-                    logger_->handle(static_cast<uint8_t>(pisco::LedControlCode::Off));
+                    logger_->handle(static_cast<pisco::LedCodeType>(pisco::LedControlCode::Off));
                 }
                 break;
 
             case pisco::BlinkMode::Dimmed:
                 if (pwm_counter == 0)
                 {
-                    logger_->handle(static_cast<uint8_t>(pisco::LedControlCode::On));
+                    logger_->handle(static_cast<pisco::LedCodeType>(pisco::LedControlCode::On));
                 }
                 else if (pwm_counter == dimmed_level_)
                 {
-                    logger_->handle(static_cast<uint8_t>(pisco::LedControlCode::Off));
+                    logger_->handle(static_cast<pisco::LedCodeType>(pisco::LedControlCode::Off));
                 }
                 break;
 
@@ -62,7 +63,7 @@ class MockLedControllerAdapter : public pisco::LedController
                 if (pwm_counter == 0)
                 {
                     // Ensure LED is OFF during idle periods
-                    logger_->handle(static_cast<uint8_t>(pisco::LedControlCode::Off));
+                    logger_->handle(static_cast<pisco::LedCodeType>(pisco::LedControlCode::Off));
                 }
                 break;
         }
