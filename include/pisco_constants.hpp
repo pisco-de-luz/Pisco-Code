@@ -35,6 +35,31 @@ namespace pisco
         return static_cast<DigitValue>(base);
     }
 
+    // Lookup table indexed by base value (2 to 16), all other entries are zero
+    constexpr NumDigits MAX_DIGITS_LUT[to_value(NumberBase::HEXADECIMAL) + 1] = {
+        0,  // 0
+        0,  // 1
+        24, // 2 = BINARY
+        0,  0, 0, 0, 0,
+        9, // 8 = OCTAL
+        0, // 9
+        9, // 10 = DECIMAL
+        0,  0, 0, 0, 0,
+        7 // 16 = HEXADECIMAL
+    };
+
+    constexpr NumDigits maxDigitsForBase(NumberBase base)
+    {
+        return MAX_DIGITS_LUT[to_value(base)];
+    }
+
+    // Compile-time checks to catch omissions
+    static_assert(MAX_DIGITS_LUT[to_value(NumberBase::BINARY)] > 0, "Missing BINARY max digits");
+    static_assert(MAX_DIGITS_LUT[to_value(NumberBase::OCTAL)] > 0, "Missing OCTAL max digits");
+    static_assert(MAX_DIGITS_LUT[to_value(NumberBase::DECIMAL)] > 0, "Missing DECIMAL max digits");
+    static_assert(MAX_DIGITS_LUT[to_value(NumberBase::HEXADECIMAL)] > 0,
+                  "Missing HEXADECIMAL max digits");
+
     // Maximum number of digits limited to 9 for 32-bit integer representation
     constexpr NumDigits MAX_DIGITS = 8;
 
