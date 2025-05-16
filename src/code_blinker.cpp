@@ -2,6 +2,7 @@
 #include "code_blinker.hpp"
 
 #include "pisco_constants.hpp"
+#include "pisco_types.hpp"
 
 namespace pisco_code
 {
@@ -10,40 +11,41 @@ namespace pisco_code
     {
     }
 
-    bool CodeBlinker::showCode(int32_t code, NumberBase base, uint8_t num_digits, uint8_t repeats)
+    bool CodeBlinker::showCode(BlinkCode code, NumberBase base, NumDigits num_digits,
+                               RepeatTimes repeats)
     {
         if (!controller_ || current_phase_ != Phase::Idle || repeats == 0 || peak_level_ == 0)
         {
             return false;
         }
 
-        is_negative_             = (code < 0);
-        int32_t value_to_display = code;
+        is_negative_               = (code < 0);
+        BlinkCode value_to_display = code;
         if (is_negative_)
         {
             value_to_display = -code;
         }
         max_digits_ = maxDigitsForBase(base);
 
-        current_digit_ = max_digits_ - 1;
+        current_digit_index_ = max_digits_ - 1;
 
-        for (int8_t i = max_digits_ - 1; i >= 0; --i)
+        for (Index i = max_digits_ - 1; i >= 0; --i)
         {
-            digits_[i]       = static_cast<uint8_t>(value_to_display % static_cast<uint8_t>(base));
-            blink_counts_[i] = static_cast<int8_t>(digits_[i]);
+            digits_[i]       = to_digit(value_to_display % to_value(base));
+            blink_counts_[i] = to_count(digits_[i]);
             if (digits_[i] > 0)
             {
-                current_digit_ = static_cast<uint8_t>(i);
+                current_digit_index_ = to_index(i);
             }
-            value_to_display /= static_cast<uint8_t>(base);
+            value_to_display /= to_value(base);
         }
 
         if (num_digits > 0 && num_digits < max_digits_)
         {
-            current_digit_ = max_digits_ - num_digits;
+            current_digit_index_ = max_digits_ - num_digits;
         }
 
-        least_significant_digit_ = current_digit_;
+        least_significant_digit_ = current_digit_index_;
         repeats_total_           = repeats;
         repeats_remaining_       = repeats;
 
@@ -86,10 +88,10 @@ namespace pisco_code
                 break;
             }
         }
-        controller_->update(pwm_counter_);
-        if (++pwm_counter_ > PWM_MAX)
+        controller_->update(loop_counter_);
+        if (++loop_counter_ > PWM_MAX)
         {
-            pwm_counter_ = 0;
+            loop_counter_ = 0;
         }
     }
 
@@ -131,17 +133,17 @@ namespace pisco_code
     bool CodeBlinker::phaseElapsed(uint8_t loop_counter) const
     {
         return static_cast<uint8_t>(loop_counter - start_time_) > phase_duration_ &&
-               pwm_counter_ == peak_level_;
+               loop_counter_ == peak_level_;
     }
 
     bool CodeBlinker::hasMoreBlinks() const
     {
-        return blink_counts_[current_digit_] > 0;
+        return blink_counts_[current_digit_index_] > 0;
     }
 
     bool CodeBlinker::hasMoreDigits() const
     {
-        return current_digit_ < max_digits_;
+        return current_digit_index_ < max_digits_;
     }
 
     bool CodeBlinker::shouldRepeat() const
@@ -192,14 +194,14 @@ namespace pisco_code
         {
             // NOTE: Need to improve this logic to avoid miss interpretation
             // shouldRepeat() is checking and decreasing the counter BAD Design
-            if (current_digit_ >= max_digits_ && shouldRepeat())
+            if (current_digit_index_ >= max_digits_ && shouldRepeat())
             {
                 transitionTo(Phase::EndOfDigitCycle, to_loop_count(END_DIMMED_PHASE_MS),
                              loop_counter);
             }
             else
             {
-                if (blink_counts_[current_digit_] == 0)
+                if (blink_counts_[current_digit_index_] == 0)
                 {
                     transitionTo(Phase::DisplayZero, to_loop_count(ZERO_DIGIT_BLINK_MS),
                                  loop_counter);
@@ -237,7 +239,7 @@ namespace pisco_code
 
         if (phaseElapsed(loop_counter))
         {
-            --blink_counts_[current_digit_];
+            --blink_counts_[current_digit_index_];
             transitionTo(Phase::PauseBetweenBlinks,
                          hasMoreBlinks() ? to_loop_count(BETWEEN_BLINK_MS)
                                          : to_loop_count(BETWEEN_DIGITS_MS),
@@ -258,7 +260,7 @@ namespace pisco_code
             {
                 if (hasMoreDigits())
                 {
-                    ++current_digit_;
+                    ++current_digit_index_;
                 }
                 transitionTo(Phase::LoadNextDigit, 0, loop_counter);
             }
@@ -298,7 +300,7 @@ namespace pisco_code
                 {
                     blink_counts_[i] = digits_[i];
                 }
-                current_digit_ = least_significant_digit_;
+                current_digit_index_ = least_significant_digit_;
                 transitionTo(Phase::PrepareRepeat, to_loop_count(BETWEEN_CODES_MS), loop_counter);
             }
         }

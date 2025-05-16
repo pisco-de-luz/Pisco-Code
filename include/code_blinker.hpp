@@ -84,7 +84,7 @@ namespace pisco_code
 
         LedController* controller_ = nullptr;
 
-        NumDigits current_digit_                     = 0;
+        Index     current_digit_index_               = 0;
         NumDigits least_significant_digit_           = 0;
         Counter   blink_counts_[MAX_DIGITS_ABSOLUTE] = {};
         NumDigits digits_[MAX_DIGITS_ABSOLUTE]       = {};
