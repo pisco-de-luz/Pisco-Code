@@ -18,13 +18,13 @@ bool turnLedOnOff(LedCodeType ctrlLED)
 {
     switch (ctrlLED)
     {
-        case static_cast<LedCodeType>(LedControlCode::On):
+        case to_value(LedControlCode::On):
             LED_PORT &= ~(1 << LED_PIN);
             return true;
-        case static_cast<LedCodeType>(LedControlCode::Off):
+        case to_value(LedControlCode::Off):
             LED_PORT |= (1 << LED_PIN);
             return true;
-        case static_cast<LedCodeType>(LedControlCode::FuncOk):
+        case to_value(LedControlCode::FuncOk):
             return true;
         default:
             return false;
