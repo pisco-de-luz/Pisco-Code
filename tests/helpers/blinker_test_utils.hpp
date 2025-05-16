@@ -6,7 +6,7 @@
 
 #include "../helpers/tests_constants.hpp"
 #include "../helpers/tests_types.hpp"
-#include "../mocks/MockLedControlLogger.hpp"
+#include "../mocks/mock_led_control_logger.hpp"
 #include "code_blinker.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"

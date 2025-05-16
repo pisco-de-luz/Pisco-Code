@@ -3,9 +3,8 @@
 
 #include <iostream>
 
-#include "MockLedControlLogger.hpp"
-
 #include "led_controller.hpp"
+#include "mock_led_control_logger.hpp"
 #include "pisco_constants.hpp"
 
 using namespace pisco_code;

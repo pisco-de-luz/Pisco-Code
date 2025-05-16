@@ -1,4 +1,4 @@
-#include "MockLedControlLogger.hpp"
+#include "mock_led_control_logger.hpp"
 
 #include <algorithm>
 #include <cstdint>

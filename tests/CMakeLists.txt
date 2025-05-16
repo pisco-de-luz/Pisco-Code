@@ -1,7 +1,7 @@
 # tests/CMakeLists.txt — Build and run CppUTest-based unit tests
 file(GLOB TEST_SOURCES "*.cpp")
 set(MOCK_SOURCES
-    mocks/MockLedControlLogger.cpp
+    mocks/mock_led_control_logger.cpp
     mocks/mock_led_controller_adapter.hpp 
 )
 set(HELPER_SOURCES
