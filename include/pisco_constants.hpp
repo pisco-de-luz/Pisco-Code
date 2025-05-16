@@ -22,9 +22,14 @@ namespace pisco_code
         HEX = 16
     };
 
-    constexpr DigitValue to_value(NumberBase base)
+    constexpr DigitValue to_value(NumberBase base) noexcept
     {
         return static_cast<DigitValue>(base);
+    }
+
+    constexpr LedCodeType to_value(LedControlCode led_control_code) noexcept
+    {
+        return static_cast<LedCodeType>(led_control_code);
     }
 
     // Lookup table indexed by base value (2 to 16), all other entries are zero
