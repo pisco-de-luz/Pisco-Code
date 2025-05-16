@@ -29,13 +29,13 @@ namespace pisco_code
 
         current_digit_index_ = max_digits_ - 1;
 
-        for (Index i = max_digits_ - 1; i >= 0; --i)
+        for (Index digit = max_digits_ - 1; digit >= 0; --digit)
         {
-            digits_[i]       = to_digit(value_to_display % to_value(base));
-            blink_counts_[i] = to_count(digits_[i]);
-            if (digits_[i] > 0)
+            digits_[digit]       = to_digit(value_to_display % to_value(base));
+            blink_counts_[digit] = to_count(digits_[digit]);
+            if (digits_[digit] > 0)
             {
-                current_digit_index_ = to_index(i);
+                current_digit_index_ = to_index(digit);
             }
             value_to_display /= to_value(base);
         }
