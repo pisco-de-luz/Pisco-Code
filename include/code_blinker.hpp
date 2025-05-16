@@ -2,8 +2,6 @@
 #ifndef PISCO_CODE_BLINKER_HPP
 #define PISCO_CODE_BLINKER_HPP
 
-#include <stdint.h>
-
 #include "led_controller.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
