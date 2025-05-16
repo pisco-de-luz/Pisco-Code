@@ -1,7 +1,4 @@
-#ifndef PISCO_CONSTANTS_HPP
-#define PISCO_CONSTANTS_HPP
-
-#include <stdint.h>
+#pragma once
 
 #include "pisco_types.hpp"
 
@@ -61,32 +58,30 @@ namespace pisco_code
                   "Missing HEXADECIMAL max digits");
 
     // Maximum number of digits limited to 9 for 32-bit integer representation
-    constexpr uint8_t MAX_DIGITS_ABSOLUTE = 31; // for int32_t in binary base
+    constexpr NumDigits MAX_DIGITS_ABSOLUTE = 31; // for int32_t in binary base
 
-    constexpr uint8_t  DEFAULT_DIMMED_LEVEL = 3;
-    constexpr uint8_t  PWM_MAX              = 15;
+    constexpr LedLevel DEFAULT_DIMMED_LEVEL = 3;
+    constexpr LedLevel PWM_MAX              = 15;
     constexpr LedLevel MIN_PULSE_DIMMED_GAP = 2;
-    constexpr uint8_t  DEFAULT_PULSE_LEVEL  = PWM_MAX;
+    constexpr LedLevel DEFAULT_PULSE_LEVEL  = PWM_MAX;
 
     // Loop timing constants
-    constexpr uint32_t LOOP_INTERVAL_MS       = 64;
-    constexpr uint32_t INIT_PHASE_MS          = 2000;
-    constexpr uint32_t INIT_DIMMED_PHASE_MS   = 1300;
-    constexpr uint32_t END_DIMMED_PHASE_MS    = 300;
-    constexpr uint32_t NEGATIVE_BLINK_LONG_MS = 1100;
-    constexpr uint32_t SHORT_BLINK_MS         = 350;
-    constexpr uint32_t ZERO_DIGIT_BLINK_MS    = 440;
-    constexpr uint32_t BETWEEN_BLINK_MS       = 350;
-    constexpr uint32_t BETWEEN_DIGITS_MS      = 1200;
-    constexpr uint32_t BETWEEN_CODES_MS       = 1500;
-    constexpr uint32_t END_PHASE_MS           = 2000;
+    constexpr Timestamp LOOP_INTERVAL_MS       = 64;
+    constexpr Timestamp INIT_PHASE_MS          = 2000;
+    constexpr Timestamp INIT_DIMMED_PHASE_MS   = 1300;
+    constexpr Timestamp END_DIMMED_PHASE_MS    = 300;
+    constexpr Timestamp NEGATIVE_BLINK_LONG_MS = 1100;
+    constexpr Timestamp SHORT_BLINK_MS         = 350;
+    constexpr Timestamp ZERO_DIGIT_BLINK_MS    = 440;
+    constexpr Timestamp BETWEEN_BLINK_MS       = 350;
+    constexpr Timestamp BETWEEN_DIGITS_MS      = 1200;
+    constexpr Timestamp BETWEEN_CODES_MS       = 1500;
+    constexpr Timestamp END_PHASE_MS           = 2000;
 
     // Conversion from ms to loop ticks
-    constexpr uint8_t to_loop_count(uint32_t ms)
+    constexpr Counter to_loop_count(Timestamp ms)
     {
-        return static_cast<uint8_t>(ms / LOOP_INTERVAL_MS);
+        return static_cast<Counter>(ms / LOOP_INTERVAL_MS);
     }
 
 } // namespace pisco_code
-
-#endif // PISCO_CONSTANTS_HPP
