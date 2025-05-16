@@ -175,7 +175,7 @@ namespace pisco_code
         }
     }
 
-    void CodeBlinker::handleIdle(LoopCounter loop_counter)
+    void CodeBlinker::handleIdle(LoopCounter)
     {
         controller_->setBlinkMode(BlinkMode::None);
     }
