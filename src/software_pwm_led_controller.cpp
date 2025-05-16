@@ -40,7 +40,7 @@ namespace pisco_code
         dimmed_level_ = level;
     }
 
-    void SoftwarePwmLedController::update(uint8_t pwm_counter)
+    void SoftwarePwmLedController::update(uint8_t loop_counter)
     {
         if (led_control_ == nullptr)
         {
@@ -50,22 +50,22 @@ namespace pisco_code
         switch (mode_)
         {
             case BlinkMode::Pulse:
-                if (pwm_counter == 0)
+                if (loop_counter == 0)
                 {
                     led_control_(static_cast<LedCodeType>(LedControlCode::On));
                 }
-                else if (pwm_counter == peak_level_)
+                else if (loop_counter == peak_level_)
                 {
                     led_control_(static_cast<LedCodeType>(LedControlCode::Off));
                 }
                 break;
 
             case BlinkMode::Dimmed:
-                if (pwm_counter == 0)
+                if (loop_counter == 0)
                 {
                     led_control_(static_cast<LedCodeType>(LedControlCode::On));
                 }
-                else if (pwm_counter == dimmed_level_)
+                else if (loop_counter == dimmed_level_)
                 {
                     led_control_(static_cast<LedCodeType>(LedControlCode::Off));
                 }
@@ -73,7 +73,7 @@ namespace pisco_code
 
             case BlinkMode::None:
             default:
-                if (pwm_counter == 0)
+                if (loop_counter == 0)
                 {
                     // Ensure LED is OFF during idle periods
                     led_control_(static_cast<LedCodeType>(LedControlCode::Off));
