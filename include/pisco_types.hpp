@@ -23,5 +23,7 @@ namespace pisco_code
 
     using BaseType    = Byte; // Used as underlying type for enum class NumberBase
     using LedCodeType = Byte; // Used for LedControlCode
+    using Counter     = Counter8;
+    using Index       = Index8;
 
 } // namespace pisco_code
