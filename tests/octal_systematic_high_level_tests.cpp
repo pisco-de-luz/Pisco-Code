@@ -25,10 +25,10 @@ TEST_GROUP(OctalSystematicHighLevelTests)
 
 TEST(OctalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigits)
 {
-    runSameDigitsUpToMaxDigitsForBase(NumberBase::OCTAL, blinker, logger);
+    runSameDigitsUpToMaxDigitsForBase(NumberBase::OCT, blinker, logger);
 }
 
 TEST(OctalSystematicHighLevelTests, ShouldBlinkSequentialUpDigitsUpToMaxDigits)
 {
-    runSequentialUpDigitsUpToMaxDigitsForBase(NumberBase::OCTAL, blinker, logger);
+    runSequentialUpDigitsUpToMaxDigitsForBase(NumberBase::OCT, blinker, logger);
 }

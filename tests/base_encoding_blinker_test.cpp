@@ -20,7 +20,7 @@ TEST(BaseEncodingBlinkerTest, CanShowDecimal10)
 {
     const testutils::TestBlinkerCase test_case{
         .blink_code  = testutils::CODE_10,
-        .number_base = NumberBase::DECIMAL,
+        .number_base = NumberBase::DEC,
         .trace_check = testutils::TraceCheck::Enforced,
     };
 
@@ -31,7 +31,7 @@ TEST(BaseEncodingBlinkerTest, CanShowZero)
 {
     const testutils::TestBlinkerCase test_case{
         .blink_code  = testutils::CODE_0,
-        .number_base = NumberBase::DECIMAL,
+        .number_base = NumberBase::DEC,
         .trace_check = testutils::TraceCheck::Enforced,
     };
 
@@ -42,7 +42,7 @@ TEST(BaseEncodingBlinkerTest, CanShowDecimal12345)
 {
     const testutils::TestBlinkerCase test_case{
         .blink_code  = testutils::CODE_12345,
-        .number_base = NumberBase::DECIMAL,
+        .number_base = NumberBase::DEC,
         .trace_check = testutils::TraceCheck::Enforced,
     };
 
@@ -53,7 +53,7 @@ TEST(BaseEncodingBlinkerTest, CanShowBinary5)
 {
     const testutils::TestBlinkerCase test_case{
         .blink_code  = testutils::CODE_BIN_5,
-        .number_base = NumberBase::BINARY,
+        .number_base = NumberBase::BIN,
         .trace_check = testutils::TraceCheck::Enforced,
     };
 
@@ -64,7 +64,7 @@ TEST(BaseEncodingBlinkerTest, CanShowBinaryNeg7)
 {
     const testutils::TestBlinkerCase test_case{
         .blink_code  = testutils::CODE_BIN_NEG_7,
-        .number_base = NumberBase::BINARY,
+        .number_base = NumberBase::BIN,
         .trace_check = testutils::TraceCheck::Enforced,
     };
 
@@ -75,7 +75,7 @@ TEST(BaseEncodingBlinkerTest, CanShowHex255)
 {
     const testutils::TestBlinkerCase test_case{
         .blink_code  = testutils::CODE_HEX_255,
-        .number_base = NumberBase::HEXADECIMAL,
+        .number_base = NumberBase::HEX,
         .trace_check = testutils::TraceCheck::Enforced,
     };
 
@@ -86,7 +86,7 @@ TEST(BaseEncodingBlinkerTest, CanShowOctal28)
 {
     const testutils::TestBlinkerCase test_case{
         .blink_code  = testutils::CODE_OCT_28,
-        .number_base = NumberBase::OCTAL,
+        .number_base = NumberBase::OCT,
         .trace_check = testutils::TraceCheck::Enforced,
     };
 

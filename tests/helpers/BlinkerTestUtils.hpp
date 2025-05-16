@@ -142,7 +142,7 @@ namespace testutils
         BlinkCode         code_to_show = testCase.blink_code.value_or(DEFAULT_CODE);
         const NumDigits   num_digits   = testCase.numDigits.value_or(0);
         const RepeatTimes repeats      = testCase.repeats.value_or(1);
-        const NumberBase  base         = testCase.number_base.value_or(NumberBase::DECIMAL);
+        const NumberBase  base         = testCase.number_base.value_or(NumberBase::DEC);
 
         // if (testCase.code_pair.has_value())
         // {

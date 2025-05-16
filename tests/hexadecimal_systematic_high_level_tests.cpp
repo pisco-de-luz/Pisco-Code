@@ -26,10 +26,10 @@ TEST_GROUP(HexadecimalSystematicHighLevelTests)
 // - Example: 9, 88, 777, ..., 111111111
 TEST(HexadecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigits)
 {
-    runSameDigitsUpToMaxDigitsForBase(NumberBase::HEXADECIMAL, blinker, logger);
+    runSameDigitsUpToMaxDigitsForBase(NumberBase::HEX, blinker, logger);
 }
 
 TEST(HexadecimalSystematicHighLevelTests, ShouldBlinkSequentialUpDigitsUpToMaxDigits)
 {
-    runSequentialUpDigitsUpToMaxDigitsForBase(NumberBase::HEXADECIMAL, blinker, logger);
+    runSequentialUpDigitsUpToMaxDigitsForBase(NumberBase::HEX, blinker, logger);
 }

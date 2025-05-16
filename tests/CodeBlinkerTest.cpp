@@ -58,14 +58,14 @@ TEST(CodeBlinkerGroup, InitiallyPaused)
 
 TEST(CodeBlinkerGroup, ShowCodeStartsSequence)
 {
-    bool result = blinker->showCode(42, NumberBase::DECIMAL, 2, 1);
+    bool result = blinker->showCode(42, NumberBase::DEC, 2, 1);
     CHECK_TRUE(result);
     CHECK_TRUE(blinker->isRunning());
 }
 
 TEST(CodeBlinkerGroup, LoopTriggersDimmedStart)
 {
-    blinker->showCode(5, NumberBase::DECIMAL, 1, 1);
+    blinker->showCode(5, NumberBase::DEC, 1, 1);
     blinker->loop(1); // simulate loop trigger
     CHECK_EQUAL(1, controller.dimmed_calls);
     CHECK_EQUAL(DEFAULT_DIMMED_LEVEL, controller.last_dimmed);

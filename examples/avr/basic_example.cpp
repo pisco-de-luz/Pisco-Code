@@ -57,7 +57,7 @@ int main()
 
     Timestamp fakeMillis = 0; // 1 hour, 1 minute, 0 seconds
 
-    led1.showCode(-102, NumberBase::DECIMAL, 0, 3);
+    led1.showCode(-102, NumberBase::DEC, 0, 3);
     while (led1.isRunning())
     {
         led1.loop(fakeMillis++ >> 6);
@@ -72,7 +72,7 @@ int main()
         {
             BlinkCode bcdTime = millisToBCDTime(fakeMillis);
             led1.setDimmedLevel(7);
-            led1.showCode(bcdTime, NumberBase::DECIMAL, 3, 1);
+            led1.showCode(bcdTime, NumberBase::DEC, 3, 1);
         }
 
         Counter loopCounter = static_cast<Counter>(fakeMillis >> 6);

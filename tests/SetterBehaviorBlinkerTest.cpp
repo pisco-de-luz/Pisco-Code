@@ -161,7 +161,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldTruncateToNumDigits)
 
 TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighNumDigits)
 {
-    const NumDigits                  max_digits = maxDigitsForBase(NumberBase::DECIMAL);
+    const NumDigits                  max_digits = maxDigitsForBase(NumberBase::DEC);
     const testutils::TestBlinkerCase test_case{
         .trace_check = testutils::TraceCheck::Enforced,
         .numDigits   = max_digits + 1,

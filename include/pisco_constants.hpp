@@ -13,18 +13,13 @@ namespace pisco_code
         FuncFail = 101 // optional, used in Mock logger
     };
 
-    // LED control codes
-    constexpr LedControlCode LED_ON      = LedControlCode::On;
-    constexpr LedControlCode LED_OFF     = LedControlCode::Off;
-    constexpr LedControlCode LED_FUNC_OK = LedControlCode::FuncOk;
-
     // Encoding bases
     enum class NumberBase : BaseType
     {
-        BINARY      = 2,
-        OCTAL       = 8,
-        DECIMAL     = 10,
-        HEXADECIMAL = 16
+        BIN = 2,
+        OCT = 8,
+        DEC = 10,
+        HEX = 16
     };
 
     constexpr DigitValue to_value(NumberBase base)
@@ -33,16 +28,16 @@ namespace pisco_code
     }
 
     // Lookup table indexed by base value (2 to 16), all other entries are zero
-    constexpr NumDigits MAX_DIGITS_LUT[to_value(NumberBase::HEXADECIMAL) + 1] = {
+    constexpr NumDigits MAX_DIGITS_LUT[to_value(NumberBase::HEX) + 1] = {
         0,  // 0
         0,  // 1
-        24, // 2 = BINARY
+        24, // 2 = BIN
         0,  0, 0, 0, 0,
-        9, // 8 = OCTAL
+        9, // 8 = OCT
         0, // 9
-        9, // 10 = DECIMAL
+        9, // 10 = DEC
         0,  0, 0, 0, 0,
-        7 // 16 = HEXADECIMAL
+        7 // 16 = HEX
     };
 
     constexpr NumDigits maxDigitsForBase(NumberBase base)
@@ -51,11 +46,10 @@ namespace pisco_code
     }
 
     // Compile-time checks to catch omissions
-    static_assert(MAX_DIGITS_LUT[to_value(NumberBase::BINARY)] > 0, "Missing BINARY max digits");
-    static_assert(MAX_DIGITS_LUT[to_value(NumberBase::OCTAL)] > 0, "Missing OCTAL max digits");
-    static_assert(MAX_DIGITS_LUT[to_value(NumberBase::DECIMAL)] > 0, "Missing DECIMAL max digits");
-    static_assert(MAX_DIGITS_LUT[to_value(NumberBase::HEXADECIMAL)] > 0,
-                  "Missing HEXADECIMAL max digits");
+    static_assert(MAX_DIGITS_LUT[to_value(NumberBase::BIN)] > 0, "Missing BIN max digits");
+    static_assert(MAX_DIGITS_LUT[to_value(NumberBase::OCT)] > 0, "Missing OCT max digits");
+    static_assert(MAX_DIGITS_LUT[to_value(NumberBase::DEC)] > 0, "Missing DEC max digits");
+    static_assert(MAX_DIGITS_LUT[to_value(NumberBase::HEX)] > 0, "Missing HEX max digits");
 
     // Maximum number of digits limited to 9 for 32-bit integer representation
     constexpr NumDigits MAX_DIGITS_ABSOLUTE = 31; // for int32_t in binary base

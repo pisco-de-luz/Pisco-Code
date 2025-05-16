@@ -84,7 +84,7 @@ namespace testutils
     struct GeneratePatternParams
     {
         PatternOption pattern{PatternOption::SequencialUp};
-        NumberBase    number_base{NumberBase::DECIMAL};
+        NumberBase    number_base{NumberBase::DEC};
         NumDigits     num_digits{};
         DigitValue    digit{0};
     };

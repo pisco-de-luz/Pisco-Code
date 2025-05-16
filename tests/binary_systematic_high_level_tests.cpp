@@ -25,10 +25,10 @@ TEST_GROUP(BinarySystematicHighLevelTests)
 
 TEST(BinarySystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigits)
 {
-    runSameDigitsUpToMaxDigitsForBase(NumberBase::BINARY, blinker, logger);
+    runSameDigitsUpToMaxDigitsForBase(NumberBase::BIN, blinker, logger);
 }
 
 TEST(BinarySystematicHighLevelTests, ShouldBlinkSequentialUpDigitsUpToMaxDigits)
 {
-    runSequentialUpDigitsUpToMaxDigitsForBase(NumberBase::BINARY, blinker, logger);
+    runSequentialUpDigitsUpToMaxDigitsForBase(NumberBase::BIN, blinker, logger);
 }
