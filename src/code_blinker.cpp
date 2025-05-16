@@ -95,9 +95,9 @@ namespace pisco_code
         }
     }
 
-    void CodeBlinker::setPeakLevel(uint8_t level)
+    void CodeBlinker::setPeakLevel(LedLevel led_level)
     {
-        peak_level_ = (level > PWM_MAX) ? PWM_MAX : level;
+        peak_level_ = (led_level > PWM_MAX) ? PWM_MAX : led_level;
         if (peak_level_ < MIN_PULSE_DIMMED_GAP)
         {
             peak_level_ = MIN_PULSE_DIMMED_GAP;
@@ -108,10 +108,11 @@ namespace pisco_code
         }
     }
 
-    void CodeBlinker::setDimmedLevel(uint8_t level)
+    void CodeBlinker::setDimmedLevel(LedLevel led_level)
     {
-        dimmed_level_ =
-            (level > (PWM_MAX - MIN_PULSE_DIMMED_GAP)) ? (PWM_MAX - MIN_PULSE_DIMMED_GAP) : level;
+        dimmed_level_ = (led_level > (PWM_MAX - MIN_PULSE_DIMMED_GAP))
+                            ? (PWM_MAX - MIN_PULSE_DIMMED_GAP)
+                            : led_level;
         if (dimmed_level_ >= peak_level_)
         {
             dimmed_level_ = peak_level_ - MIN_PULSE_DIMMED_GAP;
