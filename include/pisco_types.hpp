@@ -5,20 +5,26 @@
 namespace pisco_code
 {
 
-    using Timestamp     = uint32_t;
-    using DurationMs    = uint32_t;
-    using LedLevel      = uint8_t;
-    using RepeatTimes   = uint8_t;
-    using NumDigits     = uint8_t;
-    using DigitValue    = uint8_t;
-    using LoopCounter   = uint8_t;
-    using PhaseDuration = uint8_t;
-    using BlinkCode     = int32_t;
-    using Index8        = int8_t;
-    using Index16       = int16_t;
-    using Counter8      = int8_t;
-    using Counter16     = int16_t;
-    using Byte          = uint8_t;
+    using UInt32        = uint32_t; // 32-bit unsigned integer
+    using Int32         = int32_t;  // 32-bit signed integer
+    using UInt16        = uint16_t; // 16-bit unsigned integer
+    using Int16         = int16_t;  // 16-bit signed integer
+    using UInt8         = uint8_t;  // 8-bit unsigned integer
+    using Int8          = int8_t;   // 8-bit signed integer
+    using Timestamp     = UInt32;
+    using DurationMs    = UInt32;
+    using LedLevel      = UInt8;
+    using RepeatTimes   = UInt8;
+    using NumDigits     = UInt8;
+    using DigitValue    = UInt8;
+    using LoopCounter   = UInt8;
+    using PhaseDuration = UInt8;
+    using BlinkCode     = Int32;
+    using Index8        = Int8;
+    using Index16       = Int16;
+    using Counter8      = Int8;
+    using Counter16     = Int16;
+    using Byte          = UInt8;
 
     using BaseType      = Byte; // Used as underlying type for enum class NumberBase
     using LedCodeType   = Byte; // Used for LedControlCode
