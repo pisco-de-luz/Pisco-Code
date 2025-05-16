@@ -1,15 +1,14 @@
 #pragma once
 
-#include "../helpers/led_blink_pattern.hpp"
-// #include "../helpers/tests_constants.hpp"
 #include <array>
 #include <cstdint>
 #include <string>
 #include <vector>
 
-#include "../helpers/tests_types.hpp"
 #include "code_blinker.hpp"
+#include "led_blink_pattern.hpp"
 #include "pisco_constants.hpp"
+#include "tests_types.hpp"
 
 using namespace pisco_code;
 

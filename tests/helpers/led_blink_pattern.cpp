@@ -8,9 +8,9 @@
 #include <string>
 #include <vector>
 
-#include "../helpers/tests_constants.hpp"
-#include "../helpers/tests_types.hpp"
 #include "pisco_types.hpp"
+#include "tests_constants.hpp"
+#include "tests_types.hpp"
 
 using namespace pisco_code;
 

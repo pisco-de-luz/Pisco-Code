@@ -4,17 +4,16 @@
 #include <optional>
 #include <string>
 
-#include "../helpers/tests_constants.hpp"
-#include "../helpers/tests_types.hpp"
-#include "../mocks/mock_led_control_logger.hpp"
 #include "code_blinker.hpp"
+#include "mock_led_control_logger.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
+#include "tests_constants.hpp"
+#include "tests_types.hpp"
 
 using pisco_code::BlinkCode;
 using pisco_code::CodeBlinker;
 using pisco_code::DigitValue;
-using pisco_code::LedLevel;
 using pisco_code::NumberBase;
 using pisco_code::NumDigits;
 using pisco_code::RepeatTimes;
@@ -144,12 +143,7 @@ namespace testutils
         const RepeatTimes repeats      = testCase.repeats.value_or(1);
         const NumberBase  base         = testCase.number_base.value_or(NumberBase::DEC);
 
-        // if (testCase.code_pair.has_value())
-        // {
-        //     code_to_show = testCase.code_pair.value();
-        // }
-        TraceCode expected_trace =
-            testutils::generateExpectedTrace(code_to_show, base, num_digits, repeats);
+        TraceCode expected_trace = generateExpectedTrace(code_to_show, base, num_digits, repeats);
 
         blinker.showCode(code_to_show, base, num_digits, repeats);
         logger.setBlinker(&blinker);
