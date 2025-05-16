@@ -14,7 +14,7 @@
 #include "tests_types.hpp"
 
 using namespace pisco_code;
-using testutils::runSequencer;
+using namespace testutils;
 
 TEST_GROUP(DecimalSystematicHighLevelTests)
 {
@@ -44,19 +44,19 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialDownDigitsUpToMaxDigi
     for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
         logger.clear();
-        const testutils::GeneratePatternParams params{
-            .pattern     = testutils::PatternOption::SequencialDown,
+        const GeneratePatternParams params{
+            .pattern     = PatternOption::SequencialDown,
             .number_base = number_base,
             .num_digits  = num_digits,
         };
-        const BlinkCode                  code_to_show = testutils::generatePatternOfDigits(params);
-        const testutils::TestBlinkerCase test_case{
+        const BlinkCode       code_to_show = generatePatternOfDigits(params);
+        const TestBlinkerCase test_case{
             .blink_code  = code_to_show,
             .number_base = number_base,
-            .trace_check = testutils::TraceCheck::Enforced,
+            .trace_check = TraceCheck::Enforced,
         };
 
-        testutils::checkBlinkerBehavior(blinker, logger, test_case);
+        checkBlinkerBehavior(blinker, logger, test_case);
     }
 }
 
@@ -68,20 +68,20 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialDigitsUpToMaxDigitsPa
     for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
         logger.clear();
-        const testutils::GeneratePatternParams params{
-            .pattern     = testutils::PatternOption::SequencialUp,
+        const GeneratePatternParams params{
+            .pattern     = PatternOption::SequencialUp,
             .number_base = number_base,
             .num_digits  = num_digits,
         };
-        const BlinkCode                  code_to_show = testutils::generatePatternOfDigits(params);
-        const testutils::TestBlinkerCase test_case{
+        const BlinkCode       code_to_show = generatePatternOfDigits(params);
+        const TestBlinkerCase test_case{
             .blink_code  = code_to_show,
             .number_base = number_base,
-            .trace_check = testutils::TraceCheck::Enforced,
+            .trace_check = TraceCheck::Enforced,
             .numDigits   = max_digits,
         };
 
-        testutils::checkBlinkerBehavior(blinker, logger, test_case);
+        checkBlinkerBehavior(blinker, logger, test_case);
     }
 }
 
@@ -95,22 +95,22 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedTo
         logger.clear();
         const DigitValue digit_to_show =
             ((max_digits - num_digits) % (to_value(number_base) - 1)) + 1;
-        const testutils::GeneratePatternParams params{
-            .pattern     = testutils::PatternOption::SameDigit,
+        const GeneratePatternParams params{
+            .pattern     = PatternOption::SameDigit,
             .number_base = number_base,
             .num_digits  = num_digits,
             .digit       = digit_to_show,
         };
-        const BlinkCode code_to_show = testutils::generatePatternOfDigits(params);
+        const BlinkCode code_to_show = generatePatternOfDigits(params);
 
-        const testutils::TestBlinkerCase test_case{
+        const TestBlinkerCase test_case{
             .blink_code  = code_to_show,
             .number_base = number_base,
-            .trace_check = testutils::TraceCheck::Enforced,
+            .trace_check = TraceCheck::Enforced,
             .numDigits   = max_digits,
         };
 
-        testutils::checkBlinkerBehavior(blinker, logger, test_case);
+        checkBlinkerBehavior(blinker, logger, test_case);
     }
 }
 
@@ -122,20 +122,20 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialDigitsUpToMaxDigitsPa
     for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
         logger.clear();
-        const testutils::GeneratePatternParams params{
-            .pattern     = testutils::PatternOption::SequencialUp,
+        const GeneratePatternParams params{
+            .pattern     = PatternOption::SequencialUp,
             .number_base = number_base,
             .num_digits  = num_digits,
         };
-        const BlinkCode                  code_to_show = testutils::generatePatternOfDigits(params);
-        const testutils::TestBlinkerCase test_case{
+        const BlinkCode       code_to_show = generatePatternOfDigits(params);
+        const TestBlinkerCase test_case{
             .blink_code  = code_to_show,
             .number_base = number_base,
-            .trace_check = testutils::TraceCheck::Enforced,
+            .trace_check = TraceCheck::Enforced,
             .numDigits   = max_digits / 2,
         };
 
-        testutils::checkBlinkerBehavior(blinker, logger, test_case);
+        checkBlinkerBehavior(blinker, logger, test_case);
     }
 }
 
@@ -149,22 +149,22 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedTo
         logger.clear();
         const DigitValue digit_to_show =
             ((max_digits - num_digits) % (to_value(number_base) - 1)) + 1;
-        const testutils::GeneratePatternParams params{
-            .pattern     = testutils::PatternOption::SameDigit,
+        const GeneratePatternParams params{
+            .pattern     = PatternOption::SameDigit,
             .number_base = number_base,
             .num_digits  = num_digits,
             .digit       = digit_to_show,
         };
-        const BlinkCode code_to_show = testutils::generatePatternOfDigits(params);
+        const BlinkCode code_to_show = generatePatternOfDigits(params);
 
-        const testutils::TestBlinkerCase test_case{
+        const TestBlinkerCase test_case{
             .blink_code  = code_to_show,
             .number_base = number_base,
-            .trace_check = testutils::TraceCheck::Enforced,
+            .trace_check = TraceCheck::Enforced,
             .numDigits   = max_digits / 2,
         };
 
-        testutils::checkBlinkerBehavior(blinker, logger, test_case);
+        checkBlinkerBehavior(blinker, logger, test_case);
     }
 }
 
@@ -176,21 +176,21 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkFullPatternOfMaxBaseDigitUpToMa
     for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
         logger.clear();
-        const testutils::GeneratePatternParams params{
-            .pattern     = testutils::PatternOption::SameDigit,
+        const GeneratePatternParams params{
+            .pattern     = PatternOption::SameDigit,
             .number_base = number_base,
             .num_digits  = num_digits,
             .digit       = (to_value(number_base) - 1),
         };
-        const BlinkCode code_to_show = testutils::generatePatternOfDigits(params);
+        const BlinkCode code_to_show = generatePatternOfDigits(params);
 
-        const testutils::TestBlinkerCase test_case{
+        const TestBlinkerCase test_case{
             .blink_code  = code_to_show,
             .number_base = number_base,
-            .trace_check = testutils::TraceCheck::Enforced,
+            .trace_check = TraceCheck::Enforced,
         };
 
-        testutils::checkBlinkerBehavior(blinker, logger, test_case);
+        checkBlinkerBehavior(blinker, logger, test_case);
     }
 }
 
@@ -202,21 +202,21 @@ TEST(DecimalSystematicHighLevelTests, ShouldRepeatBlinkOfMaxBaseDigitUpToMaxDigi
     for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
         logger.clear();
-        const testutils::GeneratePatternParams params{
-            .pattern     = testutils::PatternOption::SameDigit,
+        const GeneratePatternParams params{
+            .pattern     = PatternOption::SameDigit,
             .number_base = number_base,
             .num_digits  = num_digits,
             .digit       = (to_value(number_base) - 1),
         };
-        const BlinkCode code_to_show = testutils::generatePatternOfDigits(params);
+        const BlinkCode code_to_show = generatePatternOfDigits(params);
 
-        const testutils::TestBlinkerCase test_case{
+        const TestBlinkerCase test_case{
             .blink_code  = code_to_show,
             .number_base = number_base,
-            .trace_check = testutils::TraceCheck::Enforced,
+            .trace_check = TraceCheck::Enforced,
             .repeats     = 9,
         };
 
-        testutils::checkBlinkerBehavior(blinker, logger, test_case);
+        checkBlinkerBehavior(blinker, logger, test_case);
     }
 }
