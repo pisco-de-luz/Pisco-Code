@@ -9,6 +9,7 @@
 #include "tests_types.hpp"
 
 using namespace pisco_code;
+using namespace testutils;
 
 TEST_GROUP(LoopBehaviorBlinkerTest)
 {
@@ -19,49 +20,46 @@ TEST_GROUP(LoopBehaviorBlinkerTest)
 
 TEST(LoopBehaviorBlinkerTest, ShouldHoldDimLightForDigitZero)
 {
-    blinker.setDimmedLevel(testutils::MID_DIMMED_LEVEL);
-    const testutils::TestBlinkerCase test_case{.blink_code     = testutils::CODE_0,
-                                               .trace_check    = testutils::TraceCheck::NotEnforced,
-                                               .expectedDimmed = testutils::MID_DIMMED_LEVEL};
+    blinker.setDimmedLevel(MID_DIMMED_LEVEL);
+    const TestBlinkerCase test_case{.blink_code     = CODE_0,
+                                    .trace_check    = TraceCheck::NotEnforced,
+                                    .expectedDimmed = MID_DIMMED_LEVEL};
 
-    testutils::checkBlinkerBehavior(blinker, logger, test_case);
+    checkBlinkerBehavior(blinker, logger, test_case);
 }
 
 TEST(LoopBehaviorBlinkerTest, ShouldBlinkDigits_1_2_0)
 {
-    const testutils::TestBlinkerCase test_case{.blink_code  = testutils::CODE_120,
-                                               .trace_check = testutils::TraceCheck::Enforced};
+    const TestBlinkerCase test_case{.blink_code = CODE_120, .trace_check = TraceCheck::Enforced};
 
-    testutils::checkBlinkerBehavior(blinker, logger, test_case);
+    checkBlinkerBehavior(blinker, logger, test_case);
 }
 
 TEST(LoopBehaviorBlinkerTest, ShouldBlinkNegativeSingleDigit)
 {
-    const testutils::TestBlinkerCase test_case{.blink_code  = testutils::CODE_NEG_7,
-                                               .trace_check = testutils::TraceCheck::Enforced};
+    const TestBlinkerCase test_case{.blink_code = CODE_NEG_7, .trace_check = TraceCheck::Enforced};
 
-    testutils::checkBlinkerBehavior(blinker, logger, test_case);
+    checkBlinkerBehavior(blinker, logger, test_case);
 }
 
 TEST(LoopBehaviorBlinkerTest, ShouldRepeatBlinkingSequenceTwice)
 {
-    const testutils::TestBlinkerCase test_case{.trace_check = testutils::TraceCheck::Enforced,
-                                               .repeats     = 2};
+    const TestBlinkerCase test_case{.trace_check = TraceCheck::Enforced, .repeats = 2};
 
-    testutils::checkBlinkerBehavior(blinker, logger, test_case);
+    checkBlinkerBehavior(blinker, logger, test_case);
 }
 
 TEST(LoopBehaviorBlinkerTest, ShouldEndInFinalDimmedPause)
 {
-    const testutils::TestBlinkerCase test_case{.trace_check = testutils::TraceCheck::NotEnforced};
+    const TestBlinkerCase test_case{.trace_check = TraceCheck::NotEnforced};
 
-    testutils::checkBlinkerBehavior(blinker, logger, test_case);
+    checkBlinkerBehavior(blinker, logger, test_case);
     auto trace_actual = logger.traceLogToString();
 
     // Find trailing LED off pattern (represented by a sequence of '-')
-    const auto trail_off_start = static_cast<testutils::TraceStrIndex>(
-        trace_actual.find_last_not_of(testutils::LED_DIMMED_CHARACTER) + 1);
-    if (trail_off_start == testutils::TraceCode::npos)
+    const auto trail_off_start =
+        static_cast<TraceStrIndex>(trace_actual.find_last_not_of(LED_DIMMED_CHARACTER) + 1);
+    if (trail_off_start == TraceCode::npos)
     {
         FAIL("No trailing off pattern found");
     }
@@ -69,21 +67,20 @@ TEST(LoopBehaviorBlinkerTest, ShouldEndInFinalDimmedPause)
 
 TEST(LoopBehaviorBlinkerTest, ShouldHandleMixOfZeroAndOne)
 {
-    const testutils::TestBlinkerCase test_case{.blink_code  = testutils::CODE_1010,
-                                               .trace_check = testutils::TraceCheck::Enforced};
+    const TestBlinkerCase test_case{.blink_code = CODE_1010, .trace_check = TraceCheck::Enforced};
 
-    testutils::checkBlinkerBehavior(blinker, logger, test_case);
+    checkBlinkerBehavior(blinker, logger, test_case);
 }
 
 TEST(LoopBehaviorBlinkerTest, ShouldNotTurnOnLedDuringIdlePhases)
 {
-    const testutils::TestBlinkerCase test_case{.trace_check = testutils::TraceCheck::NotEnforced};
+    const TestBlinkerCase test_case{.trace_check = TraceCheck::NotEnforced};
 
-    testutils::checkBlinkerBehavior(blinker, logger, test_case);
+    checkBlinkerBehavior(blinker, logger, test_case);
 
     for (const auto& e : logger.getEvents())
     {
-        if (e.state == testutils::LedEvent::On && !e.isLedBeingUsedNow)
+        if (e.state == LedEvent::On && !e.isLedBeingUsedNow)
         {
             FAIL("LED turned ON during an idle phase");
         }
