@@ -40,14 +40,6 @@ namespace pisco
         dimmed_level_ = level;
     }
 
-    void SoftwarePwmLedController::turnOff()
-    {
-        if (led_control_ != nullptr)
-        {
-            (void) led_control_(static_cast<pisco::LedCodeType>(LedControlCode::Off));
-        }
-    }
-
     void SoftwarePwmLedController::update(uint8_t pwm_counter)
     {
         if (led_control_ == nullptr)

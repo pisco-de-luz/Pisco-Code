@@ -18,7 +18,6 @@ namespace pisco
         void setPeakLevel(uint8_t level) override;
         void setDimmedLevel(uint8_t level) override;
         void setBlinkMode(BlinkMode mode) override;
-        void turnOff() override;
         void update(uint8_t pwm_counter) override;
 
       private:

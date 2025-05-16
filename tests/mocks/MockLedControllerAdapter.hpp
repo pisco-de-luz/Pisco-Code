@@ -19,14 +19,6 @@ class MockLedControllerAdapter : public pisco::LedController
 
     void setBlinkMode(pisco::BlinkMode mode) override { mode_ = mode; }
 
-    void turnOff() override
-    {
-        if (logger_ != nullptr)
-        {
-            logger_->handle(static_cast<pisco::LedCodeType>(pisco::LedControlCode::Off));
-        }
-    }
-
     void update(uint8_t pwm_counter) override
     {
         if (logger_ == nullptr)

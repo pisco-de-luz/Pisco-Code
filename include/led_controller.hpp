@@ -19,7 +19,6 @@ namespace pisco
       public:
         virtual void setPeakLevel(uint8_t level)   = 0;
         virtual void setDimmedLevel(uint8_t level) = 0;
-        virtual void turnOff()                     = 0;
         virtual void update(uint8_t pwm_counter) { (void) pwm_counter; }
         virtual void setBlinkMode(BlinkMode mode) = 0;
     };

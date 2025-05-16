@@ -1,4 +1,5 @@
 #include "CppUTest/TestHarness.h"
+
 #include "code_blinker.hpp"
 #include "pisco_constants.hpp"
 
@@ -21,8 +22,6 @@ namespace
             dimmed_calls++;
             last_dimmed = level;
         }
-
-        void turnOff() override { off_calls++; }
 
         void setBlinkMode(BlinkMode mode) override { blink_mode = mode; }
 
@@ -70,14 +69,4 @@ TEST(CodeBlinkerGroup, LoopTriggersDimmedStart)
     blinker->loop(1); // simulate loop trigger
     CHECK_EQUAL(1, controller.dimmed_calls);
     CHECK_EQUAL(DEFAULT_DIMMED_LEVEL, controller.last_dimmed);
-}
-
-TEST(CodeBlinkerGroup, LoopEventuallyTurnsOff)
-{
-    blinker->showCode(1, NumberBase::DECIMAL, 1, 1);
-    for (uint8_t i = 0; i < 255; ++i)
-    {
-        blinker->loop(i);
-    }
-    CHECK(controller.off_calls > 0);
 }
