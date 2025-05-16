@@ -5,7 +5,7 @@ set(MOCK_SOURCES
     mocks/MockLedControllerAdapter.hpp 
 )
 set(HELPER_SOURCES
-    helpers/LedBlinkPattern.cpp
+    helpers/led_blink_pattern.cpp
 )
 
 add_executable(PiscoCodeTests 
