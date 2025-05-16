@@ -10,21 +10,21 @@ namespace pisco_code
     class SoftwarePwmLedController : public LedController
     {
       public:
-        explicit SoftwarePwmLedController(bool (*led_func)(uint8_t));
+        explicit SoftwarePwmLedController(bool (*led_func)(LedCodeType));
         explicit SoftwarePwmLedController();
         ~SoftwarePwmLedController();
-        void attachLedControl(bool (*led_func)(uint8_t));
+        void attachLedControl(bool (*led_func)(LedCodeType));
 
-        void setPeakLevel(uint8_t level) override;
-        void setDimmedLevel(uint8_t level) override;
+        void setPeakLevel(LedLevel level) override;
+        void setDimmedLevel(LedLevel level) override;
         void setBlinkMode(BlinkMode mode) override;
-        void update(uint8_t loop_counter) override;
+        void update(LoopCounter loop_counter) override;
 
       private:
-        uint8_t peak_level_           = PWM_MAX;
-        uint8_t dimmed_level_         = DEFAULT_DIMMED_LEVEL;
-        bool (*led_control_)(uint8_t) = nullptr;
-        BlinkMode mode_               = BlinkMode::None;
+        LedLevel peak_level_              = PWM_MAX;
+        LedLevel dimmed_level_            = DEFAULT_DIMMED_LEVEL;
+        bool (*led_control_)(LedCodeType) = nullptr;
+        BlinkMode mode_                   = BlinkMode::None;
     };
 
 } // namespace pisco_code
