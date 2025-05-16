@@ -2,12 +2,12 @@
 #ifndef PISCO_LED_CONTROLLER_HPP
 #define PISCO_LED_CONTROLLER_HPP
 
-#include <stdint.h> // NOLINT(modernize-deprecated-headers)
+#include "pisco_types.hpp"
 
 namespace pisco_code
 {
 
-    enum class BlinkMode
+    enum class BlinkMode : BlinkModeType
     {
         None,
         Pulse,
@@ -17,9 +17,9 @@ namespace pisco_code
     class LedController
     {
       public:
-        virtual void setPeakLevel(uint8_t level)   = 0;
-        virtual void setDimmedLevel(uint8_t level) = 0;
-        virtual void update(uint8_t pwm_counter) { (void) pwm_counter; }
+        virtual void setPeakLevel(LedLevel level)   = 0;
+        virtual void setDimmedLevel(LedLevel level) = 0;
+        virtual void update(LoopCounter loop_counter) { (void) loop_counter; }
         virtual void setBlinkMode(BlinkMode mode) = 0;
     };
 
