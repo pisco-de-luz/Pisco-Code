@@ -12,7 +12,6 @@ namespace pisco_code
     using NumDigits     = uint8_t;
     using DigitValue    = uint8_t;
     using LoopCounter   = uint8_t;
-    using PwmCounter    = uint8_t;
     using PhaseDuration = uint8_t;
     using BlinkCode     = int32_t;
     using Index8        = int8_t;
@@ -23,6 +22,7 @@ namespace pisco_code
 
     using BaseType    = Byte; // Used as underlying type for enum class NumberBase
     using LedCodeType = Byte; // Used for LedControlCode
+    using PhaseType   = Byte; // Used for Phase enum class
     using Counter     = Counter8;
     using Index       = Index8;
 
