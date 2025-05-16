@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "code_blinker.hpp"
-#include "helpers/BlinkerTestUtils.hpp"
+#include "helpers/blinker_test_utils.hpp"
 #include "helpers/test_patterns_common.hpp"
 #include "mocks/MockLedControlLogger.hpp"
 #include "mocks/MockLedControllerAdapter.hpp"
