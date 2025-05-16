@@ -124,17 +124,19 @@ namespace pisco_code
         return current_phase_ != Phase::Idle;
     }
 
-    void CodeBlinker::transitionTo(Phase next, uint8_t duration, uint8_t loop_counter)
+    void CodeBlinker::transitionTo(Phase next, PhaseDuration duration, LoopCounter loop_counter)
     {
         current_phase_  = next;
         phase_duration_ = duration;
         start_time_     = loop_counter;
     }
 
-    bool CodeBlinker::phaseElapsed(uint8_t loop_counter) const
+    bool CodeBlinker::phaseElapsed(LoopCounter loop_counter) const
     {
-        return static_cast<uint8_t>(loop_counter - start_time_) > phase_duration_ &&
-               loop_counter_ == peak_level_;
+        const auto elapsed            = to_phase_duration(loop_counter - start_time_);
+        const bool phase_done         = elapsed > phase_duration_;
+        const bool peak_level_reached = loop_counter_ == peak_level_;
+        return phase_done && peak_level_reached;
     }
 
     bool CodeBlinker::hasMoreBlinks() const

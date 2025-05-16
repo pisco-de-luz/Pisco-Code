@@ -47,6 +47,11 @@ namespace pisco_code
         return static_cast<Index>(value);
     }
 
+    constexpr PhaseDuration to_phase_duration(UInt32 value) noexcept
+    {
+        return static_cast<PhaseDuration>(value);
+    }
+
     // Lookup table indexed by base value (2 to 16), all other entries are zero
     constexpr NumDigits MAX_DIGITS_LUT[to_value(NumberBase::HEX) + 1] = {
         0,  // 0
@@ -93,9 +98,9 @@ namespace pisco_code
     constexpr Timestamp END_PHASE_MS           = 2000;
 
     // Conversion from ms to loop ticks
-    constexpr Counter to_loop_count(Timestamp ms)
+    constexpr LoopCounter to_loop_count(Timestamp ms)
     {
-        return static_cast<Counter>(ms / LOOP_INTERVAL_MS);
+        return static_cast<LoopCounter>(ms / LOOP_INTERVAL_MS);
     }
 
 } // namespace pisco_code
