@@ -56,15 +56,15 @@ namespace pisco_code
         return true;
     }
 
-    void CodeBlinker::loop(uint8_t loop_counter)
+    void CodeBlinker::loop(LoopCounter loop_counter)
     {
         if (!controller_)
             return;
 
         static constexpr struct
         {
-            Phase id;
-            void (CodeBlinker::*handler)(uint8_t);
+            Phase             id;
+            BlinkPhaseHandler handler;
         } phase_table[] = {
             {Phase::PauseBeforeStart, &CodeBlinker::handlePauseBeforeStart},
             {Phase::BeginDigit, &CodeBlinker::handleBeginDigit},

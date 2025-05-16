@@ -62,7 +62,7 @@ namespace pisco_code
             // LED is off (system paused or stopped)
             Idle
         };
-
+        using BlinkPhaseHandler = void (CodeBlinker::*)(UInt8);
         void transitionTo(Phase next, PhaseDuration duration, LoopCounter loop_counter);
         bool phaseElapsed(LoopCounter loop_counter) const;
 
