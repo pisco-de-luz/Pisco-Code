@@ -11,25 +11,25 @@ namespace
     class MockLedController : public LedController
     {
       public:
-        void setPeakLevel(uint8_t level) override
+        void setPeakLevel(LedLevel led_level) override
         {
             peak_calls++;
-            last_peak = level;
+            last_peak = led_level;
         }
 
-        void setDimmedLevel(uint8_t level) override
+        void setDimmedLevel(LedLevel led_level) override
         {
             dimmed_calls++;
-            last_dimmed = level;
+            last_dimmed = led_level;
         }
 
         void setBlinkMode(BlinkMode mode) override { blink_mode = mode; }
 
-        int       peak_calls   = 0;
-        int       dimmed_calls = 0;
-        int       off_calls    = 0;
-        uint8_t   last_peak    = 0;
-        uint8_t   last_dimmed  = 0;
+        Int32     peak_calls   = 0;
+        Int32     dimmed_calls = 0;
+        Int32     off_calls    = 0;
+        LedLevel  last_peak    = 0;
+        LedLevel  last_dimmed  = 0;
         BlinkMode blink_mode   = BlinkMode::None;
     };
 
