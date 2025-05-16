@@ -1,9 +1,6 @@
 #include <stdint.h>
 
-#include "code_blinker.hpp"
-#include "pisco_constants.hpp"
-#include "pisco_types.hpp"
-#include "software_pwm_led_controller.hpp"
+#include "pisco_code.hpp"
 #include <avr/io.h>
 #include <util/delay.h>
 
@@ -53,19 +50,17 @@ int main()
     // Set LED pin as output
     LED_DDR |= (1 << LED_PIN);
 
-    // Create controller and blinker
-    SoftwarePwmLedController ledController(turnLedOnOff);
-    CodeBlinker              blinker(&ledController);
+    pisco_code::PiscoCode led1(turnLedOnOff);
 
     // Configure blinking behavior
-    blinker.setDimmedLevel(3);
+    led1.setDimmedLevel(3);
 
-    uint32_t fakeMillis = 3660000UL; // 1 hour, 1 minute, 0 seconds
+    uint32_t fakeMillis = 0; // 1 hour, 1 minute, 0 seconds
 
-    blinker.showCode(-102, NumberBase::DECIMAL, 0, 3);
-    while (blinker.isRunning())
+    led1.showCode(-102, NumberBase::DECIMAL, 0, 3);
+    while (led1.isRunning())
     {
-        blinker.loop(fakeMillis++ >> 6);
+        led1.loop(fakeMillis++ >> 6);
         _delay_ms(1);
     }
     while (true)
@@ -73,15 +68,15 @@ int main()
     }
     while (true)
     {
-        if (!blinker.isRunning() && fakeMillis <= static_cast<uint32_t>(INT32_MAX))
+        if (!led1.isRunning() && fakeMillis <= static_cast<uint32_t>(INT32_MAX))
         {
             int32_t bcdTime = millisToBCDTime(fakeMillis);
-            blinker.setDimmedLevel(7);
-            blinker.showCode(bcdTime, NumberBase::DECIMAL, 3, 1);
+            led1.setDimmedLevel(7);
+            led1.showCode(bcdTime, NumberBase::DECIMAL, 3, 1);
         }
 
         uint8_t loopCounter = static_cast<uint8_t>(fakeMillis >> 6);
-        blinker.loop(loopCounter);
+        led1.loop(loopCounter);
 
         _delay_ms(1);
         fakeMillis++;
