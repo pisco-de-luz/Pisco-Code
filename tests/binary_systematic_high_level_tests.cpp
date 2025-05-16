@@ -14,7 +14,6 @@
 #include "tests_types.hpp"
 
 using namespace pisco_code;
-using testutils::runSequencer;
 
 TEST_GROUP(BinarySystematicHighLevelTests)
 {
