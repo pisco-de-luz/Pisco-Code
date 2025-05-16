@@ -9,11 +9,13 @@
 #include "tests_constants.hpp"
 #include "tests_types.hpp"
 
+using namespace pisco_code;
+
 TEST_GROUP(LoopBehaviorBlinkerTest)
 {
     MockLedControlLogger     logger;
     MockLedControllerAdapter controller{&logger};
-    pisco::CodeBlinker       blinker{&controller};
+    CodeBlinker              blinker{&controller};
 };
 
 TEST(LoopBehaviorBlinkerTest, ShouldHoldDimLightForDigitZero)

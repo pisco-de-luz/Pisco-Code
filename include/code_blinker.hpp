@@ -8,7 +8,7 @@
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 
-namespace pisco
+namespace pisco_code
 {
 
     class CodeBlinker
@@ -103,6 +103,6 @@ namespace pisco
         uint8_t dimmed_level_ = DEFAULT_DIMMED_LEVEL;
     };
 
-} // namespace pisco
+} // namespace pisco_code
 
 #endif // PISCO_CODE_BLINKER_HPP

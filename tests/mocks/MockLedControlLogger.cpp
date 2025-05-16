@@ -12,16 +12,18 @@
 #include "pisco_types.hpp"
 #include "tests_types.hpp"
 
+using namespace pisco_code;
+
 MockLedControlLogger::MockLedControlLogger() : currentTime_(0)
 {
 }
 
-void MockLedControlLogger::setTime(pisco::Timestamp currTime)
+void MockLedControlLogger::setTime(Timestamp currTime)
 {
     currentTime_ = currTime;
 }
 
-void MockLedControlLogger::setBlinker(pisco::CodeBlinker* blinker)
+void MockLedControlLogger::setBlinker(CodeBlinker* blinker)
 {
     blinker_ = blinker;
 }
@@ -80,13 +82,13 @@ bool MockLedControlLogger::handle(uint8_t ctrlLED)
     testutils::LedEvent ledEvent{testutils::LedEvent::Invalid};
     switch (ctrlLED)
     {
-        case static_cast<pisco::LedCodeType>(pisco::LedControlCode::On):
+        case static_cast<LedCodeType>(LedControlCode::On):
             ledEvent = testutils::LedEvent::On;
             break;
-        case static_cast<pisco::LedCodeType>(pisco::LedControlCode::Off):
+        case static_cast<LedCodeType>(LedControlCode::Off):
             ledEvent = testutils::LedEvent::Off;
             break;
-        case static_cast<pisco::LedCodeType>(pisco::LedControlCode::FuncOk):
+        case static_cast<LedCodeType>(LedControlCode::FuncOk):
             ledEvent = testutils::LedEvent::FuncOk;
             break;
         default:
@@ -103,19 +105,19 @@ const std::vector<LedStateChange>& MockLedControlLogger::getEvents() const
     return events_;
 }
 
-void MockLedControlLogger::setTraceResolution(pisco::Timestamp resolutionMs)
+void MockLedControlLogger::setTraceResolution(Timestamp resolutionMs)
 {
     traceResolutionMs_ = resolutionMs;
 }
 
 std::string MockLedControlLogger::traceLogToString() const
 {
-    std::string       result{""};
-    pisco::Timestamp  next_duty_cycle_timestamp{0};
-    uint8_t           last_pwm_level{0};
-    pisco::Timestamp  last_timestamp_pwm_level_changed{0};
-    pisco::DurationMs duration_without_pwm_changed{0};
-    std::string       token;
+    std::string result{""};
+    Timestamp   next_duty_cycle_timestamp{0};
+    uint8_t     last_pwm_level{0};
+    Timestamp   last_timestamp_pwm_level_changed{0};
+    DurationMs  duration_without_pwm_changed{0};
+    std::string token;
     led_blink_pattern_.reset();
 
     for (const auto& event : events_)
@@ -124,7 +126,7 @@ std::string MockLedControlLogger::traceLogToString() const
         {
             break; // Events vector is incorrect, stop processing
         }
-        const pisco::Timestamp next_timestamp_event = event.timestamp + event.duration;
+        const Timestamp next_timestamp_event = event.timestamp + event.duration;
         while (next_duty_cycle_timestamp < next_timestamp_event)
         {
             uint8_t pwm_level{0};
@@ -142,7 +144,7 @@ std::string MockLedControlLogger::traceLogToString() const
                 last_pwm_level                   = pwm_level;
                 last_timestamp_pwm_level_changed = next_duty_cycle_timestamp;
             }
-            next_duty_cycle_timestamp += pisco::PWM_MAX + 1;
+            next_duty_cycle_timestamp += PWM_MAX + 1;
         }
     }
     duration_without_pwm_changed = next_duty_cycle_timestamp - last_timestamp_pwm_level_changed;

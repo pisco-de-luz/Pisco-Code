@@ -12,10 +12,10 @@
 
 #include "pisco_constants.hpp"
 
-using pisco::DurationMs;
-using pisco::LedLevel;
-using pisco::Timestamp;
-
+using pisco_code::DurationMs;
+using pisco_code::LedLevel;
+using pisco_code::RepeatTimes;
+using pisco_code::Timestamp;
 struct LedLevelDuration
 {
     LedLevel   led_level{0};
@@ -45,7 +45,7 @@ class LedBlinkPattern
     LedLevel                             getPulseLevel() const { return pulse_level_; }
     const std::vector<LedLevelDuration>& getEvents() const { return led_events_; }
     std::string                          tracePatternToString() const;
-    pisco::RepeatTimes                   getRepeatCount(DurationMs duration) const;
+    RepeatTimes                          getRepeatCount(DurationMs duration) const;
 
   private:
     bool                          pattern_is_valid_{true};

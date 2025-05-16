@@ -4,7 +4,7 @@
 
 #include <stdint.h> // NOLINT(modernize-deprecated-headers)
 
-namespace pisco
+namespace pisco_code
 {
 
     enum class BlinkMode
@@ -23,6 +23,6 @@ namespace pisco
         virtual void setBlinkMode(BlinkMode mode) = 0;
     };
 
-} // namespace pisco
+} // namespace pisco_code
 
 #endif // PISCO_LED_CONTROLLER_HPP

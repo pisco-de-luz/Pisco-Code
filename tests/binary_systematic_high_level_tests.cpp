@@ -13,7 +13,7 @@
 #include "tests_constants.hpp"
 #include "tests_types.hpp"
 
-using namespace pisco;
+using namespace pisco_code;
 using testutils::runSequencer;
 
 TEST_GROUP(BinarySystematicHighLevelTests)

@@ -12,6 +12,8 @@
 #include "../helpers/tests_types.hpp"
 #include "pisco_types.hpp"
 
+using namespace pisco_code;
+
 void LedBlinkPattern::reset()
 {
     pattern_is_valid_ = true;
@@ -21,7 +23,7 @@ void LedBlinkPattern::reset()
     used_levels_.clear();
 }
 
-void LedBlinkPattern::append(pisco::LedLevel level, pisco::DurationMs duration)
+void LedBlinkPattern::append(LedLevel level, DurationMs duration)
 {
     led_events_.push_back({level, duration});
 
@@ -93,7 +95,7 @@ testutils::TraceCode LedBlinkPattern::tracePatternToString() const
 
         const auto count = getRepeatCount(event.duration);
 
-        for (pisco::RepeatTimes i = 0; i < count; ++i)
+        for (RepeatTimes i = 0; i < count; ++i)
         {
             result += *symbol_ptr;
         }
@@ -107,12 +109,11 @@ bool LedBlinkPattern::isValid() const
     return pattern_is_valid_ && used_levels_.size() == 2;
 }
 
-pisco::RepeatTimes LedBlinkPattern::getRepeatCount(pisco::DurationMs duration) const
+RepeatTimes LedBlinkPattern::getRepeatCount(DurationMs duration) const
 {
-    auto upper_bound_rule =
-        std::upper_bound(traceRepeatRules.begin(), traceRepeatRules.end(), duration,
-                         [](pisco::DurationMs value, const TraceRepeatRule& rule)
-                         { return value < rule.min_duration; });
+    auto upper_bound_rule = std::upper_bound(
+        traceRepeatRules.begin(), traceRepeatRules.end(), duration,
+        [](DurationMs value, const TraceRepeatRule& rule) { return value < rule.min_duration; });
 
     if (upper_bound_rule == traceRepeatRules.begin())
         return traceRepeatRules.front().repeat_count;

@@ -3,7 +3,7 @@
 #include "code_blinker.hpp"
 #include "pisco_constants.hpp"
 
-using namespace pisco;
+using namespace pisco_code;
 
 namespace
 {

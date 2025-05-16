@@ -11,10 +11,18 @@
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 
+using pisco_code::BlinkCode;
+using pisco_code::CodeBlinker;
+using pisco_code::DigitValue;
+using pisco_code::LedLevel;
+using pisco_code::NumberBase;
+using pisco_code::NumDigits;
+using pisco_code::RepeatTimes;
+
 namespace testutils
 {
     // Drives the loop for a maximum simulated time, default 64 seconds.
-    inline void runSequencer(pisco::CodeBlinker* code, MockLedControlLogger* logger)
+    inline void runSequencer(CodeBlinker* code, MockLedControlLogger* logger)
     {
         constexpr uint8_t   LOOP_CALLS_PER_COUNTER = 64;
         constexpr Timestamp MAX_SEQUENCING_LOOP =
@@ -36,8 +44,7 @@ namespace testutils
         logger->flush();
     }
 
-    inline TraceCode repeatTracePattern(const TraceCode&   trace_code,
-                                        pisco::RepeatTimes repeat_count)
+    inline TraceCode repeatTracePattern(const TraceCode& trace_code, RepeatTimes repeat_count)
     {
         if (repeat_count <= 1 || trace_code.empty())
             return {};
@@ -50,7 +57,7 @@ namespace testutils
 
         const TraceCode leading_off = trace_code.substr(0, trail_off_start);
         TraceCode       result      = leading_off;
-        for (pisco::RepeatTimes i = 1; i < repeat_count; ++i)
+        for (RepeatTimes i = 1; i < repeat_count; ++i)
         {
             result += trace_code; // skip first repetition's trailing off
         }
@@ -58,15 +65,14 @@ namespace testutils
         return result;
     }
 
-    inline CodeDigitInfo convertCodeToDigits(pisco::BlinkCode code, pisco::NumberBase base,
-                                             pisco::NumDigits num_digits)
+    inline CodeDigitInfo convertCodeToDigits(BlinkCode code, NumberBase base, NumDigits num_digits)
     {
         CodeDigitInfo result{};
-        result.is_negative        = (code < 0);
-        pisco::BlinkCode abs_code = result.is_negative ? -code : code;
+        result.is_negative = (code < 0);
+        BlinkCode abs_code = result.is_negative ? -code : code;
 
-        const pisco::NumDigits max_digits    = maxDigitsForBase(base);
-        uint8_t                first_nonzero = max_digits - 1;
+        const NumDigits max_digits    = maxDigitsForBase(base);
+        uint8_t         first_nonzero = max_digits - 1;
 
         for (Index i = max_digits - 1; i >= 0; --i)
         {
@@ -91,13 +97,12 @@ namespace testutils
         return result;
     }
 
-    inline TraceCode generateExpectedTrace(pisco::BlinkCode code, pisco::NumberBase base,
-                                           pisco::NumDigits   min_digits = 0,
-                                           pisco::RepeatTimes repeats    = 1)
+    inline TraceCode generateExpectedTrace(BlinkCode code, NumberBase base,
+                                           NumDigits min_digits = 0, RepeatTimes repeats = 1)
     {
-        const CodeDigitInfo    info       = convertCodeToDigits(code, base, min_digits);
-        TraceCode              trace      = "___";
-        const pisco::NumDigits max_digits = maxDigitsForBase(base);
+        const CodeDigitInfo info       = convertCodeToDigits(code, base, min_digits);
+        TraceCode           trace      = "___";
+        const NumDigits     max_digits = maxDigitsForBase(base);
 
         for (Counter r = 0; r < repeats; ++r)
         {
@@ -131,13 +136,13 @@ namespace testutils
     }
 
     // Check the behavior of the blinker against the expected values.
-    inline void checkBlinkerBehavior(pisco::CodeBlinker& blinker, MockLedControlLogger& logger,
+    inline void checkBlinkerBehavior(CodeBlinker& blinker, MockLedControlLogger& logger,
                                      const TestBlinkerCase& testCase)
     {
-        pisco::BlinkCode         code_to_show = testCase.blink_code.value_or(DEFAULT_CODE);
-        const pisco::NumDigits   num_digits   = testCase.numDigits.value_or(0);
-        const pisco::RepeatTimes repeats      = testCase.repeats.value_or(1);
-        const pisco::NumberBase  base = testCase.number_base.value_or(pisco::NumberBase::DECIMAL);
+        BlinkCode         code_to_show = testCase.blink_code.value_or(DEFAULT_CODE);
+        const NumDigits   num_digits   = testCase.numDigits.value_or(0);
+        const RepeatTimes repeats      = testCase.repeats.value_or(1);
+        const NumberBase  base         = testCase.number_base.value_or(NumberBase::DECIMAL);
 
         // if (testCase.code_pair.has_value())
         // {
@@ -171,12 +176,12 @@ namespace testutils
     }
 
     // Generate a BlinkCode code using a pattern of digits
-    inline pisco::BlinkCode generatePatternOfDigits(const GeneratePatternParams& params)
+    inline BlinkCode generatePatternOfDigits(const GeneratePatternParams& params)
     {
-        pisco::BlinkCode code_to_show = 0;
+        BlinkCode code_to_show = 0;
         for (Counter i = 0; i < params.num_digits; ++i)
         {
-            pisco::DigitValue digit_to_show = 0;
+            DigitValue digit_to_show = 0;
             switch (params.pattern)
             {
                 case PatternOption::SequencialUp:

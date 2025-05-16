@@ -5,7 +5,7 @@
 
 #include "pisco_types.hpp"
 
-namespace pisco
+namespace pisco_code
 {
 
     enum class LedControlCode : LedCodeType
@@ -87,6 +87,6 @@ namespace pisco
         return static_cast<uint8_t>(ms / LOOP_INTERVAL_MS);
     }
 
-} // namespace pisco
+} // namespace pisco_code
 
 #endif // PISCO_CONSTANTS_HPP

@@ -5,7 +5,7 @@
 #include "pisco_constants.hpp"
 // #include <stdint.h> // NOLINT(modernize-deprecated-headers)
 
-namespace pisco
+namespace pisco_code
 {
     class SoftwarePwmLedController : public LedController
     {
@@ -27,6 +27,6 @@ namespace pisco
         BlinkMode mode_               = BlinkMode::None;
     };
 
-} // namespace pisco
+} // namespace pisco_code
 
 #endif // SOFTWARE_PWM_LED_CONTROLLER_HPP

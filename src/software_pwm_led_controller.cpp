@@ -3,7 +3,7 @@
 #include "stdint.h" // NOLINT(modernize-deprecated-headers)
 
 #include "pisco_constants.hpp"
-namespace pisco
+namespace pisco_code
 {
 
     SoftwarePwmLedController::SoftwarePwmLedController()
@@ -49,37 +49,37 @@ namespace pisco
 
         switch (mode_)
         {
-            case pisco::BlinkMode::Pulse:
+            case BlinkMode::Pulse:
                 if (pwm_counter == 0)
                 {
-                    led_control_(static_cast<pisco::LedCodeType>(LedControlCode::On));
+                    led_control_(static_cast<LedCodeType>(LedControlCode::On));
                 }
                 else if (pwm_counter == peak_level_)
                 {
-                    led_control_(static_cast<pisco::LedCodeType>(LedControlCode::Off));
+                    led_control_(static_cast<LedCodeType>(LedControlCode::Off));
                 }
                 break;
 
-            case pisco::BlinkMode::Dimmed:
+            case BlinkMode::Dimmed:
                 if (pwm_counter == 0)
                 {
-                    led_control_(static_cast<pisco::LedCodeType>(LedControlCode::On));
+                    led_control_(static_cast<LedCodeType>(LedControlCode::On));
                 }
                 else if (pwm_counter == dimmed_level_)
                 {
-                    led_control_(static_cast<pisco::LedCodeType>(LedControlCode::Off));
+                    led_control_(static_cast<LedCodeType>(LedControlCode::Off));
                 }
                 break;
 
-            case pisco::BlinkMode::None:
+            case BlinkMode::None:
             default:
                 if (pwm_counter == 0)
                 {
                     // Ensure LED is OFF during idle periods
-                    led_control_(static_cast<pisco::LedCodeType>(LedControlCode::Off));
+                    led_control_(static_cast<LedCodeType>(LedControlCode::Off));
                 }
                 break;
         }
     }
 
-} // namespace pisco
+} // namespace pisco_code

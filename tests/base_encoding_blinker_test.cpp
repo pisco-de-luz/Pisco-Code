@@ -6,7 +6,7 @@
 #include "mocks/MockLedControllerAdapter.hpp"
 #include "pisco_constants.hpp"
 
-using namespace pisco;
+using namespace pisco_code;
 using testutils::runSequencer;
 
 TEST_GROUP(BaseEncodingBlinkerTest)

@@ -8,7 +8,7 @@
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 
-using namespace pisco;
+using namespace pisco_code;
 using testutils::runSequencer;
 
 TEST_GROUP(SetterBehaviorBlinkerTest)
@@ -22,7 +22,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldUseDefaultPwmLevel)
 {
     const testutils::TestBlinkerCase test_case{
         .trace_check   = testutils::TraceCheck::NotEnforced,
-        .expectedPulse = pisco::DEFAULT_PULSE_LEVEL,
+        .expectedPulse = DEFAULT_PULSE_LEVEL,
     };
 
     testutils::checkBlinkerBehavior(blinker, logger, test_case);
@@ -66,7 +66,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldUseDefaultDimmedLevel)
 {
     const testutils::TestBlinkerCase test_case{
         .trace_check    = testutils::TraceCheck::NotEnforced,
-        .expectedDimmed = pisco::DEFAULT_DIMMED_LEVEL,
+        .expectedDimmed = DEFAULT_DIMMED_LEVEL,
     };
 
     testutils::checkBlinkerBehavior(blinker, logger, test_case);
@@ -104,7 +104,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldNotAffectDefaultPulseLevelWhenSettingDimme
 
         const testutils::TestBlinkerCase test_case{
             .trace_check   = testutils::TraceCheck::NotEnforced,
-            .expectedPulse = pisco::DEFAULT_PULSE_LEVEL,
+            .expectedPulse = DEFAULT_PULSE_LEVEL,
         };
 
         testutils::checkBlinkerBehavior(blinker, logger, test_case);
@@ -161,7 +161,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldTruncateToNumDigits)
 
 TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighNumDigits)
 {
-    const pisco::NumDigits           max_digits = maxDigitsForBase(pisco::NumberBase::DECIMAL);
+    const NumDigits                  max_digits = maxDigitsForBase(NumberBase::DECIMAL);
     const testutils::TestBlinkerCase test_case{
         .trace_check = testutils::TraceCheck::Enforced,
         .numDigits   = max_digits + 1,

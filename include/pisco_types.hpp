@@ -2,7 +2,7 @@
 #pragma once
 #include <stdint.h>
 
-namespace pisco
+namespace pisco_code
 {
 
     using Timestamp     = uint32_t;
@@ -24,4 +24,4 @@ namespace pisco
     using BaseType    = Byte; // Used as underlying type for enum class NumberBase
     using LedCodeType = Byte; // Used for LedControlCode
 
-} // namespace pisco
+} // namespace pisco_code

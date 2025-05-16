@@ -7,6 +7,7 @@
 
 #include "pisco_types.hpp"
 
+using namespace pisco_code;
 namespace testutils
 {
 
@@ -17,14 +18,14 @@ namespace testutils
 
     struct LedLevelDuration
     {
-        pisco::LedLevel  led_level{0};
-        pisco::Timestamp duration{0};
+        LedLevel  led_level{0};
+        Timestamp duration{0};
     };
 
     struct TraceRepeatRule
     {
-        pisco::Timestamp min_duration;
-        uint8_t          repeat_count;
+        Timestamp min_duration;
+        uint8_t   repeat_count;
     };
 
     enum class TraceCheck
@@ -44,20 +45,20 @@ namespace testutils
 
     struct TestBlinkerCase
     {
-        std::optional<pisco::BlinkCode>   blink_code{std::nullopt};
-        std::optional<pisco::NumberBase>  number_base{std::nullopt};
-        std::optional<TraceCheck>         trace_check{std::nullopt};
-        std::optional<pisco::NumDigits>   numDigits{std::nullopt};
-        std::optional<pisco::RepeatTimes> repeats{std::nullopt};
-        std::optional<pisco::LedLevel>    expectedDimmed{};
-        std::optional<pisco::LedLevel>    expectedPulse{};
+        std::optional<BlinkCode>   blink_code{std::nullopt};
+        std::optional<NumberBase>  number_base{std::nullopt};
+        std::optional<TraceCheck>  trace_check{std::nullopt};
+        std::optional<NumDigits>   numDigits{std::nullopt};
+        std::optional<RepeatTimes> repeats{std::nullopt};
+        std::optional<LedLevel>    expectedDimmed{};
+        std::optional<LedLevel>    expectedPulse{};
     };
 
     struct CodeDigitInfo
     {
-        bool                                            is_negative;
-        std::array<uint8_t, pisco::MAX_DIGITS_ABSOLUTE> digits;
-        uint8_t                                         first_nonzero_digit_index;
+        bool                                     is_negative;
+        std::array<uint8_t, MAX_DIGITS_ABSOLUTE> digits;
+        uint8_t                                  first_nonzero_digit_index;
     };
 
     // PatternOption — Digit composition strategies used in test generation.
@@ -82,10 +83,10 @@ namespace testutils
     };
     struct GeneratePatternParams
     {
-        PatternOption     pattern{PatternOption::SequencialUp};
-        pisco::NumberBase number_base{pisco::NumberBase::DECIMAL};
-        pisco::NumDigits  num_digits{};
-        pisco::DigitValue digit{0};
+        PatternOption pattern{PatternOption::SequencialUp};
+        NumberBase    number_base{NumberBase::DECIMAL};
+        NumDigits     num_digits{};
+        DigitValue    digit{0};
     };
 
 } // namespace testutils

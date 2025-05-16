@@ -3,7 +3,7 @@
 
 #include "pisco_constants.hpp"
 
-namespace pisco
+namespace pisco_code
 {
 
     CodeBlinker::CodeBlinker(LedController* controller) : controller_(controller)
@@ -95,25 +95,24 @@ namespace pisco
 
     void CodeBlinker::setPeakLevel(uint8_t level)
     {
-        peak_level_ = (level > pisco::PWM_MAX) ? pisco::PWM_MAX : level;
-        if (peak_level_ < pisco::MIN_PULSE_DIMMED_GAP)
+        peak_level_ = (level > PWM_MAX) ? PWM_MAX : level;
+        if (peak_level_ < MIN_PULSE_DIMMED_GAP)
         {
-            peak_level_ = pisco::MIN_PULSE_DIMMED_GAP;
+            peak_level_ = MIN_PULSE_DIMMED_GAP;
         }
         if (dimmed_level_ >= peak_level_)
         {
-            dimmed_level_ = peak_level_ - pisco::MIN_PULSE_DIMMED_GAP;
+            dimmed_level_ = peak_level_ - MIN_PULSE_DIMMED_GAP;
         }
     }
 
     void CodeBlinker::setDimmedLevel(uint8_t level)
     {
-        dimmed_level_ = (level > (pisco::PWM_MAX - pisco::MIN_PULSE_DIMMED_GAP))
-                            ? (pisco::PWM_MAX - pisco::MIN_PULSE_DIMMED_GAP)
-                            : level;
+        dimmed_level_ =
+            (level > (PWM_MAX - MIN_PULSE_DIMMED_GAP)) ? (PWM_MAX - MIN_PULSE_DIMMED_GAP) : level;
         if (dimmed_level_ >= peak_level_)
         {
-            dimmed_level_ = peak_level_ - pisco::MIN_PULSE_DIMMED_GAP;
+            dimmed_level_ = peak_level_ - MIN_PULSE_DIMMED_GAP;
         }
     }
 
@@ -314,4 +313,4 @@ namespace pisco
         }
     }
 
-} // namespace pisco
+} // namespace pisco_code
