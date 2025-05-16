@@ -2,7 +2,7 @@
 file(GLOB TEST_SOURCES "*.cpp")
 set(MOCK_SOURCES
     mocks/MockLedControlLogger.cpp
-    mocks/MockLedControllerAdapter.hpp 
+    mocks/mock_led_controller_adapter.hpp 
 )
 set(HELPER_SOURCES
     helpers/led_blink_pattern.cpp

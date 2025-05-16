@@ -4,7 +4,7 @@
 #include "helpers/blinker_test_utils.hpp"
 #include "helpers/tests_types.hpp"
 #include "mocks/MockLedControlLogger.hpp"
-#include "mocks/MockLedControllerAdapter.hpp"
+#include "mocks/mock_led_controller_adapter.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 

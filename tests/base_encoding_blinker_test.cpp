@@ -3,7 +3,7 @@
 #include "code_blinker.hpp"
 #include "helpers/blinker_test_utils.hpp"
 #include "mocks/MockLedControlLogger.hpp"
-#include "mocks/MockLedControllerAdapter.hpp"
+#include "mocks/mock_led_controller_adapter.hpp"
 #include "pisco_constants.hpp"
 
 using namespace pisco_code;
