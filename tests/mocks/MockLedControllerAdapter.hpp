@@ -20,7 +20,7 @@ class MockLedControllerAdapter : public LedController
 
     void setBlinkMode(BlinkMode mode) override { mode_ = mode; }
 
-    void update(uint8_t pwm_counter) override
+    void update(uint8_t loop_counter) override
     {
         if (logger_ == nullptr)
         {
@@ -30,22 +30,22 @@ class MockLedControllerAdapter : public LedController
         switch (mode_)
         {
             case BlinkMode::Pulse:
-                if (pwm_counter == 0)
+                if (loop_counter == 0)
                 {
                     logger_->handle(static_cast<LedCodeType>(LedControlCode::On));
                 }
-                else if (pwm_counter == peak_level_)
+                else if (loop_counter == peak_level_)
                 {
                     logger_->handle(static_cast<LedCodeType>(LedControlCode::Off));
                 }
                 break;
 
             case BlinkMode::Dimmed:
-                if (pwm_counter == 0)
+                if (loop_counter == 0)
                 {
                     logger_->handle(static_cast<LedCodeType>(LedControlCode::On));
                 }
-                else if (pwm_counter == dimmed_level_)
+                else if (loop_counter == dimmed_level_)
                 {
                     logger_->handle(static_cast<LedCodeType>(LedControlCode::Off));
                 }
@@ -53,7 +53,7 @@ class MockLedControllerAdapter : public LedController
 
             case BlinkMode::None:
             default:
-                if (pwm_counter == 0)
+                if (loop_counter == 0)
                 {
                     // Ensure LED is OFF during idle periods
                     logger_->handle(static_cast<LedCodeType>(LedControlCode::Off));
