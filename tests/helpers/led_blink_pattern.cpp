@@ -1,4 +1,4 @@
-#include "LedBlinkPattern.hpp"
+#include "led_blink_pattern.hpp"
 
 #include <algorithm>
 #include <array>

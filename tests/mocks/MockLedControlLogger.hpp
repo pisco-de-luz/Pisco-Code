@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../helpers/LedBlinkPattern.hpp"
+#include "../helpers/led_blink_pattern.hpp"
 // #include "../helpers/tests_constants.hpp"
 #include <array>
 #include <cstdint>

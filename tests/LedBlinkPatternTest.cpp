@@ -1,6 +1,6 @@
-#include "helpers/LedBlinkPattern.hpp"
-
 #include "CppUTest/TestHarness.h"
+
+#include "helpers/led_blink_pattern.hpp"
 
 TEST_GROUP(LedBlinkPatternTests){};
 
