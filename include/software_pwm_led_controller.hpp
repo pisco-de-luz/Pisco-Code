@@ -21,9 +21,9 @@ namespace pisco_code
         void update(uint8_t pwm_counter) override;
 
       private:
+        uint8_t peak_level_           = PWM_MAX;
+        uint8_t dimmed_level_         = DEFAULT_DIMMED_LEVEL;
         bool (*led_control_)(uint8_t) = nullptr;
-        uint8_t   peak_level_         = PWM_MAX;
-        uint8_t   dimmed_level_       = DEFAULT_DIMMED_LEVEL;
         BlinkMode mode_               = BlinkMode::None;
     };
 

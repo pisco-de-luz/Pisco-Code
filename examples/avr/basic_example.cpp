@@ -32,17 +32,17 @@ bool turnLedOnOff(LedCodeType ctrlLED)
 }
 
 // Converts milliseconds to a 5-digit HHHMM representation
-int32_t millisToBCDTime(uint32_t fakeMillis)
+BlinkCode millisToBCDTime(Timestamp fakeMillis)
 {
-    constexpr uint32_t MILLIS_PER_MINUTE = 60000UL;
-    constexpr uint32_t MINUTES_PER_HOUR  = 60;
+    constexpr Timestamp MILLIS_PER_MINUTE = 60000UL;
+    constexpr Timestamp MINUTES_PER_HOUR  = 60;
 
-    const uint32_t totalMinutes = fakeMillis / MILLIS_PER_MINUTE;
-    const uint32_t hours        = totalMinutes / MINUTES_PER_HOUR;
-    const uint32_t minutes      = totalMinutes % MINUTES_PER_HOUR;
-    const uint32_t cappedHours  = (hours > 999) ? 999 : hours;
+    const Timestamp totalMinutes = fakeMillis / MILLIS_PER_MINUTE;
+    const Timestamp hours        = totalMinutes / MINUTES_PER_HOUR;
+    const Timestamp minutes      = totalMinutes % MINUTES_PER_HOUR;
+    const Timestamp cappedHours  = (hours > 999) ? 999 : hours;
 
-    return static_cast<int32_t>(cappedHours * 100 + minutes);
+    return static_cast<BlinkCode>(cappedHours * 100 + minutes);
 }
 
 int main()
@@ -50,12 +50,12 @@ int main()
     // Set LED pin as output
     LED_DDR |= (1 << LED_PIN);
 
-    pisco_code::PiscoCode led1(turnLedOnOff);
+    PiscoCode led1(turnLedOnOff);
 
     // Configure blinking behavior
     led1.setDimmedLevel(3);
 
-    uint32_t fakeMillis = 0; // 1 hour, 1 minute, 0 seconds
+    Timestamp fakeMillis = 0; // 1 hour, 1 minute, 0 seconds
 
     led1.showCode(-102, NumberBase::DECIMAL, 0, 3);
     while (led1.isRunning())
@@ -68,14 +68,14 @@ int main()
     }
     while (true)
     {
-        if (!led1.isRunning() && fakeMillis <= static_cast<uint32_t>(INT32_MAX))
+        if (!led1.isRunning() && fakeMillis <= static_cast<Timestamp>(INT32_MAX))
         {
-            int32_t bcdTime = millisToBCDTime(fakeMillis);
+            BlinkCode bcdTime = millisToBCDTime(fakeMillis);
             led1.setDimmedLevel(7);
             led1.showCode(bcdTime, NumberBase::DECIMAL, 3, 1);
         }
 
-        uint8_t loopCounter = static_cast<uint8_t>(fakeMillis >> 6);
+        Counter loopCounter = static_cast<Counter>(fakeMillis >> 6);
         led1.loop(loopCounter);
 
         _delay_ms(1);
