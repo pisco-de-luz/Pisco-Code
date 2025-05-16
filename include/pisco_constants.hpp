@@ -32,6 +32,21 @@ namespace pisco_code
         return static_cast<LedCodeType>(led_control_code);
     }
 
+    constexpr DigitValue to_digit(UInt32 value) noexcept
+    {
+        return static_cast<DigitValue>(value);
+    }
+
+    constexpr Counter to_count(UInt32 value) noexcept
+    {
+        return static_cast<Counter>(value);
+    }
+
+    constexpr Index8 to_index(UInt32 value) noexcept
+    {
+        return static_cast<Index>(value);
+    }
+
     // Lookup table indexed by base value (2 to 16), all other entries are zero
     constexpr NumDigits MAX_DIGITS_LUT[to_value(NumberBase::HEX) + 1] = {
         0,  // 0
