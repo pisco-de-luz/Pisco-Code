@@ -3,14 +3,13 @@
 #undef new
 #endif
 
-#include <algorithm>
 #include <array>
 #include <cstdint>
 #include <set>
 #include <string>
 #include <vector>
 
-#include "pisco_constants.hpp"
+#include "pisco_types.hpp"
 
 using pisco_code::DurationMs;
 using pisco_code::LedLevel;
@@ -28,7 +27,7 @@ struct TraceRepeatRule
     uint8_t    repeat_count;
 };
 
-constexpr std::array<TraceRepeatRule, 3> traceRepeatRules{{
+constexpr std::array<TraceRepeatRule, 3> TRACE_REPEAT_RULES{{
     {0, 1},    // 0–1100
     {1101, 3}, // 1101–2200
     {2201, 5}  // 2201+

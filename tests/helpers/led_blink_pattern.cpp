@@ -112,11 +112,11 @@ bool LedBlinkPattern::isValid() const
 RepeatTimes LedBlinkPattern::getRepeatCount(DurationMs duration) const
 {
     auto upper_bound_rule = std::upper_bound(
-        traceRepeatRules.begin(), traceRepeatRules.end(), duration,
+        TRACE_REPEAT_RULES.begin(), TRACE_REPEAT_RULES.end(), duration,
         [](DurationMs value, const TraceRepeatRule& rule) { return value < rule.min_duration; });
 
-    if (upper_bound_rule == traceRepeatRules.begin())
-        return traceRepeatRules.front().repeat_count;
+    if (upper_bound_rule == TRACE_REPEAT_RULES.begin())
+        return TRACE_REPEAT_RULES.front().repeat_count;
 
     return std::prev(upper_bound_rule)->repeat_count;
 }
