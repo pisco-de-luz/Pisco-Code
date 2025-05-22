@@ -70,7 +70,7 @@ namespace testutils
         result.is_negative = (code < 0);
         BlinkCode abs_code = result.is_negative ? -code : code;
 
-        const NumDigits max_digits    = maxDigitsForBase(base);
+        const NumDigits max_digits    = max_digits_for_base(base);
         uint8_t         first_nonzero = max_digits - 1;
 
         for (Index i = max_digits - 1; i >= 0; --i)
@@ -101,7 +101,7 @@ namespace testutils
     {
         const CodeDigitInfo info       = convertCodeToDigits(code, base, min_digits);
         TraceCode           trace      = "___";
-        const NumDigits     max_digits = maxDigitsForBase(base);
+        const NumDigits     max_digits = max_digits_for_base(base);
 
         for (Counter r = 0; r < repeats; ++r)
         {

@@ -31,22 +31,22 @@ class MockLedControllerAdapter : public LedController
             case BlinkMode::Pulse:
                 if (loop_counter == 0)
                 {
-                    logger_->handle(static_cast<LedCodeType>(LedControlCode::On));
+                    logger_->handle(static_cast<LedCodeType>(LedControlCode::ON));
                 }
                 else if (loop_counter == peak_level_)
                 {
-                    logger_->handle(static_cast<LedCodeType>(LedControlCode::Off));
+                    logger_->handle(static_cast<LedCodeType>(LedControlCode::OFF));
                 }
                 break;
 
             case BlinkMode::Dimmed:
                 if (loop_counter == 0)
                 {
-                    logger_->handle(static_cast<LedCodeType>(LedControlCode::On));
+                    logger_->handle(static_cast<LedCodeType>(LedControlCode::ON));
                 }
                 else if (loop_counter == dimmed_level_)
                 {
-                    logger_->handle(static_cast<LedCodeType>(LedControlCode::Off));
+                    logger_->handle(static_cast<LedCodeType>(LedControlCode::OFF));
                 }
                 break;
 
@@ -55,7 +55,7 @@ class MockLedControllerAdapter : public LedController
                 if (loop_counter == 0)
                 {
                     // Ensure LED is OFF during idle periods
-                    logger_->handle(static_cast<LedCodeType>(LedControlCode::Off));
+                    logger_->handle(static_cast<LedCodeType>(LedControlCode::OFF));
                 }
                 break;
         }

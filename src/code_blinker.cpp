@@ -25,7 +25,7 @@ namespace pisco_code
         {
             value_to_display = -code;
         }
-        max_digits_ = maxDigitsForBase(base);
+        max_digits_ = max_digits_for_base(base);
 
         current_digit_index_ = max_digits_ - 1;
 

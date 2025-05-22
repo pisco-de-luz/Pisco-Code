@@ -39,7 +39,7 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialUpDigitsUpToMaxDigits
 TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialDownDigitsUpToMaxDigits)
 {
     const auto      number_base = NumberBase::DEC;
-    const NumDigits max_digits  = maxDigitsForBase(number_base);
+    const NumDigits max_digits  = max_digits_for_base(number_base);
 
     for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
@@ -63,7 +63,7 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialDownDigitsUpToMaxDigi
 TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialDigitsUpToMaxDigitsPaddedToMaxDigits)
 {
     const auto      number_base = NumberBase::DEC;
-    const NumDigits max_digits  = maxDigitsForBase(number_base);
+    const NumDigits max_digits  = max_digits_for_base(number_base);
 
     for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
@@ -88,7 +88,7 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialDigitsUpToMaxDigitsPa
 TEST(DecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedToMaxDigits)
 {
     const auto      number_base = NumberBase::DEC;
-    const NumDigits max_digits  = maxDigitsForBase(number_base);
+    const NumDigits max_digits  = max_digits_for_base(number_base);
 
     for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
@@ -117,7 +117,7 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedTo
 TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialDigitsUpToMaxDigitsPaddedToHalfMaxDigits)
 {
     const auto      number_base = NumberBase::DEC;
-    const NumDigits max_digits  = maxDigitsForBase(number_base);
+    const NumDigits max_digits  = max_digits_for_base(number_base);
 
     for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
@@ -142,7 +142,7 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialDigitsUpToMaxDigitsPa
 TEST(DecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedToHalfMaxDigits)
 {
     const auto      number_base = NumberBase::DEC;
-    const NumDigits max_digits  = maxDigitsForBase(number_base);
+    const NumDigits max_digits  = max_digits_for_base(number_base);
 
     for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
@@ -171,7 +171,7 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedTo
 TEST(DecimalSystematicHighLevelTests, ShouldBlinkFullPatternOfMaxBaseDigitUpToMaxDigits)
 {
     const auto      number_base = NumberBase::DEC;
-    const NumDigits max_digits  = maxDigitsForBase(number_base);
+    const NumDigits max_digits  = max_digits_for_base(number_base);
 
     for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
@@ -197,7 +197,7 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkFullPatternOfMaxBaseDigitUpToMa
 TEST(DecimalSystematicHighLevelTests, ShouldRepeatBlinkOfMaxBaseDigitUpToMaxDigitsNineTimes)
 {
     const auto      number_base = NumberBase::DEC;
-    const NumDigits max_digits  = maxDigitsForBase(number_base);
+    const NumDigits max_digits  = max_digits_for_base(number_base);
 
     for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {

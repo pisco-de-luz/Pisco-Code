@@ -82,13 +82,13 @@ bool MockLedControlLogger::handle(uint8_t ctrlLED)
     testutils::LedEvent ledEvent{testutils::LedEvent::Invalid};
     switch (ctrlLED)
     {
-        case static_cast<LedCodeType>(LedControlCode::On):
+        case static_cast<LedCodeType>(LedControlCode::ON):
             ledEvent = testutils::LedEvent::On;
             break;
-        case static_cast<LedCodeType>(LedControlCode::Off):
+        case static_cast<LedCodeType>(LedControlCode::OFF):
             ledEvent = testutils::LedEvent::Off;
             break;
-        case static_cast<LedCodeType>(LedControlCode::FuncOk):
+        case static_cast<LedCodeType>(LedControlCode::FUNC_OK):
             ledEvent = testutils::LedEvent::FuncOk;
             break;
         default:

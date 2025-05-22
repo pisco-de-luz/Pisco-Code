@@ -7,10 +7,10 @@ namespace pisco_code
 
     enum class LedControlCode : LedCodeType
     {
-        On       = 0,
-        Off      = 1,
-        FuncOk   = 100,
-        FuncFail = 101 // optional, used in Mock logger
+        ON        = 0,
+        OFF       = 1,
+        FUNC_OK   = 100,
+        FUNC_FAIL = 101 // optional, used in Mock logger
     };
 
     // Encoding bases
@@ -64,7 +64,7 @@ namespace pisco_code
         7 // 16 = HEX
     };
 
-    constexpr NumDigits maxDigitsForBase(NumberBase base)
+    constexpr NumDigits max_digits_for_base(NumberBase base)
     {
         return MAX_DIGITS_LUT[to_value(base)];
     }
@@ -97,9 +97,9 @@ namespace pisco_code
     constexpr Timestamp END_PHASE_MS           = 2000;
 
     // Conversion from ms to loop ticks
-    constexpr LoopCounter to_loop_count(Timestamp ms)
+    constexpr LoopCounter to_loop_count(Timestamp milliseconds) noexcept
     {
-        return static_cast<LoopCounter>(ms / LOOP_INTERVAL_MS);
+        return static_cast<LoopCounter>(milliseconds / LOOP_INTERVAL_MS);
     }
 
 } // namespace pisco_code

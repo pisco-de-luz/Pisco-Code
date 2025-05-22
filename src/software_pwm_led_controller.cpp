@@ -50,22 +50,22 @@ namespace pisco_code
             case BlinkMode::Pulse:
                 if (loop_counter == 0)
                 {
-                    led_control_(to_value(LedControlCode::On));
+                    led_control_(to_value(LedControlCode::ON));
                 }
                 else if (loop_counter == peak_level_)
                 {
-                    led_control_(to_value(LedControlCode::Off));
+                    led_control_(to_value(LedControlCode::OFF));
                 }
                 break;
 
             case BlinkMode::Dimmed:
                 if (loop_counter == 0)
                 {
-                    led_control_(to_value(LedControlCode::On));
+                    led_control_(to_value(LedControlCode::ON));
                 }
                 else if (loop_counter == dimmed_level_)
                 {
-                    led_control_(to_value(LedControlCode::Off));
+                    led_control_(to_value(LedControlCode::OFF));
                 }
                 break;
 
@@ -74,7 +74,7 @@ namespace pisco_code
                 if (loop_counter == 0)
                 {
                     // Ensure LED is OFF during idle periods
-                    led_control_(to_value(LedControlCode::Off));
+                    led_control_(to_value(LedControlCode::OFF));
                 }
                 break;
         }
