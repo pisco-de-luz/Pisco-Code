@@ -1,28 +1,24 @@
 # tests/CMakeLists.txt — Build and run CppUTest-based unit tests
 file(GLOB TEST_SOURCES "*.cpp")
-set(MOCK_SOURCES
-    mocks/mock_led_control_logger.cpp
-    mocks/mock_led_controller_adapter.hpp 
-)
-set(HELPER_SOURCES
-    helpers/led_blink_pattern.cpp
-)
+file(GLOB MOCK_SOURCES mocks/*.cpp)
+file(GLOB MOCK_HEADERS mocks/*.hpp)
+file(GLOB HELPER_SOURCES helpers/*.cpp)
+file(GLOB HELPER_HEADERS helpers/*.hpp)
 
 add_executable(PiscoCodeTests 
     ${TEST_SOURCES}
     ${MOCK_SOURCES}
     ${HELPER_SOURCES}
+    ${MOCK_HEADERS}
+    ${HELPER_HEADERS}
 )
 
 target_include_directories(PiscoCodeTests PRIVATE
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/mocks
     ${CMAKE_CURRENT_SOURCE_DIR}/helpers
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../include
-    ${CMAKE_SOURCE_DIR}/../../external/CppUTest/include
-    ${CMAKE_SOURCE_DIR}/../../external/CppUTest/include/Platforms
+    ${CMAKE_SOURCE_DIR}/external/CppUTest/include
+    ${CMAKE_SOURCE_DIR}/external/CppUTest/include/Platforms
 )
 
 target_link_libraries(PiscoCodeTests

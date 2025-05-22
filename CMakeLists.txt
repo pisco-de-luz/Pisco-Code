@@ -7,28 +7,27 @@
 # //--------------------------------------------------------------------------------------------
 
 cmake_minimum_required(VERSION 3.19)
-project(PiscoCode)
+project(PiscoCode LANGUAGES C CXX)
 
+# Build Settings
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD_REQUIRED YES)
+set(CMAKE_CXX_EXTENSIONS NO)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_BUILD_TYPE Debug) # Enable debug symbols
+set(CMAKE_BUILD_TYPE Debug)
 
-list(APPEND CMAKE_MODULE_PATH
-     "${CMAKE_SOURCE_DIR}/cmake/modules")
-
+# Directory Variables
 set(SRC_DIR     ${CMAKE_SOURCE_DIR}/src)
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 
-# Core library
-add_subdirectory(${SRC_DIR})
+# Expose to subdirs
 include_directories(${INCLUDE_DIR})
 
-# Target-specific examples
+# Subdirectories
+add_subdirectory(${SRC_DIR})
 add_subdirectory(examples)
 
-# Unit tests — only for host/native builds
+# Unit tests (only for native builds)
 if(NOT CMAKE_CROSSCOMPILING)
   message(STATUS "Native build detected — enabling unit tests.")
   add_subdirectory(external/CppUTest)

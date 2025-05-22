@@ -3,33 +3,25 @@
 # // Description: CMake file for src directory
 # // Author:      Andre Viegas
 # // Date:        2025.04
-# // Version:     1.0
+# // Version:     1.1
 # //--------------------------------------------------------------------------------------------
 
-file(GLOB_RECURSE SOURCES CMAKE_CONFIGURE_DEPENDS *.cpp)
+# Header path shared via target
+set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 
-add_executable(${PROJECT_NAME} 
-    main.cpp
-    # loop.cpp
-    # Pisco-Code.cpp
-    # show.cpp
-)
+# Source files
+file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS *.cpp)
+file(GLOB_RECURSE HEADER_FILES CONFIGURE_DEPENDS ${INCLUDE_DIR}/*.hpp)
 
-target_include_directories(${PROJECT_NAME} PUBLIC
-    ${INCLUDE_DIR}
-)
+# Core library
+add_library(PiscoCodeCore ${SRC_FILES} ${HEADER_FILES})
+target_include_directories(PiscoCodeCore PUBLIC ${INCLUDE_DIR})
 
-add_library(PiscoCodeCore
-    # ${SRC_DIR}/Pisco-Code.cpp
-    # ${SRC_DIR}/loop.cpp
-    # ${SRC_DIR}/show.cpp
-    ${SRC_DIR}/code_blinker.cpp
-    ${SRC_DIR}/software_pwm_led_controller.cpp
-)
+# Optional: warnings for library too
+target_compile_options(PiscoCodeCore PRIVATE -Wall -Wextra -Wpedantic)
 
-target_include_directories(PiscoCodeCore PUBLIC
-    ${CMAKE_SOURCE_DIR}/include 
-)
-
+# Executable (optional main program)
+add_executable(${PROJECT_NAME} main.cpp)
+target_link_libraries(${PROJECT_NAME} PRIVATE PiscoCodeCore)
+target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIR})
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
-
