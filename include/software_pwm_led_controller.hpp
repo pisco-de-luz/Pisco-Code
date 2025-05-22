@@ -24,7 +24,7 @@ namespace pisco_code
         LedLevel peak_level_              = PWM_MAX;
         LedLevel dimmed_level_            = DEFAULT_DIMMED_LEVEL;
         bool (*led_control_)(LedCodeType) = nullptr;
-        BlinkMode mode_                   = BlinkMode::None;
+        BlinkMode mode_                   = BlinkMode::NONE;
     };
 
 } // namespace pisco_code

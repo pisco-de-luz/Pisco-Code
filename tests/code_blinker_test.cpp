@@ -30,7 +30,7 @@ namespace
         Int32     off_calls    = 0;
         LedLevel  last_peak    = 0;
         LedLevel  last_dimmed  = 0;
-        BlinkMode blink_mode   = BlinkMode::None;
+        BlinkMode blink_mode   = BlinkMode::NONE;
     };
 
 } // namespace

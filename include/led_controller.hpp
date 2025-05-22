@@ -9,9 +9,9 @@ namespace pisco_code
 
     enum class BlinkMode : BlinkModeType
     {
-        None,
-        Pulse,
-        Dimmed
+        NONE,
+        PULSE,
+        DIMMED
     };
 
     class LedController

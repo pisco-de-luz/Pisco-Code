@@ -47,7 +47,7 @@ namespace pisco_code
 
         switch (mode_)
         {
-            case BlinkMode::Pulse:
+            case BlinkMode::PULSE:
                 if (loop_counter == 0)
                 {
                     led_control_(to_value(LedControlCode::ON));
@@ -58,7 +58,7 @@ namespace pisco_code
                 }
                 break;
 
-            case BlinkMode::Dimmed:
+            case BlinkMode::DIMMED:
                 if (loop_counter == 0)
                 {
                     led_control_(to_value(LedControlCode::ON));
@@ -69,7 +69,7 @@ namespace pisco_code
                 }
                 break;
 
-            case BlinkMode::None:
+            case BlinkMode::NONE:
             default:
                 if (loop_counter == 0)
                 {

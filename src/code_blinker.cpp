@@ -177,12 +177,12 @@ namespace pisco_code
 
     void CodeBlinker::handleIdle(LoopCounter)
     {
-        controller_->setBlinkMode(BlinkMode::None);
+        controller_->setBlinkMode(BlinkMode::NONE);
     }
 
     void CodeBlinker::handleBeginDigit(LoopCounter loop_counter)
     {
-        controller_->setBlinkMode(BlinkMode::Dimmed);
+        controller_->setBlinkMode(BlinkMode::DIMMED);
         if (phaseElapsed(loop_counter))
         {
             transitionTo(is_negative_ ? Phase::DisplayNegativeSign : Phase::LoadNextDigit,
@@ -192,7 +192,7 @@ namespace pisco_code
 
     void CodeBlinker::handleLoadNextDigit(LoopCounter loop_counter)
     {
-        controller_->setBlinkMode(BlinkMode::Dimmed);
+        controller_->setBlinkMode(BlinkMode::DIMMED);
         if (phaseElapsed(loop_counter))
         {
             // NOTE: Need to improve this logic to avoid miss interpretation
@@ -219,7 +219,7 @@ namespace pisco_code
 
     void CodeBlinker::handleDisplayNegativeSign(LoopCounter loop_counter)
     {
-        controller_->setBlinkMode(BlinkMode::Pulse);
+        controller_->setBlinkMode(BlinkMode::PULSE);
         if (phaseElapsed(loop_counter))
         {
             transitionTo(Phase::PauseAfterNegative, to_loop_count(NEGATIVE_BLINK_LONG_MS),
@@ -229,7 +229,7 @@ namespace pisco_code
 
     void CodeBlinker::handlePauseAfterNegative(LoopCounter loop_counter)
     {
-        controller_->setBlinkMode(BlinkMode::Dimmed);
+        controller_->setBlinkMode(BlinkMode::DIMMED);
         if (phaseElapsed(loop_counter))
         {
             transitionTo(Phase::LoadNextDigit, to_loop_count(BETWEEN_BLINK_MS), loop_counter);
@@ -238,7 +238,7 @@ namespace pisco_code
 
     void CodeBlinker::handleEmitBlink(LoopCounter loop_counter)
     {
-        controller_->setBlinkMode(BlinkMode::Pulse);
+        controller_->setBlinkMode(BlinkMode::PULSE);
 
         if (phaseElapsed(loop_counter))
         {
@@ -252,7 +252,7 @@ namespace pisco_code
 
     void CodeBlinker::handlePauseBetweenBlinks(LoopCounter loop_counter)
     {
-        controller_->setBlinkMode(BlinkMode::Dimmed);
+        controller_->setBlinkMode(BlinkMode::DIMMED);
         if (phaseElapsed(loop_counter))
         {
             if (hasMoreBlinks())
@@ -272,7 +272,7 @@ namespace pisco_code
 
     void CodeBlinker::handlePauseBeforeStart(LoopCounter loop_counter)
     {
-        controller_->setBlinkMode(BlinkMode::None);
+        controller_->setBlinkMode(BlinkMode::NONE);
         if (phaseElapsed(loop_counter))
         {
             transitionTo(Phase::BeginDigit, to_loop_count(INIT_DIMMED_PHASE_MS), loop_counter);
@@ -281,7 +281,7 @@ namespace pisco_code
 
     void CodeBlinker::handleDisplayZero(LoopCounter loop_counter)
     {
-        controller_->setBlinkMode(BlinkMode::None);
+        controller_->setBlinkMode(BlinkMode::NONE);
         if (phaseElapsed(loop_counter))
         {
             transitionTo(Phase::PauseBetweenBlinks, to_loop_count(BETWEEN_DIGITS_MS), loop_counter);
@@ -290,7 +290,7 @@ namespace pisco_code
 
     void CodeBlinker::handleEndOfDigitCycle(LoopCounter loop_counter)
     {
-        controller_->setBlinkMode(BlinkMode::Dimmed);
+        controller_->setBlinkMode(BlinkMode::DIMMED);
         if (phaseElapsed(loop_counter))
         {
             if (repeats_remaining_ == 0)
@@ -311,7 +311,7 @@ namespace pisco_code
 
     void CodeBlinker::handlePauseAfterFinish(LoopCounter loop_counter)
     {
-        controller_->setBlinkMode(BlinkMode::None);
+        controller_->setBlinkMode(BlinkMode::NONE);
         if (phaseElapsed(loop_counter))
         {
             transitionTo(Phase::Idle, 0, loop_counter);

@@ -28,7 +28,7 @@ class MockLedControllerAdapter : public LedController
 
         switch (mode_)
         {
-            case BlinkMode::Pulse:
+            case BlinkMode::PULSE:
                 if (loop_counter == 0)
                 {
                     logger_->handle(static_cast<LedCodeType>(LedControlCode::ON));
@@ -39,7 +39,7 @@ class MockLedControllerAdapter : public LedController
                 }
                 break;
 
-            case BlinkMode::Dimmed:
+            case BlinkMode::DIMMED:
                 if (loop_counter == 0)
                 {
                     logger_->handle(static_cast<LedCodeType>(LedControlCode::ON));
@@ -50,7 +50,7 @@ class MockLedControllerAdapter : public LedController
                 }
                 break;
 
-            case BlinkMode::None:
+            case BlinkMode::NONE:
             default:
                 if (loop_counter == 0)
                 {
@@ -65,7 +65,7 @@ class MockLedControllerAdapter : public LedController
     MockLedControlLogger* logger_       = nullptr;
     uint8_t               peak_level_   = PWM_MAX;
     uint8_t               dimmed_level_ = DEFAULT_DIMMED_LEVEL;
-    BlinkMode             mode_         = BlinkMode::None;
+    BlinkMode             mode_         = BlinkMode::NONE;
 };
 
 #endif // MOCK_LED_CONTROLLER_ADAPTER_HPP
