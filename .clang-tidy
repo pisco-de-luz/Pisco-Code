@@ -34,7 +34,7 @@ CheckOptions:
     value: UPPER_CASE
   - key: readability-identifier-naming.ConstexprVariableCase
     value: UPPER_CASE
-    key: readability-identifier-naming.ConstexprFunctionCase
+  - key: readability-identifier-naming.ConstexprFunctionCase
     value: lower_case
   - key: readability-identifier-naming.EnumConstantCase
     value: UPPER_CASE
