@@ -1,6 +1,5 @@
 // led_controller.hpp
-#ifndef PISCO_LED_CONTROLLER_HPP
-#define PISCO_LED_CONTROLLER_HPP
+#pragma once
 
 #include "pisco_types.hpp"
 
@@ -24,5 +23,3 @@ namespace pisco_code
     };
 
 } // namespace pisco_code
-
-#endif // PISCO_LED_CONTROLLER_HPP

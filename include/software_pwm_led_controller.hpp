@@ -3,6 +3,7 @@
 
 #include "led_controller.hpp"
 #include "pisco_constants.hpp"
+#include "pisco_types.hpp"
 // #include <stdint.h> // NOLINT(modernize-deprecated-headers)
 
 namespace pisco_code

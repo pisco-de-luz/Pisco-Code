@@ -1,6 +1,7 @@
 // code_blinker.cpp
 #include "code_blinker.hpp"
 
+#include "led_controller.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 
@@ -31,11 +32,11 @@ namespace pisco_code
 
         for (Index digit = max_digits_ - 1; digit >= 0; --digit)
         {
-            digits_[digit]       = to_digit(value_to_display % to_value(base));
-            blink_counts_[digit] = to_count(digits_[digit]);
-            if (digits_[digit] > 0)
+            digits_[to_index(digit)]       = to_digit(value_to_display % to_value(base));
+            blink_counts_[to_index(digit)] = to_count(digits_[to_index(digit)]);
+            if (digits_[to_index(digit)] > 0)
             {
-                current_digit_index_ = to_index(digit);
+                current_digit_index_ = digit;
             }
             value_to_display /= to_value(base);
         }

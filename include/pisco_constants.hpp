@@ -42,9 +42,9 @@ namespace pisco_code
         return static_cast<Counter>(value);
     }
 
-    constexpr Index8 to_index(UInt32 value) noexcept
+    constexpr UInt8 to_index(Index value) noexcept
     {
-        return static_cast<Index>(value);
+        return static_cast<UInt8>(value);
     }
 
     constexpr PhaseDuration to_phase_duration(UInt32 value) noexcept
