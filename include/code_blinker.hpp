@@ -25,40 +25,40 @@ namespace pisco_code
         enum class Phase : PhaseType
         {
             // LED is off (initial state)
-            PauseBeforeStart = 0,
+            PAUSE_BEFORE_START = 0,
 
             // LED is dimmed (start of digit display)
-            BeginDigit,
+            BEGIN_DIGIT,
 
             // LED is ON (blink for negative sign)
-            DisplayNegativeSign,
+            DISPLAY_NEGATIVE_SIGN,
 
             // LED is dimmed (cooldown after minus blink)
-            PauseAfterNegative,
+            PAUSE_AFTER_NEGATIVE,
 
             // LED is dimmed (preparing next digit)
-            LoadNextDigit,
+            LOAD_NEXT_DIGIT,
 
             // LED is ON (main blink pulse)
-            EmitBlink,
+            EMIT_BLINK,
 
             // LED is dimmed (between blinks of the same digit)
-            PauseBetweenBlinks,
+            PAUSE_BETWEEN_BLINKS,
 
             // LED is dimmed (zero represented as a dim pause)
-            DisplayZero,
+            DISPLAY_ZERO,
 
             // LED is dimmed (pause before repeat or stop)
-            EndOfDigitCycle,
+            END_OF_DIGIT_CYCLE,
 
             // LED is off (pause before next repetition)
-            PrepareRepeat,
+            PREPARE_REPEAT,
 
             // LED is off (pause after final repetition)
-            PauseAfterFinish,
+            PAUSE_AFTER_FINISH,
 
             // LED is off (system paused or stopped)
-            Idle
+            IDLE
         };
         using BlinkPhaseHandler = void (CodeBlinker::*)(UInt8);
         void transitionTo(Phase next, PhaseDuration duration, LoopCounter loop_counter);
@@ -93,7 +93,7 @@ namespace pisco_code
 
         LoopCounter   start_time_     = 0;
         PhaseDuration phase_duration_ = 0;
-        Phase         current_phase_  = Phase::Idle;
+        Phase         current_phase_  = Phase::IDLE;
 
         bool        is_negative_  = false;
         LedLevel    peak_level_   = DEFAULT_PULSE_LEVEL;
