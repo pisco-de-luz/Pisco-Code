@@ -22,7 +22,6 @@ TEST_GROUP(HexadecimalSystematicHighLevelTests)
     CodeBlinker              blinker{&controller};
 };
 
-// - Example: 9, 88, 777, ..., 111111111
 TEST(HexadecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigits)
 {
     runSameDigitsUpToMaxDigitsForBase(NumberBase::HEX, blinker, logger);
@@ -31,4 +30,9 @@ TEST(HexadecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigits)
 TEST(HexadecimalSystematicHighLevelTests, ShouldBlinkSequentialUpDigitsUpToMaxDigits)
 {
     runSequentialUpDigitsUpToMaxDigitsForBase(NumberBase::HEX, blinker, logger);
+}
+
+TEST(HexadecimalSystematicHighLevelTests, ShouldBlinkSequentialDownDigitsUpToMaxDigits)
+{
+    runSequentialDownDigitsUpToMaxDigitsForBase(NumberBase::HEX, blinker, logger);
 }

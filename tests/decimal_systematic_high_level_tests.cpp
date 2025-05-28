@@ -38,26 +38,28 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialUpDigitsUpToMaxDigits
 // - Example: 1, 21, 321, 4321, ..., 987654321
 TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialDownDigitsUpToMaxDigits)
 {
-    const auto      number_base = NumberBase::DEC;
-    const NumDigits max_digits  = max_digits_for_base(number_base);
+    runSequentialDownDigitsUpToMaxDigitsForBase(NumberBase::DEC, blinker, logger);
 
-    for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
-    {
-        logger.clear();
-        const GeneratePatternParams params{
-            .pattern     = PatternOption::SequencialDown,
-            .number_base = number_base,
-            .num_digits  = num_digits,
-        };
-        const BlinkCode       code_to_show = generatePatternOfDigits(params);
-        const TestBlinkerCase test_case{
-            .blink_code  = code_to_show,
-            .number_base = number_base,
-            .trace_check = TraceCheck::Enforced,
-        };
+    // const auto      number_base = NumberBase::DEC;
+    // const NumDigits max_digits  = max_digits_for_base(number_base);
 
-        checkBlinkerBehavior(blinker, logger, test_case);
-    }
+    // for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
+    // {
+    //     logger.clear();
+    //     const GeneratePatternParams params{
+    //         .pattern     = PatternOption::SequencialDown,
+    //         .number_base = number_base,
+    //         .num_digits  = num_digits,
+    //     };
+    //     const BlinkCode       code_to_show = generatePatternOfDigits(params);
+    //     const TestBlinkerCase test_case{
+    //         .blink_code  = code_to_show,
+    //         .number_base = number_base,
+    //         .trace_check = TraceCheck::Enforced,
+    //     };
+
+    //     checkBlinkerBehavior(blinker, logger, test_case);
+    // }
 }
 
 TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialDigitsUpToMaxDigitsPaddedToMaxDigits)
