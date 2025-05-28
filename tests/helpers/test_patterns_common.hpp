@@ -44,7 +44,6 @@ inline void runSequentialUpDigitsUpToMaxDigitsForBase(NumberBase base, CodeBlink
                                                       MockLedControlLogger& logger)
 {
     const NumDigits max_digits = max_digits_for_base(base);
-    const auto      base_value = to_value(base);
 
     for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
@@ -71,7 +70,6 @@ inline void runSequentialDownDigitsUpToMaxDigitsForBase(NumberBase base, CodeBli
                                                         MockLedControlLogger& logger)
 {
     const NumDigits max_digits = max_digits_for_base(base);
-    const auto      base_value = to_value(base);
 
     for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
