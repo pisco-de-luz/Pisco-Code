@@ -49,7 +49,6 @@ inline void runSequentialUpDigitsUpToMaxDigitsForBase(NumberBase base, CodeBlink
     for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
         logger.clear();
-        const DigitValue digit = ((base_value - num_digits) % base_value);
 
         const BlinkCode code = testutils::generatePatternOfDigits(
             {testutils::PatternOption::SequencialUp, base, num_digits});
@@ -77,7 +76,6 @@ inline void runSequentialDownDigitsUpToMaxDigitsForBase(NumberBase base, CodeBli
     for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
         logger.clear();
-        const DigitValue digit = ((base_value - num_digits) % base_value);
 
         const BlinkCode code = testutils::generatePatternOfDigits(
             {testutils::PatternOption::SequencialDown, base, num_digits});
