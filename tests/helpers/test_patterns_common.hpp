@@ -88,8 +88,8 @@ inline void runSequentialDownDigitsUpToMaxDigitsForBase(NumberBase base, CodeBli
             .trace_check = testutils::TraceCheck::Enforced,
         };
 
-        std::cout << "code: " << std::dec << code << "(dec), " << std::hex << code << "(hex), "
-                  << std::oct << code << "(oct)" << std::endl;
+        // std::cout << "code: " << std::dec << code << "(dec), " << std::hex << code << "(hex), "
+        //           << std::oct << code << "(oct)" << std::endl;
         checkBlinkerBehavior(blinker, logger, test_case);
     }
 }
