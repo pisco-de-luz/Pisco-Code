@@ -31,3 +31,8 @@ TEST(BinarySystematicHighLevelTests, ShouldBlinkSequentialUpDigitsUpToMaxDigits)
 {
     runSequentialUpDigitsUpToMaxDigitsForBase(NumberBase::BIN, blinker, logger);
 }
+
+TEST(BinarySystematicHighLevelTests, ShouldBlinkSequentialDownDigitsUpToMaxDigits)
+{
+    runSequentialDownDigitsUpToMaxDigitsForBase(NumberBase::BIN, blinker, logger);
+}
