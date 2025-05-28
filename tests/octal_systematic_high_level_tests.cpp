@@ -46,3 +46,13 @@ TEST(OctalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedToMa
 {
     runSameDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase::OCT, blinker, logger);
 }
+
+TEST(OctalSystematicHighLevelTests, ShouldBlinkSequentialDigitsUpToMaxDigitsPaddedToHalfMaxDigits)
+{
+    runSequentialDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(NumberBase::OCT, blinker, logger);
+}
+
+TEST(OctalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedToHalfMaxDigits)
+{
+    runSameDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(NumberBase::OCT, blinker, logger);
+}

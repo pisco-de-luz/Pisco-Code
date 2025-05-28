@@ -46,3 +46,13 @@ TEST(BinarySystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedToM
 {
     runSameDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase::BIN, blinker, logger);
 }
+
+TEST(BinarySystematicHighLevelTests, ShouldBlinkSequentialDigitsUpToMaxDigitsPaddedToHalfMaxDigits)
+{
+    runSequentialDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(NumberBase::BIN, blinker, logger);
+}
+
+TEST(BinarySystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedToHalfMaxDigits)
+{
+    runSameDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(NumberBase::BIN, blinker, logger);
+}

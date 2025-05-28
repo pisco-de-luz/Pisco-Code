@@ -147,3 +147,63 @@ inline void runSameDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase       
         //           << std::hex << code << "(hex), " << std::oct << code << "(oct)" << std::endl;
     }
 }
+
+// - Example DEC: 0001, 0012, 0123, 1234, 2345, ..., 6789
+// - Example HEX: 001, 012, 123, 234, ..., 567
+// - Example OCT: 0001, 0012, 0123, 1234, 2345,..., 6701
+// - Example BIN: 0{11}1, 0{10}10, 0{9}101, ..., 1010{3}
+inline void
+runSequentialDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(NumberBase base, CodeBlinker& blinker,
+                                                             MockLedControlLogger& logger)
+{
+    const NumDigits max_digits = max_digits_for_base(base);
+
+    for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
+    {
+        logger.clear();
+
+        const BlinkCode code = testutils::generatePatternOfDigits(
+            {testutils::PatternOption::SequencialUp, base, num_digits});
+
+        const testutils::TestBlinkerCase test_case{
+            .blink_code  = code,
+            .number_base = base,
+            .trace_check = testutils::TraceCheck::Enforced,
+            .numDigits   = max_digits / 2,
+        };
+
+        checkBlinkerBehavior(blinker, logger, test_case);
+    }
+}
+
+// - Example DEC: 0009, 0088, 0777, 6666, 5555, 4444, ..., 1111
+// - Example HEX: 007, 066, 555, 444, 333, 222, 111
+// - Example OCT: 0002, 0011, 0777, 6666, 5555, ..., 1111
+// - Example BIN: 0{11}1, 0{10}11, 0{9}111, ..., 1{12}
+inline void runSameDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(NumberBase            base,
+                                                                   CodeBlinker&          blinker,
+                                                                   MockLedControlLogger& logger)
+{
+    const NumDigits max_digits = max_digits_for_base(base);
+
+    for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
+    {
+        logger.clear();
+
+        const DigitValue digit_to_show = ((max_digits - num_digits) % (to_value(base) - 1)) + 1;
+        const BlinkCode  code          = testutils::generatePatternOfDigits(
+            {testutils::PatternOption::SameDigit, base, num_digits, digit_to_show});
+
+        const testutils::TestBlinkerCase test_case{
+            .blink_code  = code,
+            .number_base = base,
+            .trace_check = testutils::TraceCheck::Enforced,
+            .numDigits   = max_digits / 2,
+        };
+
+        checkBlinkerBehavior(blinker, logger, test_case);
+        // const testutils::TraceCode actual_trace = logger.traceLogToString();
+        // std::cout << " code: " << actual_trace.c_str() << " - " << std::dec << code << "(dec), "
+        //           << std::hex << code << "(hex), " << std::oct << code << "(oct)" << std::endl;
+    }
+}

@@ -46,3 +46,14 @@ TEST(HexadecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPadd
 {
     runSameDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase::HEX, blinker, logger);
 }
+
+TEST(HexadecimalSystematicHighLevelTests,
+     ShouldBlinkSequentialDigitsUpToMaxDigitsPaddedToHalfMaxDigits)
+{
+    runSequentialDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(NumberBase::HEX, blinker, logger);
+}
+
+TEST(HexadecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedToHalfMaxDigits)
+{
+    runSameDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(NumberBase::HEX, blinker, logger);
+}
