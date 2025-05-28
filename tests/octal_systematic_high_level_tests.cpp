@@ -36,3 +36,8 @@ TEST(OctalSystematicHighLevelTests, ShouldBlinkSequentialDownDigitsUpToMaxDigits
 {
     runSequentialDownDigitsUpToMaxDigitsForBase(NumberBase::OCT, blinker, logger);
 }
+
+TEST(OctalSystematicHighLevelTests, ShouldBlinkSequentialDigitsUpToMaxDigitsPaddedToMaxDigits)
+{
+    runSequentialDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase::OCT, blinker, logger);
+}

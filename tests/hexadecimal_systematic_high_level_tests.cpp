@@ -36,3 +36,8 @@ TEST(HexadecimalSystematicHighLevelTests, ShouldBlinkSequentialDownDigitsUpToMax
 {
     runSequentialDownDigitsUpToMaxDigitsForBase(NumberBase::HEX, blinker, logger);
 }
+
+TEST(HexadecimalSystematicHighLevelTests, ShouldBlinkSequentialDigitsUpToMaxDigitsPaddedToMaxDigits)
+{
+    runSequentialDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase::HEX, blinker, logger);
+}

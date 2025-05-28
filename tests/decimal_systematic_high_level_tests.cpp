@@ -43,27 +43,7 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialDownDigitsUpToMaxDigi
 
 TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialDigitsUpToMaxDigitsPaddedToMaxDigits)
 {
-    const auto      number_base = NumberBase::DEC;
-    const NumDigits max_digits  = max_digits_for_base(number_base);
-
-    for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
-    {
-        logger.clear();
-        const GeneratePatternParams params{
-            .pattern     = PatternOption::SequencialUp,
-            .number_base = number_base,
-            .num_digits  = num_digits,
-        };
-        const BlinkCode       code_to_show = generatePatternOfDigits(params);
-        const TestBlinkerCase test_case{
-            .blink_code  = code_to_show,
-            .number_base = number_base,
-            .trace_check = TraceCheck::Enforced,
-            .numDigits   = max_digits,
-        };
-
-        checkBlinkerBehavior(blinker, logger, test_case);
-    }
+    runSequentialDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase::DEC, blinker, logger);
 }
 
 TEST(DecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedToMaxDigits)

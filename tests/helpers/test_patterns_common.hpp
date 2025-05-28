@@ -64,7 +64,7 @@ inline void runSequentialUpDigitsUpToMaxDigitsForBase(NumberBase base, CodeBlink
 
 // - Example DEC: 1, 21, 321, 4321, ..., 987654321
 // - Example HEX: 1, 21, 321, 4321, ..., 7654321
-// - Example OCT: 1, 21, 321, 4321, ..., 76543210
+// - Example OCT: 1, 21, 321, 4321, ..., 765432107
 // - Example BIN: 1, 10, 101, 1010, ..., 1010101010
 inline void runSequentialDownDigitsUpToMaxDigitsForBase(NumberBase base, CodeBlinker& blinker,
                                                         MockLedControlLogger& logger)
@@ -87,5 +87,36 @@ inline void runSequentialDownDigitsUpToMaxDigitsForBase(NumberBase base, CodeBli
         // std::cout << "code: " << std::dec << code << "(dec), " << std::hex << code << "(hex), "
         //           << std::oct << code << "(oct)" << std::endl;
         checkBlinkerBehavior(blinker, logger, test_case);
+    }
+}
+
+// - Example DEC: 000000001, 000000012, 000000123, ..., 123456789
+// - Example HEX: 0000001, 0000012, 0000123, ..., 1234567
+// - Example OCT: 000000001, 000000012, 000000123, ..., 123456701
+// - Example BIN: 0{23}1, 0{22}10, 0{21}101, ..., 1010{6}
+inline void runSequentialDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase            base,
+                                                                     CodeBlinker&          blinker,
+                                                                     MockLedControlLogger& logger)
+{
+    const NumDigits max_digits = max_digits_for_base(base);
+
+    for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
+    {
+        logger.clear();
+
+        const BlinkCode code = testutils::generatePatternOfDigits(
+            {testutils::PatternOption::SequencialUp, base, num_digits});
+
+        const testutils::TestBlinkerCase test_case{
+            .blink_code  = code,
+            .number_base = base,
+            .trace_check = testutils::TraceCheck::Enforced,
+            .numDigits   = max_digits,
+        };
+
+        checkBlinkerBehavior(blinker, logger, test_case);
+        // const testutils::TraceCode actual_trace = logger.traceLogToString();
+        // std::cout << " code: " << actual_trace.c_str() << " - " << std::dec << code << "(dec), "
+        //           << std::hex << code << "(hex), " << std::oct << code << "(oct)" << std::endl;
     }
 }
