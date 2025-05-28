@@ -20,12 +20,13 @@ namespace
 
     std::string toBaseString(BlinkCode code, NumberBase base, uint8_t num_digits)
     {
-        std::string result;
+        std::string      result("");
+        const DigitValue base_value = to_value(base);
         for (uint8_t i = 0; i < num_digits; ++i)
         {
-            DigitValue digit = static_cast<DigitValue>(code % to_value(base));
-            result += "0123456789abcdef"[digit];
-            code /= to_value(base);
+            testutils::Index digit_index = to_index(code % base_value);
+            result += "0123456789abcdef"[digit_index];
+            code /= base_value;
         }
         std::reverse(result.begin(), result.end());
         return result;
@@ -40,8 +41,8 @@ namespace
         params.num_digits  = num_digits;
         params.digit       = 1;
 
-        BlinkCode   result = generatePatternOfDigits(params);
-        std::string actual = toBaseString(result, base, num_digits);
+        const BlinkCode   result = generatePatternOfDigits(params);
+        const std::string actual = toBaseString(result, base, num_digits);
 
         STRCMP_EQUAL_TEXT(expected, actual.c_str(),
                           ("Base=" + std::to_string(to_value(base)) + ", Digits=" +
