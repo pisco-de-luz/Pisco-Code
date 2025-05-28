@@ -172,33 +172,62 @@ namespace testutils
     // Generate a BlinkCode code using a pattern of digits
     inline BlinkCode generatePatternOfDigits(const GeneratePatternParams& params)
     {
-        BlinkCode code_to_show = 0;
+        BlinkCode  code_to_show = 0;
+        const auto base_value   = to_value(params.number_base);
+
+        PatternOption pattern_to_use = params.pattern;
+        if (params.pattern == PatternOption::SequencialDown && params.num_digits >= base_value)
+        {
+            pattern_to_use = PatternOption::DescendingFromMax;
+        }
+
         for (Counter i = 0; i < params.num_digits; ++i)
         {
             DigitValue digit_to_show = 0;
-            switch (params.pattern)
+
+            switch (pattern_to_use)
             {
                 case PatternOption::SequencialUp:
-                    digit_to_show = ((i + 1) % to_value(params.number_base));
+                    digit_to_show = (i + 1) % base_value;
                     break;
+
                 case PatternOption::SequencialDown:
-                    digit_to_show = ((params.num_digits - i) % to_value(params.number_base));
+                    digit_to_show = (params.num_digits - i) % base_value;
                     break;
+
                 case PatternOption::DescendingFromMax:
-                    digit_to_show =
-                        ((to_value(params.number_base) - i - 1) % to_value(params.number_base));
+                    digit_to_show = static_cast<DigitValue>((base_value - 1 - (i % base_value)));
                     break;
+
                 case PatternOption::SameDigit:
                     digit_to_show = params.digit;
                     break;
+
                 default:
-                    digit_to_show =
-                        0; // Make the generator return 0 if the pattern is not recognized
+                    digit_to_show = 0;
                     break;
             }
-            code_to_show = code_to_show * to_value(params.number_base) + digit_to_show;
+
+            code_to_show = code_to_show * base_value + digit_to_show;
         }
+
         return code_to_show;
     }
 
 } // namespace testutils
+
+/*
+if (num_digits >= base_value) { start_digit = (num_digits - base_value + 1);}
+i, (num_digits - i),  (num_digits - i) % base_value, (start_digit - i)
+0,  9,                  1, 2
+1,  8,                  0
+2,  7,                  7
+3, 6, 6
+4, 5, 5
+5, 4, 4
+6, 3, 3
+7, 2, 2
+8, 1, 1
+
+
+*/
