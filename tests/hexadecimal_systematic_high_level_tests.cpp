@@ -41,3 +41,8 @@ TEST(HexadecimalSystematicHighLevelTests, ShouldBlinkSequentialDigitsUpToMaxDigi
 {
     runSequentialDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase::HEX, blinker, logger);
 }
+
+TEST(HexadecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedToMaxDigits)
+{
+    runSameDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase::HEX, blinker, logger);
+}

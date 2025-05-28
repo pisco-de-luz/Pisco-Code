@@ -84,8 +84,6 @@ inline void runSequentialDownDigitsUpToMaxDigitsForBase(NumberBase base, CodeBli
             .trace_check = testutils::TraceCheck::Enforced,
         };
 
-        // std::cout << "code: " << std::dec << code << "(dec), " << std::hex << code << "(hex), "
-        //           << std::oct << code << "(oct)" << std::endl;
         checkBlinkerBehavior(blinker, logger, test_case);
     }
 }
@@ -106,6 +104,35 @@ inline void runSequentialDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase 
 
         const BlinkCode code = testutils::generatePatternOfDigits(
             {testutils::PatternOption::SequencialUp, base, num_digits});
+
+        const testutils::TestBlinkerCase test_case{
+            .blink_code  = code,
+            .number_base = base,
+            .trace_check = testutils::TraceCheck::Enforced,
+            .numDigits   = max_digits,
+        };
+
+        checkBlinkerBehavior(blinker, logger, test_case);
+    }
+}
+
+// - Example DEC: 000000009, 000000088, 000000777, ..., 111111111
+// - Example HEX: 0000007, 0000066, 0000555, ..., 1111111
+// - Example OCT: 000000002, 000000011, 000000777, ..., 111111111
+// - Example BIN: 0{23}1, 0{22}11, 0{21}111, ..., 1{24}
+inline void runSameDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase            base,
+                                                               CodeBlinker&          blinker,
+                                                               MockLedControlLogger& logger)
+{
+    const NumDigits max_digits = max_digits_for_base(base);
+
+    for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
+    {
+        logger.clear();
+
+        const DigitValue digit_to_show = ((max_digits - num_digits) % (to_value(base) - 1)) + 1;
+        const BlinkCode  code          = testutils::generatePatternOfDigits(
+            {testutils::PatternOption::SameDigit, base, num_digits, digit_to_show});
 
         const testutils::TestBlinkerCase test_case{
             .blink_code  = code,
