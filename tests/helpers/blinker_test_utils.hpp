@@ -84,7 +84,7 @@ namespace testutils
             abs_code /= static_cast<uint8_t>(base);
         }
 
-        if (num_digits > 0 && num_digits < max_digits)
+        if (num_digits > 0 && num_digits <= max_digits)
         {
             result.first_nonzero_digit_index = max_digits - num_digits;
         }

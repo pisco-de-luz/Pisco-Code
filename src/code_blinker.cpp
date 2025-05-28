@@ -41,7 +41,7 @@ namespace pisco_code
             value_to_display /= to_value(base);
         }
 
-        if (num_digits > 0 && num_digits < max_digits_)
+        if (num_digits > 0 && num_digits <= max_digits_)
         {
             current_digit_index_ = max_digits_ - num_digits;
         }
