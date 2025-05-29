@@ -57,3 +57,10 @@ TEST(HexadecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPadd
 {
     runSameDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(NumberBase::HEX, blinker, logger);
 }
+
+// Ignored due to long runtime from many full-digit blink sequences.
+// Useful for stress/regression tests, not routine execution.
+IGNORE_TEST(HexadecimalSystematicHighLevelTests, ShouldBlinkSameMaxBaseDigitUpToMaxDigitsNineTimes)
+{
+    runSameMaxBaseDigitUpToMaxDigitsNineTimesForBase(NumberBase::HEX, blinker, logger);
+}

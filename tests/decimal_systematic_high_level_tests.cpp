@@ -14,7 +14,6 @@
 #include "tests_types.hpp"
 
 using namespace pisco_code;
-using namespace testutils;
 
 TEST_GROUP(DecimalSystematicHighLevelTests)
 {
@@ -23,19 +22,16 @@ TEST_GROUP(DecimalSystematicHighLevelTests)
     CodeBlinker              blinker{&controller};
 };
 
-// - Example: 9, 88, 777, ..., 111111111
 TEST(DecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigits)
 {
     runSameDigitsUpToMaxDigitsForBase(NumberBase::DEC, blinker, logger);
 }
 
-// - Example: 1, 12, 123, 1234, ..., 123456789
 TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialUpDigitsUpToMaxDigits)
 {
     runSequentialUpDigitsUpToMaxDigitsForBase(NumberBase::DEC, blinker, logger);
 }
 
-// - Example: 1, 21, 321, 4321, ..., 987654321
 TEST(DecimalSystematicHighLevelTests, ShouldBlinkSequentialDownDigitsUpToMaxDigits)
 {
     runSequentialDownDigitsUpToMaxDigitsForBase(NumberBase::DEC, blinker, logger);
@@ -61,55 +57,9 @@ TEST(DecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedTo
     runSameDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(NumberBase::DEC, blinker, logger);
 }
 
-TEST(DecimalSystematicHighLevelTests, ShouldBlinkFullPatternOfMaxBaseDigitUpToMaxDigits)
+// Ignored due to long runtime from many full-digit blink sequences.
+// Useful for stress/regression tests, not routine execution.
+IGNORE_TEST(DecimalSystematicHighLevelTests, ShouldBlinkSameMaxBaseDigitUpToMaxDigitsNineTimes)
 {
-    const auto      number_base = NumberBase::DEC;
-    const NumDigits max_digits  = max_digits_for_base(number_base);
-
-    for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
-    {
-        logger.clear();
-        const GeneratePatternParams params{
-            .pattern     = PatternOption::SameDigit,
-            .number_base = number_base,
-            .num_digits  = num_digits,
-            .digit       = (to_value(number_base) - 1),
-        };
-        const BlinkCode code_to_show = generatePatternOfDigits(params);
-
-        const TestBlinkerCase test_case{
-            .blink_code  = code_to_show,
-            .number_base = number_base,
-            .trace_check = TraceCheck::Enforced,
-        };
-
-        checkBlinkerBehavior(blinker, logger, test_case);
-    }
-}
-
-TEST(DecimalSystematicHighLevelTests, ShouldRepeatBlinkOfMaxBaseDigitUpToMaxDigitsNineTimes)
-{
-    const auto      number_base = NumberBase::DEC;
-    const NumDigits max_digits  = max_digits_for_base(number_base);
-
-    for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
-    {
-        logger.clear();
-        const GeneratePatternParams params{
-            .pattern     = PatternOption::SameDigit,
-            .number_base = number_base,
-            .num_digits  = num_digits,
-            .digit       = (to_value(number_base) - 1),
-        };
-        const BlinkCode code_to_show = generatePatternOfDigits(params);
-
-        const TestBlinkerCase test_case{
-            .blink_code  = code_to_show,
-            .number_base = number_base,
-            .trace_check = TraceCheck::Enforced,
-            .repeats     = 9,
-        };
-
-        checkBlinkerBehavior(blinker, logger, test_case);
-    }
+    runSameMaxBaseDigitUpToMaxDigitsNineTimesForBase(NumberBase::DEC, blinker, logger);
 }

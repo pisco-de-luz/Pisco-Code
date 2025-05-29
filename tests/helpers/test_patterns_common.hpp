@@ -3,7 +3,6 @@
 #include "mock_led_controller_adapter.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
-#include "tests_constants.hpp"
 #include "tests_types.hpp"
 
 using namespace pisco_code;
@@ -142,9 +141,6 @@ inline void runSameDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase       
         };
 
         checkBlinkerBehavior(blinker, logger, test_case);
-        // const testutils::TraceCode actual_trace = logger.traceLogToString();
-        // std::cout << " code: " << actual_trace.c_str() << " - " << std::dec << code << "(dec), "
-        //           << std::hex << code << "(hex), " << std::oct << code << "(oct)" << std::endl;
     }
 }
 
@@ -202,8 +198,34 @@ inline void runSameDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(NumberBase   
         };
 
         checkBlinkerBehavior(blinker, logger, test_case);
-        // const testutils::TraceCode actual_trace = logger.traceLogToString();
-        // std::cout << " code: " << actual_trace.c_str() << " - " << std::dec << code << "(dec), "
-        //           << std::hex << code << "(hex), " << std::oct << code << "(oct)" << std::endl;
+    }
+}
+
+// - Example DEC: 9, 99, 999, ..., 999999999
+// - Example HEX: F, FF, FFF, ..., FFFFFFFF
+// - Example OCT: 7, 77, 777, ..., 777777777
+// - Example BIN: 1, 11, 111, ..., 1{24}
+inline void runSameMaxBaseDigitUpToMaxDigitsNineTimesForBase(NumberBase base, CodeBlinker& blinker,
+                                                             MockLedControlLogger& logger)
+{
+    const NumDigits max_digits = max_digits_for_base(base);
+    const auto      base_value = to_value(base);
+
+    for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
+    {
+        logger.clear();
+
+        const DigitValue digit_to_show = base_value - 1;
+        const BlinkCode  code          = testutils::generatePatternOfDigits(
+            {testutils::PatternOption::SameDigit, base, num_digits, digit_to_show});
+
+        const testutils::TestBlinkerCase test_case{
+            .blink_code  = code,
+            .number_base = base,
+            .trace_check = testutils::TraceCheck::Enforced,
+            .repeats     = 9,
+        };
+
+        checkBlinkerBehavior(blinker, logger, test_case);
     }
 }

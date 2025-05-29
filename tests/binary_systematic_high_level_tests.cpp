@@ -56,3 +56,10 @@ TEST(BinarySystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedToH
 {
     runSameDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(NumberBase::BIN, blinker, logger);
 }
+
+// Ignored due to long runtime from many full-digit blink sequences.
+// Useful for stress/regression tests, not routine execution.
+IGNORE_TEST(BinarySystematicHighLevelTests, ShouldBlinkSameMaxBaseDigitUpToMaxDigitsNineTimes)
+{
+    runSameMaxBaseDigitUpToMaxDigitsNineTimesForBase(NumberBase::BIN, blinker, logger);
+}
