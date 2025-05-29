@@ -1,4 +1,4 @@
-#include "pisco_code/signal_units.hpp"
+#include "signal_units.hpp"
 
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
@@ -32,7 +32,7 @@ namespace pisco_code
         count_ = 0;
     }
 
-    void SignalSequence::generateFromCode(BlinkCode code, BaseType base,
+    void SignalSequence::generateFromCode(BlinkCode code, NumberBase base,
                                           NumDigits min_digits) noexcept
     {
         clear();
@@ -62,7 +62,7 @@ namespace pisco_code
 
         if (is_negative)
         {
-            add(SignalUnit(SignalLevel::PEAK, 1, SignalDuration::LONG));
+            (void) add(SignalUnit(SignalLevel::PEAK, 1, SignalDuration::LONG));
         }
 
         for (Index i = start_index; i < max_digits; ++i)
@@ -70,11 +70,11 @@ namespace pisco_code
             const DigitValue digit = digits[to_index(i)];
             if (digit == 0)
             {
-                add(SignalUnit(SignalLevel::GAP, 1, SignalDuration::SHORT));
+                (void) add(SignalUnit(SignalLevel::GAP, 1, SignalDuration::SHORT));
             }
             else
             {
-                add(SignalUnit(SignalLevel::PEAK, digit, SignalDuration::SHORT));
+                (void) add(SignalUnit(SignalLevel::PEAK, digit, SignalDuration::SHORT));
             }
         }
     }

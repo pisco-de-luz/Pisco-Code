@@ -1,5 +1,6 @@
 #pragma once
 
+#include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 
 namespace pisco_code
@@ -70,7 +71,7 @@ namespace pisco_code
         void                            clear() noexcept;
 
         // Placeholder for logic to populate based on number
-        void generateFromCode(BlinkCode code, BaseType base, NumDigits min_digits = 0) noexcept;
+        void generateFromCode(BlinkCode code, NumberBase base, NumDigits min_digits = 0) noexcept;
 
       private:
         SignalUnit units_[MAX_SIGNAL_UNITS]{};
