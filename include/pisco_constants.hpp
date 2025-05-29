@@ -75,7 +75,7 @@ namespace pisco_code
     static_assert(MAX_DIGITS_LUT[to_value(NumberBase::DEC)] > 0, "Missing DEC max digits");
     static_assert(MAX_DIGITS_LUT[to_value(NumberBase::HEX)] > 0, "Missing HEX max digits");
 
-    // Maximum number of digits limited to 9 for 32-bit integer representation
+    // Maximum number of digits that could be represented in the system
     constexpr NumDigits MAX_DIGITS_ABSOLUTE = 31; // for int32_t in binary base
 
     constexpr LedLevel DEFAULT_DIMMED_LEVEL = 3;
