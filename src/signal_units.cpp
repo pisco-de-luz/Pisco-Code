@@ -5,21 +5,9 @@
 
 namespace pisco_code
 {
-
-    [[nodiscard]] bool SignalSequence::add(SignalUnit unit) noexcept
+    [[nodiscard]] constexpr SignalSequence::SignalSequence() noexcept
     {
-        if (count_ >= MAX_SIGNAL_UNITS)
-        {
-            return false;
-        }
-        units_[count_++] = unit;
-        return true;
-    }
-
-    [[nodiscard]] const SignalUnit& SignalSequence::at(Index index) const noexcept
-    {
-        // No bounds checking for performance; must be validated externally
-        return units_[index];
+        clear();
     }
 
     [[nodiscard]] Counter SignalSequence::size() const noexcept
@@ -29,7 +17,35 @@ namespace pisco_code
 
     void SignalSequence::clear() noexcept
     {
-        count_ = 0;
+        for (Index i = 0; i < MAX_SIGNAL_UNITS; ++i)
+        {
+            signal_units_[i] = SIGNAL_UNIT_NOT_DEFINED;
+        }
+        count_      = 0;
+        read_index_ = 0;
+    }
+
+    void SignalSequence::pushNewSignalUnit(SignalUnit unit) noexcept
+    {
+        if (count_ < MAX_SIGNAL_UNITS)
+        {
+            signal_units_[MAX_SIGNAL_UNITS - 1 - count_] = unit;
+            ++count_;
+        }
+    }
+
+    bool SignalSequence::hasNextSignalUnit() const noexcept
+    {
+        return read_index_ < count_;
+    }
+
+    SignalUnit SignalSequence::popNextSignalUnit() noexcept
+    {
+        if (read_index_ < count_)
+        {
+            return signal_units_[MAX_SIGNAL_UNITS - count_ + read_index_++];
+        }
+        return SIGNAL_UNIT_NOT_DEFINED;
     }
 
     void SignalSequence::generateFromCode(BlinkCode code, NumberBase base,
@@ -40,43 +56,27 @@ namespace pisco_code
         const bool is_negative = (code < 0);
         BlinkCode  abs_code    = is_negative ? -code : code;
 
-        const NumDigits max_digits    = to_digit(MAX_SIGNAL_UNITS); // Simplified placeholder
-        Index           first_nonzero = to_index(max_digits - 1);
+        const DigitValue base_val    = to_value(base);
+        NumDigits        digit_count = 0;
 
-        DigitValue digits[MAX_SIGNAL_UNITS]{};
-
-        for (Index i = max_digits - 1; i >= 0; --i)
+        do
         {
-            const DigitValue digit = to_digit(abs_code % to_value(base));
-            digits[to_index(i)]    = digit;
-            if (digit > 0)
-            {
-                first_nonzero = i;
-            }
-            abs_code /= to_value(base);
-        }
+            const DigitValue digit = to_digit(abs_code % base_val);
+            abs_code /= base_val;
 
-        const Index start_index = (min_digits > 0 && min_digits <= max_digits)
-                                      ? to_index(max_digits - min_digits)
-                                      : first_nonzero;
+            pushNewSignalUnit(digit == 0 ? SIGNAL_UNIT_ZERO_GAP : signal_unit_digit_peak(digit));
+            ++digit_count;
+        } while (abs_code > 0);
+
+        while (digit_count < min_digits)
+        {
+            pushNewSignalUnit(SIGNAL_UNIT_ZERO_GAP);
+            ++digit_count;
+        }
 
         if (is_negative)
         {
-            (void) add(SIGNAL_UNIT_NEGATIVE_PEAK);
-        }
-
-        for (Index i = start_index; i < max_digits; ++i)
-        {
-            const DigitValue digit = digits[to_index(i)];
-            if (digit == 0)
-            {
-                (void) add(SIGNAL_UNIT_ZERO_GAP);
-            }
-            else
-            {
-                (void) add(signal_unit_digit_peak(digit));
-            }
+            pushNewSignalUnit(SIGNAL_UNIT_NEGATIVE_PEAK);
         }
     }
-
 } // namespace pisco_code

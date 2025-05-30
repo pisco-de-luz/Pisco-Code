@@ -61,6 +61,8 @@ namespace pisco_code
 
     constexpr SignalUnit  SIGNAL_UNIT_NEGATIVE_PEAK{SignalLevel::PEAK, 1, SignalDuration::LONG};
     constexpr SignalUnit  SIGNAL_UNIT_ZERO_GAP{SignalLevel::GAP, 1, SignalDuration::SHORT};
+    constexpr SignalUnit  SIGNAL_UNIT_NOT_DEFINED{SignalLevel::NOT_DEFINED, 0,
+                                                 SignalDuration::SHORT};
     static constexpr auto signal_unit_digit_peak(DigitValue digit_value) noexcept
     {
         return SignalUnit(SignalLevel::PEAK, digit_value, SignalDuration::SHORT);
@@ -70,19 +72,21 @@ namespace pisco_code
     class SignalSequence
     {
       public:
-        [[nodiscard]] constexpr SignalSequence() noexcept = default;
+        [[nodiscard]] constexpr SignalSequence() noexcept;
 
-        [[nodiscard]] bool              add(SignalUnit unit) noexcept;
-        [[nodiscard]] const SignalUnit& at(Index index) const noexcept;
-        [[nodiscard]] Counter           size() const noexcept;
-        void                            clear() noexcept;
+        void                     pushNewSignalUnit(SignalUnit unit) noexcept;
+        [[nodiscard]] bool       hasNextSignalUnit() const noexcept;
+        [[nodiscard]] SignalUnit popNextSignalUnit() noexcept;
+        [[nodiscard]] Counter    size() const noexcept;
+        void                     clear() noexcept;
 
         // Placeholder for logic to populate based on number
         void generateFromCode(BlinkCode code, NumberBase base, NumDigits min_digits = 0) noexcept;
 
       private:
-        SignalUnit units_[MAX_SIGNAL_UNITS]{};
+        SignalUnit signal_units_[MAX_SIGNAL_UNITS]{};
         Counter    count_{0};
+        Index      read_index_{0};
     };
 
 } // namespace pisco_code
