@@ -1,0 +1,34 @@
+#pragma once
+#include "pisco_constants.hpp"
+#include "pisco_types.hpp"
+
+using namespace pisco_code;
+
+constexpr Counter MAX_SIGNAL_ELEMENTS = 32; // UPPER_CASE for constexpr variable
+
+// Signal strength or symbolic meaning
+enum class SignalLevel : Byte
+{
+    NOT_DEFINED = 0,
+    GAP, // Represents silent or idle pulse (e.g., digit 0)
+    PEAK // Represents active/visible/strong pulse
+};
+
+// Signal duration (mapped to ms by higher layers)
+enum class SignalDuration : Byte
+{
+    SHORT = 0,
+    MEDIUM,
+    LONG,
+    EXTRA_LONG
+};
+
+static constexpr Byte to_value(SignalLevel level) noexcept
+{
+    return static_cast<Byte>(level);
+}
+
+static constexpr Byte to_value(SignalDuration signal_duration) noexcept
+{
+    return static_cast<Byte>(signal_duration);
+}
