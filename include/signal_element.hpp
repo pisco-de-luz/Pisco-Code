@@ -6,7 +6,7 @@
 namespace pisco_code
 {
 
-    constexpr Counter MAX_SIGNAL_UNITS = 32; // UPPER_CASE for constexpr variable
+    constexpr Counter MAX_SIGNAL_ELEMENTS = 32; // UPPER_CASE for constexpr variable
 
     // Signal strength or symbolic meaning
     enum class SignalLevel : Byte
@@ -36,15 +36,16 @@ namespace pisco_code
     }
 
     // Single encoded unit (pulse)
-    struct SignalUnit
+    struct SignalElement
     {
         Byte times : 4;    // How many times this unit repeats (0–15)
         Byte level : 2;    // Encoded SignalLevel
         Byte duration : 2; // Encoded SignalDuration
 
-        [[nodiscard]] constexpr SignalUnit() noexcept : times(0), level(0), duration(0) {}
+        [[nodiscard]] constexpr SignalElement() noexcept : times(0), level(0), duration(0) {}
 
-        [[nodiscard]] constexpr SignalUnit(SignalLevel lvl, Byte cnt, SignalDuration dur) noexcept
+        [[nodiscard]] constexpr SignalElement(SignalLevel lvl, Byte cnt,
+                                              SignalDuration dur) noexcept
             : times(cnt), level(to_value(lvl)), duration(to_value(dur))
         {
         }
@@ -59,13 +60,14 @@ namespace pisco_code
         }
     };
 
-    constexpr SignalUnit  SIGNAL_UNIT_NEGATIVE_PEAK{SignalLevel::PEAK, 1, SignalDuration::LONG};
-    constexpr SignalUnit  SIGNAL_UNIT_ZERO_GAP{SignalLevel::GAP, 1, SignalDuration::SHORT};
-    constexpr SignalUnit  SIGNAL_UNIT_NOT_DEFINED{SignalLevel::NOT_DEFINED, 0,
-                                                 SignalDuration::SHORT};
-    static constexpr auto signal_unit_digit_peak(DigitValue digit_value) noexcept
+    constexpr SignalElement SIGNAL_ELEMENT_NEGATIVE_PEAK{SignalLevel::PEAK, 1,
+                                                         SignalDuration::LONG};
+    constexpr SignalElement SIGNAL_ELEMENT_ZERO_GAP{SignalLevel::GAP, 1, SignalDuration::SHORT};
+    constexpr SignalElement SIGNAL_ELEMENT_NOT_DEFINED{SignalLevel::NOT_DEFINED, 0,
+                                                       SignalDuration::SHORT};
+    static constexpr auto   signal_element_digit_peak(DigitValue digit_value) noexcept
     {
-        return SignalUnit(SignalLevel::PEAK, digit_value, SignalDuration::SHORT);
+        return SignalElement(SignalLevel::PEAK, digit_value, SignalDuration::SHORT);
     }
 
     class SignalStack
@@ -73,20 +75,20 @@ namespace pisco_code
       public:
         [[nodiscard]] constexpr SignalStack() noexcept = default;
 
-        void                     pushNewSignalUnit(SignalUnit unit) noexcept;
-        [[nodiscard]] bool       hasNextSignalUnit() const noexcept;
-        [[nodiscard]] SignalUnit popNextSignalUnit() noexcept;
-        [[nodiscard]] Counter    size() const noexcept;
-        void                     clear() noexcept;
-        void                     rewind() noexcept;
+        void                        pushNewSignalUnit(SignalElement unit) noexcept;
+        [[nodiscard]] bool          hasNextSignalUnit() const noexcept;
+        [[nodiscard]] SignalElement popNextSignalUnit() noexcept;
+        [[nodiscard]] Counter       size() const noexcept;
+        void                        clear() noexcept;
+        void                        rewind() noexcept;
 
         // Placeholder for logic to populate based on number
         void generateFromCode(BlinkCode code, NumberBase base, NumDigits min_digits = 0) noexcept;
 
       private:
-        SignalUnit signal_units_[MAX_SIGNAL_UNITS]{};
-        Counter    count_{0};
-        Index      read_index_{0};
+        SignalElement signal_elements_[MAX_SIGNAL_ELEMENTS]{};
+        Counter       count_{0};
+        Index         read_index_{0};
     };
 
     class SignalSequencer

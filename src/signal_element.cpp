@@ -1,4 +1,4 @@
-#include "signal_units.hpp"
+#include "signal_element.hpp"
 
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
@@ -22,19 +22,19 @@ namespace pisco_code
 
     void SignalStack::clear() noexcept
     {
-        for (Index i = 0; i < MAX_SIGNAL_UNITS; ++i)
+        for (Index i = 0; i < MAX_SIGNAL_ELEMENTS; ++i)
         {
-            signal_units_[i] = SIGNAL_UNIT_NOT_DEFINED;
+            signal_elements_[i] = SIGNAL_ELEMENT_NOT_DEFINED;
         }
         count_      = 0;
         read_index_ = 0;
     }
 
-    void SignalStack::pushNewSignalUnit(SignalUnit unit) noexcept
+    void SignalStack::pushNewSignalUnit(SignalElement unit) noexcept
     {
-        if (count_ < MAX_SIGNAL_UNITS)
+        if (count_ < MAX_SIGNAL_ELEMENTS)
         {
-            signal_units_[MAX_SIGNAL_UNITS - 1 - count_] = unit;
+            signal_elements_[MAX_SIGNAL_ELEMENTS - 1 - count_] = unit;
             ++count_;
         }
     }
@@ -44,13 +44,13 @@ namespace pisco_code
         return read_index_ < count_;
     }
 
-    SignalUnit SignalStack::popNextSignalUnit() noexcept
+    SignalElement SignalStack::popNextSignalUnit() noexcept
     {
         if (hasNextSignalUnit())
         {
-            return signal_units_[MAX_SIGNAL_UNITS - count_ + read_index_++];
+            return signal_elements_[MAX_SIGNAL_ELEMENTS - count_ + read_index_++];
         }
-        return SIGNAL_UNIT_NOT_DEFINED;
+        return SIGNAL_ELEMENT_NOT_DEFINED;
     }
 
     void SignalStack::generateFromCode(BlinkCode code, NumberBase base,
@@ -69,19 +69,20 @@ namespace pisco_code
             const DigitValue digit = to_digit(abs_code % base_val);
             abs_code /= base_val;
 
-            pushNewSignalUnit(digit == 0 ? SIGNAL_UNIT_ZERO_GAP : signal_unit_digit_peak(digit));
+            pushNewSignalUnit(digit == 0 ? SIGNAL_ELEMENT_ZERO_GAP
+                                         : signal_element_digit_peak(digit));
             ++digit_count;
         } while (abs_code > 0);
 
         while (digit_count < min_digits)
         {
-            pushNewSignalUnit(SIGNAL_UNIT_ZERO_GAP);
+            pushNewSignalUnit(SIGNAL_ELEMENT_ZERO_GAP);
             ++digit_count;
         }
 
         if (is_negative)
         {
-            pushNewSignalUnit(SIGNAL_UNIT_NEGATIVE_PEAK);
+            pushNewSignalUnit(SIGNAL_ELEMENT_NEGATIVE_PEAK);
         }
     }
 } // namespace pisco_code
