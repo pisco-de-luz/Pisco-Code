@@ -36,15 +36,15 @@ TEST(SignalUnitsGroup, ShouldEncodeSingleDigitPositiveNumber)
 {
     sequence.generateFromCode(CODE_2, NumberBase::DEC, 0);
     CHECK_EQUAL(1, sequence.size());
-    check_unit(sequence, 0, SignalUnit(SignalLevel::PEAK, 2, SignalDuration::SHORT));
+    check_unit(sequence, 0, signal_unit_digit_peak(2));
 }
 
 TEST(SignalUnitsGroup, ShouldEncodeNegativeNumberWithLeadingPeak)
 {
     sequence.generateFromCode(CODE_NEG_7, NumberBase::DEC, 0);
     CHECK_EQUAL(2, sequence.size());
-    check_unit(sequence, 0, SignalUnit(SignalLevel::PEAK, 1, SignalDuration::LONG));
-    check_unit(sequence, 1, SignalUnit(SignalLevel::PEAK, 7, SignalDuration::SHORT));
+    check_unit(sequence, 0, SIGNAL_UNIT_NEGATIVE_PEAK);
+    check_unit(sequence, 1, signal_unit_digit_peak(7));
 }
 
 TEST(SignalUnitsGroup, ShouldRespectMinDigitsWithPadding)

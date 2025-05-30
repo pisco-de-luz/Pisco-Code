@@ -59,6 +59,13 @@ namespace pisco_code
         }
     };
 
+    constexpr SignalUnit  SIGNAL_UNIT_NEGATIVE_PEAK{SignalLevel::PEAK, 1, SignalDuration::LONG};
+    constexpr SignalUnit  SIGNAL_UNIT_ZERO_GAP{SignalLevel::GAP, 1, SignalDuration::SHORT};
+    static constexpr auto signal_unit_digit_peak(DigitValue digit_value) noexcept
+    {
+        return SignalUnit(SignalLevel::PEAK, digit_value, SignalDuration::SHORT);
+    }
+
     // Sequence of signal units
     class SignalSequence
     {

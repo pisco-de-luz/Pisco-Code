@@ -62,7 +62,7 @@ namespace pisco_code
 
         if (is_negative)
         {
-            (void) add(SignalUnit(SignalLevel::PEAK, 1, SignalDuration::LONG));
+            (void) add(SIGNAL_UNIT_NEGATIVE_PEAK);
         }
 
         for (Index i = start_index; i < max_digits; ++i)
@@ -70,11 +70,11 @@ namespace pisco_code
             const DigitValue digit = digits[to_index(i)];
             if (digit == 0)
             {
-                (void) add(SignalUnit(SignalLevel::GAP, 1, SignalDuration::SHORT));
+                (void) add(SIGNAL_UNIT_ZERO_GAP);
             }
             else
             {
-                (void) add(SignalUnit(SignalLevel::PEAK, digit, SignalDuration::SHORT));
+                (void) add(signal_unit_digit_peak(digit));
             }
         }
     }
