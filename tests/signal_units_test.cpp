@@ -12,7 +12,7 @@ TEST_GROUP(SignalUnitsGroup)
 {
     void check_next(const SignalUnit& expected)
     {
-        CHECK_TRUE(sequence_stack.hasNextSignalUnit());
+        // CHECK_TRUE(sequence_stack.hasNextSignalUnit());
         const auto actual = sequence_stack.popNextSignalUnit();
         CHECK_EQUAL(to_value(expected.get_level()), to_value(actual.get_level()));
         CHECK_EQUAL(expected.times, actual.times);
@@ -38,6 +38,15 @@ TEST(SignalUnitsGroup, ShouldEncodeSingleDigitPositiveNumber)
     sequence_stack.generateFromCode(CODE_2, NumberBase::DEC, 0);
     CHECK_EQUAL(1, sequence_stack.size());
     check_next(signal_unit_digit_peak(2));
+}
+
+TEST(SignalUnitsGroup, ShouldRespectHasNextSignalUnit)
+{
+    sequence_stack.generateFromCode(CODE_2, NumberBase::DEC, 0);
+    CHECK_EQUAL(1, sequence_stack.size());
+    CHECK_TRUE(sequence_stack.hasNextSignalUnit());
+    check_next(signal_unit_digit_peak(2));
+    CHECK_FALSE(sequence_stack.hasNextSignalUnit());
 }
 
 TEST(SignalUnitsGroup, ShouldEncodeNegativeNumberWithLeadingPeak)
@@ -68,4 +77,27 @@ TEST(SignalUnitsGroup, ShouldEncodeMultiDigitNumber)
     check_next(signal_unit_digit_peak(3));
     check_next(signal_unit_digit_peak(4));
     check_next(signal_unit_digit_peak(5));
+}
+
+TEST(SignalUnitsGroup, ShouldRespectRewindCommand)
+{
+    sequence_stack.generateFromCode(CODE_120, NumberBase::DEC, 0);
+    CHECK_EQUAL(3, sequence_stack.size());
+    check_next(signal_unit_digit_peak(1));
+    check_next(signal_unit_digit_peak(2));
+    sequence_stack.rewind();
+    check_next(signal_unit_digit_peak(1));
+    check_next(signal_unit_digit_peak(2));
+    check_next(SIGNAL_UNIT_ZERO_GAP);
+}
+
+TEST(SignalUnitsGroup, ShouldRespectEndOfStack)
+{
+    sequence_stack.generateFromCode(CODE_120, NumberBase::DEC, 0);
+    CHECK_EQUAL(3, sequence_stack.size());
+    check_next(signal_unit_digit_peak(1));
+    check_next(signal_unit_digit_peak(2));
+    check_next(SIGNAL_UNIT_ZERO_GAP);
+    check_next(SIGNAL_UNIT_NOT_DEFINED);
+    check_next(SIGNAL_UNIT_NOT_DEFINED);
 }

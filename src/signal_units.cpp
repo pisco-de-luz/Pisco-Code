@@ -15,6 +15,11 @@ namespace pisco_code
         return count_;
     }
 
+    void SignalStack::rewind() noexcept
+    {
+        read_index_ = 0;
+    }
+
     void SignalStack::clear() noexcept
     {
         for (Index i = 0; i < MAX_SIGNAL_UNITS; ++i)
@@ -41,7 +46,7 @@ namespace pisco_code
 
     SignalUnit SignalStack::popNextSignalUnit() noexcept
     {
-        if (read_index_ < count_)
+        if (hasNextSignalUnit())
         {
             return signal_units_[MAX_SIGNAL_UNITS - count_ + read_index_++];
         }

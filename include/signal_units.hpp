@@ -78,6 +78,7 @@ namespace pisco_code
         [[nodiscard]] SignalUnit popNextSignalUnit() noexcept;
         [[nodiscard]] Counter    size() const noexcept;
         void                     clear() noexcept;
+        void                     rewind() noexcept;
 
         // Placeholder for logic to populate based on number
         void generateFromCode(BlinkCode code, NumberBase base, NumDigits min_digits = 0) noexcept;
@@ -86,6 +87,25 @@ namespace pisco_code
         SignalUnit signal_units_[MAX_SIGNAL_UNITS]{};
         Counter    count_{0};
         Index      read_index_{0};
+    };
+
+    class SignalSequencer
+    {
+      public:
+        [[nodiscard]] SignalSequencer(SignalStack signal_stack, RepeatTimes repeat_times)
+            : signal_stack_(signal_stack), repeat_times_(repeat_times)
+        {
+        }
+        [[nodiscard]] bool hasSignalCodeToSequence() const noexcept;
+        [[nodiscard]] bool hasMoreSignalElements() const noexcept;
+        [[nodiscard]] bool hasMorePulse() noexcept;
+
+      private:
+        SignalStack signal_stack_;
+        RepeatTimes repeat_times_;
+        Counter     signal_size_{0};
+        Index       signal_index_{0};
+        Counter     signal_times_{0};
     };
 
 } // namespace pisco_code
