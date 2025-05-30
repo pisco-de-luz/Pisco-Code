@@ -5,17 +5,17 @@
 
 namespace pisco_code
 {
-    // [[nodiscard]] constexpr SignalSequence::SignalSequence() noexcept
+    // [[nodiscard]] constexpr SignalStack::SignalStack() noexcept
     // {
     //     clear();
     // }
 
-    [[nodiscard]] Counter SignalSequence::size() const noexcept
+    [[nodiscard]] Counter SignalStack::size() const noexcept
     {
         return count_;
     }
 
-    void SignalSequence::clear() noexcept
+    void SignalStack::clear() noexcept
     {
         for (Index i = 0; i < MAX_SIGNAL_UNITS; ++i)
         {
@@ -25,7 +25,7 @@ namespace pisco_code
         read_index_ = 0;
     }
 
-    void SignalSequence::pushNewSignalUnit(SignalUnit unit) noexcept
+    void SignalStack::pushNewSignalUnit(SignalUnit unit) noexcept
     {
         if (count_ < MAX_SIGNAL_UNITS)
         {
@@ -34,12 +34,12 @@ namespace pisco_code
         }
     }
 
-    bool SignalSequence::hasNextSignalUnit() const noexcept
+    bool SignalStack::hasNextSignalUnit() const noexcept
     {
         return read_index_ < count_;
     }
 
-    SignalUnit SignalSequence::popNextSignalUnit() noexcept
+    SignalUnit SignalStack::popNextSignalUnit() noexcept
     {
         if (read_index_ < count_)
         {
@@ -48,8 +48,8 @@ namespace pisco_code
         return SIGNAL_UNIT_NOT_DEFINED;
     }
 
-    void SignalSequence::generateFromCode(BlinkCode code, NumberBase base,
-                                          NumDigits min_digits) noexcept
+    void SignalStack::generateFromCode(BlinkCode code, NumberBase base,
+                                       NumDigits min_digits) noexcept
     {
         clear();
 

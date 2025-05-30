@@ -68,11 +68,10 @@ namespace pisco_code
         return SignalUnit(SignalLevel::PEAK, digit_value, SignalDuration::SHORT);
     }
 
-    // Sequence of signal units
-    class SignalSequence
+    class SignalStack
     {
       public:
-        [[nodiscard]] constexpr SignalSequence() noexcept = default;
+        [[nodiscard]] constexpr SignalStack() noexcept = default;
 
         void                     pushNewSignalUnit(SignalUnit unit) noexcept;
         [[nodiscard]] bool       hasNextSignalUnit() const noexcept;
