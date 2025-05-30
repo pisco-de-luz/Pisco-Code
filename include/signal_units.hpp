@@ -72,7 +72,7 @@ namespace pisco_code
     class SignalSequence
     {
       public:
-        [[nodiscard]] constexpr SignalSequence() noexcept;
+        [[nodiscard]] constexpr SignalSequence() noexcept = default;
 
         void                     pushNewSignalUnit(SignalUnit unit) noexcept;
         [[nodiscard]] bool       hasNextSignalUnit() const noexcept;

@@ -5,10 +5,10 @@
 
 namespace pisco_code
 {
-    [[nodiscard]] constexpr SignalSequence::SignalSequence() noexcept
-    {
-        clear();
-    }
+    // [[nodiscard]] constexpr SignalSequence::SignalSequence() noexcept
+    // {
+    //     clear();
+    // }
 
     [[nodiscard]] Counter SignalSequence::size() const noexcept
     {
