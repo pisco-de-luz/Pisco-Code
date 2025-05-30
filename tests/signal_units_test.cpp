@@ -29,7 +29,7 @@ TEST(SignalUnitsGroup, ShouldEncodeZeroAsGap)
 {
     sequence.generateFromCode(CODE_0, NumberBase::DEC, 0);
     CHECK_EQUAL(1, sequence.size());
-    check_unit(sequence, 0, SignalUnit(SignalLevel::GAP, 1, SignalDuration::SHORT));
+    check_unit(sequence, 0, SIGNAL_UNIT_ZERO_GAP);
 }
 
 TEST(SignalUnitsGroup, ShouldEncodeSingleDigitPositiveNumber)
