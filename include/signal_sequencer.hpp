@@ -19,6 +19,8 @@ namespace pisco_code
         [[nodiscard]] bool hasSignalCodeToSequence() const noexcept;
         [[nodiscard]] bool hasMoreSignalElements() const noexcept;
         [[nodiscard]] bool hasMorePulse() noexcept;
+        // Placeholder for logic to populate based on number
+        void generateFromCode(BlinkCode code, NumberBase base, NumDigits min_digits = 0) noexcept;
 
       private:
         SignalStack signal_stack_;

@@ -55,35 +55,4 @@ namespace pisco_code
         return SIGNAL_ELEMENT_NOT_DEFINED;
     }
 
-    void SignalStack::generateFromCode(BlinkCode code, NumberBase base,
-                                       NumDigits min_digits) noexcept
-    {
-        clear();
-
-        const bool is_negative = (code < 0);
-        BlinkCode  abs_code    = is_negative ? -code : code;
-
-        const DigitValue base_val    = to_value(base);
-        NumDigits        digit_count = 0;
-
-        do
-        {
-            const DigitValue digit = to_digit(abs_code % base_val);
-            abs_code /= base_val;
-
-            push(digit == 0 ? SIGNAL_ELEMENT_ZERO_GAP : signal_element_digit_peak(digit));
-            ++digit_count;
-        } while (abs_code > 0);
-
-        while (digit_count < min_digits)
-        {
-            push(SIGNAL_ELEMENT_ZERO_GAP);
-            ++digit_count;
-        }
-
-        if (is_negative)
-        {
-            push(SIGNAL_ELEMENT_NEGATIVE_PEAK);
-        }
-    }
 } // namespace pisco_code

@@ -22,9 +22,6 @@ namespace pisco_code
         void                        clear() noexcept;
         void                        rewind() noexcept;
 
-        // Placeholder for logic to populate based on number
-        void generateFromCode(BlinkCode code, NumberBase base, NumDigits min_digits = 0) noexcept;
-
       private:
         SignalElement signal_elements_[MAX_SIGNAL_ELEMENTS]{};
         Counter       count_{0};
