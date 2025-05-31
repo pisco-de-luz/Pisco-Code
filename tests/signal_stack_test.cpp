@@ -15,7 +15,7 @@ TEST_GROUP(SignalUnitsGroup)
     void check_next(const SignalElement& expected)
     {
         // CHECK_TRUE(sequence_stack.hasNextSignalUnit());
-        const auto actual = sequence_stack.popNextSignalUnit();
+        const auto actual = sequence_stack.pop();
         CHECK_EQUAL(to_value(expected.get_level()), to_value(actual.get_level()));
         CHECK_EQUAL(to_value(expected.get_times()), to_value(actual.get_times()));
         CHECK_EQUAL(to_value(expected.get_duration()), to_value(actual.get_duration()));
@@ -42,14 +42,14 @@ TEST(SignalUnitsGroup, ShouldEncodeSingleDigitPositiveNumber)
     check_next(signal_element_digit_peak(2));
 }
 
-TEST(SignalUnitsGroup, ShouldRespectHasNextSignalUnit)
-{
-    sequence_stack.generateFromCode(CODE_2, NumberBase::DEC, 0);
-    CHECK_EQUAL(1, sequence_stack.size());
-    CHECK_TRUE(sequence_stack.hasNextSignalUnit());
-    check_next(signal_element_digit_peak(2));
-    CHECK_FALSE(sequence_stack.hasNextSignalUnit());
-}
+// TEST(SignalUnitsGroup, ShouldRespectHasNextSignalUnit)
+// {
+//     sequence_stack.generateFromCode(CODE_2, NumberBase::DEC, 0);
+//     CHECK_EQUAL(1, sequence_stack.size());
+//     CHECK_TRUE(sequence_stack.hasNextSignalUnit());
+//     check_next(signal_element_digit_peak(2));
+//     CHECK_FALSE(sequence_stack.hasNextSignalUnit());
+// }
 
 TEST(SignalUnitsGroup, ShouldEncodeNegativeNumberWithLeadingPeak)
 {

@@ -14,9 +14,10 @@ namespace pisco_code
       public:
         [[nodiscard]] constexpr SignalStack() noexcept = default;
 
-        void                        pushNewSignalUnit(SignalElement unit) noexcept;
-        [[nodiscard]] bool          hasNextSignalUnit() const noexcept;
-        [[nodiscard]] SignalElement popNextSignalUnit() noexcept;
+        void                        push(SignalElement unit) noexcept;
+        [[nodiscard]] bool          isEmpty() const noexcept;
+        [[nodiscard]] bool          isFull() const noexcept;
+        [[nodiscard]] SignalElement pop() noexcept;
         [[nodiscard]] Counter       size() const noexcept;
         void                        clear() noexcept;
         void                        rewind() noexcept;

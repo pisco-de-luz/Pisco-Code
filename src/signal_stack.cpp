@@ -3,6 +3,7 @@
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 #include "signal_element.hpp"
+#include "signal_types.hpp"
 
 namespace pisco_code
 {
@@ -26,23 +27,28 @@ namespace pisco_code
         read_index_ = 0;
     }
 
-    void SignalStack::pushNewSignalUnit(SignalElement unit) noexcept
+    void SignalStack::push(SignalElement unit) noexcept
     {
-        if (count_ < MAX_SIGNAL_ELEMENTS)
+        if (!isFull())
         {
             signal_elements_[MAX_SIGNAL_ELEMENTS - 1 - count_] = unit;
             ++count_;
         }
     }
 
-    bool SignalStack::hasNextSignalUnit() const noexcept
+    bool SignalStack::isEmpty() const noexcept
     {
-        return read_index_ < count_;
+        return read_index_ == count_;
     }
 
-    SignalElement SignalStack::popNextSignalUnit() noexcept
+    bool SignalStack::isFull() const noexcept
     {
-        if (hasNextSignalUnit())
+        return count_ == MAX_SIGNAL_ELEMENTS;
+    }
+
+    SignalElement SignalStack::pop() noexcept
+    {
+        if (!isEmpty())
         {
             return signal_elements_[MAX_SIGNAL_ELEMENTS - count_ + read_index_++];
         }
@@ -65,20 +71,19 @@ namespace pisco_code
             const DigitValue digit = to_digit(abs_code % base_val);
             abs_code /= base_val;
 
-            pushNewSignalUnit(digit == 0 ? SIGNAL_ELEMENT_ZERO_GAP
-                                         : signal_element_digit_peak(digit));
+            push(digit == 0 ? SIGNAL_ELEMENT_ZERO_GAP : signal_element_digit_peak(digit));
             ++digit_count;
         } while (abs_code > 0);
 
         while (digit_count < min_digits)
         {
-            pushNewSignalUnit(SIGNAL_ELEMENT_ZERO_GAP);
+            push(SIGNAL_ELEMENT_ZERO_GAP);
             ++digit_count;
         }
 
         if (is_negative)
         {
-            pushNewSignalUnit(SIGNAL_ELEMENT_NEGATIVE_PEAK);
+            push(SIGNAL_ELEMENT_NEGATIVE_PEAK);
         }
     }
 } // namespace pisco_code
