@@ -11,14 +11,13 @@ namespace pisco_code
     struct SignalElement
     {
       public:
-        [[nodiscard]] constexpr SignalElement() noexcept
+        constexpr SignalElement() noexcept
             : level_(to_value(SignalLevel::NOT_DEFINED)), times_(0),
               duration_(to_value(SignalDuration::SHORT))
         {
         }
 
-        [[nodiscard]] constexpr SignalElement(SignalLevel lvl, Counter cnt,
-                                              SignalDuration dur) noexcept
+        constexpr SignalElement(SignalLevel lvl, Counter cnt, SignalDuration dur) noexcept
             : level_(to_value(lvl)), times_(cnt), duration_(to_value(dur))
         {
         }
@@ -38,7 +37,7 @@ namespace pisco_code
 
       private:
         SignalLevelType    level_ : 2;    // Encoded SignalLevel
-        Counter            times_ : 4;    // How many times this unit repeats (0–15)
+        SignalTimesType    times_ : 4;    // How many times this unit repeats (0–15)
         SignalDurationType duration_ : 2; // Encoded SignalDuration
     };
 
@@ -48,7 +47,7 @@ namespace pisco_code
                                                            SignalDuration::SHORT};
     inline constexpr SignalElement SIGNAL_ELEMENT_NOT_DEFINED{SignalLevel::NOT_DEFINED, 0,
                                                               SignalDuration::SHORT};
-    constexpr auto                 signal_element_digit_peak(Counter digit_value) noexcept
+    constexpr auto                 signal_element_digit_peak(SignalTimesType digit_value) noexcept
     {
         return SignalElement(SignalLevel::PEAK, digit_value, SignalDuration::SHORT);
     }

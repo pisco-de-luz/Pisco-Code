@@ -33,6 +33,7 @@ namespace pisco_code
     using BlinkModeType      = Byte; // Used for BlinkMode enum class
     using SignalLevelType    = Byte; // Used for SignalLevel enum class
     using SignalDurationType = Byte; // Used for SignalDuration enum class
+    using SignalTimesType    = Byte; // Used for SignalTimes enum class
     using Counter            = Counter8;
     using Index              = Index8;
 

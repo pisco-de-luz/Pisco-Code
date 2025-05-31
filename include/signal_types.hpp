@@ -33,7 +33,7 @@ static constexpr SignalDurationType to_value(SignalDuration signal_duration) noe
     return static_cast<SignalDurationType>(signal_duration);
 }
 
-static constexpr Counter to_value(Counter signal_times) noexcept
+static constexpr SignalTimesType to_value(SignalTimesType signal_times) noexcept
 {
     return (signal_times);
 }
