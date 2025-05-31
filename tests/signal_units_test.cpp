@@ -17,7 +17,7 @@ TEST_GROUP(SignalUnitsGroup)
         // CHECK_TRUE(sequence_stack.hasNextSignalUnit());
         const auto actual = sequence_stack.popNextSignalUnit();
         CHECK_EQUAL(to_value(expected.get_level()), to_value(actual.get_level()));
-        CHECK_EQUAL(expected.times, actual.times);
+        CHECK_EQUAL(to_value(expected.get_times()), to_value(actual.get_times()));
         CHECK_EQUAL(to_value(expected.get_duration()), to_value(actual.get_duration()));
     }
 
