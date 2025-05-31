@@ -26,11 +26,14 @@ namespace pisco_code
     using Counter16     = Int16;
     using Byte          = UInt8;
 
-    using BaseType      = Byte; // Used as underlying type for enum class NumberBase
-    using LedCodeType   = Byte; // Used for LedControlCode
-    using PhaseType     = Byte; // Used for Phase enum class
-    using BlinkModeType = Byte; // Used for BlinkMode enum class
-    using Counter       = Counter8;
-    using Index         = Index8;
+    // Type aliases for various enums and types used in the code
+    using BaseType           = Byte; // Used as underlying type for enum class NumberBase
+    using LedCodeType        = Byte; // Used for LedControlCode
+    using PhaseType          = Byte; // Used for Phase enum class
+    using BlinkModeType      = Byte; // Used for BlinkMode enum class
+    using SignalLevelType    = Byte; // Used for SignalLevel enum class
+    using SignalDurationType = Byte; // Used for SignalDuration enum class
+    using Counter            = Counter8;
+    using Index              = Index8;
 
 } // namespace pisco_code

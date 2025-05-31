@@ -7,7 +7,7 @@ using namespace pisco_code;
 constexpr Counter MAX_SIGNAL_ELEMENTS = 32; // UPPER_CASE for constexpr variable
 
 // Signal strength or symbolic meaning
-enum class SignalLevel : Byte
+enum class SignalLevel : SignalLevelType
 {
     NOT_DEFINED = 0,
     GAP, // Represents silent or idle pulse (e.g., digit 0)
@@ -15,7 +15,7 @@ enum class SignalLevel : Byte
 };
 
 // Signal duration (mapped to ms by higher layers)
-enum class SignalDuration : Byte
+enum class SignalDuration : SignalDurationType
 {
     SHORT = 0,
     MEDIUM,
@@ -23,12 +23,17 @@ enum class SignalDuration : Byte
     EXTRA_LONG
 };
 
-static constexpr Byte to_value(SignalLevel level) noexcept
+static constexpr SignalLevelType to_value(SignalLevel level) noexcept
 {
-    return static_cast<Byte>(level);
+    return static_cast<SignalLevelType>(level);
 }
 
-static constexpr Byte to_value(SignalDuration signal_duration) noexcept
+static constexpr SignalDurationType to_value(SignalDuration signal_duration) noexcept
 {
-    return static_cast<Byte>(signal_duration);
+    return static_cast<SignalDurationType>(signal_duration);
+}
+
+static constexpr Counter to_value(Counter signal_times) noexcept
+{
+    return (signal_times);
 }
