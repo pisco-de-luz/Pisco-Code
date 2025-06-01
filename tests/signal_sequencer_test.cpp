@@ -98,6 +98,21 @@ TEST(SignalSequencerTests, ShouldHaveMorePulse_AfterPopNextSignalElement)
     CHECK_TRUE(sequencer.hasMorePulse());
 }
 
+TEST(SignalSequencerTests, ShouldPulseFiveTimesForCode5)
+{
+    sequencer.loadSignalCode(CODE_5, NumberBase::DEC, 0);
+    CHECK_TRUE(sequencer.hasMoreSignalElements());
+    CHECK_FALSE(sequencer.hasMorePulse());
+    sequencer.popNextSignalElement();
+    testutils::Counter actual_pulse_count = 0;
+    while (sequencer.hasMorePulse())
+    {
+        sequencer.popNextPulse();
+        ++actual_pulse_count;
+    }
+    CHECK_EQUAL(to_value(CODE_5), actual_pulse_count);
+}
+
 TEST(SignalSequencerTests, ShouldEncodeZeroAsGap)
 {
     sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
@@ -115,64 +130,19 @@ TEST(SignalSequencerTests, ShouldEncodeZeroWithMinDigits)
     check_next_signal_element(SIGNAL_ELEMENT_ZERO_GAP);
 }
 
-// TEST(SignalSequencerTests, ShouldRespectHasNextSignalUnit)
-// {
-//     sequencer.loadSignalCode(CODE_2, NumberBase::DEC, 0);
-//     CHECK_EQUAL(1, sequencer.size());
-//     CHECK_TRUE(sequencer.hasNextSignalUnit());
-//     check_next(signal_element_digit_peak(2));
-//     CHECK_FALSE(sequencer.hasNextSignalUnit());
-// }
-
-// TEST(SignalSequencerTests, ShouldEncodeNegativeNumberWithLeadingPeak)
-// {
-//     sequencer.loadSignalCode(CODE_NEG_7, NumberBase::DEC, 0);
-//     CHECK_EQUAL(2, sequencer.size());
-//     check_next(SIGNAL_ELEMENT_NEGATIVE_PEAK);
-//     check_next(signal_element_digit_peak(7));
-// }
-
-// TEST(SignalSequencerTests, ShouldRespectMinDigitsWithPadding)
-// {
-//     sequencer.loadSignalCode(CODE_120, NumberBase::DEC, 5);
-//     CHECK_EQUAL(5, sequencer.size());
-//     check_next(SIGNAL_ELEMENT_ZERO_GAP);
-//     check_next(SIGNAL_ELEMENT_ZERO_GAP);
-//     check_next(signal_element_digit_peak(1));
-//     check_next(signal_element_digit_peak(2));
-//     check_next(SIGNAL_ELEMENT_ZERO_GAP);
-// }
-
-// TEST(SignalSequencerTests, ShouldEncodeMultiDigitNumber)
-// {
-//     sequencer.loadSignalCode(CODE_12345, NumberBase::DEC, 0);
-//     CHECK_EQUAL(5, sequencer.size());
-//     check_next(signal_element_digit_peak(1));
-//     check_next(signal_element_digit_peak(2));
-//     check_next(signal_element_digit_peak(3));
-//     check_next(signal_element_digit_peak(4));
-//     check_next(signal_element_digit_peak(5));
-// }
-
-// TEST(SignalSequencerTests, ShouldRespectRewindCommand)
-// {
-//     sequencer.loadSignalCode(CODE_120, NumberBase::DEC, 0);
-//     CHECK_EQUAL(3, sequencer.size());
-//     check_next(signal_element_digit_peak(1));
-//     check_next(signal_element_digit_peak(2));
-//     sequencer.rewind();
-//     check_next(signal_element_digit_peak(1));
-//     check_next(signal_element_digit_peak(2));
-//     check_next(SIGNAL_ELEMENT_ZERO_GAP);
-// }
-
-// TEST(SignalSequencerTests, ShouldRespectEndOfStack)
-// {
-//     sequencer.loadSignalCode(CODE_120, NumberBase::DEC, 0);
-//     CHECK_EQUAL(3, sequencer.size());
-//     check_next(signal_element_digit_peak(1));
-//     check_next(signal_element_digit_peak(2));
-//     check_next(SIGNAL_ELEMENT_ZERO_GAP);
-//     check_next(SIGNAL_ELEMENT_NOT_DEFINED);
-//     check_next(SIGNAL_ELEMENT_NOT_DEFINED);
-// }
+TEST(SignalSequencerTests, ShouldPulseFiveTimesOnTheLastDigitForCode12345)
+{
+    sequencer.loadSignalCode(CODE_12345, NumberBase::DEC, 0);
+    testutils::Counter actual_pulse_count{0};
+    while (sequencer.hasMoreSignalElements())
+    {
+        sequencer.popNextSignalElement();
+        actual_pulse_count = 0;
+        while (sequencer.hasMorePulse())
+        {
+            sequencer.popNextPulse();
+            ++actual_pulse_count;
+        }
+    }
+    CHECK_EQUAL(to_value(CODE_5), actual_pulse_count);
+}

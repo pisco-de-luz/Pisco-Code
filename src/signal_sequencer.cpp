@@ -84,4 +84,12 @@ namespace pisco_code
         pulse_repeat_count_ = 0;
         return SIGNAL_ELEMENT_NOT_DEFINED; // Return a default element if no more elements
     }
+
+    void SignalSequencer::popNextPulse() noexcept
+    {
+        if (hasMorePulse())
+        {
+            ++pulse_repeat_index_;
+        }
+    }
 } // namespace pisco_code

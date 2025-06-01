@@ -15,6 +15,7 @@ namespace pisco_code
         [[nodiscard]] SignalSequencer() noexcept = default;
 
         void                  clear() noexcept;
+        void                  popNextPulse() noexcept;
         void                  setRepeatTimes(RepeatTimes repeat_times) noexcept;
         [[nodiscard]] Counter getElementCount() const noexcept { return element_count_; }
         [[nodiscard]] bool    hasMoreSignalCodeToSequence() const noexcept;
