@@ -68,7 +68,6 @@ namespace pisco_code
         {
             signal_stack_.push(SIGNAL_ELEMENT_NEGATIVE_PEAK);
         }
-        element_count_ = signal_stack_.size();
     }
 
     SignalElement SignalSequencer::popNextSignalElement() noexcept
@@ -90,6 +89,18 @@ namespace pisco_code
         if (hasMorePulse())
         {
             ++pulse_repeat_index_;
+        }
+    }
+    void SignalSequencer::popNextCodeToSequence() noexcept
+    {
+        if (hasMoreSignalCodeToSequence())
+        {
+            ++repeat_index_;
+            signal_stack_.rewind();
+            element_count_      = signal_stack_.size();
+            element_index_      = 0;
+            pulse_repeat_index_ = 0;
+            pulse_repeat_count_ = 0;
         }
     }
 } // namespace pisco_code

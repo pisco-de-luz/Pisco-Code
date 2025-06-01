@@ -49,18 +49,18 @@ TEST(SignalSequencerTests, ShouldNotHaveMoreSignalCodeToSequence_AfterClear)
     sequencer.clear();
     CHECK_FALSE(sequencer.hasMoreSignalCodeToSequence());
 }
-TEST(SignalSequencerTests, ShouldHaveMoreSignalElements_AfterLoad)
+TEST(SignalSequencerTests, ShouldNotHaveMoreSignalElements_AfterLoad)
 {
     sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
-    CHECK_TRUE(sequencer.hasMoreSignalElements());
-}
-TEST(SignalSequencerTests, ShouldNotHaveMoreSignalElements_AfterClear)
-{
-    sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
-    CHECK_TRUE(sequencer.hasMoreSignalElements());
-    sequencer.clear();
     CHECK_FALSE(sequencer.hasMoreSignalElements());
 }
+TEST(SignalSequencerTests, ShouldHaveMoreSignalElements_AfterPopNextCodeToSequence)
+{
+    sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
+    sequencer.popNextCodeToSequence();
+    CHECK_TRUE(sequencer.hasMoreSignalElements());
+}
+
 TEST(SignalSequencerTests, ShouldNotHaveMorePulse_AfterLoad)
 {
     sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
@@ -77,6 +77,7 @@ TEST(SignalSequencerTests, ShouldEncodeSingleDigitPositiveNumber)
 {
     sequencer.loadSignalCode(CODE_2, NumberBase::DEC, 0);
     CHECK_TRUE(sequencer.hasMoreSignalCodeToSequence());
+    sequencer.popNextCodeToSequence();
     CHECK_TRUE(sequencer.hasMoreSignalElements());
     check_next_signal_element(signal_element_digit_peak(2));
 }
@@ -84,6 +85,7 @@ TEST(SignalSequencerTests, ShouldEncodeSingleDigitPositiveNumber)
 TEST(SignalSequencerTests, ShouldNotHaveMoreSignalElements_ReadLastOne)
 {
     sequencer.loadSignalCode(CODE_2, NumberBase::DEC, 0);
+    sequencer.popNextCodeToSequence();
     CHECK_TRUE(sequencer.hasMoreSignalElements());
     check_next_signal_element(signal_element_digit_peak(2));
     CHECK_FALSE(sequencer.hasMoreSignalElements());
@@ -92,6 +94,7 @@ TEST(SignalSequencerTests, ShouldNotHaveMoreSignalElements_ReadLastOne)
 TEST(SignalSequencerTests, ShouldHaveMorePulse_AfterPopNextSignalElement)
 {
     sequencer.loadSignalCode(CODE_2, NumberBase::DEC, 0);
+    sequencer.popNextCodeToSequence();
     CHECK_TRUE(sequencer.hasMoreSignalElements());
     CHECK_FALSE(sequencer.hasMorePulse());
     sequencer.popNextSignalElement();
@@ -101,8 +104,7 @@ TEST(SignalSequencerTests, ShouldHaveMorePulse_AfterPopNextSignalElement)
 TEST(SignalSequencerTests, ShouldPulseFiveTimesForCode5)
 {
     sequencer.loadSignalCode(CODE_5, NumberBase::DEC, 0);
-    CHECK_TRUE(sequencer.hasMoreSignalElements());
-    CHECK_FALSE(sequencer.hasMorePulse());
+    sequencer.popNextCodeToSequence();
     sequencer.popNextSignalElement();
     testutils::Counter actual_pulse_count = 0;
     while (sequencer.hasMorePulse())
@@ -116,15 +118,13 @@ TEST(SignalSequencerTests, ShouldPulseFiveTimesForCode5)
 TEST(SignalSequencerTests, ShouldEncodeZeroAsGap)
 {
     sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
-    CHECK_TRUE(sequencer.hasMoreSignalCodeToSequence());
-    CHECK_TRUE(sequencer.hasMoreSignalElements());
+    sequencer.popNextCodeToSequence();
     check_next_signal_element(SIGNAL_ELEMENT_ZERO_GAP);
 }
 TEST(SignalSequencerTests, ShouldEncodeZeroWithMinDigits)
 {
     sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 3);
-    CHECK_TRUE(sequencer.hasMoreSignalCodeToSequence());
-    CHECK_TRUE(sequencer.hasMoreSignalElements());
+    sequencer.popNextCodeToSequence();
     check_next_signal_element(SIGNAL_ELEMENT_ZERO_GAP);
     check_next_signal_element(SIGNAL_ELEMENT_ZERO_GAP);
     check_next_signal_element(SIGNAL_ELEMENT_ZERO_GAP);
@@ -133,6 +133,7 @@ TEST(SignalSequencerTests, ShouldEncodeZeroWithMinDigits)
 TEST(SignalSequencerTests, ShouldPulseFiveTimesOnTheLastDigitForCode12345)
 {
     sequencer.loadSignalCode(CODE_12345, NumberBase::DEC, 0);
+    sequencer.popNextCodeToSequence();
     testutils::Counter actual_pulse_count{0};
     while (sequencer.hasMoreSignalElements())
     {
