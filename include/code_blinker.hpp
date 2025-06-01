@@ -14,7 +14,7 @@ namespace pisco_code
       public:
         explicit CodeBlinker(LedController* controller);
 
-        bool showCode(BlinkCode code, NumberBase base, NumDigits num_digits, RepeatTimes repeats);
+        bool showCode(SignalCode code, NumberBase base, NumDigits num_digits, RepeatTimes repeats);
         void loop(LoopCounter loop_counter);
         bool isRunning() const;
         bool isLedBeingUsedNow() const;

@@ -16,7 +16,7 @@ namespace pisco_code
         {
         }
 
-        void showCode(BlinkCode code, NumberBase base, NumDigits min_digits, RepeatTimes repeats)
+        void showCode(SignalCode code, NumberBase base, NumDigits min_digits, RepeatTimes repeats)
         {
             blinker_.showCode(code, base, min_digits, repeats);
         }

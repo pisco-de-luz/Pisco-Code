@@ -12,7 +12,7 @@ namespace pisco_code
     {
     }
 
-    bool CodeBlinker::showCode(BlinkCode code, NumberBase base, NumDigits num_digits,
+    bool CodeBlinker::showCode(SignalCode code, NumberBase base, NumDigits num_digits,
                                RepeatTimes repeats)
     {
         if (!controller_ || current_phase_ != Phase::IDLE || repeats == 0 || peak_level_ == 0)
@@ -20,8 +20,8 @@ namespace pisco_code
             return false;
         }
 
-        is_negative_               = (code < 0);
-        BlinkCode value_to_display = code;
+        is_negative_                = (code < 0);
+        SignalCode value_to_display = code;
         if (is_negative_)
         {
             value_to_display = -code;

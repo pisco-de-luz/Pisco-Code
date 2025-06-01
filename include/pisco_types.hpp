@@ -19,7 +19,7 @@ namespace pisco_code
     using DigitValue    = UInt8;
     using LoopCounter   = UInt8;
     using PhaseDuration = UInt8;
-    using BlinkCode     = Int32;
+    using SignalCode    = Int32;
     using Index8        = Int8;
     using Index16       = Int16;
     using Counter8      = Int8;

@@ -11,12 +11,12 @@
 #include "tests_constants.hpp"
 #include "tests_types.hpp"
 
-using pisco_code::BlinkCode;
 using pisco_code::CodeBlinker;
 using pisco_code::DigitValue;
 using pisco_code::NumberBase;
 using pisco_code::NumDigits;
 using pisco_code::RepeatTimes;
+using pisco_code::SignalCode;
 
 namespace testutils
 {
@@ -64,11 +64,11 @@ namespace testutils
         return result;
     }
 
-    inline CodeDigitInfo convertCodeToDigits(BlinkCode code, NumberBase base, NumDigits num_digits)
+    inline CodeDigitInfo convertCodeToDigits(SignalCode code, NumberBase base, NumDigits num_digits)
     {
         CodeDigitInfo result{};
-        result.is_negative = (code < 0);
-        BlinkCode abs_code = result.is_negative ? -code : code;
+        result.is_negative  = (code < 0);
+        SignalCode abs_code = result.is_negative ? -code : code;
 
         const NumDigits max_digits    = max_digits_for_base(base);
         uint8_t         first_nonzero = max_digits - 1;
@@ -96,7 +96,7 @@ namespace testutils
         return result;
     }
 
-    inline TraceCode generateExpectedTrace(BlinkCode code, NumberBase base,
+    inline TraceCode generateExpectedTrace(SignalCode code, NumberBase base,
                                            NumDigits min_digits = 0, RepeatTimes repeats = 1)
     {
         const CodeDigitInfo info       = convertCodeToDigits(code, base, min_digits);
@@ -138,7 +138,7 @@ namespace testutils
     inline void checkBlinkerBehavior(CodeBlinker& blinker, MockLedControlLogger& logger,
                                      const TestBlinkerCase& testCase)
     {
-        BlinkCode         code_to_show = testCase.blink_code.value_or(DEFAULT_CODE);
+        SignalCode        code_to_show = testCase.blink_code.value_or(DEFAULT_CODE);
         const NumDigits   num_digits   = testCase.numDigits.value_or(0);
         const RepeatTimes repeats      = testCase.repeats.value_or(1);
         const NumberBase  base         = testCase.number_base.value_or(NumberBase::DEC);
@@ -169,10 +169,10 @@ namespace testutils
         }
     }
 
-    // Generate a BlinkCode code using a pattern of digits
-    inline BlinkCode generatePatternOfDigits(const GeneratePatternParams& params)
+    // Generate a SignalCode code using a pattern of digits
+    inline SignalCode generatePatternOfDigits(const GeneratePatternParams& params)
     {
-        BlinkCode  code_to_show = 0;
+        SignalCode code_to_show = 0;
         const auto base_value   = to_value(params.number_base);
 
         PatternOption pattern_to_use = params.pattern;

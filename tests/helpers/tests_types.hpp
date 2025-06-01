@@ -45,7 +45,7 @@ namespace testutils
 
     struct TestBlinkerCase
     {
-        std::optional<BlinkCode>   blink_code{std::nullopt};
+        std::optional<SignalCode>  blink_code{std::nullopt};
         std::optional<NumberBase>  number_base{std::nullopt};
         std::optional<TraceCheck>  trace_check{std::nullopt};
         std::optional<NumDigits>   numDigits{std::nullopt};

@@ -32,7 +32,7 @@ bool turnLedOnOff(LedCodeType ctrlLED)
 }
 
 // Converts milliseconds to a 5-digit HHHMM representation
-BlinkCode millisToBCDTime(Timestamp fakeMillis)
+SignalCode millisToBCDTime(Timestamp fakeMillis)
 {
     constexpr Timestamp MILLIS_PER_MINUTE = 60000UL;
     constexpr Timestamp MINUTES_PER_HOUR  = 60;
@@ -42,7 +42,7 @@ BlinkCode millisToBCDTime(Timestamp fakeMillis)
     const Timestamp minutes      = totalMinutes % MINUTES_PER_HOUR;
     const Timestamp cappedHours  = (hours > 999) ? 999 : hours;
 
-    return static_cast<BlinkCode>(cappedHours * 100 + minutes);
+    return static_cast<SignalCode>(cappedHours * 100 + minutes);
 }
 
 int main()
@@ -70,7 +70,7 @@ int main()
     {
         if (!led1.isRunning() && fakeMillis <= static_cast<Timestamp>(INT32_MAX))
         {
-            BlinkCode bcdTime = millisToBCDTime(fakeMillis);
+            SignalCode bcdTime = millisToBCDTime(fakeMillis);
             led1.setDimmedLevel(7);
             led1.showCode(bcdTime, NumberBase::DEC, 3, 1);
         }

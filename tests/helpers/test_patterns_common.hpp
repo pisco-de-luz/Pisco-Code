@@ -22,7 +22,7 @@ inline void runSameDigitsUpToMaxDigitsForBase(NumberBase base, CodeBlinker& blin
         logger.clear();
         const DigitValue digit = (base_value - (num_digits % base_value)) % base_value;
 
-        const BlinkCode code = testutils::generatePatternOfDigits(
+        const SignalCode code = testutils::generatePatternOfDigits(
             {testutils::PatternOption::SameDigit, base, num_digits, digit});
 
         const testutils::TestBlinkerCase test_case{
@@ -48,7 +48,7 @@ inline void runSequentialUpDigitsUpToMaxDigitsForBase(NumberBase base, CodeBlink
     {
         logger.clear();
 
-        const BlinkCode code = testutils::generatePatternOfDigits(
+        const SignalCode code = testutils::generatePatternOfDigits(
             {testutils::PatternOption::SequencialUp, base, num_digits});
 
         const testutils::TestBlinkerCase test_case{
@@ -74,7 +74,7 @@ inline void runSequentialDownDigitsUpToMaxDigitsForBase(NumberBase base, CodeBli
     {
         logger.clear();
 
-        const BlinkCode code = testutils::generatePatternOfDigits(
+        const SignalCode code = testutils::generatePatternOfDigits(
             {testutils::PatternOption::SequencialDown, base, num_digits});
 
         const testutils::TestBlinkerCase test_case{
@@ -101,7 +101,7 @@ inline void runSequentialDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase 
     {
         logger.clear();
 
-        const BlinkCode code = testutils::generatePatternOfDigits(
+        const SignalCode code = testutils::generatePatternOfDigits(
             {testutils::PatternOption::SequencialUp, base, num_digits});
 
         const testutils::TestBlinkerCase test_case{
@@ -130,7 +130,7 @@ inline void runSameDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase       
         logger.clear();
 
         const DigitValue digit_to_show = ((max_digits - num_digits) % (to_value(base) - 1)) + 1;
-        const BlinkCode  code          = testutils::generatePatternOfDigits(
+        const SignalCode code          = testutils::generatePatternOfDigits(
             {testutils::PatternOption::SameDigit, base, num_digits, digit_to_show});
 
         const testutils::TestBlinkerCase test_case{
@@ -158,7 +158,7 @@ runSequentialDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(NumberBase base, Co
     {
         logger.clear();
 
-        const BlinkCode code = testutils::generatePatternOfDigits(
+        const SignalCode code = testutils::generatePatternOfDigits(
             {testutils::PatternOption::SequencialUp, base, num_digits});
 
         const testutils::TestBlinkerCase test_case{
@@ -187,7 +187,7 @@ inline void runSameDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(NumberBase   
         logger.clear();
 
         const DigitValue digit_to_show = ((max_digits - num_digits) % (to_value(base) - 1)) + 1;
-        const BlinkCode  code          = testutils::generatePatternOfDigits(
+        const SignalCode code          = testutils::generatePatternOfDigits(
             {testutils::PatternOption::SameDigit, base, num_digits, digit_to_show});
 
         const testutils::TestBlinkerCase test_case{
@@ -216,7 +216,7 @@ inline void runSameMaxBaseDigitUpToMaxDigitsNineTimesForBase(NumberBase base, Co
         logger.clear();
 
         const DigitValue digit_to_show = base_value - 1;
-        const BlinkCode  code          = testutils::generatePatternOfDigits(
+        const SignalCode code          = testutils::generatePatternOfDigits(
             {testutils::PatternOption::SameDigit, base, num_digits, digit_to_show});
 
         const testutils::TestBlinkerCase test_case{

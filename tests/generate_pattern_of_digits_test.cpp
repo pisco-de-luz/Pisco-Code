@@ -18,7 +18,7 @@ using namespace testutils;
 namespace
 {
 
-    std::string toBaseString(BlinkCode code, NumberBase base, uint8_t num_digits)
+    std::string toBaseString(SignalCode code, NumberBase base, uint8_t num_digits)
     {
         std::string      result("");
         const DigitValue base_value = to_value(base);
@@ -41,7 +41,7 @@ namespace
         params.num_digits  = num_digits;
         params.digit       = 1;
 
-        const BlinkCode   result = generatePatternOfDigits(params);
+        const SignalCode  result = generatePatternOfDigits(params);
         const std::string actual = toBaseString(result, base, num_digits);
 
         STRCMP_EQUAL_TEXT(expected, actual.c_str(),

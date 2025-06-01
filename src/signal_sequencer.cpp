@@ -14,13 +14,13 @@ namespace pisco_code
         signal_times_ = 0;
     }
 
-    void SignalSequencer::loadFromCode(BlinkCode code, NumberBase base,
-                                       NumDigits min_digits) noexcept
+    void SignalSequencer::loadPulseCode(SignalCode code, NumberBase base,
+                                        NumDigits min_digits) noexcept
     {
         signal_stack_.clear();
 
         const bool is_negative = (code < 0);
-        BlinkCode  abs_code    = is_negative ? -code : code;
+        SignalCode abs_code    = is_negative ? -code : code;
 
         const DigitValue base_val    = to_value(base);
         NumDigits        digit_count = 0;
