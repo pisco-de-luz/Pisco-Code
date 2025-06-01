@@ -147,3 +147,30 @@ TEST(SignalSequencerTests, ShouldPulseFiveTimesOnTheLastDigitForCode12345)
     }
     CHECK_EQUAL(to_value(CODE_5), actual_pulse_count);
 }
+
+TEST(SignalSequencerTests, ShouldRepeatCode120Twice)
+{
+    sequencer.loadSignalCode(CODE_120, NumberBase::DEC, 0);
+    const auto expected_element_count = 3;
+    const auto expected_repeat_count  = 2;
+    sequencer.setRepeatTimes(expected_repeat_count);
+    testutils::Counter actual_repeat_count{0};
+    testutils::Counter actual_element_count{0};
+    while (sequencer.hasMoreSignalCodeToSequence())
+    {
+        sequencer.popNextCodeToSequence();
+        actual_element_count = 0;
+        while (sequencer.hasMoreSignalElements())
+        {
+            sequencer.popNextSignalElement();
+            while (sequencer.hasMorePulse())
+            {
+                sequencer.popNextPulse();
+            }
+            ++actual_element_count;
+        }
+        ++actual_repeat_count;
+    }
+    CHECK_EQUAL(expected_repeat_count, actual_repeat_count);
+    CHECK_EQUAL(expected_element_count, actual_element_count);
+}

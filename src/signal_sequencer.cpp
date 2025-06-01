@@ -24,7 +24,7 @@ namespace pisco_code
 
     [[nodiscard]] bool SignalSequencer::hasMoreSignalCodeToSequence() const noexcept
     {
-        return !signal_stack_.isEmpty() && repeat_index_ < repeat_count_;
+        return repeat_index_ < repeat_count_ && signal_stack_.size() > 0;
     }
 
     [[nodiscard]] bool SignalSequencer::hasMoreSignalElements() const noexcept
