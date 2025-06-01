@@ -5,8 +5,17 @@
 
 namespace pisco_code
 {
-    void SignalSequencer::generateFromCode(BlinkCode code, NumberBase base,
-                                           NumDigits min_digits) noexcept
+    void SignalSequencer::clear() noexcept
+    {
+        signal_stack_.clear();
+        repeat_times_ = 0;
+        signal_size_  = 0;
+        signal_index_ = 0;
+        signal_times_ = 0;
+    }
+
+    void SignalSequencer::loadFromCode(BlinkCode code, NumberBase base,
+                                       NumDigits min_digits) noexcept
     {
         signal_stack_.clear();
 

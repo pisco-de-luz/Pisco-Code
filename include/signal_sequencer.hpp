@@ -12,19 +12,18 @@ namespace pisco_code
     class SignalSequencer
     {
       public:
-        [[nodiscard]] SignalSequencer(SignalStack signal_stack, RepeatTimes repeat_times)
-            : signal_stack_(signal_stack), repeat_times_(repeat_times)
-        {
-        }
+        [[nodiscard]] SignalSequencer() noexcept = default;
+
+        void               clear() noexcept;
         [[nodiscard]] bool hasSignalCodeToSequence() const noexcept;
         [[nodiscard]] bool hasMoreSignalElements() const noexcept;
         [[nodiscard]] bool hasMorePulse() noexcept;
         // Placeholder for logic to populate based on number
-        void generateFromCode(BlinkCode code, NumberBase base, NumDigits min_digits = 0) noexcept;
+        void loadFromCode(BlinkCode code, NumberBase base, NumDigits min_digits = 0) noexcept;
 
       private:
         SignalStack signal_stack_;
-        RepeatTimes repeat_times_;
+        RepeatTimes repeat_times_{1};
         Counter     signal_size_{0};
         Index       signal_index_{0};
         Counter     signal_times_{0};

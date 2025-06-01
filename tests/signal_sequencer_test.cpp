@@ -3,11 +3,20 @@
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 #include "signal_element.hpp"
+#include "signal_sequencer.hpp"
 #include "signal_types.hpp"
 
 using namespace pisco_code;
 
-TEST_GROUP(SignalSequencerTests){};
+TEST_GROUP(SignalSequencerTests)
+{
+    SignalSequencer sequencer;
+
+    void teardown() override
+    {
+        sequencer.clear();
+    }
+};
 
 TEST(SignalSequencerTests, DefaultConstructor_InitializesToZero)
 {
@@ -20,20 +29,20 @@ TEST(SignalSequencerTests, DefaultConstructor_InitializesToZero)
 
 // TEST(SignalUnitsGroup, ShouldEncodeZeroAsGap)
 // {
-//     sequence_stack.generateFromCode(CODE_0, NumberBase::DEC, 0);
+//     sequence_stack.loadFromCode(CODE_0, NumberBase::DEC, 0);
 //     check_next(SIGNAL_ELEMENT_ZERO_GAP);
 // }
 
 // TEST(SignalUnitsGroup, ShouldEncodeSingleDigitPositiveNumber)
 // {
-//     sequence_stack.generateFromCode(CODE_2, NumberBase::DEC, 0);
+//     sequence_stack.loadFromCode(CODE_2, NumberBase::DEC, 0);
 //     CHECK_EQUAL(1, sequence_stack.size());
 //     check_next(signal_element_digit_peak(2));
 // }
 
 // TEST(SignalUnitsGroup, ShouldRespectHasNextSignalUnit)
 // {
-//     sequence_stack.generateFromCode(CODE_2, NumberBase::DEC, 0);
+//     sequence_stack.loadFromCode(CODE_2, NumberBase::DEC, 0);
 //     CHECK_EQUAL(1, sequence_stack.size());
 //     CHECK_TRUE(sequence_stack.hasNextSignalUnit());
 //     check_next(signal_element_digit_peak(2));
@@ -42,7 +51,7 @@ TEST(SignalSequencerTests, DefaultConstructor_InitializesToZero)
 
 // TEST(SignalUnitsGroup, ShouldEncodeNegativeNumberWithLeadingPeak)
 // {
-//     sequence_stack.generateFromCode(CODE_NEG_7, NumberBase::DEC, 0);
+//     sequence_stack.loadFromCode(CODE_NEG_7, NumberBase::DEC, 0);
 //     CHECK_EQUAL(2, sequence_stack.size());
 //     check_next(SIGNAL_ELEMENT_NEGATIVE_PEAK);
 //     check_next(signal_element_digit_peak(7));
@@ -50,7 +59,7 @@ TEST(SignalSequencerTests, DefaultConstructor_InitializesToZero)
 
 // TEST(SignalUnitsGroup, ShouldRespectMinDigitsWithPadding)
 // {
-//     sequence_stack.generateFromCode(CODE_120, NumberBase::DEC, 5);
+//     sequence_stack.loadFromCode(CODE_120, NumberBase::DEC, 5);
 //     CHECK_EQUAL(5, sequence_stack.size());
 //     check_next(SIGNAL_ELEMENT_ZERO_GAP);
 //     check_next(SIGNAL_ELEMENT_ZERO_GAP);
@@ -61,7 +70,7 @@ TEST(SignalSequencerTests, DefaultConstructor_InitializesToZero)
 
 // TEST(SignalUnitsGroup, ShouldEncodeMultiDigitNumber)
 // {
-//     sequence_stack.generateFromCode(CODE_12345, NumberBase::DEC, 0);
+//     sequence_stack.loadFromCode(CODE_12345, NumberBase::DEC, 0);
 //     CHECK_EQUAL(5, sequence_stack.size());
 //     check_next(signal_element_digit_peak(1));
 //     check_next(signal_element_digit_peak(2));
@@ -72,7 +81,7 @@ TEST(SignalSequencerTests, DefaultConstructor_InitializesToZero)
 
 // TEST(SignalUnitsGroup, ShouldRespectRewindCommand)
 // {
-//     sequence_stack.generateFromCode(CODE_120, NumberBase::DEC, 0);
+//     sequence_stack.loadFromCode(CODE_120, NumberBase::DEC, 0);
 //     CHECK_EQUAL(3, sequence_stack.size());
 //     check_next(signal_element_digit_peak(1));
 //     check_next(signal_element_digit_peak(2));
@@ -84,7 +93,7 @@ TEST(SignalSequencerTests, DefaultConstructor_InitializesToZero)
 
 // TEST(SignalUnitsGroup, ShouldRespectEndOfStack)
 // {
-//     sequence_stack.generateFromCode(CODE_120, NumberBase::DEC, 0);
+//     sequence_stack.loadFromCode(CODE_120, NumberBase::DEC, 0);
 //     CHECK_EQUAL(3, sequence_stack.size());
 //     check_next(signal_element_digit_peak(1));
 //     check_next(signal_element_digit_peak(2));
