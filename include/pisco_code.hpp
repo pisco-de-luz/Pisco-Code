@@ -31,7 +31,7 @@ namespace pisco_code
 
       private:
         SoftwarePwmLedController controller_;
-        CodeBlinker              blinker_;
+        SignalEmitter            blinker_;
     };
 
 } // namespace pisco_code

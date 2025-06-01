@@ -8,11 +8,11 @@
 namespace pisco_code
 {
 
-    CodeBlinker::CodeBlinker(LedController* controller) : controller_(controller)
+    SignalEmitter::SignalEmitter(LedController* controller) : controller_(controller)
     {
     }
 
-    bool CodeBlinker::showCode(SignalCode code, NumberBase base, NumDigits num_digits,
+    bool SignalEmitter::showCode(SignalCode code, NumberBase base, NumDigits num_digits,
                                RepeatTimes repeats)
     {
         if (!controller_ || current_phase_ != Phase::IDLE || repeats == 0 || peak_level_ == 0)
@@ -57,7 +57,7 @@ namespace pisco_code
         return true;
     }
 
-    void CodeBlinker::loop(LoopCounter loop_counter)
+    void SignalEmitter::loop(LoopCounter loop_counter)
     {
         if (!controller_)
             return;
@@ -67,18 +67,18 @@ namespace pisco_code
             Phase             id;
             BlinkPhaseHandler handler;
         } phase_table[] = {
-            {Phase::PAUSE_BEFORE_START, &CodeBlinker::handlePauseBeforeStart},
-            {Phase::BEGIN_DIGIT, &CodeBlinker::handleBeginDigit},
-            {Phase::DISPLAY_NEGATIVE_SIGN, &CodeBlinker::handleDisplayNegativeSign},
-            {Phase::PAUSE_AFTER_NEGATIVE, &CodeBlinker::handlePauseAfterNegative},
-            {Phase::LOAD_NEXT_DIGIT, &CodeBlinker::handleLoadNextDigit},
-            {Phase::EMIT_BLINK, &CodeBlinker::handleEmitBlink},
-            {Phase::PAUSE_BETWEEN_BLINKS, &CodeBlinker::handlePauseBetweenBlinks},
-            {Phase::END_OF_DIGIT_CYCLE, &CodeBlinker::handleEndOfDigitCycle},
-            {Phase::PREPARE_REPEAT, &CodeBlinker::handlePauseBeforeStart},
-            {Phase::PAUSE_AFTER_FINISH, &CodeBlinker::handlePauseAfterFinish},
-            {Phase::IDLE, &CodeBlinker::handleIdle},
-            {Phase::DISPLAY_ZERO, &CodeBlinker::handleDisplayZero},
+            {Phase::PAUSE_BEFORE_START, &SignalEmitter::handlePauseBeforeStart},
+            {Phase::BEGIN_DIGIT, &SignalEmitter::handleBeginDigit},
+            {Phase::DISPLAY_NEGATIVE_SIGN, &SignalEmitter::handleDisplayNegativeSign},
+            {Phase::PAUSE_AFTER_NEGATIVE, &SignalEmitter::handlePauseAfterNegative},
+            {Phase::LOAD_NEXT_DIGIT, &SignalEmitter::handleLoadNextDigit},
+            {Phase::EMIT_BLINK, &SignalEmitter::handleEmitBlink},
+            {Phase::PAUSE_BETWEEN_BLINKS, &SignalEmitter::handlePauseBetweenBlinks},
+            {Phase::END_OF_DIGIT_CYCLE, &SignalEmitter::handleEndOfDigitCycle},
+            {Phase::PREPARE_REPEAT, &SignalEmitter::handlePauseBeforeStart},
+            {Phase::PAUSE_AFTER_FINISH, &SignalEmitter::handlePauseAfterFinish},
+            {Phase::IDLE, &SignalEmitter::handleIdle},
+            {Phase::DISPLAY_ZERO, &SignalEmitter::handleDisplayZero},
         };
 
         for (const auto& entry : phase_table)
@@ -96,7 +96,7 @@ namespace pisco_code
         }
     }
 
-    void CodeBlinker::setPeakLevel(LedLevel led_level)
+    void SignalEmitter::setPeakLevel(LedLevel led_level)
     {
         peak_level_ = (led_level > PWM_MAX) ? PWM_MAX : led_level;
         if (peak_level_ < MIN_PULSE_DIMMED_GAP)
@@ -109,7 +109,7 @@ namespace pisco_code
         }
     }
 
-    void CodeBlinker::setDimmedLevel(LedLevel led_level)
+    void SignalEmitter::setDimmedLevel(LedLevel led_level)
     {
         dimmed_level_ = (led_level > (PWM_MAX - MIN_PULSE_DIMMED_GAP))
                             ? (PWM_MAX - MIN_PULSE_DIMMED_GAP)
@@ -120,19 +120,19 @@ namespace pisco_code
         }
     }
 
-    bool CodeBlinker::isRunning() const
+    bool SignalEmitter::isRunning() const
     {
         return current_phase_ != Phase::IDLE;
     }
 
-    void CodeBlinker::transitionTo(Phase next, PhaseDuration duration, LoopCounter loop_counter)
+    void SignalEmitter::transitionTo(Phase next, PhaseDuration duration, LoopCounter loop_counter)
     {
         current_phase_  = next;
         phase_duration_ = duration;
         start_time_     = loop_counter;
     }
 
-    bool CodeBlinker::phaseElapsed(LoopCounter loop_counter) const
+    bool SignalEmitter::phaseElapsed(LoopCounter loop_counter) const
     {
         const auto elapsed            = to_phase_duration(loop_counter - start_time_);
         const bool phase_done         = elapsed > phase_duration_;
@@ -140,17 +140,17 @@ namespace pisco_code
         return phase_done && peak_level_reached;
     }
 
-    bool CodeBlinker::hasMoreBlinks() const
+    bool SignalEmitter::hasMoreBlinks() const
     {
         return blink_counts_[current_digit_index_] > 0;
     }
 
-    bool CodeBlinker::hasMoreDigits() const
+    bool SignalEmitter::hasMoreDigits() const
     {
         return current_digit_index_ < max_digits_;
     }
 
-    bool CodeBlinker::shouldRepeat() const
+    bool SignalEmitter::shouldRepeat() const
     {
         if (repeats_remaining_ == 0)
         {
@@ -161,7 +161,7 @@ namespace pisco_code
         return true;
     }
 
-    bool CodeBlinker::isLedBeingUsedNow() const
+    bool SignalEmitter::isLedBeingUsedNow() const
     {
         switch (current_phase_)
         {
@@ -176,12 +176,12 @@ namespace pisco_code
         }
     }
 
-    void CodeBlinker::handleIdle(LoopCounter)
+    void SignalEmitter::handleIdle(LoopCounter)
     {
         controller_->setBlinkMode(BlinkMode::NONE);
     }
 
-    void CodeBlinker::handleBeginDigit(LoopCounter loop_counter)
+    void SignalEmitter::handleBeginDigit(LoopCounter loop_counter)
     {
         controller_->setBlinkMode(BlinkMode::DIMMED);
         if (phaseElapsed(loop_counter))
@@ -191,7 +191,7 @@ namespace pisco_code
         }
     }
 
-    void CodeBlinker::handleLoadNextDigit(LoopCounter loop_counter)
+    void SignalEmitter::handleLoadNextDigit(LoopCounter loop_counter)
     {
         controller_->setBlinkMode(BlinkMode::DIMMED);
         if (phaseElapsed(loop_counter))
@@ -218,7 +218,7 @@ namespace pisco_code
         }
     }
 
-    void CodeBlinker::handleDisplayNegativeSign(LoopCounter loop_counter)
+    void SignalEmitter::handleDisplayNegativeSign(LoopCounter loop_counter)
     {
         controller_->setBlinkMode(BlinkMode::PULSE);
         if (phaseElapsed(loop_counter))
@@ -228,7 +228,7 @@ namespace pisco_code
         }
     }
 
-    void CodeBlinker::handlePauseAfterNegative(LoopCounter loop_counter)
+    void SignalEmitter::handlePauseAfterNegative(LoopCounter loop_counter)
     {
         controller_->setBlinkMode(BlinkMode::DIMMED);
         if (phaseElapsed(loop_counter))
@@ -237,7 +237,7 @@ namespace pisco_code
         }
     }
 
-    void CodeBlinker::handleEmitBlink(LoopCounter loop_counter)
+    void SignalEmitter::handleEmitBlink(LoopCounter loop_counter)
     {
         controller_->setBlinkMode(BlinkMode::PULSE);
 
@@ -251,7 +251,7 @@ namespace pisco_code
         }
     }
 
-    void CodeBlinker::handlePauseBetweenBlinks(LoopCounter loop_counter)
+    void SignalEmitter::handlePauseBetweenBlinks(LoopCounter loop_counter)
     {
         controller_->setBlinkMode(BlinkMode::DIMMED);
         if (phaseElapsed(loop_counter))
@@ -271,7 +271,7 @@ namespace pisco_code
         }
     }
 
-    void CodeBlinker::handlePauseBeforeStart(LoopCounter loop_counter)
+    void SignalEmitter::handlePauseBeforeStart(LoopCounter loop_counter)
     {
         controller_->setBlinkMode(BlinkMode::NONE);
         if (phaseElapsed(loop_counter))
@@ -280,7 +280,7 @@ namespace pisco_code
         }
     }
 
-    void CodeBlinker::handleDisplayZero(LoopCounter loop_counter)
+    void SignalEmitter::handleDisplayZero(LoopCounter loop_counter)
     {
         controller_->setBlinkMode(BlinkMode::NONE);
         if (phaseElapsed(loop_counter))
@@ -290,7 +290,7 @@ namespace pisco_code
         }
     }
 
-    void CodeBlinker::handleEndOfDigitCycle(LoopCounter loop_counter)
+    void SignalEmitter::handleEndOfDigitCycle(LoopCounter loop_counter)
     {
         controller_->setBlinkMode(BlinkMode::DIMMED);
         if (phaseElapsed(loop_counter))
@@ -311,7 +311,7 @@ namespace pisco_code
         }
     }
 
-    void CodeBlinker::handlePauseAfterFinish(LoopCounter loop_counter)
+    void SignalEmitter::handlePauseAfterFinish(LoopCounter loop_counter)
     {
         controller_->setBlinkMode(BlinkMode::NONE);
         if (phaseElapsed(loop_counter))

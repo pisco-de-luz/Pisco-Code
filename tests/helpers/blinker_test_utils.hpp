@@ -11,17 +11,17 @@
 #include "tests_constants.hpp"
 #include "tests_types.hpp"
 
-using pisco_code::CodeBlinker;
 using pisco_code::DigitValue;
 using pisco_code::NumberBase;
 using pisco_code::NumDigits;
 using pisco_code::RepeatTimes;
 using pisco_code::SignalCode;
+using pisco_code::SignalEmitter;
 
 namespace testutils
 {
     // Drives the loop for a maximum simulated time, default 64 seconds.
-    inline void runSequencer(CodeBlinker* code, MockLedControlLogger* logger)
+    inline void runSequencer(SignalEmitter* code, MockLedControlLogger* logger)
     {
         constexpr uint8_t   LOOP_CALLS_PER_COUNTER = 64;
         constexpr Timestamp MAX_SEQUENCING_LOOP =
@@ -135,7 +135,7 @@ namespace testutils
     }
 
     // Check the behavior of the blinker against the expected values.
-    inline void checkBlinkerBehavior(CodeBlinker& blinker, MockLedControlLogger& logger,
+    inline void checkBlinkerBehavior(SignalEmitter& blinker, MockLedControlLogger& logger,
                                      const TestBlinkerCase& testCase)
     {
         SignalCode        code_to_show = testCase.blink_code.value_or(DEFAULT_CODE);

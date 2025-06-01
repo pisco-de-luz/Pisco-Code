@@ -23,7 +23,7 @@ void MockLedControlLogger::setTime(Timestamp currTime)
     currentTime_ = currTime;
 }
 
-void MockLedControlLogger::setBlinker(CodeBlinker* blinker)
+void MockLedControlLogger::setBlinker(SignalEmitter* blinker)
 {
     blinker_ = blinker;
 }

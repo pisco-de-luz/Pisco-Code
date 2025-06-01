@@ -25,7 +25,7 @@ class MockLedControlLogger
 {
   public:
     MockLedControlLogger();
-    void setBlinker(CodeBlinker* blinker);
+    void setBlinker(SignalEmitter* blinker);
 
     void                               setTime(Timestamp currTime);
     bool                               handle(uint8_t ctrlLED);
@@ -47,5 +47,5 @@ class MockLedControlLogger
     testutils::LedEvent         lastState_{testutils::LedEvent::Invalid};
     std::vector<LedStateChange> events_{};
     Timestamp                   traceResolutionMs_{100};
-    CodeBlinker*                blinker_{nullptr};
+    SignalEmitter*              blinker_{nullptr};
 };

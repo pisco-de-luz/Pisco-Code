@@ -19,7 +19,7 @@ TEST_GROUP(BinarySystematicHighLevelTests)
 {
     MockLedControlLogger     logger;
     MockLedControllerAdapter controller{&logger};
-    CodeBlinker              blinker{&controller};
+    SignalEmitter            blinker{&controller};
 };
 
 TEST(BinarySystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigits)

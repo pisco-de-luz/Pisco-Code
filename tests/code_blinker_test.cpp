@@ -35,14 +35,14 @@ namespace
 
 } // namespace
 
-TEST_GROUP(CodeBlinkerGroup)
+TEST_GROUP(SignalEmitterGroup)
 {
     MockLedController controller;
-    CodeBlinker*      blinker;
+    SignalEmitter*    blinker;
 
     void setup() override
     {
-        blinker = new CodeBlinker(&controller);
+        blinker = new SignalEmitter(&controller);
     }
 
     void teardown() override
@@ -51,19 +51,19 @@ TEST_GROUP(CodeBlinkerGroup)
     }
 };
 
-TEST(CodeBlinkerGroup, InitiallyPaused)
+TEST(SignalEmitterGroup, InitiallyPaused)
 {
     CHECK_FALSE(blinker->isRunning());
 }
 
-TEST(CodeBlinkerGroup, ShowCodeStartsSequence)
+TEST(SignalEmitterGroup, ShowCodeStartsSequence)
 {
     bool result = blinker->showCode(42, NumberBase::DEC, 2, 1);
     CHECK_TRUE(result);
     CHECK_TRUE(blinker->isRunning());
 }
 
-TEST(CodeBlinkerGroup, LoopTriggersDimmedStart)
+TEST(SignalEmitterGroup, LoopTriggersDimmedStart)
 {
     blinker->showCode(5, NumberBase::DEC, 1, 1);
     blinker->loop(1); // simulate loop trigger

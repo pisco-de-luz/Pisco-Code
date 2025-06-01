@@ -11,7 +11,7 @@ using namespace pisco_code;
 // - Example HEX: F, EE, DDD, ..., 88888888
 // - Example OCT: 7,66, 555,4444,33333,...,77777777  (roll over)
 // - Example BIN: 1,0,111,0,11111..., 0
-inline void runSameDigitsUpToMaxDigitsForBase(NumberBase base, CodeBlinker& blinker,
+inline void runSameDigitsUpToMaxDigitsForBase(NumberBase base, SignalEmitter& blinker,
                                               MockLedControlLogger& logger)
 {
     const NumDigits max_digits = max_digits_for_base(base);
@@ -39,7 +39,7 @@ inline void runSameDigitsUpToMaxDigitsForBase(NumberBase base, CodeBlinker& blin
 // - Example HEX: 1, 12, 123, 1234, ..., 12345678
 // - Example OCT: 1, 12, 123, 1234, ..., 12345670
 // - Example BIN: 1, 10, 101, 1010, ..., 1010101010
-inline void runSequentialUpDigitsUpToMaxDigitsForBase(NumberBase base, CodeBlinker& blinker,
+inline void runSequentialUpDigitsUpToMaxDigitsForBase(NumberBase base, SignalEmitter& blinker,
                                                       MockLedControlLogger& logger)
 {
     const NumDigits max_digits = max_digits_for_base(base);
@@ -65,7 +65,7 @@ inline void runSequentialUpDigitsUpToMaxDigitsForBase(NumberBase base, CodeBlink
 // - Example HEX: 1, 21, 321, 4321, ..., 7654321
 // - Example OCT: 1, 21, 321, 4321, ..., 765432107
 // - Example BIN: 1, 10, 101, 1010, ..., 1010101010
-inline void runSequentialDownDigitsUpToMaxDigitsForBase(NumberBase base, CodeBlinker& blinker,
+inline void runSequentialDownDigitsUpToMaxDigitsForBase(NumberBase base, SignalEmitter& blinker,
                                                         MockLedControlLogger& logger)
 {
     const NumDigits max_digits = max_digits_for_base(base);
@@ -92,7 +92,7 @@ inline void runSequentialDownDigitsUpToMaxDigitsForBase(NumberBase base, CodeBli
 // - Example OCT: 000000001, 000000012, 000000123, ..., 123456701
 // - Example BIN: 0{23}1, 0{22}10, 0{21}101, ..., 1010{6}
 inline void runSequentialDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase            base,
-                                                                     CodeBlinker&          blinker,
+                                                                     SignalEmitter&        blinker,
                                                                      MockLedControlLogger& logger)
 {
     const NumDigits max_digits = max_digits_for_base(base);
@@ -120,7 +120,7 @@ inline void runSequentialDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase 
 // - Example OCT: 000000002, 000000011, 000000777, ..., 111111111
 // - Example BIN: 0{23}1, 0{22}11, 0{21}111, ..., 1{24}
 inline void runSameDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase            base,
-                                                               CodeBlinker&          blinker,
+                                                               SignalEmitter&        blinker,
                                                                MockLedControlLogger& logger)
 {
     const NumDigits max_digits = max_digits_for_base(base);
@@ -148,9 +148,8 @@ inline void runSameDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase       
 // - Example HEX: 001, 012, 123, 234, ..., 567
 // - Example OCT: 0001, 0012, 0123, 1234, 2345,..., 6701
 // - Example BIN: 0{11}1, 0{10}10, 0{9}101, ..., 1010{3}
-inline void
-runSequentialDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(NumberBase base, CodeBlinker& blinker,
-                                                             MockLedControlLogger& logger)
+inline void runSequentialDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(
+    NumberBase base, SignalEmitter& blinker, MockLedControlLogger& logger)
 {
     const NumDigits max_digits = max_digits_for_base(base);
 
@@ -177,7 +176,7 @@ runSequentialDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(NumberBase base, Co
 // - Example OCT: 0002, 0011, 0777, 6666, 5555, ..., 1111
 // - Example BIN: 0{11}1, 0{10}11, 0{9}111, ..., 1{12}
 inline void runSameDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(NumberBase            base,
-                                                                   CodeBlinker&          blinker,
+                                                                   SignalEmitter&        blinker,
                                                                    MockLedControlLogger& logger)
 {
     const NumDigits max_digits = max_digits_for_base(base);
@@ -205,7 +204,8 @@ inline void runSameDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(NumberBase   
 // - Example HEX: F, FF, FFF, ..., FFFFFFFF
 // - Example OCT: 7, 77, 777, ..., 777777777
 // - Example BIN: 1, 11, 111, ..., 1{24}
-inline void runSameMaxBaseDigitUpToMaxDigitsNineTimesForBase(NumberBase base, CodeBlinker& blinker,
+inline void runSameMaxBaseDigitUpToMaxDigitsNineTimesForBase(NumberBase            base,
+                                                             SignalEmitter&        blinker,
                                                              MockLedControlLogger& logger)
 {
     const NumDigits max_digits = max_digits_for_base(base);

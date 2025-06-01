@@ -9,10 +9,10 @@
 namespace pisco_code
 {
 
-    class CodeBlinker
+    class SignalEmitter
     {
       public:
-        explicit CodeBlinker(LedController* controller);
+        explicit SignalEmitter(LedController* controller);
 
         bool showCode(SignalCode code, NumberBase base, NumDigits num_digits, RepeatTimes repeats);
         void loop(LoopCounter loop_counter);
@@ -60,7 +60,7 @@ namespace pisco_code
             // LED is off (system paused or stopped)
             IDLE
         };
-        using BlinkPhaseHandler = void (CodeBlinker::*)(UInt8);
+        using BlinkPhaseHandler = void (SignalEmitter::*)(UInt8);
         void transitionTo(Phase next, PhaseDuration duration, LoopCounter loop_counter);
         bool phaseElapsed(LoopCounter loop_counter) const;
 

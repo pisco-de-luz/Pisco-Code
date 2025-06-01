@@ -15,7 +15,7 @@ TEST_GROUP(SetterBehaviorBlinkerTest)
 {
     MockLedControlLogger     logger;
     MockLedControllerAdapter controller{&logger};
-    CodeBlinker              blinker{&controller};
+    SignalEmitter            blinker{&controller};
 };
 
 TEST(SetterBehaviorBlinkerTest, ShouldUseDefaultPwmLevel)
