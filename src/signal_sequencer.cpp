@@ -14,8 +14,8 @@ namespace pisco_code
         signal_times_ = 0;
     }
 
-    void SignalSequencer::loadPulseCode(SignalCode code, NumberBase base,
-                                        NumDigits min_digits) noexcept
+    void SignalSequencer::loadSignalCode(SignalCode code, NumberBase base,
+                                         NumDigits min_digits) noexcept
     {
         signal_stack_.clear();
 
