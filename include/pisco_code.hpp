@@ -1,8 +1,8 @@
 #pragma once
 
-#include "code_blinker.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
+#include "signal_emitter.hpp"
 #include "software_pwm_led_controller.hpp"
 
 namespace pisco_code

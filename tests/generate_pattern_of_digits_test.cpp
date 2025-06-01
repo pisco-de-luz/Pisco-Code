@@ -6,9 +6,9 @@
 #include <string>
 
 #include "blinker_test_utils.hpp"
-#include "code_blinker.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
+#include "signal_emitter.hpp"
 #include "tests_constants.hpp"
 #include "tests_types.hpp"
 

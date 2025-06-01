@@ -4,10 +4,10 @@
 #include <optional>
 #include <string>
 
-#include "code_blinker.hpp"
 #include "mock_led_control_logger.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
+#include "signal_emitter.hpp"
 #include "tests_constants.hpp"
 #include "tests_types.hpp"
 

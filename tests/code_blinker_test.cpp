@@ -1,7 +1,7 @@
 #include "CppUTest/TestHarness.h"
 
-#include "code_blinker.hpp"
 #include "pisco_constants.hpp"
+#include "signal_emitter.hpp"
 
 using namespace pisco_code;
 

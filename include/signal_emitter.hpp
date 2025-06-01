@@ -1,4 +1,4 @@
-// code_blinker.hpp
+// signal_emitter.hpp
 #ifndef PISCO_CODE_BLINKER_HPP
 #define PISCO_CODE_BLINKER_HPP
 

@@ -1,11 +1,11 @@
 #include "CppUTest/TestHarness.h"
 
-#include "code_blinker.hpp"
 #include "helpers/blinker_test_utils.hpp"
 #include "mocks/mock_led_control_logger.hpp"
 #include "mocks/mock_led_controller_adapter.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
+#include "signal_emitter.hpp"
 #include "tests_constants.hpp"
 #include "tests_types.hpp"
 

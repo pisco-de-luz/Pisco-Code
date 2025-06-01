@@ -1,5 +1,5 @@
 // code_blinker.cpp
-#include "code_blinker.hpp"
+#include "signal_emitter.hpp"
 
 #include "led_controller.hpp"
 #include "pisco_constants.hpp"
@@ -13,7 +13,7 @@ namespace pisco_code
     }
 
     bool SignalEmitter::showCode(SignalCode code, NumberBase base, NumDigits num_digits,
-                               RepeatTimes repeats)
+                                 RepeatTimes repeats)
     {
         if (!controller_ || current_phase_ != Phase::IDLE || repeats == 0 || peak_level_ == 0)
         {

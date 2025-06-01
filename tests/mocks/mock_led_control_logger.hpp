@@ -5,9 +5,9 @@
 #include <string>
 #include <vector>
 
-#include "code_blinker.hpp"
 #include "led_blink_pattern.hpp"
 #include "pisco_constants.hpp"
+#include "signal_emitter.hpp"
 #include "tests_types.hpp"
 
 using namespace pisco_code;
