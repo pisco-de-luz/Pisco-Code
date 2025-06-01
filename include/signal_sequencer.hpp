@@ -16,8 +16,8 @@ namespace pisco_code
 
         void                  clear() noexcept;
         void                  setRepeatTimes(RepeatTimes repeat_times) noexcept;
-        [[nodiscard]] Counter getSignalSize() const noexcept { return element_count_; }
-        [[nodiscard]] bool    hasSignalCodeToSequence() const noexcept;
+        [[nodiscard]] Counter getElementCount() const noexcept { return element_count_; }
+        [[nodiscard]] bool    hasMoreSignalCodeToSequence() const noexcept;
         [[nodiscard]] bool    hasMoreSignalElements() const noexcept;
         [[nodiscard]] bool    hasMorePulse() const noexcept;
         // Placeholder for logic to populate based on number

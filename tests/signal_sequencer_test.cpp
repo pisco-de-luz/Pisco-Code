@@ -20,8 +20,8 @@ TEST_GROUP(SignalSequencerTests)
 
 TEST(SignalSequencerTests, DefaultConstructor_InitializesToZero)
 {
-    CHECK_EQUAL(0, sequencer.getSignalSize());
-    CHECK_FALSE(sequencer.hasSignalCodeToSequence());
+    CHECK_EQUAL(0, sequencer.getElementCount());
+    CHECK_FALSE(sequencer.hasMoreSignalCodeToSequence());
     CHECK_FALSE(sequencer.hasMoreSignalElements());
     CHECK_FALSE(sequencer.hasMorePulse());
 }

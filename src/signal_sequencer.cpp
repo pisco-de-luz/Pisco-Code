@@ -22,7 +22,7 @@ namespace pisco_code
         repeat_count_ = repeat_times;
     }
 
-    [[nodiscard]] bool SignalSequencer::hasSignalCodeToSequence() const noexcept
+    [[nodiscard]] bool SignalSequencer::hasMoreSignalCodeToSequence() const noexcept
     {
         return !signal_stack_.isEmpty() && repeat_index_ < repeat_count_;
     }
