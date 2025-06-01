@@ -5,11 +5,22 @@
 #include "signal_element.hpp"
 #include "signal_sequencer.hpp"
 #include "signal_types.hpp"
+#include "tests_constants.hpp"
+#include "tests_types.hpp"
 
 using namespace pisco_code;
+using namespace testutils;
 
 TEST_GROUP(SignalSequencerTests)
 {
+    void check_next_signal_element(const SignalElement& expected)
+    {
+        auto actual = sequencer.popNextSignalElement();
+        CHECK_EQUAL(to_value(expected.get_level()), to_value(actual.get_level()));
+        CHECK_EQUAL(to_value(expected.get_times()), to_value(actual.get_times()));
+        CHECK_EQUAL(to_value(expected.get_duration()), to_value(actual.get_duration()));
+    }
+
     SignalSequencer sequencer;
 
     void teardown() override
@@ -26,40 +37,105 @@ TEST(SignalSequencerTests, DefaultConstructor_InitializesToZero)
     CHECK_FALSE(sequencer.hasMorePulse());
 }
 
-// TEST(SignalUnitsGroup, ShouldEncodeZeroAsGap)
-// {
-//     sequence_stack.loadSignalCode(CODE_0, NumberBase::DEC, 0);
-//     check_next(SIGNAL_ELEMENT_ZERO_GAP);
-// }
+TEST(SignalSequencerTests, ShouldHaveMoreSignalCodeToSequence_AfterLoad)
+{
+    sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
+    CHECK_TRUE(sequencer.hasMoreSignalCodeToSequence());
+}
+TEST(SignalSequencerTests, ShouldNotHaveMoreSignalCodeToSequence_AfterClear)
+{
+    sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
+    CHECK_TRUE(sequencer.hasMoreSignalCodeToSequence());
+    sequencer.clear();
+    CHECK_FALSE(sequencer.hasMoreSignalCodeToSequence());
+}
+TEST(SignalSequencerTests, ShouldHaveMoreSignalElements_AfterLoad)
+{
+    sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
+    CHECK_TRUE(sequencer.hasMoreSignalElements());
+}
+TEST(SignalSequencerTests, ShouldNotHaveMoreSignalElements_AfterClear)
+{
+    sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
+    CHECK_TRUE(sequencer.hasMoreSignalElements());
+    sequencer.clear();
+    CHECK_FALSE(sequencer.hasMoreSignalElements());
+}
+TEST(SignalSequencerTests, ShouldNotHaveMorePulse_AfterLoad)
+{
+    sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
+    CHECK_FALSE(sequencer.hasMorePulse());
+}
+TEST(SignalSequencerTests, ShouldNotHaveMorePulse_AfterClear)
+{
+    sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
+    sequencer.clear();
+    CHECK_FALSE(sequencer.hasMorePulse());
+}
 
-// TEST(SignalUnitsGroup, ShouldEncodeSingleDigitPositiveNumber)
+TEST(SignalSequencerTests, ShouldEncodeSingleDigitPositiveNumber)
+{
+    sequencer.loadSignalCode(CODE_2, NumberBase::DEC, 0);
+    CHECK_TRUE(sequencer.hasMoreSignalCodeToSequence());
+    CHECK_TRUE(sequencer.hasMoreSignalElements());
+    check_next_signal_element(signal_element_digit_peak(2));
+}
+
+TEST(SignalSequencerTests, ShouldNotHaveMoreSignalElements_ReadLastOne)
+{
+    sequencer.loadSignalCode(CODE_2, NumberBase::DEC, 0);
+    CHECK_TRUE(sequencer.hasMoreSignalElements());
+    check_next_signal_element(signal_element_digit_peak(2));
+    CHECK_FALSE(sequencer.hasMoreSignalElements());
+}
+
+TEST(SignalSequencerTests, ShouldHaveMorePulse_AfterPopNextSignalElement)
+{
+    sequencer.loadSignalCode(CODE_2, NumberBase::DEC, 0);
+    CHECK_TRUE(sequencer.hasMoreSignalElements());
+    CHECK_FALSE(sequencer.hasMorePulse());
+    sequencer.popNextSignalElement();
+    CHECK_TRUE(sequencer.hasMorePulse());
+}
+
+TEST(SignalSequencerTests, ShouldEncodeZeroAsGap)
+{
+    sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
+    CHECK_TRUE(sequencer.hasMoreSignalCodeToSequence());
+    CHECK_TRUE(sequencer.hasMoreSignalElements());
+    check_next_signal_element(SIGNAL_ELEMENT_ZERO_GAP);
+}
+TEST(SignalSequencerTests, ShouldEncodeZeroWithMinDigits)
+{
+    sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 3);
+    CHECK_TRUE(sequencer.hasMoreSignalCodeToSequence());
+    CHECK_TRUE(sequencer.hasMoreSignalElements());
+    check_next_signal_element(SIGNAL_ELEMENT_ZERO_GAP);
+    check_next_signal_element(SIGNAL_ELEMENT_ZERO_GAP);
+    check_next_signal_element(SIGNAL_ELEMENT_ZERO_GAP);
+}
+
+// TEST(SignalSequencerTests, ShouldRespectHasNextSignalUnit)
 // {
-//     sequence_stack.loadSignalCode(CODE_2, NumberBase::DEC, 0);
-//     CHECK_EQUAL(1, sequence_stack.size());
+//     sequencer.loadSignalCode(CODE_2, NumberBase::DEC, 0);
+//     CHECK_EQUAL(1, sequencer.size());
+//     CHECK_TRUE(sequencer.hasNextSignalUnit());
 //     check_next(signal_element_digit_peak(2));
+//     CHECK_FALSE(sequencer.hasNextSignalUnit());
 // }
 
-// TEST(SignalUnitsGroup, ShouldRespectHasNextSignalUnit)
+// TEST(SignalSequencerTests, ShouldEncodeNegativeNumberWithLeadingPeak)
 // {
-//     sequence_stack.loadSignalCode(CODE_2, NumberBase::DEC, 0);
-//     CHECK_EQUAL(1, sequence_stack.size());
-//     CHECK_TRUE(sequence_stack.hasNextSignalUnit());
-//     check_next(signal_element_digit_peak(2));
-//     CHECK_FALSE(sequence_stack.hasNextSignalUnit());
-// }
-
-// TEST(SignalUnitsGroup, ShouldEncodeNegativeNumberWithLeadingPeak)
-// {
-//     sequence_stack.loadSignalCode(CODE_NEG_7, NumberBase::DEC, 0);
-//     CHECK_EQUAL(2, sequence_stack.size());
+//     sequencer.loadSignalCode(CODE_NEG_7, NumberBase::DEC, 0);
+//     CHECK_EQUAL(2, sequencer.size());
 //     check_next(SIGNAL_ELEMENT_NEGATIVE_PEAK);
 //     check_next(signal_element_digit_peak(7));
 // }
 
-// TEST(SignalUnitsGroup, ShouldRespectMinDigitsWithPadding)
+// TEST(SignalSequencerTests, ShouldRespectMinDigitsWithPadding)
 // {
-//     sequence_stack.loadSignalCode(CODE_120, NumberBase::DEC, 5);
-//     CHECK_EQUAL(5, sequence_stack.size());
+//     sequencer.loadSignalCode(CODE_120, NumberBase::DEC, 5);
+//     CHECK_EQUAL(5, sequencer.size());
 //     check_next(SIGNAL_ELEMENT_ZERO_GAP);
 //     check_next(SIGNAL_ELEMENT_ZERO_GAP);
 //     check_next(signal_element_digit_peak(1));
@@ -67,10 +143,10 @@ TEST(SignalSequencerTests, DefaultConstructor_InitializesToZero)
 //     check_next(SIGNAL_ELEMENT_ZERO_GAP);
 // }
 
-// TEST(SignalUnitsGroup, ShouldEncodeMultiDigitNumber)
+// TEST(SignalSequencerTests, ShouldEncodeMultiDigitNumber)
 // {
-//     sequence_stack.loadSignalCode(CODE_12345, NumberBase::DEC, 0);
-//     CHECK_EQUAL(5, sequence_stack.size());
+//     sequencer.loadSignalCode(CODE_12345, NumberBase::DEC, 0);
+//     CHECK_EQUAL(5, sequencer.size());
 //     check_next(signal_element_digit_peak(1));
 //     check_next(signal_element_digit_peak(2));
 //     check_next(signal_element_digit_peak(3));
@@ -78,22 +154,22 @@ TEST(SignalSequencerTests, DefaultConstructor_InitializesToZero)
 //     check_next(signal_element_digit_peak(5));
 // }
 
-// TEST(SignalUnitsGroup, ShouldRespectRewindCommand)
+// TEST(SignalSequencerTests, ShouldRespectRewindCommand)
 // {
-//     sequence_stack.loadSignalCode(CODE_120, NumberBase::DEC, 0);
-//     CHECK_EQUAL(3, sequence_stack.size());
+//     sequencer.loadSignalCode(CODE_120, NumberBase::DEC, 0);
+//     CHECK_EQUAL(3, sequencer.size());
 //     check_next(signal_element_digit_peak(1));
 //     check_next(signal_element_digit_peak(2));
-//     sequence_stack.rewind();
+//     sequencer.rewind();
 //     check_next(signal_element_digit_peak(1));
 //     check_next(signal_element_digit_peak(2));
 //     check_next(SIGNAL_ELEMENT_ZERO_GAP);
 // }
 
-// TEST(SignalUnitsGroup, ShouldRespectEndOfStack)
+// TEST(SignalSequencerTests, ShouldRespectEndOfStack)
 // {
-//     sequence_stack.loadSignalCode(CODE_120, NumberBase::DEC, 0);
-//     CHECK_EQUAL(3, sequence_stack.size());
+//     sequencer.loadSignalCode(CODE_120, NumberBase::DEC, 0);
+//     CHECK_EQUAL(3, sequencer.size());
 //     check_next(signal_element_digit_peak(1));
 //     check_next(signal_element_digit_peak(2));
 //     check_next(SIGNAL_ELEMENT_ZERO_GAP);

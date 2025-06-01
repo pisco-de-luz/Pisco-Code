@@ -70,4 +70,18 @@ namespace pisco_code
         }
         element_count_ = signal_stack_.size();
     }
+
+    SignalElement SignalSequencer::popNextSignalElement() noexcept
+    {
+        pulse_repeat_index_ = 0;
+        if (hasMoreSignalElements())
+        {
+            const SignalElement element = signal_stack_.pop();
+            ++element_index_;
+            pulse_repeat_count_ = element.get_times();
+            return element;
+        }
+        pulse_repeat_count_ = 0;
+        return SIGNAL_ELEMENT_NOT_DEFINED; // Return a default element if no more elements
+    }
 } // namespace pisco_code

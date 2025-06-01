@@ -20,6 +20,7 @@ namespace pisco_code
         [[nodiscard]] bool    hasMoreSignalCodeToSequence() const noexcept;
         [[nodiscard]] bool    hasMoreSignalElements() const noexcept;
         [[nodiscard]] bool    hasMorePulse() const noexcept;
+        SignalElement         popNextSignalElement() noexcept;
         // Placeholder for logic to populate based on number
         void loadSignalCode(SignalCode code, NumberBase base, NumDigits min_digits = 0) noexcept;
 
