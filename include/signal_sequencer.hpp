@@ -14,18 +14,22 @@ namespace pisco_code
       public:
         [[nodiscard]] SignalSequencer() noexcept = default;
 
-        void               clear() noexcept;
-        [[nodiscard]] bool hasSignalCodeToSequence() const noexcept;
-        [[nodiscard]] bool hasMoreSignalElements() const noexcept;
-        [[nodiscard]] bool hasMorePulse() noexcept;
+        void                  clear() noexcept;
+        void                  setRepeatTimes(RepeatTimes repeat_times) noexcept;
+        [[nodiscard]] Counter getSignalSize() const noexcept { return element_count_; }
+        [[nodiscard]] bool    hasSignalCodeToSequence() const noexcept;
+        [[nodiscard]] bool    hasMoreSignalElements() const noexcept;
+        [[nodiscard]] bool    hasMorePulse() const noexcept;
         // Placeholder for logic to populate based on number
         void loadSignalCode(SignalCode code, NumberBase base, NumDigits min_digits = 0) noexcept;
 
       private:
         SignalStack signal_stack_;
-        RepeatTimes repeat_times_{1};
-        Counter     signal_size_{0};
-        Index       signal_index_{0};
-        Counter     signal_times_{0};
+        RepeatTimes repeat_count_{1};
+        Index       repeat_index_{0};
+        Counter     element_count_{0};
+        Index       element_index_{0};
+        Counter     pulse_repeat_count_{0};
+        Index       pulse_repeat_index_{0};
     };
 } // namespace pisco_code

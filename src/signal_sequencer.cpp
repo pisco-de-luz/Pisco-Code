@@ -2,16 +2,39 @@
 
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
+#include "signal_element.hpp"
 
 namespace pisco_code
 {
     void SignalSequencer::clear() noexcept
     {
         signal_stack_.clear();
-        repeat_times_ = 0;
-        signal_size_  = 0;
-        signal_index_ = 0;
-        signal_times_ = 0;
+        repeat_count_       = 1;
+        repeat_index_       = 0;
+        element_count_      = 0;
+        element_index_      = 0;
+        pulse_repeat_count_ = 0;
+        pulse_repeat_index_ = 0;
+    }
+
+    void SignalSequencer::setRepeatTimes(RepeatTimes repeat_times) noexcept
+    {
+        repeat_count_ = repeat_times;
+    }
+
+    [[nodiscard]] bool SignalSequencer::hasSignalCodeToSequence() const noexcept
+    {
+        return !signal_stack_.isEmpty() && repeat_index_ < repeat_count_;
+    }
+
+    [[nodiscard]] bool SignalSequencer::hasMoreSignalElements() const noexcept
+    {
+        return element_index_ < element_count_;
+    }
+
+    [[nodiscard]] bool SignalSequencer::hasMorePulse() const noexcept
+    {
+        return pulse_repeat_index_ < pulse_repeat_count_;
     }
 
     void SignalSequencer::loadSignalCode(SignalCode code, NumberBase base,
@@ -45,5 +68,6 @@ namespace pisco_code
         {
             signal_stack_.push(SIGNAL_ELEMENT_NEGATIVE_PEAK);
         }
+        element_count_ = signal_stack_.size();
     }
 } // namespace pisco_code
