@@ -1,4 +1,9 @@
-# clang-format style for your spacecraft simulation project
+# clang-format style 
+
+# If we need to disable the clang-format check for a part of the file, we can use:
+# // clang-format off
+# // clang-format on
+
 BasedOnStyle: LLVM
 IndentWidth: 4
 TabWidth: 4
@@ -7,7 +12,8 @@ UseTab: Never
 # Braces and layout
 BreakBeforeBraces: Allman
 AllowShortIfStatementsOnASingleLine: false
-AllowShortFunctionsOnASingleLine: InlineOnly
+# AllowShortFunctionsOnASingleLine: InlineOnly
+AllowShortFunctionsOnASingleLine: None
 AllowShortLoopsOnASingleLine: false
 
 # Namespace formatting
@@ -48,11 +54,17 @@ DerivePointerAlignment: false
 PointerAlignment: Left
 
 # Column and wrapping
-ColumnLimit: 100
+ColumnLimit: 80
 AlwaysBreakTemplateDeclarations: Yes
 AlignConsecutiveAssignments: true
 AlignConsecutiveDeclarations: true
 AlignTrailingComments: true
+AlignArrayOfStructures: Right
+AlwaysBreakBeforeMultilineStrings: false
+
+AlwaysBreakAfterReturnType: TopLevel
+BreakConstructorInitializers: AfterColon
+# TrailingCommaCpp11: true 
 
 # Naming rules (optional - informational only, clang-format doesn't enforce this)
 # You can enforce naming via clang-tidy if desired
