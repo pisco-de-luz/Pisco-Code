@@ -93,10 +93,10 @@ namespace testutils
     }
 
     inline TraceCode generateExpectedTrace(SignalCode code, NumberBase base,
-                                           NumDigits min_digits = 0, RepeatTimes repeats = 1)
+                                           NumDigits num_digits = 0, RepeatTimes repeats = 1)
     {
         SignalSequencer sequencer;
-        sequencer.loadSignalCode(code, base, min_digits);
+        sequencer.loadSignalCode(code, base, num_digits);
         sequencer.setRepeatTimes(repeats);
         TraceCode trace = to_trace_code(SignalLevel::GAP, SignalDuration::LONG);
         while (sequencer.hasMoreSignalCodeToSequence())
