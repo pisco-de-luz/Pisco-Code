@@ -63,6 +63,17 @@ build_example() {
   echo "[${preset}] Building target: $target"
   cmake --build "$build_dir" --target "$target"
   echo "[${preset}] Target '$target' done."
+  
+  # Show memory usage if AVR
+  if [[ "$preset" == "avr" ]]; then
+    local elf_file="$build_dir/examples/$preset/${target}"
+    if [[ -f "$elf_file" ]]; then
+      echo "[${preset}] 📊 Memory usage for '${target}':"
+      avr-size -C --mcu=atmega328p "$elf_file"
+    else
+      echo "[${preset}] ⚠️  ELF not found: $elf_file"
+    fi
+  fi
 }
 
 # Parse argument
