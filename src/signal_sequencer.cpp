@@ -38,16 +38,18 @@ namespace pisco_code
     }
 
     void SignalSequencer::loadSignalCode(SignalCode code, NumberBase base,
-                                         NumDigits min_digits) noexcept
+                                         NumDigits num_digits) noexcept
     {
         signal_stack_.clear();
 
         const bool is_negative = (code < 0);
         SignalCode abs_code    = is_negative ? -code : code;
 
-        const DigitValue base_val    = to_value(base);
-        NumDigits        digit_count = 0;
-
+        const DigitValue base_val            = to_value(base);
+        NumDigits        digit_count         = 0;
+        const NumDigits  max_digits          = max_digits_for_base(base);
+        const bool       is_num_digits_valid = (num_digits > 0 && num_digits <= max_digits);
+        const NumDigits  max_digits_to_show  = is_num_digits_valid ? num_digits : max_digits;
         do
         {
             const DigitValue digit = to_digit(abs_code % base_val);
@@ -56,9 +58,9 @@ namespace pisco_code
             signal_stack_.push(digit == 0 ? SIGNAL_ELEMENT_ZERO_GAP
                                           : signal_element_digit_peak(digit));
             ++digit_count;
-        } while (abs_code > 0);
+        } while (abs_code > 0 && digit_count < max_digits_to_show);
 
-        while (digit_count < min_digits)
+        while (is_num_digits_valid && digit_count < num_digits)
         {
             signal_stack_.push(SIGNAL_ELEMENT_ZERO_GAP);
             ++digit_count;

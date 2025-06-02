@@ -11,8 +11,9 @@ constexpr Counter MAX_SIGNAL_ELEMENTS = 32; // UPPER_CASE for constexpr variable
 enum class SignalLevel : SignalLevelType
 {
     NOT_DEFINED = 0,
-    GAP, // Represents silent or idle pulse (e.g., digit 0)
-    PEAK // Represents active/visible/strong pulse
+    GAP,    // Represents silent or idle pulse (e.g., digit 0)
+    PEAK,   // Represents active/visible/strong pulse
+    MIDDLE, // Represents a middle level, not used in current logic
 };
 
 // Signal duration (mapped to ms by higher layers)
