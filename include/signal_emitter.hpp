@@ -5,6 +5,7 @@
 #include "led_controller.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
+#include "signal_sequencer.hpp"
 
 namespace pisco_code
 {
@@ -80,7 +81,8 @@ namespace pisco_code
         void handlePauseBeforeStart(LoopCounter loop_counter);
         void handlePauseAfterFinish(LoopCounter loop_counter);
 
-        LedController* controller_ = nullptr;
+        LedController*  controller_ = nullptr;
+        SignalSequencer sequencer_;
 
         Index     current_digit_index_               = 0;
         NumDigits least_significant_digit_           = 0;
