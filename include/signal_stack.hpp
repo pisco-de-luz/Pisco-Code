@@ -12,7 +12,7 @@ namespace pisco_code
     class SignalStack
     {
       public:
-        [[nodiscard]] constexpr SignalStack() noexcept = default;
+        constexpr SignalStack() noexcept = default;
 
         void                        push(SignalElement unit) noexcept;
         [[nodiscard]] bool          isEmpty() const noexcept;

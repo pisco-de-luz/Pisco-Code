@@ -12,7 +12,7 @@ namespace pisco_code
     class SignalSequencer
     {
       public:
-        [[nodiscard]] SignalSequencer() noexcept = default;
+        SignalSequencer() noexcept = default;
 
         void                  clear() noexcept;
         void                  popNextPulse() noexcept;
