@@ -8,6 +8,7 @@
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 #include "signal_emitter.hpp"
+#include "signal_sequencer.hpp"
 #include "tests_constants.hpp"
 #include "tests_types.hpp"
 
@@ -20,6 +21,33 @@ using pisco_code::SignalEmitter;
 
 namespace testutils
 {
+    // Two LUTs for GAP and PEAK (SignalLevel::GAP == 1, PEAK == 2)
+    constexpr const char* GAP_LUT[]    = {"_", "__", "___", "______"};
+    constexpr const char* MIDDLE_LUT[] = {"-", "--", "---", "------"};
+    constexpr const char* PEAK_LUT[]   = {"^", "^^", "^^^", "^^^^^^"};
+
+    // Returns a pointer to a static string literal (no dynamic allocation)
+    [[nodiscard]] inline TraceCode to_trace_code(SignalLevel    level,
+                                                 SignalDuration duration) noexcept
+    {
+        const auto duration_value = to_value(duration);
+
+        if (duration_value >= 4)
+            return ""; // fail-safe: invalid duration
+
+        switch (level)
+        {
+            case SignalLevel::GAP:
+                return GAP_LUT[duration_value];
+            case SignalLevel::MIDDLE:
+                return MIDDLE_LUT[duration_value];
+            case SignalLevel::PEAK:
+                return PEAK_LUT[duration_value];
+            default:
+                return ""; // NOT_DEFINED or invalid
+        }
+    }
+
     // Drives the loop for a maximum simulated time, default 64 seconds.
     inline void runSequencer(SignalEmitter* code, MockLedControlLogger* logger)
     {
@@ -64,73 +92,31 @@ namespace testutils
         return result;
     }
 
-    inline CodeDigitInfo convertCodeToDigits(SignalCode code, NumberBase base, NumDigits num_digits)
-    {
-        CodeDigitInfo result{};
-        result.is_negative  = (code < 0);
-        SignalCode abs_code = result.is_negative ? -code : code;
-
-        const NumDigits max_digits    = max_digits_for_base(base);
-        uint8_t         first_nonzero = max_digits - 1;
-
-        for (Index i = max_digits - 1; i >= 0; --i)
-        {
-            const auto digit = static_cast<uint8_t>(abs_code % static_cast<uint8_t>(base));
-            result.digits[i] = digit;
-            if (digit > 0)
-            {
-                first_nonzero = i;
-            }
-            abs_code /= static_cast<uint8_t>(base);
-        }
-
-        if (num_digits > 0 && num_digits <= max_digits)
-        {
-            result.first_nonzero_digit_index = max_digits - num_digits;
-        }
-        else
-        {
-            result.first_nonzero_digit_index = first_nonzero;
-        }
-
-        return result;
-    }
-
     inline TraceCode generateExpectedTrace(SignalCode code, NumberBase base,
                                            NumDigits min_digits = 0, RepeatTimes repeats = 1)
     {
-        const CodeDigitInfo info       = convertCodeToDigits(code, base, min_digits);
-        TraceCode           trace      = "___";
-        const NumDigits     max_digits = max_digits_for_base(base);
-
-        for (Counter r = 0; r < repeats; ++r)
+        SignalSequencer sequencer;
+        sequencer.loadSignalCode(code, base, min_digits);
+        sequencer.setRepeatTimes(repeats);
+        TraceCode trace = to_trace_code(SignalLevel::GAP, SignalDuration::LONG);
+        while (sequencer.hasMoreSignalCodeToSequence())
         {
-            trace += "---";
-            if (info.is_negative)
+            sequencer.popNextCodeToSequence();
+            trace += to_trace_code(SignalLevel::MIDDLE, SignalDuration::LONG);
+            ;
+            while (sequencer.hasMoreSignalElements())
             {
-                trace += "^^^---";
-            }
-
-            for (Index index = info.first_nonzero_digit_index; index < max_digits; ++index)
-            {
-                const Counter digit = info.digits[index];
-                if (digit == 0)
+                auto element = sequencer.popNextSignalElement();
+                while (sequencer.hasMorePulse())
                 {
-                    trace += "_-";
+                    sequencer.popNextPulse();
+                    trace += to_trace_code(element.get_level(), element.get_duration());
+                    trace += to_trace_code(SignalLevel::MIDDLE, SignalDuration::SHORT);
                 }
-                else
-                {
-                    for (Counter j = 0; j < digit; ++j)
-                    {
-                        trace += "^-";
-                    }
-                }
-                trace += "--";
+                trace += to_trace_code(SignalLevel::MIDDLE, SignalDuration::MEDIUM);
             }
-
-            trace += "___";
+            trace += to_trace_code(SignalLevel::GAP, SignalDuration::LONG);
         }
-
         return trace;
     }
 
