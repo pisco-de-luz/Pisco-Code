@@ -15,7 +15,8 @@ namespace pisco_code
       public:
         explicit SignalEmitter(LedController* controller);
 
-        bool showCode(SignalCode code, NumberBase base, NumDigits num_digits, RepeatTimes repeats);
+        bool showCode(SignalCode code, NumberBase base, NumDigits num_digits,
+                      RepeatTimes repeats);
         void loop(LoopCounter loop_counter);
         bool isRunning() const;
         bool isLedBeingUsedNow() const;
@@ -23,6 +24,24 @@ namespace pisco_code
         void setDimmedLevel(LedLevel level);
 
       private:
+        bool phaseElapsed(LoopCounter loop_counter) const;
+
+        bool hasMoreBlinks() const;
+        bool hasMoreDigits() const;
+        bool shouldRepeat() const;
+
+        void handleIdle(LoopCounter loop_counter);
+        void handleBeginDigit(LoopCounter loop_counter);
+        void handleDisplayNegativeSign(LoopCounter loop_counter);
+        void handlePauseAfterNegative(LoopCounter loop_counter);
+        void handleLoadNextDigit(LoopCounter loop_counter);
+        void handleEmitBlink(LoopCounter loop_counter);
+        void handlePauseBetweenBlinks(LoopCounter loop_counter);
+        void handleDisplayZero(LoopCounter loop_counter);
+        void handleEndOfDigitCycle(LoopCounter loop_counter);
+        void handlePauseBeforeStart(LoopCounter loop_counter);
+        void handlePauseAfterFinish(LoopCounter loop_counter);
+
         enum class Phase : PhaseType
         {
             // LED is off (initial state)
@@ -61,26 +80,86 @@ namespace pisco_code
             // LED is off (system paused or stopped)
             IDLE
         };
+
         using BlinkPhaseHandler = void (SignalEmitter::*)(UInt8);
-        void transitionTo(Phase next, PhaseDuration duration, LoopCounter loop_counter);
-        bool phaseElapsed(LoopCounter loop_counter) const;
 
-        bool hasMoreBlinks() const;
-        bool hasMoreDigits() const;
-        bool shouldRepeat() const;
+        struct PhaseTableEntry
+        {
+            BlinkPhaseHandler handler;
+            Phase             id;
+            BlinkMode         blink_mode;
+        };
 
-        void handleIdle(LoopCounter loop_counter);
-        void handleBeginDigit(LoopCounter loop_counter);
-        void handleDisplayNegativeSign(LoopCounter loop_counter);
-        void handlePauseAfterNegative(LoopCounter loop_counter);
-        void handleLoadNextDigit(LoopCounter loop_counter);
-        void handleEmitBlink(LoopCounter loop_counter);
-        void handlePauseBetweenBlinks(LoopCounter loop_counter);
-        void handleDisplayZero(LoopCounter loop_counter);
-        void handleEndOfDigitCycle(LoopCounter loop_counter);
-        void handlePauseBeforeStart(LoopCounter loop_counter);
-        void handlePauseAfterFinish(LoopCounter loop_counter);
+        // Declare the static constexpr member array
+        // This declares that an array named phase_table exists and belongs to
+        // SignalEmitter, but its actual definition (the contents) will be in
+        // the .cpp file.
+        static constexpr Counter NUM_PHASES = 13; // or whatever the number is
+        static constexpr PhaseTableEntry phase_table[NUM_PHASES] = {
+            {
+             &SignalEmitter::handlePauseBeforeStart,
+             SignalEmitter::Phase::PAUSE_BEFORE_START,
+             BlinkMode::NONE,
+             },
+            {
+             &SignalEmitter::handleBeginDigit,
+             SignalEmitter::Phase::BEGIN_DIGIT,
+             BlinkMode::DIMMED,
+             },
+            {
+             &SignalEmitter::handleDisplayNegativeSign,
+             SignalEmitter::Phase::DISPLAY_NEGATIVE_SIGN,
+             BlinkMode::PULSE,
+             },
+            {
+             &SignalEmitter::handlePauseAfterNegative,
+             SignalEmitter::Phase::PAUSE_AFTER_NEGATIVE,
+             BlinkMode::DIMMED,
+             },
+            {
+             &SignalEmitter::handleLoadNextDigit,
+             SignalEmitter::Phase::LOAD_NEXT_DIGIT,
+             BlinkMode::DIMMED,
+             },
+            {
+             &SignalEmitter::handleEmitBlink,
+             SignalEmitter::Phase::EMIT_BLINK,
+             BlinkMode::PULSE,
+             },
+            {
+             &SignalEmitter::handlePauseBetweenBlinks,
+             SignalEmitter::Phase::PAUSE_BETWEEN_BLINKS,
+             BlinkMode::DIMMED,
+             },
+            {
+             &SignalEmitter::handleEndOfDigitCycle,
+             SignalEmitter::Phase::END_OF_DIGIT_CYCLE,
+             BlinkMode::DIMMED,
+             },
+            {
+             &SignalEmitter::handlePauseBeforeStart,
+             SignalEmitter::Phase::PREPARE_REPEAT,
+             BlinkMode::NONE,
+             },
+            {
+             &SignalEmitter::handlePauseAfterFinish,
+             SignalEmitter::Phase::PAUSE_AFTER_FINISH,
+             BlinkMode::NONE,
+             },
+            {
+             &SignalEmitter::handleIdle,
+             SignalEmitter::Phase::IDLE,
+             BlinkMode::NONE,
+             },
+            {
+             &SignalEmitter::handleDisplayZero,
+             SignalEmitter::Phase::DISPLAY_ZERO,
+             BlinkMode::NONE,
+             },
+        };
 
+        void            transitionTo(Phase next, PhaseDuration duration,
+                                     LoopCounter loop_counter);
         LedController*  controller_ = nullptr;
         SignalSequencer sequencer_;
 

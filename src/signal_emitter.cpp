@@ -69,76 +69,7 @@ namespace pisco_code
         if (!controller_)
             return;
 
-        static constexpr struct
-        {
-            BlinkPhaseHandler handler;
-            Phase             id;
-            BlinkMode         blink_mode;
-
-        } phase_table[] = {
-            {
-             &SignalEmitter::handlePauseBeforeStart,
-             Phase::PAUSE_BEFORE_START,
-             BlinkMode::NONE,
-             },
-            {
-             &SignalEmitter::handleBeginDigit,
-             Phase::BEGIN_DIGIT,
-             BlinkMode::DIMMED,
-             },
-            {
-             &SignalEmitter::handleDisplayNegativeSign,
-             Phase::DISPLAY_NEGATIVE_SIGN,
-             BlinkMode::PULSE,
-             },
-            {
-             &SignalEmitter::handlePauseAfterNegative,
-             Phase::PAUSE_AFTER_NEGATIVE,
-             BlinkMode::DIMMED,
-             },
-            {
-             &SignalEmitter::handleLoadNextDigit,
-             Phase::LOAD_NEXT_DIGIT,
-             BlinkMode::DIMMED,
-             },
-            {
-             &SignalEmitter::handleEmitBlink,
-             Phase::EMIT_BLINK,
-             BlinkMode::PULSE,
-             },
-            {
-             &SignalEmitter::handlePauseBetweenBlinks,
-             Phase::PAUSE_BETWEEN_BLINKS,
-             BlinkMode::DIMMED,
-             },
-            {
-             &SignalEmitter::handleEndOfDigitCycle,
-             Phase::END_OF_DIGIT_CYCLE,
-             BlinkMode::DIMMED,
-             },
-            {
-             &SignalEmitter::handlePauseBeforeStart,
-             Phase::PREPARE_REPEAT,
-             BlinkMode::NONE,
-             },
-            {
-             &SignalEmitter::handlePauseAfterFinish,
-             Phase::PAUSE_AFTER_FINISH,
-             BlinkMode::NONE,
-             },
-            {
-             &SignalEmitter::handleIdle,
-             Phase::IDLE,
-             BlinkMode::NONE,
-             },
-            {
-             &SignalEmitter::handleDisplayZero,
-             Phase::DISPLAY_ZERO,
-             BlinkMode::NONE,
-             },
-        };
-
-        for (const auto& entry : phase_table)
+        for (const auto& entry : SignalEmitter::phase_table)
         {
             if (entry.id == current_phase_)
             {
