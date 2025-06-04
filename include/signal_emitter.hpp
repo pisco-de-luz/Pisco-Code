@@ -41,6 +41,7 @@ namespace pisco_code
         void handleEndOfDigitCycle(LoopCounter loop_counter);
         void handlePauseBeforeStart(LoopCounter loop_counter);
         void handlePauseAfterFinish(LoopCounter loop_counter);
+        void handleHasMoreSignalCodeToSequence(LoopCounter loop_counter);
 
         enum class Phase : PhaseType
         {
@@ -78,7 +79,11 @@ namespace pisco_code
             PAUSE_AFTER_FINISH,
 
             // LED is off (system paused or stopped)
-            IDLE
+            IDLE,
+
+            HAS_MORE_SIGNAL_CODE_TO_SEQUENCE,
+
+            LAST_PHASE, // Used to determine the size of the enum
         };
 
         using BlinkPhaseHandler = void (SignalEmitter::*)(UInt8);
@@ -95,67 +100,73 @@ namespace pisco_code
         // SignalEmitter, but its actual definition (the contents) will be in
         // the .cpp file.
         static constexpr Counter NUM_PHASES = 13; // or whatever the number is
-        static constexpr PhaseTableEntry phase_table[NUM_PHASES] = {
-            {
-             &SignalEmitter::handlePauseBeforeStart,
-             SignalEmitter::Phase::PAUSE_BEFORE_START,
-             BlinkMode::NONE,
-             },
-            {
-             &SignalEmitter::handleBeginDigit,
-             SignalEmitter::Phase::BEGIN_DIGIT,
-             BlinkMode::DIMMED,
-             },
-            {
-             &SignalEmitter::handleDisplayNegativeSign,
-             SignalEmitter::Phase::DISPLAY_NEGATIVE_SIGN,
-             BlinkMode::PULSE,
-             },
-            {
-             &SignalEmitter::handlePauseAfterNegative,
-             SignalEmitter::Phase::PAUSE_AFTER_NEGATIVE,
-             BlinkMode::DIMMED,
-             },
-            {
-             &SignalEmitter::handleLoadNextDigit,
-             SignalEmitter::Phase::LOAD_NEXT_DIGIT,
-             BlinkMode::DIMMED,
-             },
-            {
-             &SignalEmitter::handleEmitBlink,
-             SignalEmitter::Phase::EMIT_BLINK,
-             BlinkMode::PULSE,
-             },
-            {
-             &SignalEmitter::handlePauseBetweenBlinks,
-             SignalEmitter::Phase::PAUSE_BETWEEN_BLINKS,
-             BlinkMode::DIMMED,
-             },
-            {
-             &SignalEmitter::handleEndOfDigitCycle,
-             SignalEmitter::Phase::END_OF_DIGIT_CYCLE,
-             BlinkMode::DIMMED,
-             },
-            {
-             &SignalEmitter::handlePauseBeforeStart,
-             SignalEmitter::Phase::PREPARE_REPEAT,
-             BlinkMode::NONE,
-             },
-            {
-             &SignalEmitter::handlePauseAfterFinish,
-             SignalEmitter::Phase::PAUSE_AFTER_FINISH,
-             BlinkMode::NONE,
-             },
-            {
-             &SignalEmitter::handleIdle,
-             SignalEmitter::Phase::IDLE,
-             BlinkMode::NONE,
-             },
-            {
-             &SignalEmitter::handleDisplayZero,
-             SignalEmitter::Phase::DISPLAY_ZERO,
-             BlinkMode::NONE,
-             },
+        static constexpr PhaseTableEntry
+            phase_table[static_cast<PhaseType>(Phase::LAST_PHASE)] = {
+                {
+                 &SignalEmitter::handlePauseBeforeStart,
+                 SignalEmitter::Phase::PAUSE_BEFORE_START,
+                 BlinkMode::NONE,
+                 },
+                {
+                 &SignalEmitter::handleBeginDigit,
+                 SignalEmitter::Phase::BEGIN_DIGIT,
+                 BlinkMode::DIMMED,
+                 },
+                {
+                 &SignalEmitter::handleDisplayNegativeSign,
+                 SignalEmitter::Phase::DISPLAY_NEGATIVE_SIGN,
+                 BlinkMode::PULSE,
+                 },
+                {
+                 &SignalEmitter::handlePauseAfterNegative,
+                 SignalEmitter::Phase::PAUSE_AFTER_NEGATIVE,
+                 BlinkMode::DIMMED,
+                 },
+                {
+                 &SignalEmitter::handleLoadNextDigit,
+                 SignalEmitter::Phase::LOAD_NEXT_DIGIT,
+                 BlinkMode::DIMMED,
+                 },
+                {
+                 &SignalEmitter::handleEmitBlink,
+                 SignalEmitter::Phase::EMIT_BLINK,
+                 BlinkMode::PULSE,
+                 },
+                {
+                 &SignalEmitter::handlePauseBetweenBlinks,
+                 SignalEmitter::Phase::PAUSE_BETWEEN_BLINKS,
+                 BlinkMode::DIMMED,
+                 },
+                {
+                 &SignalEmitter::handleEndOfDigitCycle,
+                 SignalEmitter::Phase::END_OF_DIGIT_CYCLE,
+                 BlinkMode::DIMMED,
+                 },
+                {
+                 &SignalEmitter::handlePauseBeforeStart,
+                 SignalEmitter::Phase::PREPARE_REPEAT,
+                 BlinkMode::NONE,
+                 },
+                {
+                 &SignalEmitter::handlePauseAfterFinish,
+                 SignalEmitter::Phase::PAUSE_AFTER_FINISH,
+                 BlinkMode::NONE,
+                 },
+                {
+                 &SignalEmitter::handleIdle,
+                 SignalEmitter::Phase::IDLE,
+                 BlinkMode::NONE,
+                 },
+                {
+                 &SignalEmitter::handleDisplayZero,
+                 SignalEmitter::Phase::DISPLAY_ZERO,
+                 BlinkMode::NONE,
+                 },
+                {
+                 &SignalEmitter::handleHasMoreSignalCodeToSequence,
+                 SignalEmitter::Phase::HAS_MORE_SIGNAL_CODE_TO_SEQUENCE,
+                 BlinkMode::NONE,
+                 },
         };
 
         void            transitionTo(Phase next, PhaseDuration duration,

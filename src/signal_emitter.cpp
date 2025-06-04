@@ -59,8 +59,7 @@ namespace pisco_code
         controller_->setDimmedLevel(dimmed_level_);
         controller_->setPeakLevel(peak_level_);
 
-        transitionTo(Phase::PAUSE_BEFORE_START, to_loop_count(INIT_PHASE_MS),
-                     0);
+        transitionTo(Phase::HAS_MORE_SIGNAL_CODE_TO_SEQUENCE, 0, 0);
         return true;
     }
 
@@ -82,6 +81,33 @@ namespace pisco_code
         if (++loop_counter_ > PWM_MAX)
         {
             loop_counter_ = 0;
+        }
+    }
+
+    void SignalEmitter::transitionTo(Phase next, PhaseDuration duration,
+                                     LoopCounter loop_counter)
+    {
+        if (next == Phase::HAS_MORE_SIGNAL_CODE_TO_SEQUENCE ||
+            next == Phase::PAUSE_BEFORE_START || phaseElapsed(loop_counter))
+        {
+            current_phase_  = next;
+            phase_duration_ = duration;
+            start_time_     = loop_counter;
+        }
+    }
+
+    void
+    SignalEmitter::handleHasMoreSignalCodeToSequence(LoopCounter loop_counter)
+    {
+        if (sequencer_.hasMoreSignalCodeToSequence())
+        {
+            sequencer_.popNextCodeToSequence();
+            transitionTo(Phase::PAUSE_BEFORE_START,
+                         to_loop_count(INIT_PHASE_MS), 0);
+        }
+        else
+        {
+            transitionTo(Phase::IDLE, 0, 0);
         }
     }
 
@@ -112,17 +138,6 @@ namespace pisco_code
     bool SignalEmitter::isRunning() const
     {
         return current_phase_ != Phase::IDLE;
-    }
-
-    void SignalEmitter::transitionTo(Phase next, PhaseDuration duration,
-                                     LoopCounter loop_counter)
-    {
-        if (next == Phase::PAUSE_BEFORE_START || phaseElapsed(loop_counter))
-        {
-            current_phase_  = next;
-            phase_duration_ = duration;
-            start_time_     = loop_counter;
-        }
     }
 
     bool SignalEmitter::phaseElapsed(LoopCounter loop_counter) const
