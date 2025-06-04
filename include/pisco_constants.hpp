@@ -70,10 +70,14 @@ namespace pisco_code
     }
 
     // Compile-time checks to catch omissions
-    static_assert(MAX_DIGITS_LUT[to_value(NumberBase::BIN)] > 0, "Missing BIN max digits");
-    static_assert(MAX_DIGITS_LUT[to_value(NumberBase::OCT)] > 0, "Missing OCT max digits");
-    static_assert(MAX_DIGITS_LUT[to_value(NumberBase::DEC)] > 0, "Missing DEC max digits");
-    static_assert(MAX_DIGITS_LUT[to_value(NumberBase::HEX)] > 0, "Missing HEX max digits");
+    static_assert(MAX_DIGITS_LUT[to_value(NumberBase::BIN)] > 0,
+                  "Missing BIN max digits");
+    static_assert(MAX_DIGITS_LUT[to_value(NumberBase::OCT)] > 0,
+                  "Missing OCT max digits");
+    static_assert(MAX_DIGITS_LUT[to_value(NumberBase::DEC)] > 0,
+                  "Missing DEC max digits");
+    static_assert(MAX_DIGITS_LUT[to_value(NumberBase::HEX)] > 0,
+                  "Missing HEX max digits");
 
     // Maximum number of digits that could be represented in the system
     constexpr NumDigits MAX_DIGITS_ABSOLUTE = 31; // for int32_t in binary base
