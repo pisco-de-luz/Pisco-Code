@@ -69,23 +69,37 @@ namespace pisco_code
         if (!controller_)
             return;
 
-        for (const auto& entry : SignalEmitter::phase_table)
+        last_phase_entry_ = getPhaseEntry(current_phase_);
+        controller_->setBlinkMode(last_phase_entry_.blink_mode);
+        if (phaseElapsed(loop_counter))
         {
-            if (entry.id == current_phase_)
-            {
-                controller_->setBlinkMode(entry.blink_mode);
-                if (phaseElapsed(loop_counter))
-                {
-                    (this->*entry.handler)(loop_counter);
-                }
-                break;
-            }
+            (this->*last_phase_entry_.handler)(loop_counter);
         }
         controller_->update(loop_counter_);
         if (++loop_counter_ > PWM_MAX)
         {
             loop_counter_ = 0;
         }
+    }
+
+    SignalEmitter::PhaseTableEntry
+    SignalEmitter::getPhaseEntry(Phase phase) const
+    {
+        PhaseTableEntry phase_entry = last_phase_entry_;
+        if (phase != last_phase_entry_.id)
+        {
+            for (const auto& entry : SignalEmitter::phase_table)
+            {
+                if (entry.id == phase)
+                {
+                    phase_entry.blink_mode = entry.blink_mode;
+                    phase_entry.handler    = entry.handler;
+                    phase_entry.id         = entry.id;
+                    break;
+                }
+            }
+        }
+        return phase_entry;
     }
 
     void SignalEmitter::transitionTo(Phase next, PhaseDuration duration,

@@ -151,10 +151,16 @@ namespace pisco_code
                  },
         };
 
+        PhaseTableEntry getPhaseEntry(Phase phase) const;
         void            transitionTo(Phase next, PhaseDuration duration,
                                      LoopCounter loop_counter);
         LedController*  controller_ = nullptr;
         SignalSequencer sequencer_;
+        PhaseTableEntry last_phase_entry_ = {
+            &SignalEmitter::handleIdle,
+            SignalEmitter::Phase::IDLE,
+            BlinkMode::NONE,
+        };
 
         Index     current_digit_index_               = 0;
         NumDigits least_significant_digit_           = 0;
