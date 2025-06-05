@@ -22,7 +22,7 @@ namespace pisco_code
         {
             return false;
         }
-
+        sequencer_.clear();
         sequencer_.loadSignalCode(code, base, num_digits);
         sequencer_.setRepeatTimes(repeats);
         is_negative_                = (code < 0);
@@ -88,6 +88,7 @@ namespace pisco_code
                                      LoopCounter loop_counter)
     {
         if (next == Phase::HAS_MORE_SIGNAL_CODE_TO_SEQUENCE ||
+            next == Phase::POP_NEXT_CODE_TO_SEQUENCE ||
             next == Phase::PAUSE_BEFORE_START || phaseElapsed(loop_counter))
         {
             current_phase_  = next;
@@ -101,14 +102,19 @@ namespace pisco_code
     {
         if (sequencer_.hasMoreSignalCodeToSequence())
         {
-            sequencer_.popNextCodeToSequence();
-            transitionTo(Phase::PAUSE_BEFORE_START,
-                         to_loop_count(INIT_PHASE_MS), 0);
+            transitionTo(Phase::POP_NEXT_CODE_TO_SEQUENCE, 0, 0);
         }
         else
         {
             transitionTo(Phase::IDLE, 0, 0);
         }
+    }
+
+    void SignalEmitter::handlePopNextCodeToSequence(LoopCounter loop_counter)
+    {
+        sequencer_.popNextCodeToSequence();
+        transitionTo(Phase::PAUSE_BEFORE_START, to_loop_count(INIT_PHASE_MS),
+                     loop_counter);
     }
 
     void SignalEmitter::setPeakLevel(LedLevel led_level)

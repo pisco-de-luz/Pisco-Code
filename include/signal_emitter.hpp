@@ -42,47 +42,24 @@ namespace pisco_code
         void handlePauseBeforeStart(LoopCounter loop_counter);
         void handlePauseAfterFinish(LoopCounter loop_counter);
         void handleHasMoreSignalCodeToSequence(LoopCounter loop_counter);
+        void handlePopNextCodeToSequence(LoopCounter loop_counter);
 
         enum class Phase : PhaseType
         {
-            // LED is off (initial state)
             PAUSE_BEFORE_START = 0,
-
-            // LED is dimmed (start of digit display)
             BEGIN_DIGIT,
-
-            // LED is ON (blink for negative sign)
             DISPLAY_NEGATIVE_SIGN,
-
-            // LED is dimmed (cooldown after minus blink)
             PAUSE_AFTER_NEGATIVE,
-
-            // LED is dimmed (preparing next digit)
             LOAD_NEXT_DIGIT,
-
-            // LED is ON (main blink pulse)
             EMIT_BLINK,
-
-            // LED is dimmed (between blinks of the same digit)
             PAUSE_BETWEEN_BLINKS,
-
-            // LED is dimmed (zero represented as a dim pause)
             DISPLAY_ZERO,
-
-            // LED is dimmed (pause before repeat or stop)
             END_OF_DIGIT_CYCLE,
-
-            // LED is off (pause before next repetition)
             PREPARE_REPEAT,
-
-            // LED is off (pause after final repetition)
             PAUSE_AFTER_FINISH,
-
-            // LED is off (system paused or stopped)
             IDLE,
-
             HAS_MORE_SIGNAL_CODE_TO_SEQUENCE,
-
+            POP_NEXT_CODE_TO_SEQUENCE,
             LAST_PHASE, // Used to determine the size of the enum
         };
 
@@ -165,6 +142,11 @@ namespace pisco_code
                 {
                  &SignalEmitter::handleHasMoreSignalCodeToSequence,
                  SignalEmitter::Phase::HAS_MORE_SIGNAL_CODE_TO_SEQUENCE,
+                 BlinkMode::NONE,
+                 },
+                {
+                 &SignalEmitter::handlePopNextCodeToSequence,
+                 SignalEmitter::Phase::POP_NEXT_CODE_TO_SEQUENCE,
                  BlinkMode::NONE,
                  },
         };
