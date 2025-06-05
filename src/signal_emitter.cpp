@@ -74,7 +74,10 @@ namespace pisco_code
             if (entry.id == current_phase_)
             {
                 controller_->setBlinkMode(entry.blink_mode);
-                (this->*entry.handler)(loop_counter);
+                if (phaseElapsed(loop_counter))
+                {
+                    (this->*entry.handler)(loop_counter);
+                }
                 break;
             }
         }
@@ -88,14 +91,9 @@ namespace pisco_code
     void SignalEmitter::transitionTo(Phase next, PhaseDuration duration,
                                      LoopCounter loop_counter)
     {
-        if (next == Phase::POP_NEXT_CODE_TO_SEQUENCE ||
-            // next == Phase::HAS_MORE_SIGNAL_CODE_TO_SEQUENCE ||
-            next == Phase::PAUSE_BEFORE_START || phaseElapsed(loop_counter))
-        {
-            current_phase_  = next;
-            phase_duration_ = duration;
-            start_time_     = loop_counter;
-        }
+        current_phase_  = next;
+        phase_duration_ = duration;
+        start_time_     = loop_counter;
     }
 
     void
@@ -113,10 +111,7 @@ namespace pisco_code
 
     void SignalEmitter::handlePopNextCodeToSequence(LoopCounter loop_counter)
     {
-        if (phaseElapsed(loop_counter))
-        {
-            sequencer_.popNextCodeToSequence();
-        }
+        sequencer_.popNextCodeToSequence();
         transitionTo(Phase::BEGIN_DIGIT, to_loop_count(INIT_DIMMED_PHASE_MS),
                      loop_counter);
     }
@@ -208,28 +203,22 @@ namespace pisco_code
 
     void SignalEmitter::handleLoadNextDigit(LoopCounter loop_counter)
     {
-        if (phaseElapsed(loop_counter))
+        if (current_digit_index_ >= max_digits_ && shouldRepeat())
         {
-            // NOTE: Need to improve this logic to avoid miss interpretation
-            // shouldRepeat() is checking and decreasing the counter BAD Design
-            if (current_digit_index_ >= max_digits_ && shouldRepeat())
+            transitionTo(Phase::END_OF_DIGIT_CYCLE,
+                         to_loop_count(END_DIMMED_PHASE_MS), loop_counter);
+        }
+        else
+        {
+            if (blink_counts_[current_digit_index_] == 0)
             {
-                transitionTo(Phase::END_OF_DIGIT_CYCLE,
-                             to_loop_count(END_DIMMED_PHASE_MS), loop_counter);
+                transitionTo(Phase::DISPLAY_ZERO,
+                             to_loop_count(ZERO_DIGIT_BLINK_MS), loop_counter);
             }
             else
             {
-                if (blink_counts_[current_digit_index_] == 0)
-                {
-                    transitionTo(Phase::DISPLAY_ZERO,
-                                 to_loop_count(ZERO_DIGIT_BLINK_MS),
-                                 loop_counter);
-                }
-                else
-                {
-                    transitionTo(Phase::EMIT_BLINK,
-                                 to_loop_count(SHORT_BLINK_MS), loop_counter);
-                }
+                transitionTo(Phase::EMIT_BLINK, to_loop_count(SHORT_BLINK_MS),
+                             loop_counter);
             }
         }
     }
@@ -248,33 +237,27 @@ namespace pisco_code
 
     void SignalEmitter::handleEmitBlink(LoopCounter loop_counter)
     {
-        if (phaseElapsed(loop_counter))
-        {
-            --blink_counts_[current_digit_index_];
-            transitionTo(Phase::PAUSE_BETWEEN_BLINKS,
-                         hasMoreBlinks() ? to_loop_count(BETWEEN_BLINK_MS)
-                                         : to_loop_count(BETWEEN_DIGITS_MS),
-                         loop_counter);
-        }
+        --blink_counts_[current_digit_index_];
+        transitionTo(Phase::PAUSE_BETWEEN_BLINKS,
+                     hasMoreBlinks() ? to_loop_count(BETWEEN_BLINK_MS)
+                                     : to_loop_count(BETWEEN_DIGITS_MS),
+                     loop_counter);
     }
 
     void SignalEmitter::handlePauseBetweenBlinks(LoopCounter loop_counter)
     {
-        if (phaseElapsed(loop_counter))
+        if (hasMoreBlinks())
         {
-            if (hasMoreBlinks())
+            transitionTo(Phase::EMIT_BLINK, to_loop_count(SHORT_BLINK_MS),
+                         loop_counter);
+        }
+        else
+        {
+            if (hasMoreDigits())
             {
-                transitionTo(Phase::EMIT_BLINK, to_loop_count(SHORT_BLINK_MS),
-                             loop_counter);
+                ++current_digit_index_;
             }
-            else
-            {
-                if (hasMoreDigits())
-                {
-                    ++current_digit_index_;
-                }
-                transitionTo(Phase::LOAD_NEXT_DIGIT, 0, loop_counter);
-            }
+            transitionTo(Phase::LOAD_NEXT_DIGIT, 0, loop_counter);
         }
     }
 
@@ -291,23 +274,20 @@ namespace pisco_code
 
     void SignalEmitter::handleEndOfDigitCycle(LoopCounter loop_counter)
     {
-        if (phaseElapsed(loop_counter))
+        if (repeats_remaining_ == 0)
         {
-            if (repeats_remaining_ == 0)
+            transitionTo(Phase::PAUSE_AFTER_FINISH, to_loop_count(END_PHASE_MS),
+                         loop_counter);
+        }
+        else
+        {
+            for (Index digit = max_digits_ - 1; digit >= 0; --digit)
             {
-                transitionTo(Phase::PAUSE_AFTER_FINISH,
-                             to_loop_count(END_PHASE_MS), loop_counter);
+                blink_counts_[digit] = digits_[digit];
             }
-            else
-            {
-                for (Index digit = max_digits_ - 1; digit >= 0; --digit)
-                {
-                    blink_counts_[digit] = digits_[digit];
-                }
-                current_digit_index_ = least_significant_digit_;
-                transitionTo(Phase::PREPARE_REPEAT,
-                             to_loop_count(BETWEEN_CODES_MS), loop_counter);
-            }
+            current_digit_index_ = least_significant_digit_;
+            transitionTo(Phase::PREPARE_REPEAT, to_loop_count(BETWEEN_CODES_MS),
+                         loop_counter);
         }
     }
 
