@@ -59,7 +59,8 @@ namespace pisco_code
         controller_->setDimmedLevel(dimmed_level_);
         controller_->setPeakLevel(peak_level_);
 
-        transitionTo(Phase::HAS_MORE_SIGNAL_CODE_TO_SEQUENCE, 0, 0);
+        transitionTo(Phase::PAUSE_BEFORE_START, to_loop_count(INIT_PHASE_MS),
+                     0);
         return true;
     }
 
@@ -87,8 +88,8 @@ namespace pisco_code
     void SignalEmitter::transitionTo(Phase next, PhaseDuration duration,
                                      LoopCounter loop_counter)
     {
-        if (next == Phase::HAS_MORE_SIGNAL_CODE_TO_SEQUENCE ||
-            next == Phase::POP_NEXT_CODE_TO_SEQUENCE ||
+        if (next == Phase::POP_NEXT_CODE_TO_SEQUENCE ||
+            // next == Phase::HAS_MORE_SIGNAL_CODE_TO_SEQUENCE ||
             next == Phase::PAUSE_BEFORE_START || phaseElapsed(loop_counter))
         {
             current_phase_  = next;
@@ -102,7 +103,7 @@ namespace pisco_code
     {
         if (sequencer_.hasMoreSignalCodeToSequence())
         {
-            transitionTo(Phase::POP_NEXT_CODE_TO_SEQUENCE, 0, 0);
+            transitionTo(Phase::POP_NEXT_CODE_TO_SEQUENCE, 0, loop_counter);
         }
         else
         {
@@ -112,8 +113,11 @@ namespace pisco_code
 
     void SignalEmitter::handlePopNextCodeToSequence(LoopCounter loop_counter)
     {
-        sequencer_.popNextCodeToSequence();
-        transitionTo(Phase::PAUSE_BEFORE_START, to_loop_count(INIT_PHASE_MS),
+        if (phaseElapsed(loop_counter))
+        {
+            sequencer_.popNextCodeToSequence();
+        }
+        transitionTo(Phase::BEGIN_DIGIT, to_loop_count(INIT_DIMMED_PHASE_MS),
                      loop_counter);
     }
 
@@ -276,8 +280,7 @@ namespace pisco_code
 
     void SignalEmitter::handlePauseBeforeStart(LoopCounter loop_counter)
     {
-        transitionTo(Phase::BEGIN_DIGIT, to_loop_count(INIT_DIMMED_PHASE_MS),
-                     loop_counter);
+        transitionTo(Phase::HAS_MORE_SIGNAL_CODE_TO_SEQUENCE, 0, loop_counter);
     }
 
     void SignalEmitter::handleDisplayZero(LoopCounter loop_counter)

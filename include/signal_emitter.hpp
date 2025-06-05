@@ -30,7 +30,7 @@ namespace pisco_code
         bool hasMoreDigits() const;
         bool shouldRepeat() const;
 
-        void handleIdle(LoopCounter loop_counter);
+        void handleIdle(LoopCounter);
         void handleBeginDigit(LoopCounter loop_counter);
         void handleDisplayNegativeSign(LoopCounter loop_counter);
         void handlePauseAfterNegative(LoopCounter loop_counter);
@@ -41,8 +41,8 @@ namespace pisco_code
         void handleEndOfDigitCycle(LoopCounter loop_counter);
         void handlePauseBeforeStart(LoopCounter loop_counter);
         void handlePauseAfterFinish(LoopCounter loop_counter);
-        void handleHasMoreSignalCodeToSequence(LoopCounter loop_counter);
-        void handlePopNextCodeToSequence(LoopCounter loop_counter);
+        void handleHasMoreSignalCodeToSequence(LoopCounter);
+        void handlePopNextCodeToSequence(LoopCounter);
 
         enum class Phase : PhaseType
         {
