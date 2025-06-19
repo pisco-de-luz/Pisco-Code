@@ -27,8 +27,8 @@ namespace testutils
     constexpr const char* PEAK_LUT[]   = {"^", "^^", "^^^", "^^^^^^"};
 
     // Returns a pointer to a static string literal (no dynamic allocation)
-    [[nodiscard]] inline TraceCode to_trace_code(SignalLevel    level,
-                                                 SignalDuration duration) noexcept
+    [[nodiscard]] inline TraceCode
+    to_trace_code(SignalLevel level, SignalDuration duration) noexcept
     {
         const auto duration_value = to_value(duration);
 
@@ -71,14 +71,15 @@ namespace testutils
         logger->flush();
     }
 
-    inline TraceCode repeatTracePattern(const TraceCode& trace_code, RepeatTimes repeat_count)
+    inline TraceCode repeatTracePattern(const TraceCode& trace_code,
+                                        RepeatTimes      repeat_count)
     {
         if (repeat_count <= 1 || trace_code.empty())
             return {};
 
         // Find trailing LED off pattern (represented by a sequence of '_')
-        const auto trail_off_start =
-            static_cast<TraceStrIndex>(trace_code.find_last_not_of(LED_OFF_CHARACTER) + 1);
+        const auto trail_off_start = static_cast<TraceStrIndex>(
+            trace_code.find_last_not_of(LED_OFF_CHARACTER) + 1);
         if (trail_off_start == TraceCode::npos)
             return "No trailing off pattern found";
 
@@ -93,7 +94,8 @@ namespace testutils
     }
 
     inline TraceCode generateExpectedTrace(SignalCode code, NumberBase base,
-                                           NumDigits num_digits = 0, RepeatTimes repeats = 1)
+                                           NumDigits   num_digits = 0,
+                                           RepeatTimes repeats    = 1)
     {
         SignalSequencer sequencer;
         sequencer.loadSignalCode(code, base, num_digits);
@@ -110,10 +112,13 @@ namespace testutils
                 while (sequencer.hasMorePulse())
                 {
                     sequencer.popNextPulse();
-                    trace += to_trace_code(element.get_level(), element.get_duration());
-                    trace += to_trace_code(SignalLevel::MIDDLE, SignalDuration::SHORT);
+                    trace += to_trace_code(element.get_level(),
+                                           element.get_duration());
+                    trace += to_trace_code(SignalLevel::MIDDLE,
+                                           SignalDuration::SHORT);
                 }
-                trace += to_trace_code(SignalLevel::MIDDLE, SignalDuration::MEDIUM);
+                trace +=
+                    to_trace_code(SignalLevel::MIDDLE, SignalDuration::MEDIUM);
             }
             trace += to_trace_code(SignalLevel::GAP, SignalDuration::LONG);
         }
@@ -121,15 +126,17 @@ namespace testutils
     }
 
     // Check the behavior of the blinker against the expected values.
-    inline void checkBlinkerBehavior(SignalEmitter& blinker, MockLedControlLogger& logger,
+    inline void checkBlinkerBehavior(SignalEmitter&         blinker,
+                                     MockLedControlLogger&  logger,
                                      const TestBlinkerCase& testCase)
     {
-        SignalCode        code_to_show = testCase.blink_code.value_or(DEFAULT_CODE);
-        const NumDigits   num_digits   = testCase.numDigits.value_or(0);
-        const RepeatTimes repeats      = testCase.repeats.value_or(1);
-        const NumberBase  base         = testCase.number_base.value_or(NumberBase::DEC);
+        SignalCode code_to_show = testCase.blink_code.value_or(DEFAULT_CODE);
+        const NumDigits   num_digits = testCase.numDigits.value_or(0);
+        const RepeatTimes repeats    = testCase.repeats.value_or(1);
+        const NumberBase  base = testCase.number_base.value_or(NumberBase::DEC);
 
-        TraceCode expected_trace = generateExpectedTrace(code_to_show, base, num_digits, repeats);
+        TraceCode expected_trace =
+            generateExpectedTrace(code_to_show, base, num_digits, repeats);
 
         blinker.showCode(code_to_show, base, num_digits, repeats);
         logger.setBlinker(&blinker);
@@ -145,24 +152,26 @@ namespace testutils
         // Check the dimmed and pulse levels
         if (testCase.expectedDimmed.has_value())
         {
-            CHECK_EQUAL_TEXT(testCase.expectedDimmed.value(), logger.getDimmedLevel(),
-                             "Dimmed level mismatch");
+            CHECK_EQUAL_TEXT(testCase.expectedDimmed.value(),
+                             logger.getDimmedLevel(), "Dimmed level mismatch");
         }
         if (testCase.expectedPulse.has_value())
         {
-            CHECK_EQUAL_TEXT(testCase.expectedPulse.value(), logger.getPulseLevel(),
-                             "Pulse level mismatch");
+            CHECK_EQUAL_TEXT(testCase.expectedPulse.value(),
+                             logger.getPulseLevel(), "Pulse level mismatch");
         }
     }
 
     // Generate a SignalCode code using a pattern of digits
-    inline SignalCode generatePatternOfDigits(const GeneratePatternParams& params)
+    inline SignalCode
+    generatePatternOfDigits(const GeneratePatternParams& params)
     {
         SignalCode code_to_show = 0;
         const auto base_value   = to_value(params.number_base);
 
         PatternOption pattern_to_use = params.pattern;
-        if (params.pattern == PatternOption::SequencialDown && params.num_digits >= base_value)
+        if (params.pattern == PatternOption::SequencialDown &&
+            params.num_digits >= base_value)
         {
             pattern_to_use = PatternOption::DescendingFromMax;
         }
@@ -182,7 +191,8 @@ namespace testutils
                     break;
 
                 case PatternOption::DescendingFromMax:
-                    digit_to_show = static_cast<DigitValue>((base_value - 1 - (i % base_value)));
+                    digit_to_show = static_cast<DigitValue>(
+                        (base_value - 1 - (i % base_value)));
                     break;
 
                 case PatternOption::SameDigit:
@@ -201,19 +211,3 @@ namespace testutils
     }
 
 } // namespace testutils
-
-/*
-if (num_digits >= base_value) { start_digit = (num_digits - base_value + 1);}
-i, (num_digits - i),  (num_digits - i) % base_value, (start_digit - i)
-0,  9,                  1, 2
-1,  8,                  0
-2,  7,                  7
-3, 6, 6
-4, 5, 5
-5, 4, 4
-6, 3, 3
-7, 2, 2
-8, 1, 1
-
-
-*/
