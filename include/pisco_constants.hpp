@@ -89,7 +89,7 @@ namespace pisco_code
 
     // Loop timing constants
     constexpr Timestamp LOOP_INTERVAL_MS       = 64;
-    constexpr Timestamp INIT_PHASE_MS          = 2000;
+    constexpr Timestamp INIT_PHASE_MS          = 1900;
     constexpr Timestamp INIT_DIMMED_PHASE_MS   = 1300;
     constexpr Timestamp END_DIMMED_PHASE_MS    = 300;
     constexpr Timestamp NEGATIVE_BLINK_LONG_MS = 1100;

@@ -41,8 +41,9 @@ namespace pisco_code
         void handleEndOfDigitCycle(LoopCounter loop_counter);
         void handlePauseBeforeStart(LoopCounter loop_counter);
         void handlePauseAfterFinish(LoopCounter loop_counter);
-        void handleHasMoreSignalCodeToSequence(LoopCounter);
-        void handlePopNextCodeToSequence(LoopCounter);
+        void handleHasMoreSignalCodeToSequence(LoopCounter loop_counter);
+        void handleHasMoreSignalElements(LoopCounter loop_counter);
+        void handlePopNextCodeToSequence(LoopCounter loop_counter);
 
         enum class Phase : PhaseType
         {
@@ -60,6 +61,7 @@ namespace pisco_code
             IDLE,
             HAS_MORE_SIGNAL_CODE_TO_SEQUENCE,
             POP_NEXT_CODE_TO_SEQUENCE,
+            HAS_MORE_SIGNAL_ELEMENTS,
             LAST_PHASE, // Used to determine the size of the enum
         };
 
@@ -147,6 +149,11 @@ namespace pisco_code
                 {
                  &SignalEmitter::handlePopNextCodeToSequence,
                  SignalEmitter::Phase::POP_NEXT_CODE_TO_SEQUENCE,
+                 BlinkMode::NONE,
+                 },
+                {
+                 &SignalEmitter::handleHasMoreSignalElements,
+                 SignalEmitter::Phase::HAS_MORE_SIGNAL_ELEMENTS,
                  BlinkMode::NONE,
                  },
         };

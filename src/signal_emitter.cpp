@@ -102,34 +102,6 @@ namespace pisco_code
         return phase_entry;
     }
 
-    void SignalEmitter::transitionTo(Phase next, PhaseDuration duration,
-                                     LoopCounter loop_counter)
-    {
-        current_phase_  = next;
-        phase_duration_ = duration;
-        start_time_     = loop_counter;
-    }
-
-    void
-    SignalEmitter::handleHasMoreSignalCodeToSequence(LoopCounter loop_counter)
-    {
-        if (sequencer_.hasMoreSignalCodeToSequence())
-        {
-            transitionTo(Phase::POP_NEXT_CODE_TO_SEQUENCE, 0, loop_counter);
-        }
-        else
-        {
-            transitionTo(Phase::IDLE, 0, 0);
-        }
-    }
-
-    void SignalEmitter::handlePopNextCodeToSequence(LoopCounter loop_counter)
-    {
-        sequencer_.popNextCodeToSequence();
-        transitionTo(Phase::BEGIN_DIGIT, to_loop_count(INIT_DIMMED_PHASE_MS),
-                     loop_counter);
-    }
-
     void SignalEmitter::setPeakLevel(LedLevel led_level)
     {
         peak_level_ = (led_level > PWM_MAX) ? PWM_MAX : led_level;
@@ -203,6 +175,51 @@ namespace pisco_code
         }
     }
 
+    void SignalEmitter::transitionTo(Phase next, PhaseDuration duration,
+                                     LoopCounter loop_counter)
+    {
+        current_phase_  = next;
+        phase_duration_ = duration;
+        start_time_     = loop_counter;
+    }
+
+    void SignalEmitter::handlePauseBeforeStart(LoopCounter loop_counter)
+    {
+        transitionTo(Phase::HAS_MORE_SIGNAL_CODE_TO_SEQUENCE, 0, loop_counter);
+    }
+
+    void
+    SignalEmitter::handleHasMoreSignalCodeToSequence(LoopCounter loop_counter)
+    {
+        if (sequencer_.hasMoreSignalCodeToSequence())
+        {
+            transitionTo(Phase::POP_NEXT_CODE_TO_SEQUENCE, 0, loop_counter);
+        }
+        else
+        {
+            transitionTo(Phase::IDLE, 0, 0);
+        }
+    }
+
+    void SignalEmitter::handlePopNextCodeToSequence(LoopCounter loop_counter)
+    {
+        sequencer_.popNextCodeToSequence();
+        transitionTo(Phase::HAS_MORE_SIGNAL_ELEMENTS, 0, loop_counter);
+    }
+
+    void SignalEmitter::handleHasMoreSignalElements(LoopCounter loop_counter)
+    {
+        if (sequencer_.hasMoreSignalElements())
+        {
+            transitionTo(Phase::BEGIN_DIGIT,
+                         to_loop_count(INIT_DIMMED_PHASE_MS), loop_counter);
+        }
+        else
+        {
+            transitionTo(Phase::IDLE, 0, 0);
+        }
+    }
+
     void SignalEmitter::handleIdle(LoopCounter)
     {
     }
@@ -273,11 +290,6 @@ namespace pisco_code
             }
             transitionTo(Phase::LOAD_NEXT_DIGIT, 0, loop_counter);
         }
-    }
-
-    void SignalEmitter::handlePauseBeforeStart(LoopCounter loop_counter)
-    {
-        transitionTo(Phase::HAS_MORE_SIGNAL_CODE_TO_SEQUENCE, 0, loop_counter);
     }
 
     void SignalEmitter::handleDisplayZero(LoopCounter loop_counter)
