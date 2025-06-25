@@ -77,12 +77,11 @@ namespace pisco_code
         };
 
         // Declare the static constexpr member array
-        // This declares that an array named phase_table exists and belongs to
+        // This declares that an array named PHASE_TABLE exists and belongs to
         // SignalEmitter, but its actual definition (the contents) will be in
         // the .cpp file.
-        static constexpr Counter NUM_PHASES = 13; // or whatever the number is
         static constexpr PhaseTableEntry
-            phase_table[static_cast<PhaseType>(Phase::LAST_PHASE)] = {
+            PHASE_TABLE[static_cast<PhaseType>(Phase::LAST_PHASE)] = {
                 {
                  &SignalEmitter::handlePauseBeforeStart,
                  SignalEmitter::Phase::PAUSE_BEFORE_START,

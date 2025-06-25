@@ -88,7 +88,7 @@ namespace pisco_code
         PhaseTableEntry phase_entry = last_phase_entry_;
         if (phase != last_phase_entry_.id)
         {
-            for (const auto& entry : SignalEmitter::phase_table)
+            for (const auto& entry : SignalEmitter::PHASE_TABLE)
             {
                 if (entry.id == phase)
                 {
