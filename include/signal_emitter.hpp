@@ -44,6 +44,7 @@ namespace pisco_code
         void handleHasMoreSignalCodeToSequence(LoopCounter loop_counter);
         void handleHasMoreSignalElements(LoopCounter loop_counter);
         void handlePopNextCodeToSequence(LoopCounter loop_counter);
+        void handlePopNextSignalElement(LoopCounter loop_counter);
 
         enum class Phase : PhaseType
         {
@@ -62,6 +63,7 @@ namespace pisco_code
             HAS_MORE_SIGNAL_CODE_TO_SEQUENCE,
             POP_NEXT_CODE_TO_SEQUENCE,
             HAS_MORE_SIGNAL_ELEMENTS,
+            POP_NEXT_SIGNAL_ELEMENT,
             LAST_PHASE, // Used to determine the size of the enum
         };
 
@@ -156,6 +158,11 @@ namespace pisco_code
                  SignalEmitter::Phase::HAS_MORE_SIGNAL_ELEMENTS,
                  BlinkMode::NONE,
                  },
+                {
+                 &SignalEmitter::handlePopNextSignalElement,
+                 SignalEmitter::Phase::POP_NEXT_SIGNAL_ELEMENT,
+                 BlinkMode::NONE,
+                 },
         };
 
         PhaseTableEntry getPhaseEntry(Phase phase) const;
@@ -163,6 +170,7 @@ namespace pisco_code
                                      LoopCounter loop_counter);
         LedController*  controller_ = nullptr;
         SignalSequencer sequencer_;
+        SignalElement   element_;
         PhaseTableEntry last_phase_entry_ = {
             &SignalEmitter::handleIdle,
             SignalEmitter::Phase::IDLE,

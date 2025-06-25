@@ -211,13 +211,19 @@ namespace pisco_code
     {
         if (sequencer_.hasMoreSignalElements())
         {
-            transitionTo(Phase::BEGIN_DIGIT,
-                         to_loop_count(INIT_DIMMED_PHASE_MS), loop_counter);
+            transitionTo(Phase::POP_NEXT_SIGNAL_ELEMENT, 0, loop_counter);
         }
         else
         {
             transitionTo(Phase::IDLE, 0, 0);
         }
+    }
+
+    void SignalEmitter::handlePopNextSignalElement(LoopCounter loop_counter)
+    {
+        element_ = sequencer_.popNextSignalElement();
+        transitionTo(Phase::BEGIN_DIGIT, to_loop_count(INIT_DIMMED_PHASE_MS),
+                     loop_counter);
     }
 
     void SignalEmitter::handleIdle(LoopCounter)
