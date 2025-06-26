@@ -18,7 +18,7 @@ namespace pisco_code
         void setPeakLevel(LedLevel level) override;
         void setDimmedLevel(LedLevel level) override;
         void setBlinkMode(BlinkMode mode) override;
-        void update(LoopCounter loop_counter) override;
+        void update(PwmTickPosition pwm_tick_position) override;
 
       private:
         LedLevel peak_level_              = PWM_MAX;

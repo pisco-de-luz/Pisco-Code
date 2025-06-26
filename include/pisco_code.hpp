@@ -11,23 +11,36 @@ namespace pisco_code
     class PiscoCode
     {
       public:
-        explicit PiscoCode(bool (*led_func)(LedCodeType))
-            : controller_(led_func), blinker_(&controller_)
+        explicit PiscoCode(bool (*led_func)(LedCodeType)) :
+            controller_(led_func), blinker_(&controller_)
         {
         }
 
-        void showCode(SignalCode code, NumberBase base, NumDigits min_digits, RepeatTimes repeats)
+        void showCode(SignalCode code, NumberBase base, NumDigits min_digits,
+                      RepeatTimes repeats)
         {
             blinker_.showCode(code, base, min_digits, repeats);
         }
 
-        void loop(LoopCounter loop_counter) { blinker_.loop(loop_counter); }
+        void loop(LoopCounter tick_counter)
+        {
+            blinker_.loop(tick_counter);
+        }
 
-        void setDimmedLevel(LedLevel level) { blinker_.setDimmedLevel(level); }
+        void setDimmedLevel(LedLevel level)
+        {
+            blinker_.setDimmedLevel(level);
+        }
 
-        void setPeakLevel(LedLevel level) { blinker_.setPeakLevel(level); }
+        void setPeakLevel(LedLevel level)
+        {
+            blinker_.setPeakLevel(level);
+        }
 
-        bool isRunning() const { return blinker_.isRunning(); }
+        bool isRunning() const
+        {
+            return blinker_.isRunning();
+        }
 
       private:
         SoftwarePwmLedController controller_;

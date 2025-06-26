@@ -11,15 +11,27 @@ using namespace pisco_code;
 class MockLedControllerAdapter : public LedController
 {
   public:
-    explicit MockLedControllerAdapter(MockLedControlLogger* logger) : logger_(logger) {}
+    explicit MockLedControllerAdapter(MockLedControlLogger* logger) :
+        logger_(logger)
+    {
+    }
 
-    void setPeakLevel(uint8_t value) override { peak_level_ = value; }
+    void setPeakLevel(uint8_t value) override
+    {
+        peak_level_ = value;
+    }
 
-    void setDimmedLevel(uint8_t value) override { dimmed_level_ = value; }
+    void setDimmedLevel(uint8_t value) override
+    {
+        dimmed_level_ = value;
+    }
 
-    void setBlinkMode(BlinkMode mode) override { mode_ = mode; }
+    void setBlinkMode(BlinkMode mode) override
+    {
+        mode_ = mode;
+    }
 
-    void update(uint8_t loop_counter) override
+    void update(PwmTickPosition pwm_tick_position) override
     {
         if (logger_ == nullptr)
         {
@@ -29,33 +41,38 @@ class MockLedControllerAdapter : public LedController
         switch (mode_)
         {
             case BlinkMode::PULSE:
-                if (loop_counter == 0)
+                if (pwm_tick_position == 0)
                 {
-                    logger_->handle(static_cast<LedCodeType>(LedControlCode::ON));
+                    logger_->handle(
+                        static_cast<LedCodeType>(LedControlCode::ON));
                 }
-                else if (loop_counter == peak_level_)
+                else if (pwm_tick_position == peak_level_)
                 {
-                    logger_->handle(static_cast<LedCodeType>(LedControlCode::OFF));
+                    logger_->handle(
+                        static_cast<LedCodeType>(LedControlCode::OFF));
                 }
                 break;
 
             case BlinkMode::DIMMED:
-                if (loop_counter == 0)
+                if (pwm_tick_position == 0)
                 {
-                    logger_->handle(static_cast<LedCodeType>(LedControlCode::ON));
+                    logger_->handle(
+                        static_cast<LedCodeType>(LedControlCode::ON));
                 }
-                else if (loop_counter == dimmed_level_)
+                else if (pwm_tick_position == dimmed_level_)
                 {
-                    logger_->handle(static_cast<LedCodeType>(LedControlCode::OFF));
+                    logger_->handle(
+                        static_cast<LedCodeType>(LedControlCode::OFF));
                 }
                 break;
 
             case BlinkMode::NONE:
             default:
-                if (loop_counter == 0)
+                if (pwm_tick_position == 0)
                 {
                     // Ensure LED is OFF during idle periods
-                    logger_->handle(static_cast<LedCodeType>(LedControlCode::OFF));
+                    logger_->handle(
+                        static_cast<LedCodeType>(LedControlCode::OFF));
                 }
                 break;
         }
@@ -63,8 +80,8 @@ class MockLedControllerAdapter : public LedController
 
   private:
     MockLedControlLogger* logger_       = nullptr;
-    uint8_t               peak_level_   = PWM_MAX;
-    uint8_t               dimmed_level_ = DEFAULT_DIMMED_LEVEL;
+    PwmTickPosition       peak_level_   = PWM_MAX;
+    PwmTickPosition       dimmed_level_ = DEFAULT_DIMMED_LEVEL;
     BlinkMode             mode_         = BlinkMode::NONE;
 };
 

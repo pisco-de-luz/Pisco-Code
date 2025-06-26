@@ -17,34 +17,34 @@ namespace pisco_code
 
         bool showCode(SignalCode code, NumberBase base, NumDigits num_digits,
                       RepeatTimes repeats);
-        void loop(LoopCounter loop_counter);
+        void loop(LoopCounter tick_counter);
         bool isRunning() const;
         bool isLedBeingUsedNow() const;
         void setPeakLevel(LedLevel level);
         void setDimmedLevel(LedLevel level);
 
       private:
-        bool phaseElapsed(LoopCounter loop_counter) const;
+        bool phaseElapsed(LoopCounter tick_counter) const;
 
         bool hasMoreBlinks() const;
         bool hasMoreDigits() const;
         bool shouldRepeat() const;
 
         void handleIdle(LoopCounter);
-        void handleBeginDigit(LoopCounter loop_counter);
-        void handleDisplayNegativeSign(LoopCounter loop_counter);
-        void handlePauseAfterNegative(LoopCounter loop_counter);
-        void handleLoadNextDigit(LoopCounter loop_counter);
-        void handleEmitBlink(LoopCounter loop_counter);
-        void handlePauseBetweenBlinks(LoopCounter loop_counter);
-        void handleDisplayZero(LoopCounter loop_counter);
-        void handleEndOfDigitCycle(LoopCounter loop_counter);
-        void handlePauseBeforeStart(LoopCounter loop_counter);
-        void handlePauseAfterFinish(LoopCounter loop_counter);
-        void handleHasMoreSignalCodeToSequence(LoopCounter loop_counter);
-        void handleHasMoreSignalElements(LoopCounter loop_counter);
-        void handlePopNextCodeToSequence(LoopCounter loop_counter);
-        void handlePopNextSignalElement(LoopCounter loop_counter);
+        void handleBeginDigit(LoopCounter tick_counter);
+        void handleDisplayNegativeSign(LoopCounter tick_counter);
+        void handlePauseAfterNegative(LoopCounter tick_counter);
+        void handleLoadNextDigit(LoopCounter tick_counter);
+        void handleEmitBlink(LoopCounter tick_counter);
+        void handlePauseBetweenBlinks(LoopCounter tick_counter);
+        void handleDisplayZero(LoopCounter tick_counter);
+        void handleEndOfDigitCycle(LoopCounter tick_counter);
+        void handlePauseBeforeStart(LoopCounter tick_counter);
+        void handlePauseAfterFinish(LoopCounter tick_counter);
+        void handleHasMoreSignalCodeToSequence(LoopCounter tick_counter);
+        void handleHasMoreSignalElements(LoopCounter tick_counter);
+        void handlePopNextCodeToSequence(LoopCounter tick_counter);
+        void handlePopNextSignalElement(LoopCounter tick_counter);
 
         enum class Phase : PhaseType
         {
@@ -166,7 +166,7 @@ namespace pisco_code
 
         PhaseTableEntry getPhaseEntry(Phase phase) const;
         void            transitionTo(Phase next, PhaseDuration duration,
-                                     LoopCounter loop_counter);
+                                     LoopCounter tick_counter);
         LedController*  controller_ = nullptr;
         SignalSequencer sequencer_;
         SignalElement   element_;
@@ -189,10 +189,10 @@ namespace pisco_code
         PhaseDuration phase_duration_ = 0;
         Phase         current_phase_  = Phase::IDLE;
 
-        bool        is_negative_  = false;
-        LedLevel    peak_level_   = DEFAULT_PULSE_LEVEL;
-        LoopCounter loop_counter_ = 0;
-        LedLevel    dimmed_level_ = DEFAULT_DIMMED_LEVEL;
+        bool            is_negative_       = false;
+        LedLevel        peak_level_        = DEFAULT_PULSE_LEVEL;
+        PwmTickPosition pwm_tick_position_ = 0;
+        LedLevel        dimmed_level_      = DEFAULT_DIMMED_LEVEL;
     };
 
 } // namespace pisco_code

@@ -18,7 +18,10 @@ namespace pisco_code
       public:
         virtual void setPeakLevel(LedLevel level)   = 0;
         virtual void setDimmedLevel(LedLevel level) = 0;
-        virtual void update(LoopCounter loop_counter) { (void) loop_counter; }
+        virtual void update(PwmTickPosition pwm_tick_position)
+        {
+            (void) pwm_tick_position;
+        }
         virtual void setBlinkMode(BlinkMode mode) = 0;
     };
 
