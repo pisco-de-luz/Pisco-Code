@@ -52,16 +52,16 @@ namespace testutils
     inline void runSequencer(SignalEmitter* code, MockLedControlLogger* logger)
     {
         constexpr uint8_t   LOOP_CALLS_PER_COUNTER = 64;
-        constexpr Timestamp MAX_SEQUENCING_LOOP =
+        constexpr Timestamp MAX_SEQUENCING_LOOPS =
             3600000UL; // Limit simulation of 1h to prevent infinite loop
-        Timestamp loop_counter = 0;
-        uint8_t   fake_millis  = 0;
+        Timestamp sequencing_counter = 0;
+        uint8_t   fake_millis        = 0;
 
-        while (code->isRunning() && loop_counter < MAX_SEQUENCING_LOOP)
+        while (code->isRunning() && sequencing_counter < MAX_SEQUENCING_LOOPS)
         {
             for (uint8_t i = 0; i < LOOP_CALLS_PER_COUNTER; ++i)
             {
-                logger->setTime(loop_counter++);
+                logger->setTime(sequencing_counter++);
                 code->loop(fake_millis);
             }
 
