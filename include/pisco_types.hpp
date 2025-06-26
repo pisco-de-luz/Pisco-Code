@@ -17,7 +17,7 @@ namespace pisco_code
     using RepeatTimes     = UInt8;
     using NumDigits       = UInt8;
     using DigitValue      = UInt8;
-    using LoopCounter     = UInt8;
+    using TickCounter     = UInt8;
     using PwmTickPosition = UInt8;
     using PhaseDuration   = UInt8;
     using SignalCode      = Int32;

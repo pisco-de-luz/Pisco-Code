@@ -101,9 +101,9 @@ namespace pisco_code
     constexpr Timestamp END_PHASE_MS           = 2000;
 
     // Conversion from ms to loop ticks
-    constexpr LoopCounter to_loop_count(Timestamp milliseconds) noexcept
+    constexpr TickCounter to_loop_count(Timestamp milliseconds) noexcept
     {
-        return static_cast<LoopCounter>(milliseconds / LOOP_INTERVAL_MS);
+        return static_cast<TickCounter>(milliseconds / LOOP_INTERVAL_MS);
     }
 
 } // namespace pisco_code

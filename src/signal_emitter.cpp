@@ -64,7 +64,7 @@ namespace pisco_code
         return true;
     }
 
-    void SignalEmitter::loop(LoopCounter tick_counter)
+    void SignalEmitter::loop(TickCounter tick_counter)
     {
         if (!controller_)
             return;
@@ -131,7 +131,7 @@ namespace pisco_code
         return current_phase_ != Phase::IDLE;
     }
 
-    bool SignalEmitter::phaseElapsed(LoopCounter tick_counter) const
+    bool SignalEmitter::phaseElapsed(TickCounter tick_counter) const
     {
         const auto elapsed    = to_phase_duration(tick_counter - start_time_);
         const bool phase_done = elapsed > phase_duration_;
@@ -176,20 +176,20 @@ namespace pisco_code
     }
 
     void SignalEmitter::transitionTo(Phase next, PhaseDuration duration,
-                                     LoopCounter tick_counter)
+                                     TickCounter tick_counter)
     {
         current_phase_  = next;
         phase_duration_ = duration;
         start_time_     = tick_counter;
     }
 
-    void SignalEmitter::handlePauseBeforeStart(LoopCounter tick_counter)
+    void SignalEmitter::handlePauseBeforeStart(TickCounter tick_counter)
     {
         transitionTo(Phase::HAS_MORE_SIGNAL_CODE_TO_SEQUENCE, 0, tick_counter);
     }
 
     void
-    SignalEmitter::handleHasMoreSignalCodeToSequence(LoopCounter tick_counter)
+    SignalEmitter::handleHasMoreSignalCodeToSequence(TickCounter tick_counter)
     {
         if (sequencer_.hasMoreSignalCodeToSequence())
         {
@@ -201,13 +201,13 @@ namespace pisco_code
         }
     }
 
-    void SignalEmitter::handlePopNextCodeToSequence(LoopCounter tick_counter)
+    void SignalEmitter::handlePopNextCodeToSequence(TickCounter tick_counter)
     {
         sequencer_.popNextCodeToSequence();
         transitionTo(Phase::HAS_MORE_SIGNAL_ELEMENTS, 0, tick_counter);
     }
 
-    void SignalEmitter::handleHasMoreSignalElements(LoopCounter tick_counter)
+    void SignalEmitter::handleHasMoreSignalElements(TickCounter tick_counter)
     {
         if (sequencer_.hasMoreSignalElements())
         {
@@ -219,18 +219,18 @@ namespace pisco_code
         }
     }
 
-    void SignalEmitter::handlePopNextSignalElement(LoopCounter tick_counter)
+    void SignalEmitter::handlePopNextSignalElement(TickCounter tick_counter)
     {
         element_ = sequencer_.popNextSignalElement();
         transitionTo(Phase::BEGIN_DIGIT, to_loop_count(INIT_DIMMED_PHASE_MS),
                      tick_counter);
     }
 
-    void SignalEmitter::handleIdle(LoopCounter)
+    void SignalEmitter::handleIdle(TickCounter)
     {
     }
 
-    void SignalEmitter::handleBeginDigit(LoopCounter tick_counter)
+    void SignalEmitter::handleBeginDigit(TickCounter tick_counter)
     {
         transitionTo(is_negative_ ? Phase::DISPLAY_NEGATIVE_SIGN
                                   : Phase::LOAD_NEXT_DIGIT,
@@ -238,7 +238,7 @@ namespace pisco_code
                      tick_counter);
     }
 
-    void SignalEmitter::handleLoadNextDigit(LoopCounter tick_counter)
+    void SignalEmitter::handleLoadNextDigit(TickCounter tick_counter)
     {
         if (current_digit_index_ >= max_digits_ && shouldRepeat())
         {
@@ -260,19 +260,19 @@ namespace pisco_code
         }
     }
 
-    void SignalEmitter::handleDisplayNegativeSign(LoopCounter tick_counter)
+    void SignalEmitter::handleDisplayNegativeSign(TickCounter tick_counter)
     {
         transitionTo(Phase::PAUSE_AFTER_NEGATIVE,
                      to_loop_count(NEGATIVE_BLINK_LONG_MS), tick_counter);
     }
 
-    void SignalEmitter::handlePauseAfterNegative(LoopCounter tick_counter)
+    void SignalEmitter::handlePauseAfterNegative(TickCounter tick_counter)
     {
         transitionTo(Phase::LOAD_NEXT_DIGIT, to_loop_count(BETWEEN_BLINK_MS),
                      tick_counter);
     }
 
-    void SignalEmitter::handleEmitBlink(LoopCounter tick_counter)
+    void SignalEmitter::handleEmitBlink(TickCounter tick_counter)
     {
         --blink_counts_[current_digit_index_];
         transitionTo(Phase::PAUSE_BETWEEN_BLINKS,
@@ -281,7 +281,7 @@ namespace pisco_code
                      tick_counter);
     }
 
-    void SignalEmitter::handlePauseBetweenBlinks(LoopCounter tick_counter)
+    void SignalEmitter::handlePauseBetweenBlinks(TickCounter tick_counter)
     {
         if (hasMoreBlinks())
         {
@@ -298,13 +298,13 @@ namespace pisco_code
         }
     }
 
-    void SignalEmitter::handleDisplayZero(LoopCounter tick_counter)
+    void SignalEmitter::handleDisplayZero(TickCounter tick_counter)
     {
         transitionTo(Phase::PAUSE_BETWEEN_BLINKS,
                      to_loop_count(BETWEEN_DIGITS_MS), tick_counter);
     }
 
-    void SignalEmitter::handleEndOfDigitCycle(LoopCounter tick_counter)
+    void SignalEmitter::handleEndOfDigitCycle(TickCounter tick_counter)
     {
         if (repeats_remaining_ == 0)
         {
@@ -323,7 +323,7 @@ namespace pisco_code
         }
     }
 
-    void SignalEmitter::handlePauseAfterFinish(LoopCounter tick_counter)
+    void SignalEmitter::handlePauseAfterFinish(TickCounter tick_counter)
     {
         transitionTo(Phase::IDLE, 0, tick_counter);
     }

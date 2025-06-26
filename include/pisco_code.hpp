@@ -22,7 +22,7 @@ namespace pisco_code
             blinker_.showCode(code, base, min_digits, repeats);
         }
 
-        void loop(LoopCounter tick_counter)
+        void loop(TickCounter tick_counter)
         {
             blinker_.loop(tick_counter);
         }
