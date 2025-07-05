@@ -30,21 +30,21 @@ namespace pisco_code
         bool hasMoreDigits() const;
         bool shouldRepeat() const;
 
-        void handleIdle(TickCounter);
-        void handleBeginDigit(TickCounter tick_counter);
-        void handleDisplayNegativeSign(TickCounter tick_counter);
-        void handlePauseAfterNegative(TickCounter tick_counter);
-        void handleLoadNextDigit(TickCounter tick_counter);
-        void handleEmitBlink(TickCounter tick_counter);
-        void handlePauseBetweenBlinks(TickCounter tick_counter);
-        void handleDisplayZero(TickCounter tick_counter);
-        void handleEndOfDigitCycle(TickCounter tick_counter);
-        void handlePauseBeforeStart(TickCounter tick_counter);
-        void handlePauseAfterFinish(TickCounter tick_counter);
-        void handleHasMoreSignalCodeToSequence(TickCounter tick_counter);
-        void handleHasMoreSignalElements(TickCounter tick_counter);
-        void handlePopNextCodeToSequence(TickCounter tick_counter);
-        void handlePopNextSignalElement(TickCounter tick_counter);
+        void handleIdle();
+        void handleBeginDigit();
+        void handleDisplayNegativeSign();
+        void handlePauseAfterNegative();
+        void handleLoadNextDigit();
+        void handleEmitBlink();
+        void handlePauseBetweenBlinks();
+        void handleDisplayZero();
+        void handleEndOfDigitCycle();
+        void handlePauseBeforeStart();
+        void handlePauseAfterFinish();
+        void handleHasMoreSignalCodeToSequence();
+        void handleHasMoreSignalElements();
+        void handlePopNextCodeToSequence();
+        void handlePopNextSignalElement();
 
         enum class Phase : PhaseType
         {
@@ -67,7 +67,7 @@ namespace pisco_code
             LAST_PHASE, // Used to determine the size of the enum
         };
 
-        using BlinkPhaseHandler = void (SignalEmitter::*)(UInt8);
+        using BlinkPhaseHandler = void (SignalEmitter::*)();
 
         struct PhaseTableEntry
         {
@@ -165,8 +165,7 @@ namespace pisco_code
         };
 
         PhaseTableEntry getPhaseEntry(Phase phase) const;
-        void            transitionTo(Phase next, PhaseDuration duration,
-                                     TickCounter tick_counter);
+        void            transitionTo(Phase next, PhaseDuration duration);
         LedController*  controller_ = nullptr;
         SignalSequencer sequencer_;
         SignalElement   element_;
