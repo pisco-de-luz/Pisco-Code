@@ -37,6 +37,7 @@ namespace pisco_code
         void handleLoadNextDigit();
         void handleEmitBlink();
         void handlePauseBetweenBlinks();
+        void handlePauseBetweenDigits();
         void handleDisplayZero();
         void handleEndOfDigitCycle();
         void handlePauseBeforeStart();
@@ -55,6 +56,7 @@ namespace pisco_code
             LOAD_NEXT_DIGIT,
             EMIT_BLINK,
             PAUSE_BETWEEN_BLINKS,
+            PAUSE_BETWEEN_DIGITS,
             DISPLAY_ZERO,
             END_OF_DIGIT_CYCLE,
             PREPARE_REPEAT,
@@ -71,9 +73,10 @@ namespace pisco_code
 
         struct PhaseTableEntry
         {
-            BlinkPhaseHandler handler;
-            Phase             id;
-            BlinkMode         blink_mode;
+            BlinkPhaseHandler handler    = nullptr;
+            Phase             id         = Phase::IDLE;
+            BlinkMode         blink_mode = BlinkMode::NONE;
+            PhaseDuration     duration   = 0;
         };
 
         // Declare the static constexpr member array
@@ -86,86 +89,108 @@ namespace pisco_code
                  &SignalEmitter::handlePauseBeforeStart,
                  SignalEmitter::Phase::PAUSE_BEFORE_START,
                  BlinkMode::NONE,
+                 to_phase_duration(INIT_PHASE_MS),
                  },
                 {
                  &SignalEmitter::handleBeginDigit,
                  SignalEmitter::Phase::BEGIN_DIGIT,
                  BlinkMode::DIMMED,
+                 to_phase_duration(INIT_DIMMED_PHASE_MS),
                  },
                 {
                  &SignalEmitter::handleDisplayNegativeSign,
                  SignalEmitter::Phase::DISPLAY_NEGATIVE_SIGN,
                  BlinkMode::PULSE,
+                 to_phase_duration(NEGATIVE_BLINK_LONG_MS),
                  },
                 {
                  &SignalEmitter::handlePauseAfterNegative,
                  SignalEmitter::Phase::PAUSE_AFTER_NEGATIVE,
                  BlinkMode::DIMMED,
+                 to_phase_duration(NEGATIVE_BLINK_LONG_MS),
                  },
                 {
                  &SignalEmitter::handleLoadNextDigit,
-                 SignalEmitter::Phase::LOAD_NEXT_DIGIT,
-                 BlinkMode::DIMMED,
-                 },
+                 SignalEmitter::Phase::LOAD_NEXT_DIGIT, BlinkMode::DIMMED,
+                 to_phase_duration(0),
+                 // to_phase_duration(BETWEEN_BLINK_MS),
+                },
                 {
                  &SignalEmitter::handleEmitBlink,
                  SignalEmitter::Phase::EMIT_BLINK,
                  BlinkMode::PULSE,
+                 to_phase_duration(SHORT_BLINK_MS),
                  },
                 {
                  &SignalEmitter::handlePauseBetweenBlinks,
                  SignalEmitter::Phase::PAUSE_BETWEEN_BLINKS,
                  BlinkMode::DIMMED,
+                 to_phase_duration(BETWEEN_BLINK_MS),
+                 },
+                {
+                 &SignalEmitter::handlePauseBetweenDigits,
+                 SignalEmitter::Phase::PAUSE_BETWEEN_DIGITS,
+                 BlinkMode::DIMMED,
+                 to_phase_duration(BETWEEN_DIGITS_MS),
                  },
                 {
                  &SignalEmitter::handleEndOfDigitCycle,
                  SignalEmitter::Phase::END_OF_DIGIT_CYCLE,
                  BlinkMode::DIMMED,
+                 to_phase_duration(END_DIMMED_PHASE_MS),
                  },
                 {
                  &SignalEmitter::handlePauseBeforeStart,
                  SignalEmitter::Phase::PREPARE_REPEAT,
                  BlinkMode::NONE,
+                 to_phase_duration(BETWEEN_CODES_MS),
                  },
                 {
                  &SignalEmitter::handlePauseAfterFinish,
                  SignalEmitter::Phase::PAUSE_AFTER_FINISH,
                  BlinkMode::NONE,
+                 to_phase_duration(END_PHASE_MS),
                  },
                 {
                  &SignalEmitter::handleIdle,
                  SignalEmitter::Phase::IDLE,
                  BlinkMode::NONE,
+                 to_phase_duration(0),
                  },
                 {
                  &SignalEmitter::handleDisplayZero,
                  SignalEmitter::Phase::DISPLAY_ZERO,
                  BlinkMode::NONE,
+                 to_phase_duration(ZERO_DIGIT_BLINK_MS),
                  },
                 {
                  &SignalEmitter::handleHasMoreSignalCodeToSequence,
                  SignalEmitter::Phase::HAS_MORE_SIGNAL_CODE_TO_SEQUENCE,
                  BlinkMode::NONE,
+                 to_phase_duration(0),
                  },
                 {
                  &SignalEmitter::handlePopNextCodeToSequence,
                  SignalEmitter::Phase::POP_NEXT_CODE_TO_SEQUENCE,
                  BlinkMode::NONE,
+                 to_phase_duration(0),
                  },
                 {
                  &SignalEmitter::handleHasMoreSignalElements,
                  SignalEmitter::Phase::HAS_MORE_SIGNAL_ELEMENTS,
                  BlinkMode::NONE,
+                 to_phase_duration(0),
                  },
                 {
                  &SignalEmitter::handlePopNextSignalElement,
                  SignalEmitter::Phase::POP_NEXT_SIGNAL_ELEMENT,
                  BlinkMode::NONE,
+                 to_phase_duration(0),
                  },
         };
 
         PhaseTableEntry getPhaseEntry(Phase phase) const;
-        void            transitionTo(Phase next, PhaseDuration duration);
+        void            transitionTo(Phase next);
         LedController*  controller_ = nullptr;
         SignalSequencer sequencer_;
         SignalElement   element_;

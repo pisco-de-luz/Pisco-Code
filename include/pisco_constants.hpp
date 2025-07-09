@@ -4,6 +4,18 @@
 
 namespace pisco_code
 {
+    // Loop timing constants
+    constexpr Timestamp LOOP_INTERVAL_MS       = 64;
+    constexpr Timestamp INIT_PHASE_MS          = 1900;
+    constexpr Timestamp INIT_DIMMED_PHASE_MS   = 1300;
+    constexpr Timestamp END_DIMMED_PHASE_MS    = 300;
+    constexpr Timestamp NEGATIVE_BLINK_LONG_MS = 1100;
+    constexpr Timestamp SHORT_BLINK_MS         = 350;
+    constexpr Timestamp ZERO_DIGIT_BLINK_MS    = 440;
+    constexpr Timestamp BETWEEN_BLINK_MS       = 350;
+    constexpr Timestamp BETWEEN_DIGITS_MS      = 1200;
+    constexpr Timestamp BETWEEN_CODES_MS       = 1500;
+    constexpr Timestamp END_PHASE_MS           = 2000;
 
     enum class LedControlCode : LedCodeType
     {
@@ -47,9 +59,9 @@ namespace pisco_code
         return static_cast<UInt8>(value);
     }
 
-    constexpr PhaseDuration to_phase_duration(UInt32 value) noexcept
+    constexpr PhaseDuration to_phase_duration(Timestamp milliseconds) noexcept
     {
-        return static_cast<PhaseDuration>(value);
+        return static_cast<PhaseDuration>(milliseconds / LOOP_INTERVAL_MS);
     }
 
     // Lookup table indexed by base value (2 to 16), all other entries are zero
@@ -86,19 +98,6 @@ namespace pisco_code
     constexpr LedLevel PWM_MAX              = 15;
     constexpr LedLevel MIN_PULSE_DIMMED_GAP = 2;
     constexpr LedLevel DEFAULT_PULSE_LEVEL  = PWM_MAX;
-
-    // Loop timing constants
-    constexpr Timestamp LOOP_INTERVAL_MS       = 64;
-    constexpr Timestamp INIT_PHASE_MS          = 1900;
-    constexpr Timestamp INIT_DIMMED_PHASE_MS   = 1300;
-    constexpr Timestamp END_DIMMED_PHASE_MS    = 300;
-    constexpr Timestamp NEGATIVE_BLINK_LONG_MS = 1100;
-    constexpr Timestamp SHORT_BLINK_MS         = 350;
-    constexpr Timestamp ZERO_DIGIT_BLINK_MS    = 440;
-    constexpr Timestamp BETWEEN_BLINK_MS       = 350;
-    constexpr Timestamp BETWEEN_DIGITS_MS      = 1200;
-    constexpr Timestamp BETWEEN_CODES_MS       = 1500;
-    constexpr Timestamp END_PHASE_MS           = 2000;
 
     // Conversion from ms to loop ticks
     constexpr TickCounter to_loop_count(Timestamp milliseconds) noexcept
