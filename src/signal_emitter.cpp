@@ -70,7 +70,6 @@ namespace pisco_code
             return;
 
         last_phase_entry_ = getPhaseEntry(current_phase_);
-        controller_->setBlinkMode(last_phase_entry_.blink_mode);
         if (phaseElapsed(tick_counter))
         {
             start_time_ = tick_counter;
@@ -137,9 +136,9 @@ namespace pisco_code
     {
         const auto elapsed =
             static_cast<PhaseDuration>(tick_counter - start_time_);
-        const bool phase_done         = elapsed > phase_duration_;
-        const bool peak_level_reached = pwm_tick_position_ == peak_level_;
-        return phase_done && peak_level_reached;
+        const bool phase_done              = elapsed > phase_duration_;
+        const bool pwm_cycle_start_reached = pwm_tick_position_ == 0;
+        return phase_done && pwm_cycle_start_reached;
     }
 
     bool SignalEmitter::hasMoreBlinks() const
@@ -181,8 +180,9 @@ namespace pisco_code
     void SignalEmitter::transitionTo(Phase next)
     {
         current_phase_    = next;
-        last_phase_entry_ = getPhaseEntry(current_phase_);
+        last_phase_entry_ = getPhaseEntry(next);
         phase_duration_   = last_phase_entry_.duration;
+        controller_->setBlinkMode(last_phase_entry_.blink_mode);
     }
 
     void SignalEmitter::handlePauseBeforeStart()
