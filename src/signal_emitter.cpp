@@ -276,9 +276,6 @@ namespace pisco_code
         {
             transitionTo(Phase::PAUSE_BETWEEN_DIGITS);
         }
-        // transitionTo(Phase::PAUSE_BETWEEN_BLINKS,
-        //              hasMoreBlinks() ? to_phase_duration(BETWEEN_BLINK_MS)
-        //                              : to_phase_duration(BETWEEN_DIGITS_MS));
     }
 
     void SignalEmitter::handlePauseBetweenBlinks()
@@ -287,30 +284,15 @@ namespace pisco_code
         {
             transitionTo(Phase::EMIT_BLINK);
         }
-        // else
-        // {
-        //     if (hasMoreDigits())
-        //     {
-        //         ++current_digit_index_;
-        //     }
-        //     transitionTo(Phase::LOAD_NEXT_DIGIT, 0);
-        // }
     }
 
     void SignalEmitter::handlePauseBetweenDigits()
     {
-        // if (hasMoreBlinks())
-        // {
-        //     transitionTo(Phase::EMIT_BLINK);
-        // }
-        // else
+        if (hasMoreDigits())
         {
-            if (hasMoreDigits())
-            {
-                ++current_digit_index_;
-            }
-            transitionTo(Phase::LOAD_NEXT_DIGIT);
+            ++current_digit_index_;
         }
+        transitionTo(Phase::LOAD_NEXT_DIGIT);
     }
 
     void SignalEmitter::handleDisplayZero()
