@@ -21,8 +21,8 @@ namespace pisco_code
     using PwmTickPosition = UInt8;
     using PhaseDuration   = UInt8;
     using SignalCode      = Int32;
-    using Index8          = Int8;
-    using Index16         = Int16;
+    using Index8          = UInt8;
+    using Index16         = UInt16;
     using Counter8        = Int8;
     using Counter16       = Int16;
     using Byte            = UInt8;

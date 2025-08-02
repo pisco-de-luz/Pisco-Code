@@ -35,8 +35,9 @@ namespace pisco_code
 
         current_digit_index_ = max_digits_ - 1;
 
-        for (Index digit = max_digits_ - 1; digit >= 0; --digit)
+        for (Index i = 0; i < max_digits_; ++i)
         {
+            const Index digit = max_digits_ - 1U - i;
             digits_[to_index(digit)] =
                 to_digit(value_to_display % to_value(base));
             blink_counts_[to_index(digit)] = to_count(digits_[to_index(digit)]);
@@ -308,8 +309,9 @@ namespace pisco_code
         }
         else
         {
-            for (Index digit = max_digits_ - 1; digit >= 0; --digit)
+            for (Index i = 0; i < max_digits_; ++i)
             {
+                const Index digit    = max_digits_ - 1U - i;
                 blink_counts_[digit] = digits_[digit];
             }
             current_digit_index_ = least_significant_digit_;
