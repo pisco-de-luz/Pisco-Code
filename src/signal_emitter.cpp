@@ -37,11 +37,10 @@ namespace pisco_code
 
         for (Index i = 0; i < max_digits_; ++i)
         {
-            const Index digit = max_digits_ - 1U - i;
-            digits_[to_index(digit)] =
-                to_digit(value_to_display % to_value(base));
-            blink_counts_[to_index(digit)] = to_count(digits_[to_index(digit)]);
-            if (digits_[to_index(digit)] > 0)
+            const Index digit    = max_digits_ - 1U - i;
+            digits_[digit]       = to_digit(value_to_display % to_value(base));
+            blink_counts_[digit] = to_count(digits_[digit]);
+            if (digits_[digit] > 0)
             {
                 current_digit_index_ = digit;
             }
