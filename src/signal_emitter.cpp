@@ -17,8 +17,8 @@ namespace pisco_code
     bool SignalEmitter::showCode(SignalCode code, NumberBase base,
                                  NumDigits num_digits, RepeatTimes repeats)
     {
-        if (!controller_ || current_phase_ != Phase::IDLE || repeats == 0 ||
-            peak_level_ == 0)
+        if (controller_ == nullptr || current_phase_ != Phase::IDLE ||
+            repeats == 0 || peak_level_ == 0)
         {
             return false;
         }
@@ -66,7 +66,7 @@ namespace pisco_code
 
     void SignalEmitter::loop(TickCounter tick_counter)
     {
-        if (!controller_)
+        if (controller_ == nullptr)
             return;
 
         last_phase_entry_ = getPhaseEntry(current_phase_);
