@@ -6,6 +6,7 @@
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 #include "signal_sequencer.hpp"
+#include "signal_types.hpp"
 
 namespace pisco_code
 {
@@ -26,9 +27,12 @@ namespace pisco_code
       private:
         bool phaseElapsed(TickCounter tick_counter) const;
 
-        bool hasMoreBlinks() const;
-        bool hasMoreDigits() const;
-        bool shouldRepeat() const;
+        bool             hasMoreBlinks() const;
+        bool             hasMoreDigits() const;
+        bool             shouldRepeat() const;
+        static BlinkMode signalLevelToBlinkMode(SignalLevel level);
+        static PhaseDuration
+        signalDurationToPhaseDuration(SignalDuration duration);
 
         void handleIdle();
         void handleBeginDigit();
@@ -46,6 +50,8 @@ namespace pisco_code
         void handleHasMoreSignalElements();
         void handlePopNextCodeToSequence();
         void handlePopNextSignalElement();
+        void handleHasMorePulse();
+        void handlePopNextPulse();
 
         enum class Phase : PhaseType
         {
@@ -66,6 +72,8 @@ namespace pisco_code
             POP_NEXT_CODE_TO_SEQUENCE,
             HAS_MORE_SIGNAL_ELEMENTS,
             POP_NEXT_SIGNAL_ELEMENT,
+            HAS_MORE_PULSE,
+            POP_NEXT_PULSE,
             LAST_PHASE, // Used to determine the size of the enum
         };
 
@@ -187,10 +195,23 @@ namespace pisco_code
                  BlinkMode::NONE,
                  to_phase_duration(0),
                  },
+                {
+                 &SignalEmitter::handleHasMorePulse,
+                 SignalEmitter::Phase::HAS_MORE_PULSE,
+                 BlinkMode::NONE,
+                 to_phase_duration(0),
+                 },
+                {
+                 &SignalEmitter::handlePopNextPulse,
+                 SignalEmitter::Phase::POP_NEXT_PULSE,
+                 BlinkMode::NONE,
+                 to_phase_duration(0),
+                 },
         };
 
         PhaseTableEntry getPhaseEntry(Phase phase) const;
         void            transitionTo(Phase next);
+        void pulseAs(Phase next, SignalLevel level, SignalDuration duration);
         LedController*  controller_ = nullptr;
         SignalSequencer sequencer_;
         SignalElement   element_;

@@ -11,6 +11,9 @@ namespace pisco_code
     constexpr Timestamp END_DIMMED_PHASE_MS    = 300;
     constexpr Timestamp NEGATIVE_BLINK_LONG_MS = 1100;
     constexpr Timestamp SHORT_BLINK_MS         = 350;
+    constexpr Timestamp MEDIUM_BLINK_MS        = 500;
+    constexpr Timestamp LONG_BLINK_MS          = 800;
+    constexpr Timestamp EXTRA_LONG_BLINK_MS    = 1200;
     constexpr Timestamp ZERO_DIGIT_BLINK_MS    = 440;
     constexpr Timestamp BETWEEN_BLINK_MS       = 350;
     constexpr Timestamp BETWEEN_DIGITS_MS      = 1200;

@@ -5,6 +5,7 @@
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 #include "signal_sequencer.hpp"
+#include "signal_types.hpp"
 
 namespace pisco_code
 {
@@ -177,12 +178,54 @@ namespace pisco_code
         }
     }
 
+    BlinkMode SignalEmitter::signalLevelToBlinkMode(SignalLevel level)
+    {
+        switch (level)
+        {
+            case SignalLevel::GAP:
+                return BlinkMode::NONE;
+            case SignalLevel::MIDDLE:
+                return BlinkMode::DIMMED;
+            case SignalLevel::PEAK:
+                return BlinkMode::PULSE;
+            default:
+                return BlinkMode::NONE; // Not defined or invalid
+        }
+    }
+
+    PhaseDuration
+    SignalEmitter::signalDurationToPhaseDuration(SignalDuration duration)
+    {
+        switch (duration)
+        {
+            case SignalDuration::SHORT:
+                return to_phase_duration(SHORT_BLINK_MS);
+            case SignalDuration::MEDIUM:
+                return to_phase_duration(MEDIUM_BLINK_MS);
+            case SignalDuration::LONG:
+                return to_phase_duration(LONG_BLINK_MS);
+            case SignalDuration::EXTRA_LONG:
+                return to_phase_duration(EXTRA_LONG_BLINK_MS);
+            default:
+                return to_phase_duration(0);
+        }
+    }
+
     void SignalEmitter::transitionTo(Phase next)
     {
         current_phase_    = next;
         last_phase_entry_ = getPhaseEntry(next);
         phase_duration_   = last_phase_entry_.duration;
         controller_->setBlinkMode(last_phase_entry_.blink_mode);
+    }
+
+    void SignalEmitter::pulseAs(Phase next, SignalLevel level,
+                                SignalDuration duration)
+    {
+        current_phase_    = next;
+        last_phase_entry_ = getPhaseEntry(next);
+        phase_duration_   = signalDurationToPhaseDuration(duration);
+        controller_->setBlinkMode(signalLevelToBlinkMode(level));
     }
 
     void SignalEmitter::handlePauseBeforeStart()
@@ -224,6 +267,25 @@ namespace pisco_code
     {
         element_ = sequencer_.popNextSignalElement();
         transitionTo(Phase::BEGIN_DIGIT);
+        // transitionTo(Phase::HAS_MORE_PULSE);
+    }
+
+    void SignalEmitter::handleHasMorePulse()
+    {
+        if (sequencer_.hasMorePulse())
+        {
+            transitionTo(Phase::POP_NEXT_PULSE);
+        }
+        else
+        {
+            transitionTo(Phase::HAS_MORE_SIGNAL_ELEMENTS);
+        }
+    }
+
+    void SignalEmitter::handlePopNextPulse()
+    {
+        sequencer_.popNextPulse();
+        // transitionTo(Phase::HAS_MORE_SIGNAL_ELEMENTS);
     }
 
     void SignalEmitter::handleIdle()
