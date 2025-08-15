@@ -69,13 +69,13 @@ namespace pisco_code
 
     // Lookup table indexed by base value (2 to 16), all other entries are zero
     constexpr NumDigits MAX_DIGITS_LUT[to_value(NumberBase::HEX) + 1] = {
-        0,  0,
-        24, // 2 = BIN
-        0,  0, 0, 0, 0,
+        0, 0,
+        8, // 2 = BIN
+        0, 0, 0, 0, 0,
         9, // 8 = OCT
         0, // 9
         9, // 10 = DEC
-        0,  0, 0, 0, 0,
+        0, 0, 0, 0, 0,
         7 // 16 = HEX
     };
 
