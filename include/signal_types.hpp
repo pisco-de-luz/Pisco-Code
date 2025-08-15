@@ -5,7 +5,7 @@
 
 using namespace pisco_code;
 
-constexpr Counter MAX_SIGNAL_ELEMENTS = 32; // UPPER_CASE for constexpr variable
+constexpr Counter MAX_SIGNAL_ELEMENTS = 10;
 
 // Signal strength or symbolic meaning
 enum class SignalLevel : SignalLevelType
@@ -25,17 +25,20 @@ enum class SignalDuration : SignalDurationType
     EXTRA_LONG
 };
 
-static constexpr SignalLevelType to_value(SignalLevel level) noexcept
+static constexpr SignalLevelType
+to_value(SignalLevel level) noexcept
 {
     return static_cast<SignalLevelType>(level);
 }
 
-static constexpr SignalDurationType to_value(SignalDuration signal_duration) noexcept
+static constexpr SignalDurationType
+to_value(SignalDuration signal_duration) noexcept
 {
     return static_cast<SignalDurationType>(signal_duration);
 }
 
-static constexpr SignalTimesType to_value(SignalTimesType signal_times) noexcept
+static constexpr SignalTimesType
+to_value(SignalTimesType signal_times) noexcept
 {
     return (signal_times);
 }
