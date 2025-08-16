@@ -5,8 +5,6 @@
 #include "signal_element.hpp"
 #include "signal_types.hpp"
 
-using namespace pisco_code;
-
 namespace pisco_code
 {
     class SignalStack

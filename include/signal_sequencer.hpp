@@ -4,7 +4,6 @@
 #include "pisco_types.hpp"
 #include "signal_stack.hpp"
 #include "signal_types.hpp"
-using namespace pisco_code;
 
 namespace pisco_code
 {

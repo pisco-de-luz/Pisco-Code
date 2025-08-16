@@ -3,42 +3,42 @@
 #include "pisco_types.hpp"
 #include "signal_element.hpp"
 
-using namespace pisco_code;
-
-constexpr Counter MAX_SIGNAL_ELEMENTS = 10;
-
-// Signal strength or symbolic meaning
-enum class SignalLevel : SignalLevelType
+namespace pisco_code
 {
-    NOT_DEFINED = 0,
-    GAP,    // Represents silent or idle pulse (e.g., digit 0)
-    PEAK,   // Represents active/visible/strong pulse
-    MIDDLE, // Represents a middle level, not used in current logic
-};
+    constexpr Counter MAX_SIGNAL_ELEMENTS = 10;
 
-// Signal duration (mapped to ms by higher layers)
-enum class SignalDuration : SignalDurationType
-{
-    SHORT = 0,
-    MEDIUM,
-    LONG,
-    EXTRA_LONG
-};
+    // Signal strength or symbolic meaning
+    enum class SignalLevel : SignalLevelType
+    {
+        NOT_DEFINED = 0,
+        GAP,    // Represents silent or idle pulse (e.g., digit 0)
+        PEAK,   // Represents active/visible/strong pulse
+        MIDDLE, // Represents a middle level, not used in current logic
+    };
 
-static constexpr SignalLevelType
-to_value(SignalLevel level) noexcept
-{
-    return static_cast<SignalLevelType>(level);
-}
+    // Signal duration (mapped to ms by higher layers)
+    enum class SignalDuration : SignalDurationType
+    {
+        SHORT = 0,
+        MEDIUM,
+        LONG,
+        EXTRA_LONG
+    };
 
-static constexpr SignalDurationType
-to_value(SignalDuration signal_duration) noexcept
-{
-    return static_cast<SignalDurationType>(signal_duration);
-}
+    static constexpr SignalLevelType to_value(SignalLevel level) noexcept
+    {
+        return static_cast<SignalLevelType>(level);
+    }
 
-static constexpr SignalTimesType
-to_value(SignalTimesType signal_times) noexcept
-{
-    return (signal_times);
-}
+    static constexpr SignalDurationType
+    to_value(SignalDuration signal_duration) noexcept
+    {
+        return static_cast<SignalDurationType>(signal_duration);
+    }
+
+    static constexpr SignalTimesType
+    to_value(SignalTimesType signal_times) noexcept
+    {
+        return (signal_times);
+    }
+} // namespace pisco_code
