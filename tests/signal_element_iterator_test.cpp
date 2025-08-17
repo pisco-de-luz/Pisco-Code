@@ -1,3 +1,6 @@
+
+#include "helpers/signal_element_iterator_test.hpp"
+
 #include "CppUTest/TestHarness.h"
 
 #include "pisco_constants.hpp"
@@ -16,10 +19,7 @@ TEST(SignalElementIteratorTests, ZERO_GAP_IteratesCorrectly)
     SignalElementIterator iterator(expected);
     CHECK_TRUE(iterator.hasNext());
     const auto actual = iterator.next();
-    CHECK_EQUAL(to_value(expected.get_level()), to_value(actual.get_level()));
-    CHECK_EQUAL(to_value(expected.get_duration()),
-                to_value(actual.get_duration()));
-    CHECK_EQUAL(to_value(expected.get_times()), to_value(actual.get_times()));
+    CHECK_EQUAL(expected, actual);
     CHECK_FALSE(iterator.hasNext());
 }
 
@@ -29,10 +29,7 @@ TEST(SignalElementIteratorTests, NEGATIVE_PEAK_IteratesCorrectly)
     SignalElementIterator iterator(expected);
     CHECK_TRUE(iterator.hasNext());
     const auto actual = iterator.next();
-    CHECK_EQUAL(to_value(expected.get_level()), to_value(actual.get_level()));
-    CHECK_EQUAL(to_value(expected.get_duration()),
-                to_value(actual.get_duration()));
-    CHECK_EQUAL(to_value(expected.get_times()), to_value(actual.get_times()));
+    CHECK_EQUAL(expected, actual);
     CHECK_FALSE(iterator.hasNext());
 }
 
@@ -48,12 +45,7 @@ TEST(SignalElementIteratorTests, NUMBER_One_IteratesCorrectly)
     if (iterator.hasNext())
     {
         const auto between = iterator.next();
-        CHECK_EQUAL(to_value(expected_peak.get_level()),
-                    to_value(between.get_level()));
-        CHECK_EQUAL(to_value(expected_peak.get_duration()),
-                    to_value(between.get_duration()));
-        CHECK_EQUAL(to_value(expected_peak.get_times()),
-                    to_value(between.get_times()));
+        CHECK_EQUAL(expected_peak, between);
     }
     CHECK_FALSE(iterator.hasNext());
 }
@@ -71,22 +63,12 @@ TEST(SignalElementIteratorTests, NUMBER_Two_IteratesCorrectly)
     while (iterator.hasNext())
     {
         const auto actual = iterator.next();
-        CHECK_EQUAL(to_value(expected_peak.get_level()),
-                    to_value(actual.get_level()));
-        CHECK_EQUAL(to_value(expected_peak.get_duration()),
-                    to_value(actual.get_duration()));
-        CHECK_EQUAL(to_value(expected_peak.get_times()),
-                    to_value(actual.get_times()));
+        CHECK_EQUAL(expected_peak, actual);
         ++peak_pulse_count;
         if (iterator.hasNext())
         {
             const auto between = iterator.next();
-            CHECK_EQUAL(to_value(expected_between.get_level()),
-                        to_value(between.get_level()));
-            CHECK_EQUAL(to_value(expected_between.get_duration()),
-                        to_value(between.get_duration()));
-            CHECK_EQUAL(to_value(expected_between.get_times()),
-                        to_value(between.get_times()));
+            CHECK_EQUAL(expected_between, between);
         }
     }
     CHECK_EQUAL(digit_value, peak_pulse_count);
@@ -105,22 +87,12 @@ TEST(SignalElementIteratorTests, NUMBER_Fifteen_IteratesCorrectly)
     while (iterator.hasNext())
     {
         const auto actual = iterator.next();
-        CHECK_EQUAL(to_value(expected_peak.get_level()),
-                    to_value(actual.get_level()));
-        CHECK_EQUAL(to_value(expected_peak.get_duration()),
-                    to_value(actual.get_duration()));
-        CHECK_EQUAL(to_value(expected_peak.get_times()),
-                    to_value(actual.get_times()));
+        CHECK_EQUAL(expected_peak, actual);
         ++peak_pulse_count;
         if (iterator.hasNext())
         {
             const auto between = iterator.next();
-            CHECK_EQUAL(to_value(expected_between.get_level()),
-                        to_value(between.get_level()));
-            CHECK_EQUAL(to_value(expected_between.get_duration()),
-                        to_value(between.get_duration()));
-            CHECK_EQUAL(to_value(expected_between.get_times()),
-                        to_value(between.get_times()));
+            CHECK_EQUAL(expected_between, between);
         }
     }
     CHECK_EQUAL(digit_value, peak_pulse_count);
@@ -221,22 +193,12 @@ TEST(SignalElementIteratorTests, ResetMustIterateAgain)
         while (iterator.hasNext())
         {
             const auto actual = iterator.next();
-            CHECK_EQUAL(to_value(expected_peak.get_level()),
-                        to_value(actual.get_level()));
-            CHECK_EQUAL(to_value(expected_peak.get_duration()),
-                        to_value(actual.get_duration()));
-            CHECK_EQUAL(to_value(expected_peak.get_times()),
-                        to_value(actual.get_times()));
+            CHECK_EQUAL(expected_peak, actual);
             ++peak_pulse_count;
             if (iterator.hasNext())
             {
                 const auto between = iterator.next();
-                CHECK_EQUAL(to_value(expected_between.get_level()),
-                            to_value(between.get_level()));
-                CHECK_EQUAL(to_value(expected_between.get_duration()),
-                            to_value(between.get_duration()));
-                CHECK_EQUAL(to_value(expected_between.get_times()),
-                            to_value(between.get_times()));
+                CHECK_EQUAL(expected_between, between);
             }
         }
         CHECK_FALSE(iterator.hasNext());
