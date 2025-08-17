@@ -12,8 +12,9 @@ namespace pisco_code
     {
         NOT_DEFINED = 0,
         GAP,    // Represents silent or idle pulse (e.g., digit 0)
-        PEAK,   // Represents active/visible/strong pulse
         MIDDLE, // Represents a middle level, not used in current logic
+        PEAK,   // Represents active/visible/strong pulse
+        MAX_VALUE,
     };
 
     // Signal duration (mapped to ms by higher layers)
@@ -22,8 +23,16 @@ namespace pisco_code
         SHORT = 0,
         MEDIUM,
         LONG,
-        EXTRA_LONG
+        EXTRA_LONG,
+        MAX_VALUE,
     };
+
+    static_assert(static_cast<unsigned>(SignalLevel::MAX_VALUE) <=
+                      bit_mask(LEVEL_BITS),
+                  "SignalLevel fits LEVEL_BITS");
+    static_assert(static_cast<unsigned>(SignalDuration::MAX_VALUE) <=
+                      bit_mask(DURATION_BITS),
+                  "SignalDuration fits DURATION_BITS");
 
     static constexpr SignalLevelType to_value(SignalLevel level) noexcept
     {

@@ -37,9 +37,10 @@ namespace pisco_code
         }
 
       private:
-        SignalLevelType level_ : 2; // Encoded SignalLevel
-        SignalTimesType times_ : 4; // How many times this unit repeats (0–15)
-        SignalDurationType duration_ : 2; // Encoded SignalDuration
+        SignalLevelType level_ : LEVEL_BITS;
+        SignalTimesType times_
+            : TIMES_BITS; // Times this unit can repeats (0–15)
+        SignalDurationType duration_ : DURATION_BITS;
     };
 
     inline constexpr SignalElement SIGNAL_ELEMENT_NEGATIVE_PEAK{
@@ -58,5 +59,8 @@ namespace pisco_code
         return SignalElement(SignalLevel::PEAK, digit_value,
                              SignalDuration::SHORT);
     }
+
+    static_assert(sizeof(SignalElement) == 1,
+                  "SignalElement must be 1 byte in size");
 
 } // namespace pisco_code
