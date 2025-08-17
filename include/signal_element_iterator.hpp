@@ -11,7 +11,7 @@ namespace pisco_code
     {
       public:
         explicit SignalElementIterator(SignalElement element) noexcept :
-            element_(element), remaining_(element.get_times())
+            element_(element), remaining_(to_value(element.get_times()))
         {
         }
 
@@ -52,7 +52,7 @@ namespace pisco_code
         }
 
         SignalElement      element_;
-        Counter            remaining_{0};
+        SignalTimesType    remaining_{0};
         bool               is_pulse_between_{false};
         [[nodiscard]] bool isPeakShort() const noexcept
         {
