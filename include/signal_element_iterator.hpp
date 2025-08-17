@@ -37,7 +37,7 @@ namespace pisco_code
 
         void reset() noexcept
         {
-            remaining_        = element_.get_times();
+            remaining_        = to_value(element_.get_times());
             is_pulse_between_ = false;
         }
 
