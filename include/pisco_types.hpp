@@ -26,6 +26,7 @@ namespace pisco_code
     using Counter8        = Int8;
     using Counter16       = Int16;
     using Byte            = UInt8;
+    using NumBits         = UInt8;
 
     // Type aliases for various enums and types used in the code
     using BaseType = Byte; // Used as underlying type for enum class NumberBase
