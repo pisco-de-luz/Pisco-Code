@@ -21,16 +21,13 @@ namespace pisco_code
             {
                 return SIGNAL_ELEMENT_NOT_DEFINED;
             }
-            advance();
             if (is_pulse_between_)
             {
+                is_pulse_between_ = false;
                 return SIGNAL_ELEMENT_BETWEEN_PEAK;
             }
-            if (remaining_ > 0)
-            {
-                return {element_.get_level(), 1, element_.get_duration()};
-            }
-            return element_;
+            advance();
+            return {element_.get_level(), Byte{1}, element_.get_duration()};
         }
 
         [[nodiscard]] bool hasNext() const noexcept
@@ -47,11 +44,6 @@ namespace pisco_code
       private:
         void advance() noexcept
         {
-            if (is_pulse_between_)
-            {
-                is_pulse_between_ = false;
-                return;
-            }
             if (isPeakShort() && remaining_ > 1)
             {
                 is_pulse_between_ = true;
