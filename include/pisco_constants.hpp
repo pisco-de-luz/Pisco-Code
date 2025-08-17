@@ -101,6 +101,14 @@ namespace pisco_code
     constexpr LedLevel PWM_MAX              = 15;
     constexpr LedLevel MIN_PULSE_DIMMED_GAP = 2;
     constexpr LedLevel DEFAULT_PULSE_LEVEL  = PWM_MAX;
+    constexpr NumBits  TIMES_BITS           = 4;
+    constexpr NumBits  LEVEL_BITS           = 2;
+    constexpr NumBits  DURATION_BITS        = 2;
+
+    constexpr UInt32 bit_mask(NumBits bits) noexcept
+    {
+        return bits == 0 ? 0U : ((1U << bits));
+    }
 
     // Conversion from ms to loop ticks
     constexpr TickCounter to_loop_count(Timestamp milliseconds) noexcept
