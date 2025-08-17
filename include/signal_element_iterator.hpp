@@ -15,8 +15,13 @@ namespace pisco_code
         {
         }
 
-        [[nodiscard]] SignalElement current() const noexcept
+        [[nodiscard]] SignalElement next() noexcept
         {
+            if (!hasNext())
+            {
+                return SIGNAL_ELEMENT_NOT_DEFINED;
+            }
+            advance();
             if (is_pulse_between_)
             {
                 return SIGNAL_ELEMENT_BETWEEN_PEAK;
@@ -24,10 +29,6 @@ namespace pisco_code
             if (remaining_ > 0)
             {
                 return {element_.get_level(), 1, element_.get_duration()};
-            }
-            if (remaining_ == 0)
-            {
-                return SIGNAL_ELEMENT_NOT_DEFINED;
             }
             return element_;
         }
@@ -43,12 +44,9 @@ namespace pisco_code
             is_pulse_between_ = false;
         }
 
+      private:
         void advance() noexcept
         {
-            if (!hasNext())
-            {
-                return;
-            }
             if (is_pulse_between_)
             {
                 is_pulse_between_ = false;
@@ -61,7 +59,6 @@ namespace pisco_code
             --remaining_;
         }
 
-      private:
         SignalElement      element_;
         Counter            remaining_{0};
         bool               is_pulse_between_{false};
