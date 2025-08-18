@@ -43,6 +43,10 @@ namespace pisco_code
         SignalDurationType duration_ : DURATION_BITS;
     };
 
+    inline constexpr SignalElement SIGNAL_ELEMENT_FRAMING{SignalLevel::GAP, 1,
+                                                          SignalDuration::LONG};
+    inline constexpr SignalElement SIGNAL_ELEMENT_INTER_DIGIT{
+        SignalLevel::GAP, 1, SignalDuration::LONG};
     inline constexpr SignalElement SIGNAL_ELEMENT_NEGATIVE_PEAK{
         SignalLevel::PEAK, 1, SignalDuration::LONG};
     inline constexpr SignalElement SIGNAL_ELEMENT_ZERO_GAP{
