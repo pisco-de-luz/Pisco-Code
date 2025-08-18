@@ -22,7 +22,8 @@ namespace pisco_code
         repeat_count_ = repeat_times;
     }
 
-    [[nodiscard]] bool SignalSequencer::hasMoreSignalCodeToSequence() const noexcept
+    [[nodiscard]] bool
+    SignalSequencer::hasMoreSignalCodeToSequence() const noexcept
     {
         return repeat_index_ < repeat_count_ && signal_stack_.size() > 0;
     }
@@ -45,11 +46,13 @@ namespace pisco_code
         const bool is_negative = (code < 0);
         SignalCode abs_code    = is_negative ? -code : code;
 
-        const DigitValue base_val            = to_value(base);
-        NumDigits        digit_count         = 0;
-        const NumDigits  max_digits          = max_digits_for_base(base);
-        const bool       is_num_digits_valid = (num_digits > 0 && num_digits <= max_digits);
-        const NumDigits  max_digits_to_show  = is_num_digits_valid ? num_digits : max_digits;
+        const DigitValue base_val    = to_value(base);
+        NumDigits        digit_count = 0;
+        const NumDigits  max_digits  = max_digits_for_base(base);
+        const bool       is_num_digits_valid =
+            (num_digits > 0 && num_digits <= max_digits);
+        const NumDigits max_digits_to_show =
+            is_num_digits_valid ? num_digits : max_digits;
         do
         {
             const DigitValue digit = to_digit(abs_code % base_val);
@@ -83,7 +86,8 @@ namespace pisco_code
             return element;
         }
         pulse_repeat_count_ = 0;
-        return SIGNAL_ELEMENT_NOT_DEFINED; // Return a default element if no more elements
+        return SIGNAL_ELEMENT_NOT_DEFINED; // Return a default element if no
+                                           // more elements
     }
 
     void SignalSequencer::popNextPulse() noexcept
