@@ -45,15 +45,15 @@ namespace pisco_code
 
     inline constexpr SignalElement SIGNAL_ELEMENT_FRAMING{SignalLevel::GAP, 1,
                                                           SignalDuration::LONG};
-    inline constexpr SignalElement SIGNAL_ELEMENT_INTER_DIGIT{
-        SignalLevel::GAP, 1, SignalDuration::LONG};
+    inline constexpr SignalElement SIGNAL_ELEMENT_INTER_SYMBOL{
+        SignalLevel::MIDDLE, 1, SignalDuration::LONG};
     inline constexpr SignalElement SIGNAL_ELEMENT_NEGATIVE{
         SignalLevel::PEAK, 1, SignalDuration::LONG};
     inline constexpr SignalElement SIGNAL_ELEMENT_ZERO{SignalLevel::GAP, 1,
                                                        SignalDuration::SHORT};
     inline constexpr SignalElement SIGNAL_ELEMENT_NOT_DEFINED{
         SignalLevel::NOT_DEFINED, 0, SignalDuration::SHORT};
-    inline constexpr SignalElement SIGNAL_ELEMENT_BETWEEN{
+    inline constexpr SignalElement SIGNAL_ELEMENT_INTRA_DIGIT{
         SignalLevel::MIDDLE, 1, SignalDuration::SHORT};
     inline constexpr SignalElement SIGNAL_ELEMENT_DIGIT{SignalLevel::PEAK, 1,
                                                         SignalDuration::SHORT};

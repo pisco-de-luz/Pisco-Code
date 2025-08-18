@@ -1,5 +1,6 @@
 #include "CppUTest/TestHarness.h"
 
+#include "helpers/signal_element_test.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 #include "signal_element.hpp"
@@ -41,8 +42,7 @@ TEST(SignalPulseIteratorTests, NumberOne_IteratesCorrectly)
     SignalPulseIterator iterator(signal_stack);
 
     CHECK_TRUE(iterator.hasNext());
-    const auto expected_gap = SIGNAL_ELEMENT_FRAMING;
-    const auto actual       = iterator.next();
-    CHECK_EQUAL(to_value(expected_gap.get_level()),
-                to_value(actual.get_level()));
+    const auto expected_framing = SIGNAL_ELEMENT_FRAMING;
+    const auto actual           = iterator.next();
+    CHECK_EQUAL(expected_framing, actual);
 }

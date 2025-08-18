@@ -1,8 +1,7 @@
 
-#include "helpers/signal_element_iterator_test.hpp"
-
 #include "CppUTest/TestHarness.h"
 
+#include "helpers/signal_element_test.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 #include "signal_element.hpp"
@@ -55,7 +54,7 @@ TEST(SignalElementIteratorTests, NUMBER_Two_IteratesCorrectly)
     const SignalTimesType digit_value      = 2;
     const auto            digit_element    = signal_element_digit(digit_value);
     const auto            expected_peak    = SIGNAL_ELEMENT_DIGIT;
-    const auto            expected_between = SIGNAL_ELEMENT_BETWEEN;
+    const auto            expected_between = SIGNAL_ELEMENT_INTRA_DIGIT;
 
     SignalElementIterator iterator(digit_element);
     SignalTimesType       peak_pulse_count = 0;
@@ -79,7 +78,7 @@ TEST(SignalElementIteratorTests, NUMBER_Fifteen_IteratesCorrectly)
     const SignalTimesType digit_value      = 15;
     const auto            digit_element    = signal_element_digit(digit_value);
     const auto            expected_peak    = SIGNAL_ELEMENT_DIGIT;
-    const auto            expected_between = SIGNAL_ELEMENT_BETWEEN;
+    const auto            expected_between = SIGNAL_ELEMENT_INTRA_DIGIT;
 
     SignalElementIterator iterator(digit_element);
     SignalTimesType       peak_pulse_count = 0;
@@ -182,7 +181,7 @@ TEST(SignalElementIteratorTests, ResetMustIterateAgain)
     Byte                  reset_count      = 2;
     const auto            digit_element    = signal_element_digit(digit_value);
     const auto            expected_peak    = SIGNAL_ELEMENT_DIGIT;
-    const auto            expected_between = SIGNAL_ELEMENT_BETWEEN;
+    const auto            expected_between = SIGNAL_ELEMENT_INTRA_DIGIT;
 
     SignalElementIterator iterator(digit_element);
     while (reset_count > 0)
