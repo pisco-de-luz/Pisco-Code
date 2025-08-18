@@ -22,7 +22,7 @@ namespace pisco_code
             {
                 return SIGNAL_ELEMENT_NOT_DEFINED;
             }
-            return SIGNAL_ELEMENT_ZERO_GAP;
+            return SIGNAL_ELEMENT_ZERO;
             // return {element_.get_level(), Byte{1}, element_.get_duration()};
         }
 

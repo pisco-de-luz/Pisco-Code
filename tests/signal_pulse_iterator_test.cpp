@@ -36,7 +36,7 @@ TEST_GROUP(SignalPulseIteratorTests)
 
 TEST(SignalPulseIteratorTests, NumberOne_IteratesCorrectly)
 {
-    const SignalElement element = signal_element_digit_peak(1);
+    const SignalElement element = signal_element_digit(1);
     signal_stack.push(element);
     SignalPulseIterator iterator(signal_stack);
 

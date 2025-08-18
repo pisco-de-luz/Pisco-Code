@@ -15,7 +15,7 @@ TEST_GROUP(SignalElementIteratorTests){};
 
 TEST(SignalElementIteratorTests, ZERO_GAP_IteratesCorrectly)
 {
-    const auto            expected = SIGNAL_ELEMENT_ZERO_GAP;
+    const auto            expected = SIGNAL_ELEMENT_ZERO;
     SignalElementIterator iterator(expected);
     CHECK_TRUE(iterator.hasNext());
     const auto actual = iterator.next();
@@ -25,7 +25,7 @@ TEST(SignalElementIteratorTests, ZERO_GAP_IteratesCorrectly)
 
 TEST(SignalElementIteratorTests, NEGATIVE_PEAK_IteratesCorrectly)
 {
-    const auto            expected = SIGNAL_ELEMENT_NEGATIVE_PEAK;
+    const auto            expected = SIGNAL_ELEMENT_NEGATIVE;
     SignalElementIterator iterator(expected);
     CHECK_TRUE(iterator.hasNext());
     const auto actual = iterator.next();
@@ -35,9 +35,9 @@ TEST(SignalElementIteratorTests, NEGATIVE_PEAK_IteratesCorrectly)
 
 TEST(SignalElementIteratorTests, NUMBER_One_IteratesCorrectly)
 {
-    const SignalTimesType digit_value = 1;
-    const auto digit_element          = signal_element_digit_peak(digit_value);
-    const auto expected_peak          = SIGNAL_ELEMENT_DIGIT_PEAK;
+    const SignalTimesType digit_value   = 1;
+    const auto            digit_element = signal_element_digit(digit_value);
+    const auto            expected_peak = SIGNAL_ELEMENT_DIGIT;
 
     SignalElementIterator iterator(digit_element);
 
@@ -52,10 +52,10 @@ TEST(SignalElementIteratorTests, NUMBER_One_IteratesCorrectly)
 
 TEST(SignalElementIteratorTests, NUMBER_Two_IteratesCorrectly)
 {
-    const SignalTimesType digit_value = 2;
-    const auto digit_element          = signal_element_digit_peak(digit_value);
-    const auto expected_peak          = SIGNAL_ELEMENT_DIGIT_PEAK;
-    const auto expected_between       = SIGNAL_ELEMENT_BETWEEN_PEAK;
+    const SignalTimesType digit_value      = 2;
+    const auto            digit_element    = signal_element_digit(digit_value);
+    const auto            expected_peak    = SIGNAL_ELEMENT_DIGIT;
+    const auto            expected_between = SIGNAL_ELEMENT_BETWEEN;
 
     SignalElementIterator iterator(digit_element);
     SignalTimesType       peak_pulse_count = 0;
@@ -76,10 +76,10 @@ TEST(SignalElementIteratorTests, NUMBER_Two_IteratesCorrectly)
 
 TEST(SignalElementIteratorTests, NUMBER_Fifteen_IteratesCorrectly)
 {
-    const SignalTimesType digit_value = 15;
-    const auto digit_element          = signal_element_digit_peak(digit_value);
-    const auto expected_peak          = SIGNAL_ELEMENT_DIGIT_PEAK;
-    const auto expected_between       = SIGNAL_ELEMENT_BETWEEN_PEAK;
+    const SignalTimesType digit_value      = 15;
+    const auto            digit_element    = signal_element_digit(digit_value);
+    const auto            expected_peak    = SIGNAL_ELEMENT_DIGIT;
+    const auto            expected_between = SIGNAL_ELEMENT_BETWEEN;
 
     SignalElementIterator iterator(digit_element);
     SignalTimesType       peak_pulse_count = 0;
@@ -178,11 +178,11 @@ TEST(SignalElementIteratorTests, TimesEqualToZero_MustNotEmitPulse)
 
 TEST(SignalElementIteratorTests, ResetMustIterateAgain)
 {
-    const SignalTimesType digit_value = 3;
-    Byte                  reset_count = 2;
-    const auto digit_element          = signal_element_digit_peak(digit_value);
-    const auto expected_peak          = SIGNAL_ELEMENT_DIGIT_PEAK;
-    const auto expected_between       = SIGNAL_ELEMENT_BETWEEN_PEAK;
+    const SignalTimesType digit_value      = 3;
+    Byte                  reset_count      = 2;
+    const auto            digit_element    = signal_element_digit(digit_value);
+    const auto            expected_peak    = SIGNAL_ELEMENT_DIGIT;
+    const auto            expected_between = SIGNAL_ELEMENT_BETWEEN;
 
     SignalElementIterator iterator(digit_element);
     while (reset_count > 0)

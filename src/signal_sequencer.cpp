@@ -58,20 +58,20 @@ namespace pisco_code
             const DigitValue digit = to_digit(abs_code % base_val);
             abs_code /= base_val;
 
-            signal_stack_.push(digit == 0 ? SIGNAL_ELEMENT_ZERO_GAP
-                                          : signal_element_digit_peak(digit));
+            signal_stack_.push(digit == 0 ? SIGNAL_ELEMENT_ZERO
+                                          : signal_element_digit(digit));
             ++digit_count;
         } while (abs_code > 0 && digit_count < max_digits_to_show);
 
         while (is_num_digits_valid && digit_count < num_digits)
         {
-            signal_stack_.push(SIGNAL_ELEMENT_ZERO_GAP);
+            signal_stack_.push(SIGNAL_ELEMENT_ZERO);
             ++digit_count;
         }
 
         if (is_negative)
         {
-            signal_stack_.push(SIGNAL_ELEMENT_NEGATIVE_PEAK);
+            signal_stack_.push(SIGNAL_ELEMENT_NEGATIVE);
         }
     }
 

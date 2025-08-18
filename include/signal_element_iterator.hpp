@@ -24,7 +24,7 @@ namespace pisco_code
             if (is_pulse_between_)
             {
                 is_pulse_between_ = false;
-                return SIGNAL_ELEMENT_BETWEEN_PEAK;
+                return SIGNAL_ELEMENT_BETWEEN;
             }
             advance();
             return {element_.get_level(), Byte{1}, element_.get_duration()};

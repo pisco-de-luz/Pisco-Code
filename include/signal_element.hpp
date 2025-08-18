@@ -47,18 +47,17 @@ namespace pisco_code
                                                           SignalDuration::LONG};
     inline constexpr SignalElement SIGNAL_ELEMENT_INTER_DIGIT{
         SignalLevel::GAP, 1, SignalDuration::LONG};
-    inline constexpr SignalElement SIGNAL_ELEMENT_NEGATIVE_PEAK{
+    inline constexpr SignalElement SIGNAL_ELEMENT_NEGATIVE{
         SignalLevel::PEAK, 1, SignalDuration::LONG};
-    inline constexpr SignalElement SIGNAL_ELEMENT_ZERO_GAP{
-        SignalLevel::GAP, 1, SignalDuration::SHORT};
+    inline constexpr SignalElement SIGNAL_ELEMENT_ZERO{SignalLevel::GAP, 1,
+                                                       SignalDuration::SHORT};
     inline constexpr SignalElement SIGNAL_ELEMENT_NOT_DEFINED{
         SignalLevel::NOT_DEFINED, 0, SignalDuration::SHORT};
-    inline constexpr SignalElement SIGNAL_ELEMENT_BETWEEN_PEAK{
+    inline constexpr SignalElement SIGNAL_ELEMENT_BETWEEN{
         SignalLevel::MIDDLE, 1, SignalDuration::SHORT};
-    inline constexpr SignalElement SIGNAL_ELEMENT_DIGIT_PEAK{
-        SignalLevel::PEAK, 1, SignalDuration::SHORT};
-    constexpr auto
-    signal_element_digit_peak(SignalTimesType digit_value) noexcept
+    inline constexpr SignalElement SIGNAL_ELEMENT_DIGIT{SignalLevel::PEAK, 1,
+                                                        SignalDuration::SHORT};
+    constexpr auto signal_element_digit(SignalTimesType digit_value) noexcept
     {
         return SignalElement(SignalLevel::PEAK, digit_value,
                              SignalDuration::SHORT);
