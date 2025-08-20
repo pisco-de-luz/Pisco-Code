@@ -44,7 +44,6 @@ namespace pisco_code
                 }
                 need_inter_symbol_ = false;
                 element            = SIGNAL_ELEMENT_INTER_SYMBOL;
-                // return SIGNAL_ELEMENT_INTER_SYMBOL;
             }
             else
             {
@@ -53,8 +52,7 @@ namespace pisco_code
                     case Phase::LEADING_FRAME:
                     {
                         need_inter_symbol_ = true;
-                        // return SIGNAL_ELEMENT_FRAMING;
-                        element = SIGNAL_ELEMENT_FRAMING;
+                        element            = SIGNAL_ELEMENT_FRAMING;
                         break;
                     }
                     case Phase::IN_ELEMENTS:
@@ -74,10 +72,7 @@ namespace pisco_code
                                     current_phase_   = Phase::TRAILING_FRAME;
                                 }
                             }
-                            // return element;
                         }
-
-                        // return element;
                         break;
                     }
                     case Phase::TRAILING_FRAME:
@@ -85,7 +80,6 @@ namespace pisco_code
                         current_phase_     = Phase::DONE;
                         need_inter_symbol_ = false;
                         element            = SIGNAL_ELEMENT_FRAMING;
-                        // return SIGNAL_ELEMENT_FRAMING;
                         break;
                     }
                     // Should never come here, but added for completeness
@@ -106,8 +100,11 @@ namespace pisco_code
 
         void reset() noexcept
         {
-            current_phase_     = Phase::LEADING_FRAME;
-            symbol_remaining_  = symbols_.size();
+            current_phase_    = Phase::LEADING_FRAME;
+            symbol_remaining_ = symbols_.size();
+            element_iterator_ =
+                SignalElementIterator(SIGNAL_ELEMENT_NOT_DEFINED);
+            current_symbol_    = SIGNAL_ELEMENT_NOT_DEFINED;
             need_inter_symbol_ = false;
             need_new_symbol_   = true;
             symbols_.rewind();
@@ -135,9 +132,9 @@ namespace pisco_code
             return (symbol_remaining_ == 0) && (need_new_symbol_);
         }
     };
-    constexpr auto MAX_BYTES_PASS_BY_VALUE = 16;
+    constexpr auto MAX_STACK_BYTES_PASS_BY_VALUE = 16;
 
-    static_assert(sizeof(SignalStack) <= MAX_BYTES_PASS_BY_VALUE,
+    static_assert(sizeof(SignalStack) <= MAX_STACK_BYTES_PASS_BY_VALUE,
                   "Stack grew, reconsider pass-by-value");
 
 } // namespace pisco_code
