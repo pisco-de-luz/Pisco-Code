@@ -54,21 +54,25 @@ namespace pisco_code
                 case Phase::IN_ELEMENTS:
                 {
                     SignalElement element{SIGNAL_ELEMENT_INTER_SYMBOL};
-                    if (symbol_remaining_ > 0)
+                    if (element_iterator_.hasNext())
                     {
+                        need_new_symbol_ = false;
+                        element          = element_iterator_.next();
                     }
                     else
                     {
-                        need_inter_symbol_ = true;
-                        current_phase_     = Phase::TRAILING_FRAME;
+                        need_new_symbol_ = true;
+                    }
+
+                    if (allPulsesProcessed())
+                    {
+                        need_new_symbol_ = false;
+                        current_phase_   = Phase::TRAILING_FRAME;
                     }
                     return element;
                 }
                 case Phase::TRAILING_FRAME:
                 {
-                    if (symbol_remaining_ > 0)
-                    {
-                    }
                     current_phase_     = Phase::DONE;
                     need_inter_symbol_ = false;
                     return SIGNAL_ELEMENT_FRAMING;
@@ -113,11 +117,10 @@ namespace pisco_code
         bool                  need_inter_symbol_{false};
         bool                  need_new_symbol_{true};
         Phase                 current_phase_{Phase::LEADING_FRAME};
-        // [[nodiscard]] bool isPeakShort() const noexcept
-        // {
-        //     return symbols_.get_level() == SignalLevel::PEAK &&
-        //            element_.get_duration() == SignalDuration::SHORT;
-        // }
+        [[nodiscard]] bool    allPulsesProcessed() const noexcept
+        {
+            return (symbol_remaining_ == 0) && (need_new_symbol_);
+        }
     };
     constexpr auto MAX_BYTES_PASS_BY_VALUE = 16;
 

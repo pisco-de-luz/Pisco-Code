@@ -53,14 +53,55 @@ TEST(SignalPulseIteratorTests, SignalStackEmpty_IteratesCorrectly)
     CHECK_FALSE(iterator.hasNext());
 }
 
-// TEST(SignalPulseIteratorTests, NumberOne_IteratesCorrectly)
-// {
-//     const SignalElement element = signal_element_digit(1);
-//     signal_stack.push(element);
-//     SignalPulseIterator iterator(signal_stack);
+TEST(SignalPulseIteratorTests, NumberOne_IteratesCorrectly)
+{
+    const SignalElement element = signal_element_digit(1);
+    signal_stack.push(element);
+    SignalPulseIterator iterator(signal_stack);
 
-//     CHECK_TRUE(iterator.hasNext());
-//     const auto expected_framing = SIGNAL_ELEMENT_FRAMING;
-//     const auto actual           = iterator.next();
-//     CHECK_EQUAL(expected_framing, actual);
-// }
+    const auto expected_framing      = SIGNAL_ELEMENT_FRAMING;
+    const auto expected_inter_symbol = SIGNAL_ELEMENT_INTER_SYMBOL;
+    const auto expected_digit        = SIGNAL_ELEMENT_DIGIT;
+
+    CHECK_TRUE(iterator.hasNext());
+    auto actual = iterator.next();
+    CHECK_EQUAL(expected_framing, actual);
+    actual = iterator.next();
+    CHECK_EQUAL(expected_inter_symbol, actual);
+    actual = iterator.next();
+    CHECK_EQUAL(expected_digit, actual);
+    actual = iterator.next();
+    CHECK_EQUAL(expected_inter_symbol, actual);
+    actual = iterator.next();
+    CHECK_EQUAL(expected_framing, actual);
+    CHECK_FALSE(iterator.hasNext());
+}
+
+TEST(SignalPulseIteratorTests, NumberTwo_IteratesCorrectly)
+{
+    const SignalElement element = signal_element_digit(2);
+    signal_stack.push(element);
+    SignalPulseIterator iterator(signal_stack);
+
+    const auto expected_framing      = SIGNAL_ELEMENT_FRAMING;
+    const auto expected_inter_symbol = SIGNAL_ELEMENT_INTER_SYMBOL;
+    const auto expected_digit        = SIGNAL_ELEMENT_DIGIT;
+    const auto expected_intra_digit  = SIGNAL_ELEMENT_INTRA_DIGIT;
+
+    CHECK_TRUE(iterator.hasNext());
+    auto actual = iterator.next();
+    CHECK_EQUAL(expected_framing, actual);
+    actual = iterator.next();
+    CHECK_EQUAL(expected_inter_symbol, actual);
+    actual = iterator.next();
+    CHECK_EQUAL(expected_digit, actual);
+    actual = iterator.next();
+    CHECK_EQUAL(expected_intra_digit, actual);
+    actual = iterator.next();
+    CHECK_EQUAL(expected_digit, actual);
+    actual = iterator.next();
+    CHECK_EQUAL(expected_inter_symbol, actual);
+    actual = iterator.next();
+    CHECK_EQUAL(expected_framing, actual);
+    CHECK_FALSE(iterator.hasNext());
+}
