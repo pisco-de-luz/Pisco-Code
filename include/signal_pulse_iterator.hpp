@@ -12,8 +12,8 @@ namespace pisco_code
     class SignalPulseIterator
     {
       public:
-        explicit SignalPulseIterator(SignalStack signal_stack) noexcept :
-            symbols_(signal_stack), symbol_remaining_(signal_stack.size())
+        explicit SignalPulseIterator(const SignalStack& signal_stack) noexcept :
+            symbols_(signal_stack), symbol_remaining_(symbols_.size())
         {
         }
 
@@ -57,20 +57,21 @@ namespace pisco_code
                     }
                     case Phase::IN_ELEMENTS:
                     {
-                        if (element_iterator_.hasNext())
+                        if (!element_iterator_.hasNext())
                         {
-                            need_new_symbol_ = false;
-                            element          = element_iterator_.next();
-                            if (!element_iterator_.hasNext())
-                            {
-                                need_inter_symbol_ = true;
-                                need_new_symbol_   = true;
+                            break;
+                        }
+                        need_new_symbol_ = false;
+                        element          = element_iterator_.next();
+                        if (!element_iterator_.hasNext())
+                        {
+                            need_inter_symbol_ = true;
+                            need_new_symbol_   = true;
 
-                                if (allPulsesProcessed())
-                                {
-                                    need_new_symbol_ = false;
-                                    current_phase_   = Phase::TRAILING_FRAME;
-                                }
+                            if (allPulsesProcessed())
+                            {
+                                need_new_symbol_ = false;
+                                current_phase_   = Phase::TRAILING_FRAME;
                             }
                         }
                         break;
