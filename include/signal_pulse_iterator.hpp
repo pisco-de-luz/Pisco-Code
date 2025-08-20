@@ -9,6 +9,9 @@
 
 namespace pisco_code
 {
+    /// Produces a sequence with leading FRAMING, inter-symbol separators,
+    /// the symbol elements from SignalElementIterator, and trailing FRAMING.
+
     class SignalPulseIterator
     {
       public:
@@ -26,22 +29,18 @@ namespace pisco_code
             }
             if (need_inter_symbol_)
             {
-                if (need_new_symbol_)
+                if (symbols_.isEmpty())
                 {
-                    if (symbols_.isEmpty())
-                    {
-                        current_phase_ = Phase::TRAILING_FRAME;
-                    }
-                    else
-                    {
-                        current_symbol_ = symbols_.pop();
-                        --symbol_remaining_;
-                        element_iterator_ =
-                            SignalElementIterator(current_symbol_);
-                        need_new_symbol_ = false;
-                        current_phase_   = Phase::IN_ELEMENTS;
-                    }
+                    current_phase_ = Phase::TRAILING_FRAME;
                 }
+                else
+                {
+                    current_symbol_ = symbols_.pop();
+                    --symbol_remaining_;
+                    element_iterator_ = SignalElementIterator(current_symbol_);
+                    current_phase_    = Phase::IN_ELEMENTS;
+                }
+
                 need_inter_symbol_ = false;
                 element            = SIGNAL_ELEMENT_INTER_SYMBOL;
             }
@@ -61,17 +60,13 @@ namespace pisco_code
                         {
                             break;
                         }
-                        need_new_symbol_ = false;
-                        element          = element_iterator_.next();
+                        element = element_iterator_.next();
                         if (!element_iterator_.hasNext())
                         {
                             need_inter_symbol_ = true;
-                            need_new_symbol_   = true;
-
                             if (allPulsesProcessed())
                             {
-                                need_new_symbol_ = false;
-                                current_phase_   = Phase::TRAILING_FRAME;
+                                current_phase_ = Phase::TRAILING_FRAME;
                             }
                         }
                         break;
@@ -107,7 +102,6 @@ namespace pisco_code
                 SignalElementIterator(SIGNAL_ELEMENT_NOT_DEFINED);
             current_symbol_    = SIGNAL_ELEMENT_NOT_DEFINED;
             need_inter_symbol_ = false;
-            need_new_symbol_   = true;
             symbols_.rewind();
         }
 
@@ -118,7 +112,7 @@ namespace pisco_code
             IN_ELEMENTS,
             TRAILING_FRAME,
             DONE,
-            LAST_PHASE, // Used to determine the size of the enum
+            LAST_PHASE,
         };
 
         SignalStack           symbols_;
@@ -126,11 +120,10 @@ namespace pisco_code
         SignalElement         current_symbol_{SIGNAL_ELEMENT_NOT_DEFINED};
         Counter               symbol_remaining_{0};
         bool                  need_inter_symbol_{false};
-        bool                  need_new_symbol_{true};
         Phase                 current_phase_{Phase::LEADING_FRAME};
         [[nodiscard]] bool    allPulsesProcessed() const noexcept
         {
-            return (symbol_remaining_ == 0) && (need_new_symbol_);
+            return (symbol_remaining_ == 0) && (need_inter_symbol_);
         }
     };
     constexpr auto MAX_STACK_BYTES_PASS_BY_VALUE = 16;
