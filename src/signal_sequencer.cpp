@@ -3,6 +3,7 @@
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 #include "signal_element.hpp"
+#include "signal_pulse_iterator.hpp"
 
 namespace pisco_code
 {
@@ -36,6 +37,12 @@ namespace pisco_code
     [[nodiscard]] bool SignalSequencer::hasMorePulse() const noexcept
     {
         return pulse_repeat_index_ < pulse_repeat_count_;
+    }
+
+    [[nodiscard]] SignalPulseIterator
+    SignalSequencer::createPulseIterator() const noexcept
+    {
+        return SignalPulseIterator{signal_stack_};
     }
 
     void SignalSequencer::loadSignalCode(SignalCode code, NumberBase base,
@@ -73,6 +80,7 @@ namespace pisco_code
         {
             signal_stack_.push(SIGNAL_ELEMENT_NEGATIVE);
         }
+        signal_stack_.rewind();
     }
 
     SignalElement SignalSequencer::popNextSignalElement() noexcept
