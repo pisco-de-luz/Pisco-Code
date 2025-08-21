@@ -8,6 +8,7 @@
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 #include "signal_emitter.hpp"
+#include "signal_pulse_iterator.hpp"
 #include "signal_sequencer.hpp"
 #include "tests_constants.hpp"
 #include "tests_types.hpp"
@@ -99,31 +100,57 @@ namespace testutils
     {
         SignalSequencer sequencer;
         sequencer.loadSignalCode(code, base, num_digits);
-        sequencer.setRepeatTimes(repeats);
-        TraceCode trace = to_trace_code(SignalLevel::GAP, SignalDuration::LONG);
-        while (sequencer.hasMoreSignalCodeToSequence())
+        SignalPulseIterator pulse_iterator = sequencer.createPulseIterator();
+
+        TraceCode trace{};
+        for (RepeatTimes i = 0; i < repeats; ++i)
         {
-            sequencer.popNextCodeToSequence();
-            trace += to_trace_code(SignalLevel::MIDDLE, SignalDuration::LONG);
-            ;
-            while (sequencer.hasMoreSignalElements())
+            pulse_iterator.reset();
+            while (pulse_iterator.hasNext())
             {
-                auto element = sequencer.popNextSignalElement();
-                while (sequencer.hasMorePulse())
-                {
-                    sequencer.popNextPulse();
-                    trace += to_trace_code(element.get_level(),
-                                           element.get_duration());
-                    trace += to_trace_code(SignalLevel::MIDDLE,
-                                           SignalDuration::SHORT);
-                }
+                auto element = pulse_iterator.next();
                 trace +=
-                    to_trace_code(SignalLevel::MIDDLE, SignalDuration::MEDIUM);
+                    to_trace_code(element.get_level(), element.get_duration());
             }
-            trace += to_trace_code(SignalLevel::GAP, SignalDuration::LONG);
         }
+
         return trace;
     }
+
+    // inline TraceCode generateExpectedTrace(SignalCode code, NumberBase base,
+    //                                        NumDigits   num_digits = 0,
+    //                                        RepeatTimes repeats    = 1)
+    // {
+    //     SignalSequencer sequencer;
+    //     sequencer.loadSignalCode(code, base, num_digits);
+    //     sequencer.setRepeatTimes(repeats);
+    //     TraceCode trace = to_trace_code(SignalLevel::GAP,
+    //     SignalDuration::LONG); while
+    //     (sequencer.hasMoreSignalCodeToSequence())
+    //     {
+    //         sequencer.popNextCodeToSequence();
+    //         trace += to_trace_code(SignalLevel::MIDDLE,
+    //         SignalDuration::LONG);
+    //         ;
+    //         while (sequencer.hasMoreSignalElements())
+    //         {
+    //             auto element = sequencer.popNextSignalElement();
+    //             while (sequencer.hasMorePulse())
+    //             {
+    //                 sequencer.popNextPulse();
+    //                 trace += to_trace_code(element.get_level(),
+    //                                        element.get_duration());
+    //                 trace += to_trace_code(SignalLevel::MIDDLE,
+    //                                        SignalDuration::SHORT);
+    //             }
+    //             trace +=
+    //                 to_trace_code(SignalLevel::MIDDLE,
+    //                 SignalDuration::MEDIUM);
+    //         }
+    //         trace += to_trace_code(SignalLevel::GAP, SignalDuration::LONG);
+    //     }
+    //     return trace;
+    // }
 
     // Check the behavior of the blinker against the expected values.
     inline void checkBlinkerBehavior(SignalEmitter&         blinker,
