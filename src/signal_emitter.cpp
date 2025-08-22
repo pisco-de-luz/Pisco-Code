@@ -134,8 +134,7 @@ namespace pisco_code
         const auto elapsed =
             static_cast<PhaseDuration>(tick_counter - start_time_);
         const bool phase_done = elapsed > phase_duration_;
-        // const bool pwm_cycle_start_reached = pwm_tick_position_ == 0;
-        // return phase_done && pwm_cycle_start_reached;
+
         return phase_done && controller_->readyForPhaseChange();
     }
 
