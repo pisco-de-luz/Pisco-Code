@@ -23,7 +23,19 @@ namespace
             last_dimmed = led_level;
         }
 
-        void setBlinkMode(BlinkMode mode) override { blink_mode = mode; }
+        void setBlinkMode(BlinkMode mode) override
+        {
+            blink_mode = mode;
+        }
+
+        void update() override
+        {
+        }
+
+        [[nodiscard]] bool readyForPhaseChange() const noexcept override
+        {
+            return true;
+        }
 
         Int32     peak_calls   = 0;
         Int32     dimmed_calls = 0;

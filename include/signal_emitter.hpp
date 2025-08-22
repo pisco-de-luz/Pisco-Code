@@ -234,10 +234,10 @@ namespace pisco_code
         PhaseDuration phase_duration_ = 0;
         Phase         current_phase_  = Phase::IDLE;
 
-        bool            is_negative_       = false;
-        LedLevel        peak_level_        = DEFAULT_PULSE_LEVEL;
-        PwmTickPosition pwm_tick_position_ = 0;
-        LedLevel        dimmed_level_      = DEFAULT_DIMMED_LEVEL;
+        bool     is_negative_ = false;
+        LedLevel peak_level_  = DEFAULT_PULSE_LEVEL;
+
+        LedLevel dimmed_level_ = DEFAULT_DIMMED_LEVEL;
     };
 
 } // namespace pisco_code

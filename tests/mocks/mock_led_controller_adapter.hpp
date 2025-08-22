@@ -31,7 +31,7 @@ class MockLedControllerAdapter : public LedController
         mode_ = mode;
     }
 
-    void update(PwmTickPosition pwm_tick_position) override
+    void update() override
     {
         if (logger_ == nullptr)
         {
@@ -41,12 +41,12 @@ class MockLedControllerAdapter : public LedController
         switch (mode_)
         {
             case BlinkMode::PULSE:
-                if (pwm_tick_position == 0)
+                if (pwm_tick_position_ == 0)
                 {
                     logger_->handle(
                         static_cast<LedCodeType>(LedControlCode::ON));
                 }
-                else if (pwm_tick_position == peak_level_)
+                else if (pwm_tick_position_ == peak_level_)
                 {
                     logger_->handle(
                         static_cast<LedCodeType>(LedControlCode::OFF));
@@ -54,12 +54,12 @@ class MockLedControllerAdapter : public LedController
                 break;
 
             case BlinkMode::DIMMED:
-                if (pwm_tick_position == 0)
+                if (pwm_tick_position_ == 0)
                 {
                     logger_->handle(
                         static_cast<LedCodeType>(LedControlCode::ON));
                 }
-                else if (pwm_tick_position == dimmed_level_)
+                else if (pwm_tick_position_ == dimmed_level_)
                 {
                     logger_->handle(
                         static_cast<LedCodeType>(LedControlCode::OFF));
@@ -68,7 +68,7 @@ class MockLedControllerAdapter : public LedController
 
             case BlinkMode::NONE:
             default:
-                if (pwm_tick_position == 0)
+                if (pwm_tick_position_ == 0)
                 {
                     // Ensure LED is OFF during idle periods
                     logger_->handle(
@@ -76,13 +76,22 @@ class MockLedControllerAdapter : public LedController
                 }
                 break;
         }
+        if (++pwm_tick_position_ > PWM_MAX)
+        {
+            pwm_tick_position_ = 0;
+        }
+    }
+    [[nodiscard]] bool readyForPhaseChange() const noexcept
+    {
+        return (pwm_tick_position_ == 0);
     }
 
   private:
-    MockLedControlLogger* logger_       = nullptr;
-    PwmTickPosition       peak_level_   = PWM_MAX;
-    PwmTickPosition       dimmed_level_ = DEFAULT_DIMMED_LEVEL;
-    BlinkMode             mode_         = BlinkMode::NONE;
+    MockLedControlLogger* logger_            = nullptr;
+    PwmTickPosition       peak_level_        = PWM_MAX;
+    PwmTickPosition       dimmed_level_      = DEFAULT_DIMMED_LEVEL;
+    BlinkMode             mode_              = BlinkMode::NONE;
+    PwmTickPosition       pwm_tick_position_ = 0;
 };
 
 #endif // MOCK_LED_CONTROLLER_ADAPTER_HPP

@@ -39,7 +39,7 @@ namespace pisco_code
         dimmed_level_ = led_level;
     }
 
-    void SoftwarePwmLedController::update(PwmTickPosition pwm_tick_position)
+    void SoftwarePwmLedController::update()
     {
         if (led_control_ == nullptr)
         {
@@ -49,22 +49,22 @@ namespace pisco_code
         switch (mode_)
         {
             case BlinkMode::PULSE:
-                if (pwm_tick_position == 0)
+                if (pwm_tick_position_ == 0)
                 {
                     led_control_(to_value(LedControlCode::ON));
                 }
-                else if (pwm_tick_position == peak_level_)
+                else if (pwm_tick_position_ == peak_level_)
                 {
                     led_control_(to_value(LedControlCode::OFF));
                 }
                 break;
 
             case BlinkMode::DIMMED:
-                if (pwm_tick_position == 0)
+                if (pwm_tick_position_ == 0)
                 {
                     led_control_(to_value(LedControlCode::ON));
                 }
-                else if (pwm_tick_position == dimmed_level_)
+                else if (pwm_tick_position_ == dimmed_level_)
                 {
                     led_control_(to_value(LedControlCode::OFF));
                 }
@@ -72,13 +72,22 @@ namespace pisco_code
 
             case BlinkMode::NONE:
             default:
-                if (pwm_tick_position == 0)
+                if (pwm_tick_position_ == 0)
                 {
                     // Ensure LED is OFF during idle periods
                     led_control_(to_value(LedControlCode::OFF));
                 }
                 break;
         }
+        if (++pwm_tick_position_ > PWM_MAX)
+        {
+            pwm_tick_position_ = 0;
+        }
+    }
+    [[nodiscard]] bool
+    SoftwarePwmLedController::readyForPhaseChange() const noexcept
+    {
+        return (pwm_tick_position_ == 0);
     }
 
 } // namespace pisco_code
