@@ -45,18 +45,36 @@ namespace pisco_code
         return SignalPulseIterator{signal_stack_};
     }
 
+    constexpr bool is_valid(NumberBase b) noexcept
+    {
+        switch (b)
+        {
+            case NumberBase::BIN:
+            case NumberBase::OCT:
+            case NumberBase::DEC:
+            case NumberBase::HEX:
+                return true;
+        }
+        return false;
+    }
+
     void SignalSequencer::loadSignalCode(SignalCode code, NumberBase base,
                                          NumDigits num_digits) noexcept
     {
         signal_stack_.clear();
 
+        const DigitValue base_val = to_value(base);
+        if (!is_valid(base))
+        {
+            return;
+        }
+
         const bool is_negative = (code < 0);
         SignalCode abs_code    = is_negative ? -code : code;
 
-        const DigitValue base_val    = to_value(base);
-        NumDigits        digit_count = 0;
-        const NumDigits  max_digits  = max_digits_for_base(base);
-        const bool       is_num_digits_valid =
+        NumDigits       digit_count = 0;
+        const NumDigits max_digits  = max_digits_for_base(base);
+        const bool      is_num_digits_valid =
             (num_digits > 0 && num_digits <= max_digits);
         const NumDigits max_digits_to_show =
             is_num_digits_valid ? num_digits : max_digits;
