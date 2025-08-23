@@ -4,6 +4,7 @@
 #include "pisco_types.hpp"
 #include "signal_element.hpp"
 #include "signal_pulse_iterator.hpp"
+#include "signal_types.hpp"
 
 namespace pisco_code
 {
@@ -59,13 +60,14 @@ namespace pisco_code
         const bool is_negative = (code < 0);
         SignalCode abs_code    = is_negative ? -code : code;
 
-        NumDigits       digit_count = 0;
-        const NumDigits max_digits  = max_digits_for_base(base);
+        const NumDigits max_digits = max_digits_for_base(base);
         const bool      is_num_digits_valid =
             (num_digits > 0 && num_digits <= max_digits);
         const NumDigits max_digits_to_show =
             is_num_digits_valid ? num_digits : max_digits;
-        do
+
+        NumDigits digit_count = 0;
+        for (;;)
         {
             const DigitValue digit = to_digit(abs_code % base_val);
             abs_code /= base_val;
@@ -73,12 +75,21 @@ namespace pisco_code
             signal_stack_.push(digit == 0 ? SIGNAL_ELEMENT_ZERO
                                           : signal_element_digit(digit));
             ++digit_count;
-        } while (abs_code > 0 && digit_count < max_digits_to_show);
 
-        while (is_num_digits_valid && digit_count < num_digits)
+            if (!(abs_code > 0 && digit_count < max_digits_to_show))
+            {
+                break;
+            }
+        }
+
+        // Pad with leading zeros only when a fixed width was requested
+        if (is_num_digits_valid)
         {
-            signal_stack_.push(SIGNAL_ELEMENT_ZERO);
-            ++digit_count;
+            while (digit_count < num_digits)
+            {
+                signal_stack_.push(SIGNAL_ELEMENT_ZERO);
+                ++digit_count;
+            }
         }
 
         if (is_negative)
