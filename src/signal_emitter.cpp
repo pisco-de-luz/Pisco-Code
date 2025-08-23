@@ -77,6 +77,7 @@ namespace pisco_code
 
         if (current_phase_loop_ == PhaseLoop::STARTING)
         {
+            pulse_iterator_.reset();
             is_running_         = true;
             start_time_         = tick_counter;
             phase_duration_     = 0;
@@ -98,8 +99,16 @@ namespace pisco_code
             }
             else
             {
-                is_running_         = false;
-                current_phase_loop_ = PhaseLoop::IDLE;
+                if (sequencer_.shouldRepeat())
+                {
+                    current_phase_loop_ = PhaseLoop::STARTING;
+                    sequencer_.incrementRepeatIndex();
+                }
+                else
+                {
+                    is_running_         = false;
+                    current_phase_loop_ = PhaseLoop::IDLE;
+                }
             }
         }
         controller_->update();

@@ -23,6 +23,17 @@ namespace pisco_code
         {
             return element_count_;
         }
+        [[nodiscard]] bool shouldRepeat() const noexcept
+        {
+            return repeat_index_ < repeat_count_ - 1;
+        }
+        void incrementRepeatIndex() noexcept
+        {
+            if (shouldRepeat())
+            {
+                ++repeat_index_;
+            }
+        }
         [[nodiscard]] bool hasMoreSignalCodeToSequence() const noexcept;
         [[nodiscard]] bool hasMoreSignalElements() const noexcept;
         [[nodiscard]] bool hasMorePulse() const noexcept;
