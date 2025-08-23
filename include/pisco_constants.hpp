@@ -67,31 +67,78 @@ namespace pisco_code
         return static_cast<PhaseDuration>(milliseconds / LOOP_INTERVAL_MS);
     }
 
-    // Lookup table indexed by base value (2 to 16), all other entries are zero
-    constexpr NumDigits MAX_DIGITS_LUT[to_value(NumberBase::HEX) + 1] = {
-        0, 0,
-        8, // 2 = BIN
-        0, 0, 0, 0, 0,
-        9, // 8 = OCT
-        0, // 9
-        9, // 10 = DEC
-        0, 0, 0, 0, 0,
-        7 // 16 = HEX
+    struct BaseLimits
+    {
+        NumDigits  max_digits;
+        SignalCode max_value; // maximum |code| allowed for this base
     };
+
+    // Index 0..16, fill only supported bases
+    constexpr BaseLimits LIMITS_LUT[17] = {
+        {0,         0},
+        {0,         0},
+        {8,       255}, // BIN  2^8 - 1
+        {0,         0},
+        {0,         0},
+        {0,         0},
+        {0,         0},
+        {0,         0},
+        {9, 134217727}, // OCT  8^9 - 1
+        {0,         0},
+        {9, 999999999}, // DEC
+        {0,         0},
+        {0,         0},
+        {0,         0},
+        {0,         0},
+        {0,         0},
+        {7, 268435455}  // HEX 16^7 - 1
+    };
+
+    // Accessors
+    constexpr BaseLimits limits_for(NumberBase base)
+    {
+        return LIMITS_LUT[to_value(base)];
+    }
 
     constexpr NumDigits max_digits_for_base(NumberBase base)
     {
-        return MAX_DIGITS_LUT[to_value(base)];
+        return limits_for(base).max_digits;
     }
 
+    constexpr bool base_supported(NumberBase base)
+    {
+        return max_digits_for_base(base) != 0;
+    }
+
+    // Range check using LUT only
+    inline bool isCodeInRange(NumberBase base, SignalCode code) noexcept
+    {
+        const BaseLimits lim = limits_for(base);
+        if (lim.max_digits == 0)
+        {
+            return false;
+        }
+        return (code >= -lim.max_value) && (code <= lim.max_value);
+    }
+
+    // Compile‑time sanity checks
+    static_assert(LIMITS_LUT[to_value(NumberBase::BIN)].max_value <= INT32_MAX,
+                  "BIN range too large");
+    static_assert(LIMITS_LUT[to_value(NumberBase::OCT)].max_value <= INT32_MAX,
+                  "OCT range too large");
+    static_assert(LIMITS_LUT[to_value(NumberBase::DEC)].max_value <= INT32_MAX,
+                  "DEC range too large");
+    static_assert(LIMITS_LUT[to_value(NumberBase::HEX)].max_value <= INT32_MAX,
+                  "HEX range too large");
+
     // Compile-time checks to catch omissions
-    static_assert(MAX_DIGITS_LUT[to_value(NumberBase::BIN)] > 0,
+    static_assert(LIMITS_LUT[to_value(NumberBase::BIN)].max_digits > 0,
                   "Missing BIN max digits");
-    static_assert(MAX_DIGITS_LUT[to_value(NumberBase::OCT)] > 0,
+    static_assert(LIMITS_LUT[to_value(NumberBase::OCT)].max_digits > 0,
                   "Missing OCT max digits");
-    static_assert(MAX_DIGITS_LUT[to_value(NumberBase::DEC)] > 0,
+    static_assert(LIMITS_LUT[to_value(NumberBase::DEC)].max_digits > 0,
                   "Missing DEC max digits");
-    static_assert(MAX_DIGITS_LUT[to_value(NumberBase::HEX)] > 0,
+    static_assert(LIMITS_LUT[to_value(NumberBase::HEX)].max_digits > 0,
                   "Missing HEX max digits");
 
     // Maximum number of digits that could be represented in the system
