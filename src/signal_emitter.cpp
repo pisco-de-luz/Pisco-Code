@@ -57,14 +57,11 @@ namespace pisco_code
         }
 
         least_significant_digit_ = current_digit_index_;
-        repeats_total_           = repeats;
-        repeats_remaining_       = repeats;
 
         controller_->setDimmedLevel(dimmed_level_);
         controller_->setPeakLevel(peak_level_);
 
         current_phase_loop_ = PhaseLoop::STARTING;
-        // transitionTo(Phase::PAUSE_BEFORE_START);
         return true;
     }
 
@@ -184,30 +181,8 @@ namespace pisco_code
         return current_digit_index_ < max_digits_;
     }
 
-    bool SignalEmitter::shouldRepeat() const
-    {
-        if (repeats_remaining_ == 0)
-        {
-            return false;
-        }
-
-        --repeats_remaining_;
-        return true;
-    }
-
     bool SignalEmitter::isLedBeingUsedNow() const
     {
-        // switch (current_phase_)
-        // {
-        //     case Phase::PREPARE_REPEAT:
-        //     case Phase::PAUSE_AFTER_FINISH:
-        //     case Phase::IDLE:
-        //     case Phase::DISPLAY_ZERO:
-        //         // LED is not being used
-        //         return false;
-        //     default:
-        //         return true;
-        // }
         return is_running_ && !is_in_gap_level_;
     }
 
@@ -333,21 +308,21 @@ namespace pisco_code
 
     void SignalEmitter::handleLoadNextDigit()
     {
-        if (current_digit_index_ >= max_digits_ && shouldRepeat())
-        {
-            transitionTo(Phase::END_OF_DIGIT_CYCLE);
-        }
-        else
-        {
-            if (blink_counts_[current_digit_index_] == 0)
-            {
-                transitionTo(Phase::DISPLAY_ZERO);
-            }
-            else
-            {
-                transitionTo(Phase::EMIT_BLINK);
-            }
-        }
+        // if (current_digit_index_ >= max_digits_ && shouldRepeat())
+        // {
+        //     transitionTo(Phase::END_OF_DIGIT_CYCLE);
+        // }
+        // else
+        // {
+        //     if (blink_counts_[current_digit_index_] == 0)
+        //     {
+        //         transitionTo(Phase::DISPLAY_ZERO);
+        //     }
+        //     else
+        //     {
+        //         transitionTo(Phase::EMIT_BLINK);
+        //     }
+        // }
     }
 
     void SignalEmitter::handleDisplayNegativeSign()
@@ -397,20 +372,20 @@ namespace pisco_code
 
     void SignalEmitter::handleEndOfDigitCycle()
     {
-        if (repeats_remaining_ == 0)
-        {
-            transitionTo(Phase::PAUSE_AFTER_FINISH);
-        }
-        else
-        {
-            for (Index i = 0; i < max_digits_; ++i)
-            {
-                const Index digit    = max_digits_ - 1U - i;
-                blink_counts_[digit] = digits_[digit];
-            }
-            current_digit_index_ = least_significant_digit_;
-            transitionTo(Phase::PREPARE_REPEAT);
-        }
+        // if (repeats_remaining_ == 0)
+        // {
+        //     transitionTo(Phase::PAUSE_AFTER_FINISH);
+        // }
+        // else
+        // {
+        //     for (Index i = 0; i < max_digits_; ++i)
+        //     {
+        //         const Index digit    = max_digits_ - 1U - i;
+        //         blink_counts_[digit] = digits_[digit];
+        //     }
+        //     current_digit_index_ = least_significant_digit_;
+        //     transitionTo(Phase::PREPARE_REPEAT);
+        // }
     }
 
     void SignalEmitter::handlePauseAfterFinish()

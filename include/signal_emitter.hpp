@@ -29,9 +29,9 @@ namespace pisco_code
       private:
         bool phaseElapsed(TickCounter tick_counter) const;
 
-        bool             hasMoreBlinks() const;
-        bool             hasMoreDigits() const;
-        bool             shouldRepeat() const;
+        bool hasMoreBlinks() const;
+        bool hasMoreDigits() const;
+
         static BlinkMode signalLevelToBlinkMode(SignalLevel level);
         static PhaseDuration
         signalDurationToPhaseDuration(SignalDuration duration);
@@ -237,17 +237,15 @@ namespace pisco_code
         NumDigits digits_[MAX_DIGITS_ABSOLUTE]       = {};
         NumDigits max_digits_                        = 0;
 
-        RepeatTimes         repeats_total_      = 0;
-        mutable RepeatTimes repeats_remaining_  = 0;
-        TickCounter         start_time_         = 0;
-        PhaseDuration       phase_duration_     = 0;
-        Phase               current_phase_      = Phase::IDLE;
-        PhaseLoop           current_phase_loop_ = PhaseLoop::IDLE;
-        bool                is_negative_        = false;
-        bool                is_running_         = false;
-        bool                is_in_gap_level_    = false;
-        LedLevel            peak_level_         = DEFAULT_PULSE_LEVEL;
-        LedLevel            dimmed_level_       = DEFAULT_DIMMED_LEVEL;
+        TickCounter   start_time_         = 0;
+        PhaseDuration phase_duration_     = 0;
+        Phase         current_phase_      = Phase::IDLE;
+        PhaseLoop     current_phase_loop_ = PhaseLoop::IDLE;
+        bool          is_negative_        = false;
+        bool          is_running_         = false;
+        bool          is_in_gap_level_    = false;
+        LedLevel      peak_level_         = DEFAULT_PULSE_LEVEL;
+        LedLevel      dimmed_level_       = DEFAULT_DIMMED_LEVEL;
     };
 
 } // namespace pisco_code
