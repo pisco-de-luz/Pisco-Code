@@ -5,27 +5,17 @@
 namespace pisco_code
 {
     // Loop timing constants
-    constexpr Timestamp LOOP_INTERVAL_MS       = 64;
-    constexpr Timestamp INIT_PHASE_MS          = 1900;
-    constexpr Timestamp INIT_DIMMED_PHASE_MS   = 1300;
-    constexpr Timestamp END_DIMMED_PHASE_MS    = 300;
-    constexpr Timestamp NEGATIVE_BLINK_LONG_MS = 1100;
-    constexpr Timestamp SHORT_BLINK_MS         = 350;
-    constexpr Timestamp MEDIUM_BLINK_MS        = 500;
-    constexpr Timestamp LONG_BLINK_MS          = 1100;
-    constexpr Timestamp EXTRA_LONG_BLINK_MS    = 1300;
-    constexpr Timestamp ZERO_DIGIT_BLINK_MS    = 440;
-    constexpr Timestamp BETWEEN_BLINK_MS       = 350;
-    constexpr Timestamp BETWEEN_DIGITS_MS      = 1200;
-    constexpr Timestamp BETWEEN_CODES_MS       = 1500;
-    constexpr Timestamp END_PHASE_MS           = 2000;
+    constexpr Timestamp LOOP_INTERVAL_MS    = 64;
+    constexpr Timestamp SHORT_BLINK_MS      = 350;
+    constexpr Timestamp MEDIUM_BLINK_MS     = 500;
+    constexpr Timestamp LONG_BLINK_MS       = 1100;
+    constexpr Timestamp EXTRA_LONG_BLINK_MS = 1300;
 
     enum class LedControlCode : LedCodeType
     {
-        ON        = 0,
-        OFF       = 1,
-        FUNC_OK   = 100,
-        FUNC_FAIL = 101 // optional, used in Mock logger
+        ON      = 0,
+        OFF     = 1,
+        FUNC_OK = 100,
     };
 
     // Encoding bases
@@ -129,8 +119,6 @@ namespace pisco_code
                   "DEC max value mismatch");
     static_assert(limits_for(NumberBase::HEX).max_value == MAX_VALUE_HEX,
                   "HEX max value mismatch");
-
-    constexpr NumDigits MAX_DIGITS_ABSOLUTE = 31; // for int32_t in binary base
 
     constexpr LedLevel DEFAULT_DIMMED_LEVEL = 3;
     constexpr LedLevel PWM_MAX              = 15;

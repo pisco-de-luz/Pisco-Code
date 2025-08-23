@@ -54,12 +54,12 @@ namespace testutils
         std::optional<LedLevel>    expectedPulse{};
     };
 
-    struct CodeDigitInfo
-    {
-        bool                                     is_negative;
-        std::array<uint8_t, MAX_DIGITS_ABSOLUTE> digits;
-        uint8_t                                  first_nonzero_digit_index;
-    };
+    // struct CodeDigitInfo
+    // {
+    //     bool                                     is_negative;
+    //     std::array<uint8_t, MAX_DIGITS_ABSOLUTE> digits;
+    //     uint8_t                                  first_nonzero_digit_index;
+    // };
 
     // PatternOption — Digit composition strategies used in test generation.
     //
