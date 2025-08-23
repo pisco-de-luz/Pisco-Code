@@ -28,6 +28,10 @@ namespace pisco_code
         [[nodiscard]] bool hasMorePulse() const noexcept;
         [[nodiscard]] SignalPulseIterator createPulseIterator() const noexcept;
         SignalElement                     popNextSignalElement() noexcept;
+        [[nodiscard]] const SignalStack&  stack() const noexcept
+        {
+            return signal_stack_;
+        }
         // Placeholder for logic to populate based on number
         void loadSignalCode(SignalCode code, NumberBase base,
                             NumDigits min_digits = 0) noexcept;

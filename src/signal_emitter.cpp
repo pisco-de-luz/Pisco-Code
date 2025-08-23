@@ -4,6 +4,7 @@
 #include "led_controller.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
+#include "signal_element.hpp"
 #include "signal_sequencer.hpp"
 #include "signal_types.hpp"
 
@@ -11,7 +12,7 @@ namespace pisco_code
 {
 
     SignalEmitter::SignalEmitter(LedController* controller) :
-        controller_(controller)
+        controller_(controller), pulse_iterator_(sequencer_.stack())
     {
     }
 
@@ -26,6 +27,8 @@ namespace pisco_code
         sequencer_.clear();
         sequencer_.loadSignalCode(code, base, num_digits);
         sequencer_.setRepeatTimes(repeats);
+        pulse_iterator_ = sequencer_.createPulseIterator();
+
         is_negative_                = (code < 0);
         SignalCode value_to_display = code;
         if (is_negative_)
@@ -60,8 +63,8 @@ namespace pisco_code
         controller_->setDimmedLevel(dimmed_level_);
         controller_->setPeakLevel(peak_level_);
 
-        start_time_ = 0;
-        transitionTo(Phase::PAUSE_BEFORE_START);
+        current_phase_loop_ = PhaseLoop::STARTING;
+        // transitionTo(Phase::PAUSE_BEFORE_START);
         return true;
     }
 
@@ -70,13 +73,51 @@ namespace pisco_code
         if (controller_ == nullptr)
             return;
 
-        last_phase_entry_ = getPhaseEntry(current_phase_);
-        if (phaseElapsed(tick_counter))
+        // last_phase_entry_ = getPhaseEntry(current_phase_);
+
+        if (current_phase_loop_ == PhaseLoop::STARTING)
         {
-            start_time_ = tick_counter;
-            (this->*last_phase_entry_.handler)();
+            is_running_         = true;
+            start_time_         = tick_counter;
+            phase_duration_     = 0;
+            current_phase_loop_ = PhaseLoop::APPLYING_PULSE;
+        }
+
+        if (phaseElapsed(tick_counter) && is_running_)
+        {
+            if (pulse_iterator_.hasNext())
+            {
+                start_time_                 = tick_counter;
+                const SignalElement element = pulse_iterator_.next();
+                phase_duration_ =
+                    signalDurationToPhaseDuration(element.get_duration());
+                const auto level = element.get_level();
+                is_in_gap_level_ = (level == SignalLevel::GAP);
+                controller_->setBlinkMode(signalLevelToBlinkMode(level));
+                //(this->*last_phase_entry_.handler)();
+            }
+            else
+            {
+                is_running_         = false;
+                current_phase_loop_ = PhaseLoop::IDLE;
+            }
         }
         controller_->update();
+    }
+
+    bool SignalEmitter::phaseElapsed(TickCounter tick_counter) const
+    {
+        const auto elapsed =
+            static_cast<PhaseDuration>(tick_counter - start_time_);
+        const bool phase_done = elapsed > phase_duration_;
+
+        return phase_done && controller_->readyForPhaseChange();
+    }
+
+    bool SignalEmitter::isRunning() const
+    {
+        // return current_phase_ != Phase::IDLE;
+        return (is_running_ || current_phase_loop_ != PhaseLoop::IDLE);
     }
 
     SignalEmitter::PhaseTableEntry
@@ -124,20 +165,6 @@ namespace pisco_code
         }
     }
 
-    bool SignalEmitter::isRunning() const
-    {
-        return current_phase_ != Phase::IDLE;
-    }
-
-    bool SignalEmitter::phaseElapsed(TickCounter tick_counter) const
-    {
-        const auto elapsed =
-            static_cast<PhaseDuration>(tick_counter - start_time_);
-        const bool phase_done = elapsed > phase_duration_;
-
-        return phase_done && controller_->readyForPhaseChange();
-    }
-
     bool SignalEmitter::hasMoreBlinks() const
     {
         return blink_counts_[current_digit_index_] > 0;
@@ -161,17 +188,18 @@ namespace pisco_code
 
     bool SignalEmitter::isLedBeingUsedNow() const
     {
-        switch (current_phase_)
-        {
-            case Phase::PREPARE_REPEAT:
-            case Phase::PAUSE_AFTER_FINISH:
-            case Phase::IDLE:
-            case Phase::DISPLAY_ZERO:
-                // LED is not being used
-                return false;
-            default:
-                return true;
-        }
+        // switch (current_phase_)
+        // {
+        //     case Phase::PREPARE_REPEAT:
+        //     case Phase::PAUSE_AFTER_FINISH:
+        //     case Phase::IDLE:
+        //     case Phase::DISPLAY_ZERO:
+        //         // LED is not being used
+        //         return false;
+        //     default:
+        //         return true;
+        // }
+        return is_running_ && !is_in_gap_level_;
     }
 
     BlinkMode SignalEmitter::signalLevelToBlinkMode(SignalLevel level)

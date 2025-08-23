@@ -5,6 +5,8 @@
 #include "led_controller.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
+#include "signal_element.hpp"
+#include "signal_pulse_iterator.hpp"
 #include "signal_sequencer.hpp"
 #include "signal_types.hpp"
 
@@ -52,6 +54,13 @@ namespace pisco_code
         void handlePopNextSignalElement();
         void handleHasMorePulse();
         void handlePopNextPulse();
+
+        enum class PhaseLoop : PhaseType
+        {
+            STARTING = 0,
+            APPLYING_PULSE,
+            IDLE,
+        };
 
         enum class Phase : PhaseType
         {
@@ -212,10 +221,11 @@ namespace pisco_code
         PhaseTableEntry getPhaseEntry(Phase phase) const;
         void            transitionTo(Phase next);
         void pulseAs(Phase next, SignalLevel level, SignalDuration duration);
-        LedController*  controller_ = nullptr;
-        SignalSequencer sequencer_;
-        SignalElement   element_;
-        PhaseTableEntry last_phase_entry_ = {
+        LedController*      controller_ = nullptr;
+        SignalSequencer     sequencer_;
+        SignalPulseIterator pulse_iterator_;
+        SignalElement       element_;
+        PhaseTableEntry     last_phase_entry_ = {
             &SignalEmitter::handleIdle,
             SignalEmitter::Phase::IDLE,
             BlinkMode::NONE,
@@ -227,17 +237,17 @@ namespace pisco_code
         NumDigits digits_[MAX_DIGITS_ABSOLUTE]       = {};
         NumDigits max_digits_                        = 0;
 
-        RepeatTimes         repeats_total_     = 0;
-        mutable RepeatTimes repeats_remaining_ = 0;
-
-        TickCounter   start_time_     = 0;
-        PhaseDuration phase_duration_ = 0;
-        Phase         current_phase_  = Phase::IDLE;
-
-        bool     is_negative_ = false;
-        LedLevel peak_level_  = DEFAULT_PULSE_LEVEL;
-
-        LedLevel dimmed_level_ = DEFAULT_DIMMED_LEVEL;
+        RepeatTimes         repeats_total_      = 0;
+        mutable RepeatTimes repeats_remaining_  = 0;
+        TickCounter         start_time_         = 0;
+        PhaseDuration       phase_duration_     = 0;
+        Phase               current_phase_      = Phase::IDLE;
+        PhaseLoop           current_phase_loop_ = PhaseLoop::IDLE;
+        bool                is_negative_        = false;
+        bool                is_running_         = false;
+        bool                is_in_gap_level_    = false;
+        LedLevel            peak_level_         = DEFAULT_PULSE_LEVEL;
+        LedLevel            dimmed_level_       = DEFAULT_DIMMED_LEVEL;
     };
 
 } // namespace pisco_code
