@@ -27,11 +27,13 @@ struct TraceRepeatRule
     uint8_t    repeat_count{0};
 };
 
-constexpr std::array<TraceRepeatRule, 3> TRACE_REPEAT_RULES{{
-    {0, 1},    // 0–1100
-    {1101, 3}, // 1101–2200
-    {2201, 5}  // 2201+
-}};
+constexpr std::array<TraceRepeatRule, 3> TRACE_REPEAT_RULES{
+    {
+     {0, 1},    // 0–1100
+        {1101, 3}, // 1101–2200
+        {2201, 6}, // 2201+
+    }
+};
 
 class LedBlinkPattern
 {
@@ -40,11 +42,20 @@ class LedBlinkPattern
     void append(LedLevel level, DurationMs duration);
 
     [[nodiscard]] bool     isValid() const;
-    [[nodiscard]] LedLevel getDimmedLevel() const { return dimmed_level_; }
-    [[nodiscard]] LedLevel getPulseLevel() const { return pulse_level_; }
-    [[nodiscard]] const std::vector<LedLevelDuration>& getEvents() const { return led_events_; }
-    [[nodiscard]] std::string                          tracePatternToString() const;
-    [[nodiscard]] RepeatTimes                          getRepeatCount(DurationMs duration) const;
+    [[nodiscard]] LedLevel getDimmedLevel() const
+    {
+        return dimmed_level_;
+    }
+    [[nodiscard]] LedLevel getPulseLevel() const
+    {
+        return pulse_level_;
+    }
+    [[nodiscard]] const std::vector<LedLevelDuration>& getEvents() const
+    {
+        return led_events_;
+    }
+    [[nodiscard]] std::string tracePatternToString() const;
+    [[nodiscard]] RepeatTimes getRepeatCount(DurationMs duration) const;
 
   private:
     bool                          pattern_is_valid_{true};

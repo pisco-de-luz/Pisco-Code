@@ -24,14 +24,14 @@ TEST(LedBlinkPatternTests, ShouldOutputThreeCharactersForMediumDurations)
     STRCMP_EQUAL("---^^^___", pattern.tracePatternToString().c_str());
 }
 
-TEST(LedBlinkPatternTests, ShouldOutputFiveCharactersForLongDurations)
+TEST(LedBlinkPatternTests, ShouldOutputSixCharactersForLongDurations)
 {
     LedBlinkPattern pattern;
     pattern.append(3, 3000);
     pattern.append(10, 3000);
     pattern.append(0, 3000);
 
-    STRCMP_EQUAL("-----^^^^^_____", pattern.tracePatternToString().c_str());
+    STRCMP_EQUAL("------^^^^^^______", pattern.tracePatternToString().c_str());
 }
 
 TEST(LedBlinkPatternTests, ShouldReturnExclamationMarkIfInvalidPattern)
