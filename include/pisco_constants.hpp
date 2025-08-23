@@ -130,31 +130,6 @@ namespace pisco_code
     static_assert(limits_for(NumberBase::HEX).max_value == MAX_VALUE_HEX,
                   "HEX max value mismatch");
 
-    // // Compile‑time sanity checks
-    // static_assert(LIMITS_LUT[to_value(NumberBase::BIN)].max_value <=
-    // INT32_MAX,
-    //               "BIN range too large");
-    // static_assert(LIMITS_LUT[to_value(NumberBase::OCT)].max_value <=
-    // INT32_MAX,
-    //               "OCT range too large");
-    // static_assert(LIMITS_LUT[to_value(NumberBase::DEC)].max_value <=
-    // INT32_MAX,
-    //               "DEC range too large");
-    // static_assert(LIMITS_LUT[to_value(NumberBase::HEX)].max_value <=
-    // INT32_MAX,
-    //               "HEX range too large");
-
-    // // Compile-time checks to catch omissions
-    // static_assert(LIMITS_LUT[to_value(NumberBase::BIN)].max_digits > 0,
-    //               "Missing BIN max digits");
-    // static_assert(LIMITS_LUT[to_value(NumberBase::OCT)].max_digits > 0,
-    //               "Missing OCT max digits");
-    // static_assert(LIMITS_LUT[to_value(NumberBase::DEC)].max_digits > 0,
-    //               "Missing DEC max digits");
-    // static_assert(LIMITS_LUT[to_value(NumberBase::HEX)].max_digits > 0,
-    //               "Missing HEX max digits");
-
-    // Maximum number of digits that could be represented in the system
     constexpr NumDigits MAX_DIGITS_ABSOLUTE = 31; // for int32_t in binary base
 
     constexpr LedLevel DEFAULT_DIMMED_LEVEL = 3;
