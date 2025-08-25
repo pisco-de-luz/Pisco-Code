@@ -21,13 +21,13 @@ namespace pisco_code
         bool showCode(SignalCode code, NumberBase base, NumDigits num_digits,
                       RepeatTimes repeats);
         void loop(TickCounter tick_counter);
-        bool isRunning() const;
-        bool isLedBeingUsedNow() const;
-        void setPeakLevel(LedLevel level);
-        void setDimmedLevel(LedLevel level);
+        [[nodiscard]] bool isRunning() const;
+        [[nodiscard]] bool isLedBeingUsedNow() const;
+        void               setPeakLevel(LedLevel level);
+        void               setDimmedLevel(LedLevel level);
 
       private:
-        bool phaseElapsed(TickCounter tick_counter) const;
+        [[nodiscard]] bool phaseElapsed(TickCounter tick_counter) const;
 
         static BlinkMode signalLevelToBlinkMode(SignalLevel level);
         static PhaseDuration
