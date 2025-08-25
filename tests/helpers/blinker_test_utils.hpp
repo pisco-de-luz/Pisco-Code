@@ -136,7 +136,7 @@ namespace testutils
         const TraceCode actual_trace = logger.traceLogToString();
 
         // Check the trace log
-        if (testCase.trace_check == TraceCheck::Enforced)
+        if (testCase.trace_check == TraceCheck::ENFORCED)
         {
             STRCMP_EQUAL(expected_trace.c_str(), actual_trace.c_str());
         }

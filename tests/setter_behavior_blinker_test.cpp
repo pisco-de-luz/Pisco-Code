@@ -21,7 +21,7 @@ TEST_GROUP(SetterBehaviorBlinkerTest)
 TEST(SetterBehaviorBlinkerTest, ShouldUseDefaultPwmLevel)
 {
     const TestBlinkerCase test_case{
-        .trace_check   = TraceCheck::NotEnforced,
+        .trace_check   = TraceCheck::NOT_ENFORCED,
         .expectedPulse = DEFAULT_PULSE_LEVEL,
     };
 
@@ -33,7 +33,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldUseCustomPwmLevel)
 
     blinker.setPeakLevel(MID_PULSE_LEVEL);
     const TestBlinkerCase test_case{
-        .trace_check   = TraceCheck::NotEnforced,
+        .trace_check   = TraceCheck::NOT_ENFORCED,
         .expectedPulse = MID_PULSE_LEVEL,
     };
 
@@ -44,7 +44,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighPwmLevel)
 {
     blinker.setPeakLevel(TOO_HIGH_PULSE_LEVEL);
     const TestBlinkerCase test_case{
-        .trace_check   = TraceCheck::NotEnforced,
+        .trace_check   = TraceCheck::NOT_ENFORCED,
         .expectedPulse = HIGHEST_PULSE_LEVEL,
     };
 
@@ -55,7 +55,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldRejectSlightHighPwmLevel)
 {
     blinker.setPeakLevel(HIGHEST_PULSE_LEVEL + 1);
     const TestBlinkerCase test_case{
-        .trace_check   = TraceCheck::NotEnforced,
+        .trace_check   = TraceCheck::NOT_ENFORCED,
         .expectedPulse = HIGHEST_PULSE_LEVEL,
     };
 
@@ -65,7 +65,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldRejectSlightHighPwmLevel)
 TEST(SetterBehaviorBlinkerTest, ShouldUseDefaultDimmedLevel)
 {
     const TestBlinkerCase test_case{
-        .trace_check    = TraceCheck::NotEnforced,
+        .trace_check    = TraceCheck::NOT_ENFORCED,
         .expectedDimmed = DEFAULT_DIMMED_LEVEL,
     };
 
@@ -77,7 +77,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldUseCustomDimmedLevel)
 
     blinker.setDimmedLevel(MID_DIMMED_LEVEL);
     const TestBlinkerCase test_case{
-        .trace_check    = TraceCheck::NotEnforced,
+        .trace_check    = TraceCheck::NOT_ENFORCED,
         .expectedDimmed = MID_DIMMED_LEVEL,
     };
 
@@ -89,21 +89,22 @@ TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighDimmedLevel)
 {
     blinker.setDimmedLevel(TOO_HIGH_DIMMED_LEVEL);
     const TestBlinkerCase test_case{
-        .trace_check    = TraceCheck::NotEnforced,
+        .trace_check    = TraceCheck::NOT_ENFORCED,
         .expectedDimmed = HIGHEST_DIMMED_LEVEL,
     };
 
     checkBlinkerBehavior(blinker, logger, test_case);
 }
 
-TEST(SetterBehaviorBlinkerTest, ShouldNotAffectDefaultPulseLevelWhenSettingDimmedLevel)
+TEST(SetterBehaviorBlinkerTest,
+     ShouldNotAffectDefaultPulseLevelWhenSettingDimmedLevel)
 {
     for (auto led_level : ALL_DIMMED_LEVELS)
     {
         blinker.setDimmedLevel(led_level);
 
         const TestBlinkerCase test_case{
-            .trace_check   = TraceCheck::NotEnforced,
+            .trace_check   = TraceCheck::NOT_ENFORCED,
             .expectedPulse = DEFAULT_PULSE_LEVEL,
         };
 
@@ -111,14 +112,15 @@ TEST(SetterBehaviorBlinkerTest, ShouldNotAffectDefaultPulseLevelWhenSettingDimme
     }
 }
 
-TEST(SetterBehaviorBlinkerTest, ShouldNotAffecLowestDimmedLevelWhenSettingPulseLevel)
+TEST(SetterBehaviorBlinkerTest,
+     ShouldNotAffecLowestDimmedLevelWhenSettingPulseLevel)
 {
     for (auto led_level : ALL_PULSE_LEVELS)
     {
         blinker.setPeakLevel(led_level);
         blinker.setDimmedLevel(LOWEST_DIMMED_LEVEL);
         const TestBlinkerCase test_case{
-            .trace_check    = TraceCheck::NotEnforced,
+            .trace_check    = TraceCheck::NOT_ENFORCED,
             .expectedDimmed = LOWEST_DIMMED_LEVEL,
         };
 
@@ -130,7 +132,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldPadWithLeadingZeros)
 {
     const TestBlinkerCase test_case{
         .blink_code  = CODE_0010,
-        .trace_check = TraceCheck::Enforced,
+        .trace_check = TraceCheck::ENFORCED,
         .numDigits   = 4,
     };
 
@@ -141,7 +143,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldNotPadIfNotNeeded)
 {
     const TestBlinkerCase test_case{
         .blink_code  = CODE_12345,
-        .trace_check = TraceCheck::Enforced,
+        .trace_check = TraceCheck::ENFORCED,
         .numDigits   = 5,
     };
 
@@ -152,7 +154,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldTruncateToNumDigits)
 {
     const TestBlinkerCase test_case{
         .blink_code  = CODE_12345_TRUNCATED_TO_2_DIGITS,
-        .trace_check = TraceCheck::Enforced,
+        .trace_check = TraceCheck::ENFORCED,
         .numDigits   = 2,
     };
 
@@ -163,7 +165,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighNumDigits)
 {
     const NumDigits       max_digits = max_digits_for_base(NumberBase::DEC);
     const TestBlinkerCase test_case{
-        .trace_check = TraceCheck::Enforced,
+        .trace_check = TraceCheck::ENFORCED,
         .numDigits   = max_digits + 1,
     };
 
@@ -173,7 +175,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighNumDigits)
 TEST(SetterBehaviorBlinkerTest, ShouldRejectTooLowNumDigits)
 {
     const TestBlinkerCase test_case{
-        .trace_check = TraceCheck::Enforced,
+        .trace_check = TraceCheck::ENFORCED,
         .numDigits   = 0,
     };
 
@@ -184,7 +186,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldHandleSingleDigitZero)
 {
     const TestBlinkerCase test_case{
         .blink_code  = CODE_0,
-        .trace_check = TraceCheck::Enforced,
+        .trace_check = TraceCheck::ENFORCED,
     };
 
     checkBlinkerBehavior(blinker, logger, test_case);

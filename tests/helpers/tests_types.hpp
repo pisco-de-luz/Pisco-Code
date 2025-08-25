@@ -11,10 +11,13 @@ using namespace pisco_code;
 namespace testutils
 {
 
-    using TraceCode     = std::string;
-    using TraceStrIndex = int16_t;
-    using Index         = int32_t;
-    using Counter       = int32_t;
+    using TraceCode         = std::string;
+    using TraceStrIndex     = int16_t;
+    using Index             = int32_t;
+    using Counter           = int32_t;
+    using PatternOptionType = uint8_t;
+    using TraceCheckType    = uint8_t;
+    using LedLevelType      = uint8_t;
 
     struct LedLevelDuration
     {
@@ -24,17 +27,17 @@ namespace testutils
 
     struct TraceRepeatRule
     {
-        Timestamp min_duration;
-        uint8_t   repeat_count;
+        Timestamp   min_duration{0};
+        RepeatTimes repeat_count{0};
     };
 
-    enum class TraceCheck
+    enum class TraceCheck : TraceCheckType
     {
-        NotEnforced,
-        Enforced,
+        NOT_ENFORCED,
+        ENFORCED,
     };
 
-    enum class LedEvent : uint8_t
+    enum class LedEvent : LedLevelType
     {
         Invalid,
         On,
@@ -54,13 +57,6 @@ namespace testutils
         std::optional<LedLevel>    expectedPulse{};
     };
 
-    // struct CodeDigitInfo
-    // {
-    //     bool                                     is_negative;
-    //     std::array<uint8_t, MAX_DIGITS_ABSOLUTE> digits;
-    //     uint8_t                                  first_nonzero_digit_index;
-    // };
-
     // PatternOption — Digit composition strategies used in test generation.
     //
     // SequencialUp
@@ -74,7 +70,7 @@ namespace testutils
     //
     // SameDigit (use the digit value parameter to determine the digit)
     // - Example: 9, 88, 777, ..., 111111111
-    enum class PatternOption
+    enum class PatternOption : PatternOptionType
     {
         SequencialUp,
         SequencialDown,
