@@ -4,7 +4,6 @@
 #include "pisco_types.hpp"
 #include "signal_element.hpp"
 #include "signal_pulse_iterator.hpp"
-#include "signal_types.hpp"
 
 namespace pisco_code
 {
