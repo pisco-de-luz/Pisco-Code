@@ -10,7 +10,6 @@
 using namespace pisco_code;
 namespace testutils
 {
-
     using TraceCode         = std::string;
     using TraceStrIndex     = int16_t;
     using Index             = int32_t;
@@ -43,7 +42,7 @@ namespace testutils
         ON,
         OFF,
         FUNC_OK,
-        FUNC_FAIL
+        FUNC_FAIL,
     };
 
     struct TestBlinkerCase
@@ -59,27 +58,27 @@ namespace testutils
 
     // PatternOption — Digit composition strategies used in test generation.
     //
-    // SequencialUp
+    // SEQUENCIAL_UP
     // - Example: 1, 12, 123, 1234, ..., 123456789
     //
-    // SequencialDown
+    // SEQUENCIAL_DOWN
     // - Example: 1, 21, 321, 4321, ..., 987654321
     //
-    // DescendingFromMax (use the base-1 value to determine the max digit)
+    // DESCENDING_FROM_MAX (use the base-1 value to determine the max digit)
     // - Example: 9, 98, 987, 9876, ..., 987654321
     //
-    // SameDigit (use the digit value parameter to determine the digit)
+    // SAME_DIGIT (use the digit value parameter to determine the digit)
     // - Example: 9, 88, 777, ..., 111111111
     enum class PatternOption : PatternOptionType
     {
-        SequencialUp,
-        SequencialDown,
-        DescendingFromMax,
-        SameDigit,
+        SEQUENCIAL_UP,
+        SEQUENCIAL_DOWN,
+        DESCENDING_FROM_MAX,
+        SAME_DIGIT,
     };
     struct GeneratePatternParams
     {
-        PatternOption pattern{PatternOption::SequencialUp};
+        PatternOption pattern{PatternOption::SEQUENCIAL_UP};
         NumberBase    number_base{NumberBase::DEC};
         NumDigits     num_digits{};
         DigitValue    digit{0};

@@ -162,10 +162,10 @@ namespace testutils
         const auto base_value   = to_value(params.number_base);
 
         PatternOption pattern_to_use = params.pattern;
-        if (params.pattern == PatternOption::SequencialDown &&
+        if (params.pattern == PatternOption::SEQUENCIAL_DOWN &&
             params.num_digits >= base_value)
         {
-            pattern_to_use = PatternOption::DescendingFromMax;
+            pattern_to_use = PatternOption::DESCENDING_FROM_MAX;
         }
 
         for (Counter i = 0; i < params.num_digits; ++i)
@@ -174,20 +174,20 @@ namespace testutils
 
             switch (pattern_to_use)
             {
-                case PatternOption::SequencialUp:
+                case PatternOption::SEQUENCIAL_UP:
                     digit_to_show = (i + 1) % base_value;
                     break;
 
-                case PatternOption::SequencialDown:
+                case PatternOption::SEQUENCIAL_DOWN:
                     digit_to_show = (params.num_digits - i) % base_value;
                     break;
 
-                case PatternOption::DescendingFromMax:
+                case PatternOption::DESCENDING_FROM_MAX:
                     digit_to_show = static_cast<DigitValue>(
                         (base_value - 1 - (i % base_value)));
                     break;
 
-                case PatternOption::SameDigit:
+                case PatternOption::SAME_DIGIT:
                     digit_to_show = params.digit;
                     break;
 
