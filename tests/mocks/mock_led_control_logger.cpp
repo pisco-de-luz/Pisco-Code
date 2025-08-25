@@ -1,13 +1,5 @@
 #include "mock_led_control_logger.hpp"
 
-#include <algorithm>
-#include <cstdint>
-#include <cstdio>
-#include <iomanip>
-#include <map>
-#include <string>
-#include <vector>
-
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 #include "tests_types.hpp"
@@ -119,17 +111,16 @@ MockLedControlLogger::setTraceResolution(Timestamp resolutionMs)
     traceResolutionMs_ = resolutionMs;
 }
 
-std::string
+testutils::TraceCode
 MockLedControlLogger::traceLogToString() const
 {
-    std::string result{""};
-    Timestamp   next_duty_cycle_timestamp{0};
-    uint8_t     last_pwm_level{0};
-    Timestamp   last_timestamp_pwm_level_changed{0};
-    DurationMs  duration_without_pwm_changed{0};
-    std::string token;
-    led_blink_pattern_.reset();
+    testutils::TraceCode result;
+    Timestamp            next_duty_cycle_timestamp{0};
+    LedLevel             last_pwm_level{0};
+    Timestamp            last_timestamp_pwm_level_changed{0};
+    DurationMs           duration_without_pwm_changed{0};
 
+    led_blink_pattern_.reset();
     for (const auto& event : events_)
     {
         if (event.state == testutils::LedEvent::ON &&
@@ -140,7 +131,7 @@ MockLedControlLogger::traceLogToString() const
         const Timestamp next_timestamp_event = event.timestamp + event.duration;
         while (next_duty_cycle_timestamp < next_timestamp_event)
         {
-            uint8_t pwm_level{0};
+            LedLevel pwm_level{0};
             if (event.state == testutils::LedEvent::ON)
             {
                 pwm_level = event.duration;

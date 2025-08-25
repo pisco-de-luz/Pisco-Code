@@ -27,25 +27,25 @@ class MockLedControlLogger
     MockLedControlLogger();
     void setBlinker(SignalEmitter* blinker);
 
-    void                               setTime(Timestamp currTime);
-    bool                               handle(uint8_t ctrlLED);
-    void                               clear();
-    const std::vector<LedStateChange>& getEvents() const;
-    void                               flush();
-    void     setTraceResolution(Timestamp resolutionMs); // default: 100
-    LedLevel getDimmedLevel() const
+    void setTime(Timestamp currTime);
+    bool handle(uint8_t ctrlLED);
+    void clear();
+    [[nodiscard]] const std::vector<LedStateChange>& getEvents() const;
+    void                                             flush();
+    void setTraceResolution(Timestamp resolutionMs); // default: 100
+    [[nodiscard]] LedLevel getDimmedLevel() const
     {
         return led_blink_pattern_.getDimmedLevel();
     }
-    LedLevel getPulseLevel() const
+    [[nodiscard]] LedLevel getPulseLevel() const
     {
         return led_blink_pattern_.getPulseLevel();
     }
 
-    std::string traceLogToString() const;
+    [[nodiscard]] testutils::TraceCode traceLogToString() const;
 
   private:
-    void                        log(testutils::LedEvent ev);
+    void                        log(testutils::LedEvent ledEvent);
     Timestamp                   currentTime_{0};
     Timestamp                   lastTime_{0};
     DurationMs                  duration_{1};
