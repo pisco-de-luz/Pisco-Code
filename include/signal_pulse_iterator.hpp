@@ -1,11 +1,9 @@
 #pragma once
 
-#include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 #include "signal_element.hpp"
 #include "signal_element_iterator.hpp"
 #include "signal_stack.hpp"
-#include "signal_types.hpp"
 
 namespace pisco_code
 {
@@ -118,7 +116,7 @@ namespace pisco_code
         SignalStack           symbols_;
         SignalElementIterator element_iterator_{SIGNAL_ELEMENT_NOT_DEFINED};
         SignalElement         current_symbol_{SIGNAL_ELEMENT_NOT_DEFINED};
-        Counter               symbol_remaining_{0};
+        Index                 symbol_remaining_{0};
         bool                  need_inter_symbol_{false};
         Phase                 current_phase_{Phase::LEADING_FRAME};
         [[nodiscard]] bool    allPulsesProcessed() const noexcept
