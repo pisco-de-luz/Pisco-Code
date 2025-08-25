@@ -26,8 +26,8 @@ namespace testutils
     constexpr const char* PEAK_LUT[]   = {"^", "^^", "^^^", "^^^^^^"};
 
     // Returns a pointer to a static string literal (no dynamic allocation)
-    [[nodiscard]] inline TraceCode
-    to_trace_code(SignalLevel level, SignalDuration duration) noexcept
+    [[nodiscard]] inline TraceCode toTraceCode(SignalLevel    level,
+                                               SignalDuration duration) noexcept
     {
         const auto duration_value = to_value(duration);
 
@@ -109,7 +109,7 @@ namespace testutils
             {
                 auto element = pulse_iterator.next();
                 trace +=
-                    to_trace_code(element.get_level(), element.get_duration());
+                    toTraceCode(element.get_level(), element.get_duration());
             }
         }
 
