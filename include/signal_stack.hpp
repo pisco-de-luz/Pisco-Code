@@ -16,13 +16,13 @@ namespace pisco_code
         [[nodiscard]] bool          isEmpty() const noexcept;
         [[nodiscard]] bool          isFull() const noexcept;
         [[nodiscard]] SignalElement pop() noexcept;
-        [[nodiscard]] Counter       size() const noexcept;
+        [[nodiscard]] Index         size() const noexcept;
         void                        clear() noexcept;
         void                        rewind() noexcept;
 
       private:
         SignalElement signal_elements_[MAX_SIGNAL_ELEMENTS]{};
-        Counter       count_{0};
+        Index         count_{0};
         Index         read_index_{0};
     };
 } // namespace pisco_code

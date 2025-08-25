@@ -1,13 +1,12 @@
 #include "signal_stack.hpp"
 
-#include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 #include "signal_element.hpp"
 #include "signal_types.hpp"
 
 namespace pisco_code
 {
-    [[nodiscard]] Counter SignalStack::size() const noexcept
+    [[nodiscard]] Index SignalStack::size() const noexcept
     {
         return count_;
     }
@@ -50,7 +49,8 @@ namespace pisco_code
     {
         if (!isEmpty())
         {
-            return signal_elements_[MAX_SIGNAL_ELEMENTS - count_ + read_index_++];
+            return signal_elements_[MAX_SIGNAL_ELEMENTS - count_ +
+                                    read_index_++];
         }
         return SIGNAL_ELEMENT_NOT_DEFINED;
     }
