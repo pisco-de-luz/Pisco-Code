@@ -1,17 +1,11 @@
 #include "CppUTest/TestHarness.h"
 
-#include <cstdint>
-#include <iostream>
-
 #include "helpers/blinker_test_utils.hpp"
 #include "helpers/test_patterns_common.hpp"
 #include "mocks/mock_led_control_logger.hpp"
 #include "mocks/mock_led_controller_adapter.hpp"
 #include "pisco_constants.hpp"
-#include "pisco_types.hpp"
 #include "signal_emitter.hpp"
-#include "tests_constants.hpp"
-#include "tests_types.hpp"
 
 using namespace pisco_code;
 
@@ -32,34 +26,46 @@ TEST(BinarySystematicHighLevelTests, ShouldBlinkSequentialUpDigitsUpToMaxDigits)
     runSequentialUpDigitsUpToMaxDigitsForBase(NumberBase::BIN, blinker, logger);
 }
 
-TEST(BinarySystematicHighLevelTests, ShouldBlinkSequentialDownDigitsUpToMaxDigits)
+TEST(BinarySystematicHighLevelTests,
+     ShouldBlinkSequentialDownDigitsUpToMaxDigits)
 {
-    runSequentialDownDigitsUpToMaxDigitsForBase(NumberBase::BIN, blinker, logger);
+    runSequentialDownDigitsUpToMaxDigitsForBase(NumberBase::BIN, blinker,
+                                                logger);
 }
 
-TEST(BinarySystematicHighLevelTests, ShouldBlinkSequentialDigitsUpToMaxDigitsPaddedToMaxDigits)
+TEST(BinarySystematicHighLevelTests,
+     ShouldBlinkSequentialDigitsUpToMaxDigitsPaddedToMaxDigits)
 {
-    runSequentialDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase::BIN, blinker, logger);
+    runSequentialDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase::BIN,
+                                                             blinker, logger);
 }
 
-TEST(BinarySystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedToMaxDigits)
+TEST(BinarySystematicHighLevelTests,
+     ShouldBlinkSameDigitsUpToMaxDigitsPaddedToMaxDigits)
 {
-    runSameDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase::BIN, blinker, logger);
+    runSameDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase::BIN, blinker,
+                                                       logger);
 }
 
-TEST(BinarySystematicHighLevelTests, ShouldBlinkSequentialDigitsUpToMaxDigitsPaddedToHalfMaxDigits)
+TEST(BinarySystematicHighLevelTests,
+     ShouldBlinkSequentialDigitsUpToMaxDigitsPaddedToHalfMaxDigits)
 {
-    runSequentialDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(NumberBase::BIN, blinker, logger);
+    runSequentialDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(
+        NumberBase::BIN, blinker, logger);
 }
 
-TEST(BinarySystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedToHalfMaxDigits)
+TEST(BinarySystematicHighLevelTests,
+     ShouldBlinkSameDigitsUpToMaxDigitsPaddedToHalfMaxDigits)
 {
-    runSameDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(NumberBase::BIN, blinker, logger);
+    runSameDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(NumberBase::BIN,
+                                                           blinker, logger);
 }
 
 // Ignored due to long runtime from many full-digit blink sequences.
 // Useful for stress/regression tests, not routine execution.
-IGNORE_TEST(BinarySystematicHighLevelTests, ShouldBlinkSameMaxBaseDigitUpToMaxDigitsNineTimes)
+IGNORE_TEST(BinarySystematicHighLevelTests,
+            ShouldBlinkSameMaxBaseDigitUpToMaxDigitsNineTimes)
 {
-    runSameMaxBaseDigitUpToMaxDigitsNineTimesForBase(NumberBase::BIN, blinker, logger);
+    runSameMaxBaseDigitUpToMaxDigitsNineTimesForBase(NumberBase::BIN, blinker,
+                                                     logger);
 }
