@@ -1,8 +1,6 @@
 #pragma once
 
 #include <cstdint>
-#include <optional>
-#include <string>
 
 #include "mock_led_control_logger.hpp"
 #include "pisco_constants.hpp"
@@ -34,8 +32,9 @@ namespace testutils
         const auto duration_value = to_value(duration);
 
         if (duration_value >= 4)
+        {
             return ""; // fail-safe: invalid duration
-
+        }
         switch (level)
         {
             case SignalLevel::GAP:
@@ -117,52 +116,18 @@ namespace testutils
         return trace;
     }
 
-    // inline TraceCode generateExpectedTrace(SignalCode code, NumberBase base,
-    //                                        NumDigits   num_digits = 0,
-    //                                        RepeatTimes repeats    = 1)
-    // {
-    //     SignalSequencer sequencer;
-    //     sequencer.loadSignalCode(code, base, num_digits);
-    //     sequencer.setRepeatTimes(repeats);
-    //     TraceCode trace = to_trace_code(SignalLevel::GAP,
-    //     SignalDuration::LONG); while
-    //     (sequencer.hasMoreSignalCodeToSequence())
-    //     {
-    //         sequencer.popNextCodeToSequence();
-    //         trace += to_trace_code(SignalLevel::MIDDLE,
-    //         SignalDuration::LONG);
-    //         ;
-    //         while (sequencer.hasMoreSignalElements())
-    //         {
-    //             auto element = sequencer.popNextSignalElement();
-    //             while (sequencer.hasMorePulse())
-    //             {
-    //                 sequencer.popNextPulse();
-    //                 trace += to_trace_code(element.get_level(),
-    //                                        element.get_duration());
-    //                 trace += to_trace_code(SignalLevel::MIDDLE,
-    //                                        SignalDuration::SHORT);
-    //             }
-    //             trace +=
-    //                 to_trace_code(SignalLevel::MIDDLE,
-    //                 SignalDuration::MEDIUM);
-    //         }
-    //         trace += to_trace_code(SignalLevel::GAP, SignalDuration::LONG);
-    //     }
-    //     return trace;
-    // }
-
     // Check the behavior of the blinker against the expected values.
     inline void checkBlinkerBehavior(SignalEmitter&         blinker,
                                      MockLedControlLogger&  logger,
                                      const TestBlinkerCase& testCase)
     {
-        SignalCode code_to_show = testCase.blink_code.value_or(DEFAULT_CODE);
+        const SignalCode code_to_show =
+            testCase.blink_code.value_or(DEFAULT_CODE);
         const NumDigits   num_digits = testCase.numDigits.value_or(0);
         const RepeatTimes repeats    = testCase.repeats.value_or(1);
         const NumberBase  base = testCase.number_base.value_or(NumberBase::DEC);
 
-        TraceCode expected_trace =
+        const TraceCode expected_trace =
             generateExpectedTrace(code_to_show, base, num_digits, repeats);
 
         blinker.showCode(code_to_show, base, num_digits, repeats);
