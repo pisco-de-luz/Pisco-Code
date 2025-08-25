@@ -1,5 +1,4 @@
-#ifndef SOFTWARE_PWM_LED_CONTROLLER_HPP
-#define SOFTWARE_PWM_LED_CONTROLLER_HPP
+#pragma once
 
 #include "led_controller.hpp"
 #include "pisco_constants.hpp"
@@ -28,5 +27,3 @@ namespace pisco_code
     };
 
 } // namespace pisco_code
-
-#endif // SOFTWARE_PWM_LED_CONTROLLER_HPP
