@@ -72,11 +72,10 @@ namespace pisco_code
             const DigitValue digit = to_digit(abs_code % base_val);
             abs_code /= base_val;
 
-            signal_stack_.push(digit == 0 ? SIGNAL_ELEMENT_ZERO
-                                          : signal_element_digit(digit));
+            signal_stack_.push(signal_element_from_digit(digit));
             ++digit_count;
 
-            if (!(abs_code > 0 && digit_count < max_digits_to_show))
+            if (abs_code == 0 || digit_count >= max_digits_to_show)
             {
                 break;
             }

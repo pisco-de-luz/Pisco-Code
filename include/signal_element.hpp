@@ -57,10 +57,17 @@ namespace pisco_code
         SignalLevel::MIDDLE, 1, SignalDuration::SHORT};
     inline constexpr SignalElement SIGNAL_ELEMENT_DIGIT{SignalLevel::PEAK, 1,
                                                         SignalDuration::SHORT};
-    constexpr auto signal_element_digit(SignalTimesType digit_value) noexcept
+
+    constexpr auto signal_element_digit(DigitValue digit) noexcept
     {
-        return SignalElement(SignalLevel::PEAK, digit_value,
-                             SignalDuration::SHORT);
+        return SignalElement(SignalLevel::PEAK, digit, SignalDuration::SHORT);
+    }
+    [[nodiscard]] constexpr SignalElement
+    signal_element_from_digit(DigitValue digit) noexcept
+    {
+        return (digit == 0)
+                   ? SIGNAL_ELEMENT_ZERO
+                   : signal_element_digit(static_cast<SignalTimesType>(digit));
     }
 
     static_assert(sizeof(SignalElement) == 1,
