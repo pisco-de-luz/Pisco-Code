@@ -1,17 +1,12 @@
 #include "CppUTest/TestHarness.h"
 
-#include <cstdint>
-#include <iostream>
-
 #include "helpers/blinker_test_utils.hpp"
 #include "helpers/test_patterns_common.hpp"
 #include "mocks/mock_led_control_logger.hpp"
 #include "mocks/mock_led_controller_adapter.hpp"
 #include "pisco_constants.hpp"
-#include "pisco_types.hpp"
 #include "signal_emitter.hpp"
 #include "tests_constants.hpp"
-#include "tests_types.hpp"
 
 using namespace pisco_code;
 
@@ -32,34 +27,46 @@ TEST(OctalSystematicHighLevelTests, ShouldBlinkSequentialUpDigitsUpToMaxDigits)
     runSequentialUpDigitsUpToMaxDigitsForBase(NumberBase::OCT, blinker, logger);
 }
 
-TEST(OctalSystematicHighLevelTests, ShouldBlinkSequentialDownDigitsUpToMaxDigits)
+TEST(OctalSystematicHighLevelTests,
+     ShouldBlinkSequentialDownDigitsUpToMaxDigits)
 {
-    runSequentialDownDigitsUpToMaxDigitsForBase(NumberBase::OCT, blinker, logger);
+    runSequentialDownDigitsUpToMaxDigitsForBase(NumberBase::OCT, blinker,
+                                                logger);
 }
 
-TEST(OctalSystematicHighLevelTests, ShouldBlinkSequentialDigitsUpToMaxDigitsPaddedToMaxDigits)
+TEST(OctalSystematicHighLevelTests,
+     ShouldBlinkSequentialDigitsUpToMaxDigitsPaddedToMaxDigits)
 {
-    runSequentialDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase::OCT, blinker, logger);
+    runSequentialDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase::OCT,
+                                                             blinker, logger);
 }
 
-TEST(OctalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedToMaxDigits)
+TEST(OctalSystematicHighLevelTests,
+     ShouldBlinkSameDigitsUpToMaxDigitsPaddedToMaxDigits)
 {
-    runSameDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase::OCT, blinker, logger);
+    runSameDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase::OCT, blinker,
+                                                       logger);
 }
 
-TEST(OctalSystematicHighLevelTests, ShouldBlinkSequentialDigitsUpToMaxDigitsPaddedToHalfMaxDigits)
+TEST(OctalSystematicHighLevelTests,
+     ShouldBlinkSequentialDigitsUpToMaxDigitsPaddedToHalfMaxDigits)
 {
-    runSequentialDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(NumberBase::OCT, blinker, logger);
+    runSequentialDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(
+        NumberBase::OCT, blinker, logger);
 }
 
-TEST(OctalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigitsPaddedToHalfMaxDigits)
+TEST(OctalSystematicHighLevelTests,
+     ShouldBlinkSameDigitsUpToMaxDigitsPaddedToHalfMaxDigits)
 {
-    runSameDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(NumberBase::OCT, blinker, logger);
+    runSameDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(NumberBase::OCT,
+                                                           blinker, logger);
 }
 
 // Ignored due to long runtime from many full-digit blink sequences.
 // Useful for stress/regression tests, not routine execution.
-IGNORE_TEST(OctalSystematicHighLevelTests, ShouldBlinkSameMaxBaseDigitUpToMaxDigitsNineTimes)
+IGNORE_TEST(OctalSystematicHighLevelTests,
+            ShouldBlinkSameMaxBaseDigitUpToMaxDigitsNineTimes)
 {
-    runSameMaxBaseDigitUpToMaxDigitsNineTimesForBase(NumberBase::OCT, blinker, logger);
+    runSameMaxBaseDigitUpToMaxDigitsNineTimesForBase(NumberBase::OCT, blinker,
+                                                     logger);
 }
