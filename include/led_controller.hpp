@@ -13,6 +13,7 @@ namespace pisco_code
         DIMMED
     };
 
+    // NOLINT(cppcoreguidelines-special-member-functions)
     class LedController
     {
       public:
@@ -21,6 +22,14 @@ namespace pisco_code
         virtual void               update()                             = 0;
         [[nodiscard]] virtual bool readyForPhaseChange() const noexcept = 0;
         virtual void               setBlinkMode(BlinkMode mode)         = 0;
+
+      protected:
+        LedController()                                = default;
+        LedController(const LedController&)            = default;
+        LedController& operator=(const LedController&) = default;
+        LedController(LedController&&)                 = default;
+        LedController& operator=(LedController&&)      = default;
+        ~LedController()                               = default;
     };
 
 } // namespace pisco_code

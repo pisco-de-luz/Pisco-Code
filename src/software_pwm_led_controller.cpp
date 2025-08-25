@@ -1,21 +1,19 @@
 #include "software_pwm_led_controller.hpp"
 
+#include "led_controller.hpp"
 #include "pisco_constants.hpp"
+#include "pisco_types.hpp"
+
 namespace pisco_code
 {
 
     SoftwarePwmLedController::SoftwarePwmLedController() :
-        peak_level_(PWM_MAX), dimmed_level_(0), led_control_(nullptr)
+        peak_level_(PWM_MAX), dimmed_level_(0)
     {
     }
     SoftwarePwmLedController::SoftwarePwmLedController(
         bool (*led_func)(LedCodeType)) : led_control_(led_func)
     {
-    }
-
-    SoftwarePwmLedController::~SoftwarePwmLedController()
-    {
-        led_control_ = nullptr;
     }
 
     void

@@ -7,14 +7,12 @@
 
 namespace pisco_code
 {
-    class SoftwarePwmLedController : public LedController
+    class SoftwarePwmLedController final : public LedController
     {
       public:
         explicit SoftwarePwmLedController(bool (*led_func)(LedCodeType));
         explicit SoftwarePwmLedController();
-        ~SoftwarePwmLedController();
-        void attachLedControl(bool (*led_func)(LedCodeType));
-
+        void               attachLedControl(bool (*led_func)(LedCodeType));
         void               setPeakLevel(LedLevel level) override;
         void               setDimmedLevel(LedLevel level) override;
         void               setBlinkMode(BlinkMode mode) override;
