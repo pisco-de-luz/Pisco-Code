@@ -49,14 +49,12 @@ namespace pisco_code
     void SignalSequencer::loadSignalCode(SignalCode code, NumberBase base,
                                          NumDigits num_digits) noexcept
     {
-        signal_stack_.clear();
-
-        const DigitValue base_val = to_value(base);
         if (!base_supported(base) || !isCodeInRange(base, code))
         {
             return;
         }
 
+        signal_stack_.clear();
         const bool is_negative = (code < 0);
         SignalCode abs_code    = is_negative ? -code : code;
 
@@ -66,7 +64,8 @@ namespace pisco_code
         const NumDigits max_digits_to_show =
             is_num_digits_valid ? num_digits : max_digits;
 
-        NumDigits digit_count = 0;
+        const DigitValue base_val    = to_value(base);
+        NumDigits        digit_count = 0;
         for (;;)
         {
             const DigitValue digit = to_digit(abs_code % base_val);
