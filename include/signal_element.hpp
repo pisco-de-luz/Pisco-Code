@@ -17,7 +17,7 @@ namespace pisco_code
         {
         }
 
-        constexpr SignalElement(SignalLevel lvl, Counter cnt,
+        constexpr SignalElement(SignalLevel lvl, SignalTimesType cnt,
                                 SignalDuration dur) noexcept :
             level_(to_value(lvl)), times_(cnt), duration_(to_value(dur))
         {
@@ -31,9 +31,9 @@ namespace pisco_code
         {
             return static_cast<SignalDuration>(duration_);
         }
-        [[nodiscard]] constexpr Counter get_times() const noexcept
+        [[nodiscard]] constexpr SignalTimesType get_times() const noexcept
         {
-            return static_cast<Counter>(times_);
+            return static_cast<SignalTimesType>(times_);
         }
 
       private:
