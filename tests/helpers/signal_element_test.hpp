@@ -5,32 +5,35 @@
 #include "signal_sequencer.hpp"
 #include "signal_types.hpp"
 #include "tests_constants.hpp"
-#include "tests_types.hpp"
 
 namespace pisco_code
 {
     // Equality for tests
-    inline bool operator==(const SignalElement& a,
-                           const SignalElement& b) noexcept
+    inline bool operator==(const SignalElement& element_a,
+                           const SignalElement& element_b) noexcept
     {
-        return to_value(a.get_level()) == to_value(b.get_level()) &&
-               to_value(a.get_duration()) == to_value(b.get_duration()) &&
-               to_value(a.get_times()) == to_value(b.get_times());
+        return to_value(element_a.get_level()) ==
+                   to_value(element_b.get_level()) &&
+               to_value(element_a.get_duration()) ==
+                   to_value(element_b.get_duration()) &&
+               to_value(element_a.get_times()) ==
+                   to_value(element_b.get_times());
     }
 
-    inline bool operator!=(const SignalElement& a,
-                           const SignalElement& b) noexcept
+    inline bool operator!=(const SignalElement& element_a,
+                           const SignalElement& element_b) noexcept
     {
-        return !(a == b);
+        return !(element_a == element_b);
     }
 } // namespace pisco_code
 
 // Must be in the global namespace so CppUTest finds it
 inline SimpleString
-StringFrom(const pisco_code::SignalElement& e)
+StringFrom(const pisco_code::SignalElement& element)
 {
-    return StringFromFormat("{L=%u D=%u T=%u}",
-                            static_cast<unsigned>(to_value(e.get_level())),
-                            static_cast<unsigned>(to_value(e.get_duration())),
-                            static_cast<unsigned>(to_value(e.get_times())));
+    return StringFromFormat(
+        "{L=%u D=%u T=%u}",
+        static_cast<unsigned>(to_value(element.get_level())),
+        static_cast<unsigned>(to_value(element.get_duration())),
+        static_cast<unsigned>(to_value(element.get_times())));
 }
