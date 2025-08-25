@@ -61,6 +61,6 @@ class LedBlinkPattern
     bool                          pattern_is_valid_{true};
     LedLevel                      dimmed_level_{0};
     LedLevel                      pulse_level_{0};
-    std::vector<LedLevelDuration> led_events_;
-    std::set<LedLevel>            used_levels_;
+    std::vector<LedLevelDuration> led_events_{};
+    std::set<LedLevel>            used_levels_{};
 };
