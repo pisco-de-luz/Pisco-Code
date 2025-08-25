@@ -1,0 +1,17 @@
+Checks: >
+  clang-analyzer-*,
+  bugprone-*,
+  modernize-*,
+  -modernize-use-trailing-return-type,
+  performance-*,
+  readability-*,
+  cppcoreguidelines-*,
+  -cppcoreguidelines-owning-memory,
+  -cppcoreguidelines-avoid-non-const-global-variables,
+  google-readability-function-size,
+  misc-unused-parameters,
+  hicpp-*,
+  misc-*,
+  -misc-include-cleaner,
+  -misc-use-anonymous-namespace
+HeaderFilterRegex: '.*'
