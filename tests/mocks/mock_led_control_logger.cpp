@@ -39,18 +39,18 @@ MockLedControlLogger::log(testutils::LedEvent ledEvent)
     // If lastState_ was valid, flush it to the log
     if (lastState_ != testutils::LedEvent::INVALID)
     {
-        LedStateChange stateChange;
-        stateChange.timestamp = lastTime_;
-        stateChange.state     = lastState_;
-        stateChange.duration  = currentTime_ - lastTime_;
+        LedStateChange state_change;
+        state_change.timestamp = lastTime_;
+        state_change.state     = lastState_;
+        state_change.duration  = currentTime_ - lastTime_;
 
         // Capture context if blinker is set
         if (blinker_ != nullptr)
         {
-            stateChange.isLedBeingUsedNow = blinker_->isLedBeingUsedNow();
-            stateChange.isRunning         = blinker_->isRunning();
+            state_change.isLedBeingUsedNow = blinker_->isLedBeingUsedNow();
+            state_change.isRunning         = blinker_->isRunning();
         }
-        events_.push_back(stateChange);
+        events_.push_back(state_change);
     }
 
     // Start counting new state
@@ -63,11 +63,11 @@ MockLedControlLogger::flush()
 {
     if (lastState_ != testutils::LedEvent::INVALID)
     {
-        LedStateChange stateChange;
-        stateChange.timestamp = lastTime_;
-        stateChange.state     = lastState_;
-        stateChange.duration  = currentTime_ - lastTime_;
-        events_.push_back(stateChange);
+        LedStateChange state_change;
+        state_change.timestamp = lastTime_;
+        state_change.state     = lastState_;
+        state_change.duration  = currentTime_ - lastTime_;
+        events_.push_back(state_change);
     }
 
     lastTime_  = currentTime_;
@@ -75,28 +75,28 @@ MockLedControlLogger::flush()
 }
 
 bool
-MockLedControlLogger::handle(uint8_t ctrlLED)
+MockLedControlLogger::handle(LedCodeType ctrlLED)
 {
-    testutils::LedEvent ledEvent{testutils::LedEvent::INVALID};
+    testutils::LedEvent led_event{testutils::LedEvent::INVALID};
     switch (ctrlLED)
     {
         case static_cast<LedCodeType>(LedControlCode::ON):
-            ledEvent = testutils::LedEvent::ON;
+            led_event = testutils::LedEvent::ON;
             break;
         case static_cast<LedCodeType>(LedControlCode::OFF):
-            ledEvent = testutils::LedEvent::OFF;
+            led_event = testutils::LedEvent::OFF;
             break;
         case static_cast<LedCodeType>(LedControlCode::FUNC_OK):
-            ledEvent = testutils::LedEvent::FUNC_OK;
+            led_event = testutils::LedEvent::FUNC_OK;
             break;
         default:
-            ledEvent = testutils::LedEvent::FUNC_FAIL;
+            led_event = testutils::LedEvent::FUNC_FAIL;
     }
 
-    log(ledEvent);
-    return (ledEvent == testutils::LedEvent::ON ||
-            ledEvent == testutils::LedEvent::OFF ||
-            ledEvent == testutils::LedEvent::FUNC_OK);
+    log(led_event);
+    return (led_event == testutils::LedEvent::ON ||
+            led_event == testutils::LedEvent::OFF ||
+            led_event == testutils::LedEvent::FUNC_OK);
 }
 
 const std::vector<LedStateChange>&
