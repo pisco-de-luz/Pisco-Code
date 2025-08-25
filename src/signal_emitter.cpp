@@ -19,7 +19,7 @@ namespace pisco_code
     bool SignalEmitter::showCode(SignalCode code, NumberBase base,
                                  NumDigits num_digits, RepeatTimes repeats)
     {
-        if (controller_ == nullptr || current_phase_loop_ != PhaseLoop::IDLE ||
+        if (controller_ == nullptr || current_phase_ != PhaseLoop::IDLE ||
             repeats == 0 || peak_level_ == 0)
         {
             return false;
@@ -32,7 +32,7 @@ namespace pisco_code
         controller_->setDimmedLevel(dimmed_level_);
         controller_->setPeakLevel(peak_level_);
 
-        current_phase_loop_ = PhaseLoop::STARTING;
+        current_phase_ = PhaseLoop::STARTING;
         return true;
     }
 
@@ -41,13 +41,13 @@ namespace pisco_code
         if (controller_ == nullptr)
             return;
 
-        if (current_phase_loop_ == PhaseLoop::STARTING)
+        if (current_phase_ == PhaseLoop::STARTING)
         {
             pulse_iterator_.reset();
-            is_running_         = true;
-            start_time_         = tick_counter;
-            phase_duration_     = 0;
-            current_phase_loop_ = PhaseLoop::APPLYING_PULSE;
+            is_running_     = true;
+            start_time_     = tick_counter;
+            phase_duration_ = 0;
+            current_phase_  = PhaseLoop::APPLYING_PULSE;
         }
 
         if (phaseElapsed(tick_counter) && is_running_)
@@ -66,13 +66,13 @@ namespace pisco_code
             {
                 if (sequencer_.shouldRepeat())
                 {
-                    current_phase_loop_ = PhaseLoop::STARTING;
+                    current_phase_ = PhaseLoop::STARTING;
                     sequencer_.incrementRepeatIndex();
                 }
                 else
                 {
-                    is_running_         = false;
-                    current_phase_loop_ = PhaseLoop::IDLE;
+                    is_running_    = false;
+                    current_phase_ = PhaseLoop::IDLE;
                 }
             }
         }
@@ -90,7 +90,7 @@ namespace pisco_code
 
     bool SignalEmitter::isRunning() const
     {
-        return (is_running_ || current_phase_loop_ != PhaseLoop::IDLE);
+        return (is_running_ || current_phase_ != PhaseLoop::IDLE);
     }
 
     void SignalEmitter::setPeakLevel(LedLevel led_level)

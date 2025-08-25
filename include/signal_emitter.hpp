@@ -44,14 +44,14 @@ namespace pisco_code
         SignalSequencer     sequencer_;
         SignalPulseIterator pulse_iterator_;
         SignalElement       element_;
-        TickCounter         start_time_         = 0;
-        PhaseDuration       phase_duration_     = 0;
-        PhaseLoop           current_phase_loop_ = PhaseLoop::IDLE;
-        bool                is_negative_        = false;
-        bool                is_running_         = false;
-        bool                is_in_gap_level_    = false;
-        LedLevel            peak_level_         = DEFAULT_PULSE_LEVEL;
-        LedLevel            dimmed_level_       = DEFAULT_DIMMED_LEVEL;
+        TickCounter         start_time_      = 0;
+        PhaseDuration       phase_duration_  = 0;
+        PhaseLoop           current_phase_   = PhaseLoop::IDLE;
+        bool                is_negative_     = false;
+        bool                is_running_      = false;
+        bool                is_in_gap_level_ = false;
+        LedLevel            peak_level_      = DEFAULT_PULSE_LEVEL;
+        LedLevel            dimmed_level_    = DEFAULT_DIMMED_LEVEL;
     };
 
 } // namespace pisco_code
