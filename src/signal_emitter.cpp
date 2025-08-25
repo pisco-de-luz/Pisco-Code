@@ -39,7 +39,9 @@ namespace pisco_code
     void SignalEmitter::loop(TickCounter tick_counter)
     {
         if (controller_ == nullptr)
+        {
             return;
+        }
 
         if (current_phase_ == PhaseLoop::STARTING)
         {
