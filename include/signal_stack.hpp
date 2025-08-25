@@ -1,6 +1,5 @@
 #pragma once
 
-#include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 #include "signal_element.hpp"
 #include "signal_types.hpp"
