@@ -45,7 +45,7 @@ namespace pisco_code
         }
         // Placeholder for logic to populate based on number
         void loadSignalCode(SignalCode code, NumberBase base,
-                            NumDigits min_digits = 0) noexcept;
+                            NumDigits num_digits = 0) noexcept;
 
       private:
         SignalStack         signal_stack_;
