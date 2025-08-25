@@ -13,5 +13,7 @@ Checks: >
   hicpp-*,
   misc-*,
   -misc-include-cleaner,
+  -cppcoreguidelines-avoid-do-while,
+  -hicpp-avoid-do-while,
   -misc-use-anonymous-namespace
 HeaderFilterRegex: '.*'
