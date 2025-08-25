@@ -1,6 +1,5 @@
 // signal_emitter.hpp
-#ifndef PISCO_CODE_BLINKER_HPP
-#define PISCO_CODE_BLINKER_HPP
+#pragma once
 
 #include "led_controller.hpp"
 #include "pisco_constants.hpp"
@@ -55,5 +54,3 @@ namespace pisco_code
     };
 
 } // namespace pisco_code
-
-#endif // PISCO_CODE_BLINKER_HPP
