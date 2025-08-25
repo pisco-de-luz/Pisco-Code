@@ -15,7 +15,7 @@ using namespace pisco_code;
 struct LedStateChange
 {
     Timestamp           timestamp{0};
-    testutils::LedEvent state{testutils::LedEvent::Invalid};
+    testutils::LedEvent state{testutils::LedEvent::INVALID};
     DurationMs          duration{0};
     bool                isLedBeingUsedNow{false};
     bool                isRunning{false};
@@ -32,9 +32,15 @@ class MockLedControlLogger
     void                               clear();
     const std::vector<LedStateChange>& getEvents() const;
     void                               flush();
-    void                               setTraceResolution(Timestamp resolutionMs); // default: 100
-    LedLevel getDimmedLevel() const { return led_blink_pattern_.getDimmedLevel(); }
-    LedLevel getPulseLevel() const { return led_blink_pattern_.getPulseLevel(); }
+    void     setTraceResolution(Timestamp resolutionMs); // default: 100
+    LedLevel getDimmedLevel() const
+    {
+        return led_blink_pattern_.getDimmedLevel();
+    }
+    LedLevel getPulseLevel() const
+    {
+        return led_blink_pattern_.getPulseLevel();
+    }
 
     std::string traceLogToString() const;
 
@@ -44,7 +50,7 @@ class MockLedControlLogger
     Timestamp                   lastTime_{0};
     DurationMs                  duration_{1};
     mutable LedBlinkPattern     led_blink_pattern_{};
-    testutils::LedEvent         lastState_{testutils::LedEvent::Invalid};
+    testutils::LedEvent         lastState_{testutils::LedEvent::INVALID};
     std::vector<LedStateChange> events_{};
     Timestamp                   traceResolutionMs_{100};
     SignalEmitter*              blinker_{nullptr};

@@ -84,7 +84,7 @@ TEST(LoopBehaviorBlinkerTest, ShouldNotTurnOnLedDuringIdlePhases)
 
     for (const auto& e : logger.getEvents())
     {
-        if (e.state == LedEvent::On && !e.isLedBeingUsedNow)
+        if (e.state == LedEvent::ON && !e.isLedBeingUsedNow)
         {
             FAIL("LED turned ON during an idle phase");
         }

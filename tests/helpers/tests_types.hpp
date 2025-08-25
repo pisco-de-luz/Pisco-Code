@@ -39,11 +39,11 @@ namespace testutils
 
     enum class LedEvent : LedLevelType
     {
-        Invalid,
-        On,
-        Off,
-        FuncOk,
-        FuncFail
+        INVALID,
+        ON,
+        OFF,
+        FUNC_OK,
+        FUNC_FAIL
     };
 
     struct TestBlinkerCase
