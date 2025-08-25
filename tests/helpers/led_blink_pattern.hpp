@@ -54,8 +54,8 @@ class LedBlinkPattern
     {
         return led_events_;
     }
-    [[nodiscard]] std::string tracePatternToString() const;
-    [[nodiscard]] RepeatTimes getRepeatCount(DurationMs duration) const;
+    [[nodiscard]] std::string        tracePatternToString() const;
+    [[nodiscard]] static RepeatTimes getRepeatCount(DurationMs duration);
 
   private:
     bool                          pattern_is_valid_{true};
