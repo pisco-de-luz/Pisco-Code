@@ -41,7 +41,7 @@ namespace pisco_code
             emitter_.setPeakLevel(level);
         }
 
-        bool isRunning() const
+        [[nodiscard]] bool isRunning() const
         {
             return emitter_.isRunning();
         }
