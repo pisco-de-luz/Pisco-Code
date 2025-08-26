@@ -31,6 +31,7 @@ function(add_avr_example TARGET_NAME)
       -c stk500v1
       -P ${AVR_PORT}
       -b ${AVR_BAUD}
+      -F
       -e
       -U flash:w:${HEX_FILE}:i
     COMMENT "→ Uploading ${TARGET_NAME}.hex to ${AVR_PORT}"
