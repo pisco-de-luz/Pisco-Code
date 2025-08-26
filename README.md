@@ -23,6 +23,8 @@ This method is workable but limited: it does not naturally support zero digits a
 
 Pisco Code extends the conventional approach by introducing a framing signal. Before transmitting a numeric sequence, the LED is held at a low brightness (or partial duty cycle) to indicate the start of a new sequence. Once the sequence completes, the LED is turned off.
 
+Status LED showing the code `121` using Pisco Code.
+
 ![Video-Code-121-132x132.gif](https://github.com/pisco-de-luz/Pisco-Code/blob/d0bb059eef8c726219ba4b1a40f07471f648127f/graphics/Video-Code-121-132x132.gif) 
 <img src="https://github.com/pisco-de-luz/Pisco-Code/blob/2d7ab53852a28b9fdf24be6b03f43a6450f9fef0/graphics/pisco-code-121.png" height="132">
 
@@ -32,7 +34,7 @@ This framing mechanism improves readability, ensuring that observers can reliabl
 
 The introduction of a framing signal enables explicit representation of the digit zero, which is often ambiguous in conventional blink-based systems.
 
-For example, in the sequence below representing the value `120`, digits `1` and `2` are shown with one and two bright blinks, separated by pauses. The digit 0 is represented not by a blink, but by an intentional gap in the sequence. This makes it possible to represent zero clearly in any position within the code.
+For example, in the sequence below representing the value `120`, digits `1` and `2` are shown with one and two bright blinks, separated by pauses. The digit `0` is represented not by a blink, but by an intentional gap in the sequence. This makes it possible to represent zero clearly in any position within the code.
 
 ![Pisco-Code-120-144x144.gif](https://github.com/pisco-de-luz/Pisco-Code/blob/ba3e80ebc5cc06cf77d8f8e30f36b71e3b5d880f/graphics/Pisco-Code-120-144x144.gif)
 <img src="https://github.com/pisco-de-luz/Pisco-Code/blob/9d276453b1f99df96e158106dcbb28b7e36d6daf/graphics/pisco-code-120.png" height="144">
