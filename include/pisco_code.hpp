@@ -5,6 +5,11 @@
 #include "signal_emitter.hpp"
 #include "software_pwm_led_controller.hpp"
 
+using pisco_code::LedCodeType;
+using pisco_code::LedControlCode;
+using pisco_code::NumberBase;
+using pisco_code::RepeatTimes;
+using pisco_code::Timestamp;
 namespace pisco_code
 {
 
