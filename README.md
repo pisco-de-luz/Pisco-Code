@@ -1,65 +1,63 @@
 # Pisco Code
 
-A way to show decimal or hexadecimal values using a single LED or a vibrator device. In addition, these values can be displayed as positive or negative when needed.
+Pisco Code is a lightweight mechanism for representing decimal or hexadecimal values using a single status LED or an actuator such as a vibration motor. The method supports both positive and negative values and is designed for use in embedded systems with minimal hardware resources.
 
 # Why
 
-How many times in developing some microcontroller project, do we miss a simple mechanism to display variable values? Of course, in some projects, we already have a serial output, debug tools or even a display that we can use in the early stages of the project! However, this is not always what we have.
+In many embedded projects, especially during early prototyping or field maintenance, there is no convenient way to observe internal variables. Serial interfaces, debugging tools, or displays are not always available.
 
-At other times, we miss a simple and intuitive mechanism. For example, people who perform field maintenance on the hardware we are developing, can read values from internal registers, to facilitate diagnosis.
+Pisco Code provides a simple and intuitive method for conveying values through blink patterns or vibrations, allowing engineers and technicians to interpret internal states or diagnostic codes without additional hardware.
 
-# The Simple and Current way to Implement this
+# Conventional Approach
 
-Currently, in most cases, we develop some blinking patterns on the status LEDs to indicate certain conditions in the software have been reached.
-To demonstrate numerical values between 1 and 20, for example, we can blink a status LED x times, indicating the desired value.
+A common practice is to use simple blink patterns on a status LED to indicate conditions or values. For example, blinking the LED _n_ times to represent the value _n_.
 
-Another approach I found for larger numbers were creating sequences of blinks.
+For larger values, some implementations concatenate digit sequences. For example, the code `312` may be shown as three blinks, a pause, one blink, a pause, and two blinks.
 
-Status LED showing the code 312 using a sequence of blinks.
+Status LED showing the code `312` using a sequence of blinks.
 ![code312.png](https://github.com/pisco-de-luz/Pisco-Code/blob/6c91251ed2d3033bc74d414339b4a64d40685235/graphics/code312.png)
 
-This approach works well for pre-defined codes that do not have a zero digit. It would be tricky to show the code 302, for example, and expect the observer to notice a more significant gap between the digits 3 and 2, thus concluding that it would be 302
+This method is workable but limited: it does not naturally support zero digits and may be ambiguous when interpreting sequences such as `302`.
 
-The basic idea of this project is to create a mechanism to display digits, using a sequence of blinks like above, but with the possibility of also showing the zero number.
+# Proposed Solution
 
-# Egg of Columbus
+Pisco Code extends the conventional approach by introducing a framing signal. Before transmitting a numeric sequence, the LED is held at a low brightness (or partial duty cycle) to indicate the start of a new sequence. Once the sequence completes, the LED is turned off.
 
-As can be seen in the graphic below, the working principle of the Pisco Code is practically the same. The only difference is that before starting the blinking sequence, the LED will be partially on and it is turned off only after the code has all been "displayed".
-
+Status LED showing the code `121` using
 ![Video-Code-121-132x132.gif](https://github.com/pisco-de-luz/Pisco-Code/blob/d0bb059eef8c726219ba4b1a40f07471f648127f/graphics/Video-Code-121-132x132.gif) 
 <img src="https://github.com/pisco-de-luz/Pisco-Code/blob/2d7ab53852a28b9fdf24be6b03f43a6450f9fef0/graphics/pisco-code-121.png" height="132">
 
+This framing mechanism improves readability, ensuring that observers can reliably distinguish between digit groups, including zeros, and recognize the start of a new value.
 
-This simple change makes the code easier to read, allowing the observer to know when the sequence starts. For example, when the LED is off and remains dimmed for a few seconds and starts blinking, the observer knows that a new series has just begun.
+# Representation of Zero
 
-# The Origin of Zero
+The introduction of a framing signal enables explicit representation of the digit zero, which is often ambiguous in conventional blink-based systems.
 
-In addition to the benefit mentioned above, this solution also created the possibility of representing the zero digit, in any position of the code to be displayed.
-For example, in the graphic below, code 120 is shown. As you can see, once the sequence of codes starts with the LED partially on, the blinks with maximum brightness show numbers between 1-9 while a single blink, turning off the LED, signals the digit zero.
+For example, in the sequence below representing the value `120`, digits `1` and `2` are shown using maximum brightness blinks, while the digit `0` is indicated by a single blink followed by the LED turning fully off. This makes it possible to represent zero in any position within the sequence.
 
 ![Pisco-Code-120-144x144.gif](https://github.com/pisco-de-luz/Pisco-Code/blob/ba3e80ebc5cc06cf77d8f8e30f36b71e3b5d880f/graphics/Pisco-Code-120-144x144.gif)
 <img src="https://github.com/pisco-de-luz/Pisco-Code/blob/9d276453b1f99df96e158106dcbb28b7e36d6daf/graphics/pisco-code-120.png" height="144">
 
-Sometimes, depending on the type of information we will show, it is necessary to guarantee a minimum number of digits. 
-
-For example, when we need to show the voltage value in the range of 0 - 5v with two decimal places like 0.02 volts, it is crucial to set the minimum number of the digit to 3. 
-
-With this method, we will infer where the decimal point is.
+In some cases, it is also necessary to define a minimum number of digits to convey information accurately. For example, when displaying a voltage measurement between 0–5 V with two decimal places (e.g., 0.02 V), at least three digits must always be shown. With this convention, the observer can infer the decimal point location.
 
 ![Pisco-Code-002-144x144.gif](https://github.com/pisco-de-luz/Pisco-Code/blob/b1c607510b4095d7174fb170666a0196a63d295a/graphics/Pisco-Code-002-144x144.gif)
 <img src="https://github.com/pisco-de-luz/Pisco-Code/blob/9d276453b1f99df96e158106dcbb28b7e36d6daf/graphics/pisco-code-002.png" height="144">
 
-# Binary and Hexadecimal Values
+# Binary and Hexadecimal Support
 
-Using the Pisco Code system, it would be easy to implement variations to display binary (0 and 1) or even hexadecimal (0 - 15) values. But, of course, the sequence would probably contain more digits for binary numbers. In contrast, each digit could have many blinks for hexadecimal numbers, making it a little harder to read them.
+Pisco Code can be extended to represent binary (0–1) or hexadecimal (0–15) values.
 
-For decimal numbers, this system has been used by the [Pisco de Luz](https://www.piscodeluz.org/?lang=en) project since 2020, working very well. They use it to read the number of hours of lighting already used, battery/solar board voltage, temperature and much more.
+* Binary values are represented as sequences containing only two possible digits, which may result in longer sequences for larger numbers.
 
-# The Negative Side
+* Hexadecimal values allow compact representation but may require multiple blinks for a single digit, making interpretation slower.
 
-As some variables can contain negative values, in their case the temperature inside of the device, it was necessary to create a mechanism to distinguish a positive number from a negative one. The idea was to create a long blink at the beginning of the sequence to signal the dash of the negative sign. After this blink, the digit-by-digit process begins.
+For decimal use cases, Pisco Code has been successfully applied in the [Pisco de Luz](https://www.piscodeluz.org/?lang=en) project since 2020. The system is used in the field to read operational data such as lighting usage hours, battery or solar voltage, and temperature, without requiring additional display hardware.
 
-Below is an example of the value -12 being shown. Note the long blink at the beginning.  
+# Representation of Negative Values
+
+Some applications require distinguishing between positive and negative values. To address this, Pisco Code introduces a **negative sign indicator**: a long blink at the beginning of the sequence.
+
+After this initial blink, the digit-by-digit representation proceeds as usual. For example, the sequence shown below represents the value `-12`, with the initial long blink indicating the negative sign.  
 
 ![Pisco-Code-Negative12-144x144.gif](https://github.com/pisco-de-luz/Pisco-Code/blob/347a2f6999becbef7c22bfab5b0d4cb3d843b71c/graphics/Pisco-Code-Negative12-144x144.gif)
 <img src="https://github.com/pisco-de-luz/Pisco-Code/blob/d46fea2847a2d3f49e9fccbcebee1c75f28df785/graphics/pisco-code-12-negative.png" height="144">
