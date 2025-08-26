@@ -16,39 +16,39 @@ namespace pisco_code
     {
       public:
         explicit PiscoCode(bool (*led_func)(LedControlCode)) :
-            controller_(led_func), blinker_(&controller_)
+            controller_(led_func), emitter_(&controller_)
         {
         }
 
         void showCode(SignalCode code, NumberBase base, NumDigits min_digits,
                       RepeatTimes repeats)
         {
-            blinker_.showCode(code, base, min_digits, repeats);
+            emitter_.showCode(code, base, min_digits, repeats);
         }
 
         void loop(TickCounter tick_counter)
         {
-            blinker_.loop(tick_counter);
+            emitter_.loop(tick_counter);
         }
 
         void setDimmedLevel(LedLevel level)
         {
-            blinker_.setDimmedLevel(level);
+            emitter_.setDimmedLevel(level);
         }
 
         void setPeakLevel(LedLevel level)
         {
-            blinker_.setPeakLevel(level);
+            emitter_.setPeakLevel(level);
         }
 
         bool isRunning() const
         {
-            return blinker_.isRunning();
+            return emitter_.isRunning();
         }
 
       private:
         SoftwarePwmLedController controller_;
-        SignalEmitter            blinker_;
+        SignalEmitter            emitter_;
     };
 
 } // namespace pisco_code
