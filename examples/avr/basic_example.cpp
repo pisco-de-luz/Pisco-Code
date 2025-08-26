@@ -8,7 +8,7 @@ using namespace pisco_code;
 
 namespace
 {
-    constexpr uint8_t LED_PIN_PD1 = PD1; // Nano TX LED
+    constexpr uint8_t LED_PIN_PD1 = PD0; // Nano TX LED
     inline void       ledInit() noexcept
     {
         DDRD |= static_cast<uint8_t>(1U << LED_PIN_PD1);
@@ -23,7 +23,7 @@ namespace
     }
 
     // Adapter from library control codes to board I/O
-    bool turnLedOnOff(LedControlCode code) noexcept
+    bool swPwmLed1(LedControlCode code) noexcept
     {
         switch (code)
         {
@@ -45,17 +45,20 @@ int
 main()
 {
     ledInit();
+    SoftwarePwmLedController controller_led1(swPwmLed1);
+    SignalEmitter            emitter_led1(&controller_led1);
 
-    PiscoCode led1(turnLedOnOff);
+    emitter_led1.setDimmedLevel(3);
 
-    led1.setDimmedLevel(3);
+    Timestamp         fake_millis{0};
+    const RepeatTimes repeats{3};
+    const NumDigits   num_digits{0};
+    const SignalCode  signal_code{102};
 
-    Timestamp fake_millis = 0;
-
-    led1.showCode(102, NumberBase::DEC, 0, static_cast<RepeatTimes>(2));
-    while (led1.isRunning())
+    emitter_led1.showCode(signal_code, NumberBase::DEC, num_digits, repeats);
+    while (emitter_led1.isRunning())
     {
-        led1.loop(fake_millis++ >> 6);
+        emitter_led1.loop(fake_millis++ >> 6);
         _delay_ms(1);
     }
     for (;;)
