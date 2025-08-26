@@ -5,7 +5,6 @@
 #include "signal_emitter.hpp"
 #include "software_pwm_led_controller.hpp"
 
-using pisco_code::LedCodeType;
 using pisco_code::LedControlCode;
 using pisco_code::NumberBase;
 using pisco_code::RepeatTimes;
@@ -16,7 +15,7 @@ namespace pisco_code
     class PiscoCode
     {
       public:
-        explicit PiscoCode(bool (*led_func)(LedCodeType)) :
+        explicit PiscoCode(bool (*led_func)(LedControlCode)) :
             controller_(led_func), blinker_(&controller_)
         {
         }

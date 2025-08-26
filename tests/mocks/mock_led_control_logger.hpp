@@ -28,7 +28,7 @@ class MockLedControlLogger
     void setBlinker(SignalEmitter* blinker);
 
     void setTime(Timestamp currTime);
-    bool handle(uint8_t ctrlLED);
+    bool handle(LedControlCode ctrl_code);
     void clear();
     [[nodiscard]] const std::vector<LedStateChange>& getEvents() const;
     void                                             flush();

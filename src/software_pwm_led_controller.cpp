@@ -12,12 +12,12 @@ namespace pisco_code
     {
     }
     SoftwarePwmLedController::SoftwarePwmLedController(
-        bool (*led_func)(LedCodeType)) : led_control_(led_func)
+        bool (*led_func)(LedControlCode)) : led_control_(led_func)
     {
     }
 
     void
-    SoftwarePwmLedController::attachLedControl(bool (*led_func)(LedCodeType))
+    SoftwarePwmLedController::attachLedControl(bool (*led_func)(LedControlCode))
     {
         led_control_ = led_func;
     }
@@ -49,22 +49,22 @@ namespace pisco_code
             case BlinkMode::PULSE:
                 if (pwm_tick_position_ == 0)
                 {
-                    led_control_(to_value(LedControlCode::ON));
+                    led_control_(LedControlCode::ON);
                 }
                 else if (pwm_tick_position_ == peak_level_)
                 {
-                    led_control_(to_value(LedControlCode::OFF));
+                    led_control_(LedControlCode::OFF);
                 }
                 break;
 
             case BlinkMode::DIMMED:
                 if (pwm_tick_position_ == 0)
                 {
-                    led_control_(to_value(LedControlCode::ON));
+                    led_control_(LedControlCode::ON);
                 }
                 else if (pwm_tick_position_ == dimmed_level_)
                 {
-                    led_control_(to_value(LedControlCode::OFF));
+                    led_control_(LedControlCode::OFF);
                 }
                 break;
 
@@ -73,7 +73,7 @@ namespace pisco_code
                 if (pwm_tick_position_ == 0)
                 {
                     // Ensure LED is OFF during idle periods
-                    led_control_(to_value(LedControlCode::OFF));
+                    led_control_(LedControlCode::OFF);
                 }
                 break;
         }

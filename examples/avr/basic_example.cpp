@@ -23,17 +23,17 @@ namespace
     }
 
     // Adapter from library control codes to board I/O
-    bool turnLedOnOff(LedCodeType code) noexcept
+    bool turnLedOnOff(LedControlCode code) noexcept
     {
         switch (code)
         {
-            case pisco_code::to_value(LedControlCode::ON):
+            case LedControlCode::ON:
                 ledOn();
                 return true;
-            case pisco_code::to_value(LedControlCode::OFF):
+            case LedControlCode::OFF:
                 ledOff();
                 return true;
-            case pisco_code::to_value(LedControlCode::FUNC_OK):
+            case LedControlCode::FUNC_OK:
                 return true;
             default:
                 return false;
