@@ -11,6 +11,15 @@ namespace pisco_code
     constexpr Timestamp LONG_BLINK_MS       = 1200;
     constexpr Timestamp EXTRA_LONG_BLINK_MS = 1900;
 
+    static_assert((SHORT_BLINK_MS / LOOP_INTERVAL_MS) <
+                      sizeof(TickCounter) * (MAX_BYTE_VALUE + 1),
+                  "LOOP_INTERVAL_MS too small");
+    static_assert((MEDIUM_BLINK_MS / LOOP_INTERVAL_MS) <
+                      sizeof(TickCounter) * (MAX_BYTE_VALUE + 1),
+                  "LOOP_INTERVAL_MS too small");
+    static_assert((LONG_BLINK_MS / LOOP_INTERVAL_MS) <
+                      sizeof(TickCounter) * (MAX_BYTE_VALUE + 1),
+                  "LOOP_INTERVAL_MS too small");
     static_assert((EXTRA_LONG_BLINK_MS / LOOP_INTERVAL_MS) <
                       sizeof(TickCounter) * (MAX_BYTE_VALUE + 1),
                   "LOOP_INTERVAL_MS too small");
