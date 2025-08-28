@@ -1,10 +1,8 @@
 #pragma once
 
 #include "pisco_types.hpp"
-
 namespace pisco_code
 {
-    // Loop timing constants
     constexpr Timestamp LOOP_INTERVAL_MS    = 16;
     constexpr Timestamp SHORT_BLINK_MS      = 400;
     constexpr Timestamp MEDIUM_BLINK_MS     = 600;
@@ -31,7 +29,6 @@ namespace pisco_code
         FUNC_OK = 100,
     };
 
-    // Encoding bases
     enum class NumberBase : BaseType
     {
         BIN = 2,
