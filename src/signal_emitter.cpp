@@ -48,16 +48,16 @@ namespace pisco_code
         {
             pulse_iterator_.reset();
             is_running_     = true;
-            start_time_     = to_phase_duration(tick_timestamp_);
+            start_time_     = to_tick_counter(tick_timestamp_);
             phase_duration_ = 0;
             current_phase_  = PhaseLoop::APPLYING_PULSE;
         }
 
-        if (phaseElapsed(to_phase_duration(tick_timestamp_)) && is_running_)
+        if (phaseElapsed(to_tick_counter(tick_timestamp_)) && is_running_)
         {
             if (pulse_iterator_.hasNext())
             {
-                start_time_ = to_phase_duration(tick_timestamp_);
+                start_time_                 = to_tick_counter(tick_timestamp_);
                 const SignalElement element = pulse_iterator_.next();
                 phase_duration_ =
                     signalDurationToPhaseDuration(element.get_duration());
@@ -146,15 +146,15 @@ namespace pisco_code
         switch (duration)
         {
             case SignalDuration::SHORT:
-                return to_phase_duration(SHORT_BLINK_MS);
+                return to_tick_counter(SHORT_BLINK_MS);
             case SignalDuration::MEDIUM:
-                return to_phase_duration(MEDIUM_BLINK_MS);
+                return to_tick_counter(MEDIUM_BLINK_MS);
             case SignalDuration::LONG:
-                return to_phase_duration(LONG_BLINK_MS);
+                return to_tick_counter(LONG_BLINK_MS);
             case SignalDuration::EXTRA_LONG:
-                return to_phase_duration(EXTRA_LONG_BLINK_MS);
+                return to_tick_counter(EXTRA_LONG_BLINK_MS);
             default:
-                return to_phase_duration(0);
+                return to_tick_counter(0);
         }
     }
 } // namespace pisco_code

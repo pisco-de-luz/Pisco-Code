@@ -52,7 +52,7 @@ namespace pisco_code
         return static_cast<UInt8>(value);
     }
 
-    constexpr TickCounter to_phase_duration(Timestamp timestamp_ms) noexcept
+    constexpr TickCounter to_tick_counter(Timestamp timestamp_ms) noexcept
     {
         return static_cast<TickCounter>(timestamp_ms / LOOP_INTERVAL_MS);
     }
