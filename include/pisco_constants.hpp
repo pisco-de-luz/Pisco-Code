@@ -5,11 +5,11 @@
 namespace pisco_code
 {
     // Loop timing constants
-    constexpr Timestamp LOOP_INTERVAL_MS    = 64;
-    constexpr Timestamp SHORT_BLINK_MS      = 350;
-    constexpr Timestamp MEDIUM_BLINK_MS     = 500;
-    constexpr Timestamp LONG_BLINK_MS       = 1100;
-    constexpr Timestamp EXTRA_LONG_BLINK_MS = 1300;
+    constexpr Timestamp LOOP_INTERVAL_MS    = 32;
+    constexpr Timestamp SHORT_BLINK_MS      = 400;
+    constexpr Timestamp MEDIUM_BLINK_MS     = 600;
+    constexpr Timestamp LONG_BLINK_MS       = 1200;
+    constexpr Timestamp EXTRA_LONG_BLINK_MS = 1900;
 
     enum class LedControlCode : LedCodeType
     {
@@ -52,9 +52,9 @@ namespace pisco_code
         return static_cast<UInt8>(value);
     }
 
-    constexpr PhaseDuration to_phase_duration(Timestamp milliseconds) noexcept
+    constexpr TickCounter to_phase_duration(Timestamp timestamp_ms) noexcept
     {
-        return static_cast<PhaseDuration>(milliseconds / LOOP_INTERVAL_MS);
+        return static_cast<TickCounter>(timestamp_ms / LOOP_INTERVAL_MS);
     }
 
     struct BaseLimits
@@ -132,11 +132,4 @@ namespace pisco_code
     {
         return bits == 0 ? 0U : ((1U << bits));
     }
-
-    // Conversion from ms to loop ticks
-    constexpr TickCounter to_loop_count(Timestamp milliseconds) noexcept
-    {
-        return static_cast<TickCounter>(milliseconds / LOOP_INTERVAL_MS);
-    }
-
 } // namespace pisco_code

@@ -28,13 +28,8 @@ namespace pisco_code
       private:
         [[nodiscard]] bool phaseElapsed(TickCounter tick_counter) const;
         static BlinkMode   signalLevelToBlinkMode(SignalLevel level);
-        static PhaseDuration
+        static TickCounter
         signalDurationToPhaseDuration(SignalDuration duration);
-        [[nodiscard]] static TickCounter
-        timestampToTickCounter(Timestamp timestamp) noexcept
-        {
-            return static_cast<TickCounter>((timestamp >> 6) & 0xFF);
-        }
 
         enum class PhaseLoop : PhaseType
         {
@@ -49,7 +44,7 @@ namespace pisco_code
         SignalElement       element_;
         Timestamp           tick_timestamp_  = 0;
         TickCounter         start_time_      = 0;
-        PhaseDuration       phase_duration_  = 0;
+        TickCounter         phase_duration_  = 0;
         PhaseLoop           current_phase_   = PhaseLoop::IDLE;
         bool                is_negative_     = false;
         bool                is_running_      = false;

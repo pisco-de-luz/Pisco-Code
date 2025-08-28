@@ -48,17 +48,16 @@ namespace pisco_code
         {
             pulse_iterator_.reset();
             is_running_     = true;
-            start_time_     = timestampToTickCounter(tick_timestamp_);
+            start_time_     = to_phase_duration(tick_timestamp_);
             phase_duration_ = 0;
             current_phase_  = PhaseLoop::APPLYING_PULSE;
         }
 
-        if (phaseElapsed(timestampToTickCounter(tick_timestamp_)) &&
-            is_running_)
+        if (phaseElapsed(to_phase_duration(tick_timestamp_)) && is_running_)
         {
             if (pulse_iterator_.hasNext())
             {
-                start_time_ = timestampToTickCounter(tick_timestamp_);
+                start_time_ = to_phase_duration(tick_timestamp_);
                 const SignalElement element = pulse_iterator_.next();
                 phase_duration_ =
                     signalDurationToPhaseDuration(element.get_duration());
@@ -86,7 +85,7 @@ namespace pisco_code
     bool SignalEmitter::phaseElapsed(TickCounter tick_counter) const
     {
         const auto elapsed =
-            static_cast<PhaseDuration>(tick_counter - start_time_);
+            static_cast<TickCounter>(tick_counter - start_time_);
         const bool phase_done = elapsed > phase_duration_;
 
         return phase_done && controller_->readyForPhaseChange();
@@ -141,7 +140,7 @@ namespace pisco_code
         }
     }
 
-    PhaseDuration
+    TickCounter
     SignalEmitter::signalDurationToPhaseDuration(SignalDuration duration)
     {
         switch (duration)
