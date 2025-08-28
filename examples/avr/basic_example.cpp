@@ -50,7 +50,6 @@ main()
 
     emitter_led1.setDimmedLevel(3);
 
-    Timestamp         fake_millis{0};
     const RepeatTimes repeats{3};
     const NumDigits   num_digits{0};
     const SignalCode  signal_code{102};
@@ -58,7 +57,7 @@ main()
     emitter_led1.showCode(signal_code, NumberBase::DEC, num_digits, repeats);
     while (emitter_led1.isRunning())
     {
-        emitter_led1.loop(fake_millis++ >> 6);
+        emitter_led1.loop();
         _delay_ms(1);
     }
     for (;;)

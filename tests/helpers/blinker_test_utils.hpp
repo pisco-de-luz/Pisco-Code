@@ -62,7 +62,8 @@ namespace testutils
             for (uint8_t i = 0; i < LOOP_CALLS_PER_COUNTER; ++i)
             {
                 logger->setTime(sequencing_counter++);
-                code->loop(fake_millis);
+                // code->loop(fake_millis);
+                code->loop();
             }
 
             ++fake_millis;

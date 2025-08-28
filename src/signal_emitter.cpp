@@ -32,31 +32,33 @@ namespace pisco_code
         controller_->setDimmedLevel(dimmed_level_);
         controller_->setPeakLevel(peak_level_);
 
-        current_phase_ = PhaseLoop::STARTING;
+        tick_timestamp_ = 0;
+        current_phase_  = PhaseLoop::STARTING;
         return true;
     }
 
-    void SignalEmitter::loop(TickCounter tick_counter)
+    void SignalEmitter::loop()
     {
         if (controller_ == nullptr)
         {
             return;
         }
-
+        ++tick_timestamp_;
         if (current_phase_ == PhaseLoop::STARTING)
         {
             pulse_iterator_.reset();
             is_running_     = true;
-            start_time_     = tick_counter;
+            start_time_     = timestampToTickCounter(tick_timestamp_);
             phase_duration_ = 0;
             current_phase_  = PhaseLoop::APPLYING_PULSE;
         }
 
-        if (phaseElapsed(tick_counter) && is_running_)
+        if (phaseElapsed(timestampToTickCounter(tick_timestamp_)) &&
+            is_running_)
         {
             if (pulse_iterator_.hasNext())
             {
-                start_time_                 = tick_counter;
+                start_time_ = timestampToTickCounter(tick_timestamp_);
                 const SignalElement element = pulse_iterator_.next();
                 phase_duration_ =
                     signalDurationToPhaseDuration(element.get_duration());

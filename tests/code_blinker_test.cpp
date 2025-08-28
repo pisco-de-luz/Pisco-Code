@@ -78,7 +78,7 @@ TEST(SignalEmitterGroup, ShowCodeStartsSequence)
 TEST(SignalEmitterGroup, LoopTriggersDimmedStart)
 {
     blinker->showCode(5, NumberBase::DEC, 1, 1);
-    blinker->loop(1); // simulate loop trigger
+    blinker->loop(); // simulate loop trigger
     CHECK_EQUAL(1, controller.dimmed_calls);
     CHECK_EQUAL(DEFAULT_DIMMED_LEVEL, controller.last_dimmed);
 }

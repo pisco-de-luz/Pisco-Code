@@ -19,7 +19,7 @@ namespace pisco_code
 
         bool showCode(SignalCode code, NumberBase base, NumDigits num_digits,
                       RepeatTimes repeats);
-        void loop(TickCounter tick_counter);
+        void loop();
         [[nodiscard]] bool isRunning() const;
         [[nodiscard]] bool isLedBeingUsedNow() const;
         void               setPeakLevel(LedLevel level);
@@ -27,10 +27,14 @@ namespace pisco_code
 
       private:
         [[nodiscard]] bool phaseElapsed(TickCounter tick_counter) const;
-
-        static BlinkMode signalLevelToBlinkMode(SignalLevel level);
+        static BlinkMode   signalLevelToBlinkMode(SignalLevel level);
         static PhaseDuration
         signalDurationToPhaseDuration(SignalDuration duration);
+        [[nodiscard]] static TickCounter
+        timestampToTickCounter(Timestamp timestamp) noexcept
+        {
+            return static_cast<TickCounter>((timestamp >> 6) & 0xFF);
+        }
 
         enum class PhaseLoop : PhaseType
         {
@@ -43,6 +47,7 @@ namespace pisco_code
         SignalSequencer     sequencer_;
         SignalPulseIterator pulse_iterator_;
         SignalElement       element_;
+        Timestamp           tick_timestamp_  = 0;
         TickCounter         start_time_      = 0;
         PhaseDuration       phase_duration_  = 0;
         PhaseLoop           current_phase_   = PhaseLoop::IDLE;
