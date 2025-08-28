@@ -38,4 +38,6 @@ namespace pisco_code
     using Counter            = Counter8;
     using Index              = Index8;
 
+    constexpr UInt8 MAX_BYTE_VALUE = 255;
+
 } // namespace pisco_code

@@ -5,11 +5,15 @@
 namespace pisco_code
 {
     // Loop timing constants
-    constexpr Timestamp LOOP_INTERVAL_MS    = 32;
+    constexpr Timestamp LOOP_INTERVAL_MS    = 16;
     constexpr Timestamp SHORT_BLINK_MS      = 400;
     constexpr Timestamp MEDIUM_BLINK_MS     = 600;
     constexpr Timestamp LONG_BLINK_MS       = 1200;
     constexpr Timestamp EXTRA_LONG_BLINK_MS = 1900;
+
+    static_assert((EXTRA_LONG_BLINK_MS / LOOP_INTERVAL_MS) <
+                      sizeof(TickCounter) * (MAX_BYTE_VALUE + 1),
+                  "LOOP_INTERVAL_MS too small");
 
     enum class LedControlCode : LedCodeType
     {
