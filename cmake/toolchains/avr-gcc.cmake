@@ -18,7 +18,8 @@ set(WARN_FLAGS "-Wall -Wextra")
 # Global flags
 set(CMAKE_C_FLAGS "${MCU_FLAGS} -DF_CPU=${F_CPU} ${OPT_FLAGS} ${WARN_FLAGS}" CACHE STRING "" FORCE)
 set(CMAKE_CXX_FLAGS "${MCU_FLAGS} -DF_CPU=${F_CPU} ${OPT_FLAGS} ${WARN_FLAGS}" CACHE STRING "" FORCE)
-set(CMAKE_EXE_LINKER_FLAGS "${MCU_FLAGS}" CACHE STRING "" FORCE)
+set(CMAKE_EXE_LINKER_FLAGS "${MCU_FLAGS} -nodefaultlibs -Wl,--gc-sections" CACHE STRING "" FORCE)
 
 # Disable standard C library linkage (optional if using bare metal)
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+
