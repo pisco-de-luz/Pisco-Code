@@ -29,6 +29,7 @@ if(PISCO_FREESTANDING)
   target_sources(PiscoCodeCore PRIVATE
     ${FREESTANDING_DIR}/pisco_runtime_shim.cpp
     ${FREESTANDING_DIR}/pisco_memory_shim.cpp
+    ${FREESTANDING_DIR}/pisco_exit_shim.cpp
   )
   target_compile_definitions(PiscoCodeCore PRIVATE PISCO_FREESTANDING=1)
   target_compile_options(PiscoCodeCore PRIVATE

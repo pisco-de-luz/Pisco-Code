@@ -1,4 +1,5 @@
-__attribute__((noreturn)) void
+#if defined(PISCO_FREESTANDING)
+extern "C" __attribute__((noreturn)) void
 exit(int code)
 {
     (void) code;
@@ -7,10 +8,11 @@ exit(int code)
 }
 
 /* Some toolchains call _exit, keep a weak alias */
-__attribute__((noreturn, weak)) void
+extern "C" __attribute__((noreturn, weak)) void
 _exit(int code)
 {
     (void) code;
     for (;;)
         ;
 }
+#endif
