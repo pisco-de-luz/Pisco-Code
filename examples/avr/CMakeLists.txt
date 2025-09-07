@@ -14,6 +14,7 @@ target_link_options(basic_example PRIVATE
 
 target_sources(basic_example PRIVATE
   avr_exit_stub.c
+  avr_systick.cpp
 )
 
 target_link_libraries(basic_example gcc)

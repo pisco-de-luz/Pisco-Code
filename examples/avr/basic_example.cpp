@@ -1,8 +1,8 @@
 #include <stdint.h>
 
+#include "avr_systick.hpp"
 #include "pisco_code.hpp"
 #include <avr/io.h>
-#include <util/delay.h>
 
 using namespace pisco_code;
 
@@ -44,6 +44,7 @@ namespace
 int
 main()
 {
+    avr_systick::systick_init_1ms();
     ledInit();
     SoftwarePwmLedController controller_led1(swPwmLed1);
     SignalEmitter            emitter_led1(&controller_led1);
@@ -52,13 +53,13 @@ main()
 
     const RepeatTimes repeats{3};
     const NumDigits   num_digits{0};
-    const SignalCode  signal_code{102};
+    const SignalCode  signal_code{-102};
 
     emitter_led1.showCode(signal_code, NumberBase::DEC, num_digits, repeats);
     while (emitter_led1.isRunning())
     {
         emitter_led1.loop();
-        _delay_ms(1);
+        avr_systick::delay_ms(1);
     }
     for (;;)
     {
