@@ -3,7 +3,11 @@ function(add_avr_example TARGET_NAME)
   cmake_parse_arguments(EX "" "${oneValueArgs}" "" ${ARGN})
 
   add_executable(${TARGET_NAME} ${EX_SOURCE})
-  target_link_libraries(${TARGET_NAME} PiscoCodeCore)
+  target_link_libraries(${TARGET_NAME} 
+     PRIVATE 
+        PiscoCodeCore
+        gcc
+  )
 
   find_program(AVR_OBJCOPY avr-objcopy REQUIRED)
   find_program(AVRDUDE     avrdude     REQUIRED)

@@ -1,16 +1,16 @@
-// src/runtime/abort_handlers.cpp
-extern "C" __attribute__((weak)) void
+#if defined(PISCO_FREESTANDING)
+extern "C" void
 __cxa_pure_virtual() noexcept
 {
     for (;;)
     {
     }
 }
-
-extern "C" __attribute__((weak)) void
+extern "C" void
 __cxa_deleted_virtual() noexcept
 {
     for (;;)
     {
     }
 }
+#endif
