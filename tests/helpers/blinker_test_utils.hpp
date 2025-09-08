@@ -76,13 +76,18 @@ namespace testutils
                                         RepeatTimes      repeat_count)
     {
         if (repeat_count <= 1 || trace_code.empty())
+        {
             return {};
+        }
 
         // Find trailing LED off pattern (represented by a sequence of '_')
-        const auto trail_off_start = static_cast<TraceStrIndex>(
-            trace_code.find_last_not_of(LED_OFF_CHARACTER) + 1);
+        using size_type = TraceCode::size_type;
+        const size_type trail_off_start =
+            trace_code.find_last_not_of(LED_OFF_CHARACTER) + 1;
         if (trail_off_start == TraceCode::npos)
+        {
             return "No trailing off pattern found";
+        }
 
         const TraceCode leading_off = trace_code.substr(0, trail_off_start);
         TraceCode       result      = leading_off;

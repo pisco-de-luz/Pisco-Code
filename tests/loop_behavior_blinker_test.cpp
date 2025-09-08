@@ -60,8 +60,9 @@ TEST(LoopBehaviorBlinkerTest, ShouldEndInFinalDimmedPause)
     auto trace_actual = logger.traceLogToString();
 
     // Find trailing LED off pattern (represented by a sequence of '-')
-    const auto trail_off_start = static_cast<TraceStrIndex>(
-        trace_actual.find_last_not_of(LED_DIMMED_CHARACTER) + 1);
+    using size_type = TraceCode::size_type;
+    const size_type trail_off_start =
+        trace_actual.find_last_not_of(LED_DIMMED_CHARACTER) + 1;
     if (trail_off_start == TraceCode::npos)
     {
         FAIL("No trailing off pattern found");
