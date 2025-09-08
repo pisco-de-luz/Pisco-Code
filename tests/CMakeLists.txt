@@ -9,9 +9,11 @@ add_executable(PiscoCodeTests
     ${HELPER_SOURCES}
 )
 
-# Hosted build for tests
-target_compile_features(PiscoCodeTests PRIVATE cxx_std_20)
+set_property(TARGET PiscoCodeTests PROPERTY CXX_STANDARD 20)
+set_property(TARGET PiscoCodeTests PROPERTY CXX_STANDARD_REQUIRED YES)
+set_property(TARGET PiscoCodeTests PROPERTY CXX_EXTENSIONS OFF)
 target_compile_options(PiscoCodeTests PRIVATE -Wall -Wextra -Wpedantic)
+
 
 target_include_directories(PiscoCodeTests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
