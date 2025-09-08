@@ -17,9 +17,13 @@ target_include_directories(PiscoCodeTests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/mocks
     ${CMAKE_CURRENT_SOURCE_DIR}/helpers
+)
+
+target_include_directories(PiscoCodeTests SYSTEM PRIVATE
     ${CMAKE_SOURCE_DIR}/external/CppUTest/include
     ${CMAKE_SOURCE_DIR}/external/CppUTest/include/Platforms
 )
+
 
 target_link_libraries(PiscoCodeTests PRIVATE
     pisco_code::core
