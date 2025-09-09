@@ -6,10 +6,10 @@
 # // Version:     1.1
 # //--------------------------------------------------------------------------------------------
 
-# Public headers are under include/
+# Public headers
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 
-# List sources explicitly for auditability
+# Sources listed explicitly
 set(LIB_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/signal_emitter.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/signal_sequencer.cpp
@@ -17,50 +17,48 @@ set(LIB_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/software_pwm_led_controller.cpp
 )
 
-# Build once as objects so we can create two static libs with different flags
+# Hosted objects for tests and hosted builds
 add_library(PiscoCodeObjects OBJECT ${LIB_SOURCES})
 target_include_directories(PiscoCodeObjects PUBLIC ${INCLUDE_DIR})
 target_compile_features(PiscoCodeObjects PUBLIC cxx_std_11)
-
-# Baseline warnings and section splitting for all targets
 target_compile_options(PiscoCodeObjects PRIVATE
   -Wall -Wextra -Wpedantic
   -ffunction-sections -fdata-sections
 )
 
-# Hosted core for unit tests
-add_library(PiscoCodeCore STATIC
-  $<TARGET_OBJECTS:PiscoCodeObjects>
-)
-target_include_directories(PiscoCodeCore PUBLIC ${INCLUDE_DIR})
-# Let final executables drop unused code
-target_link_options(PiscoCodeCore INTERFACE -Wl,--gc-sections)
-
-# Bare metal variant for embedded examples
-add_library(PiscoCodeCoreBare STATIC
-  $<TARGET_OBJECTS:PiscoCodeObjects>
-  ${CMAKE_CURRENT_SOURCE_DIR}/freestanding/pisco_runtime_shim.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/freestanding/pisco_memory_shim.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/freestanding/pisco_exit_shim.cpp
-)
-target_include_directories(PiscoCodeCoreBare PUBLIC ${INCLUDE_DIR})
-target_compile_definitions(PiscoCodeCoreBare PUBLIC PISCO_FREESTANDING=1)
-target_compile_options(PiscoCodeCoreBare PRIVATE
+# Bare objects for embedded builds
+add_library(PiscoCodeObjectsBare OBJECT ${LIB_SOURCES})
+target_include_directories(PiscoCodeObjectsBare PUBLIC ${INCLUDE_DIR})
+target_compile_features(PiscoCodeObjectsBare PUBLIC cxx_std_11)
+target_compile_definitions(PiscoCodeObjectsBare PUBLIC PISCO_FREESTANDING=1)
+target_compile_options(PiscoCodeObjectsBare PRIVATE
+  -Wall -Wextra -Wpedantic
+  -ffunction-sections -fdata-sections
   -ffreestanding -fno-builtin
   $<$<COMPILE_LANGUAGE:CXX>:
     -fno-exceptions -fno-rtti
     -fno-unwind-tables -fno-asynchronous-unwind-tables
     -fno-threadsafe-statics -fno-use-cxa-atexit
   >
-  # Keep section splitting here too in case a toolchain overrides defaults
-  -ffunction-sections -fdata-sections
 )
+
+# Build the freestanding shims with the bare objects so they see the define
+target_sources(PiscoCodeObjectsBare PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}/freestanding/pisco_runtime_shim.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/freestanding/pisco_memory_shim.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/freestanding/pisco_exit_shim.cpp
+)
+
+# Hosted static lib
+add_library(PiscoCodeCore STATIC $<TARGET_OBJECTS:PiscoCodeObjects>)
+target_include_directories(PiscoCodeCore PUBLIC ${INCLUDE_DIR})
+target_link_options(PiscoCodeCore INTERFACE -Wl,--gc-sections)
+
+# Bare static lib
+add_library(PiscoCodeCoreBare STATIC $<TARGET_OBJECTS:PiscoCodeObjectsBare>)
+target_include_directories(PiscoCodeCoreBare PUBLIC ${INCLUDE_DIR})
 target_link_options(PiscoCodeCoreBare INTERFACE -Wl,--gc-sections)
 
-# Export tidy aliases
+# Aliases for consumers
 add_library(pisco_code::core      ALIAS PiscoCodeCore)
 add_library(pisco_code::core_bare ALIAS PiscoCodeCoreBare)
-
-
-
-

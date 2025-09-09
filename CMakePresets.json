@@ -17,6 +17,15 @@
         "cacheVariables": {
         "CMAKE_TOOLCHAIN_FILE": "cmake/toolchains/avr-gcc.cmake"
         }
+      },
+      {
+        "name": "stm32-f410rb",
+        "generator": "Unix Makefiles",
+        "binaryDir": "build/stm32-f410rb",
+        "description": "Cross-compile for STM32F410RB Nucleo",
+        "cacheVariables": {
+          "CMAKE_TOOLCHAIN_FILE": "cmake/toolchains/arm-none-eabi-gcc.cmake"
+        }
       }
     ],  
     "buildPresets": [
@@ -29,6 +38,11 @@
         "name":            "avr",
         "configurePreset": "avr",
         "description":     "Build the AVR configuration"
+      },
+      {
+        "name":            "stm32-f410rb",
+        "configurePreset": "stm32-f410rb",
+        "description":     "Build the STM32F410RB configuration"
       }
     ]
   }

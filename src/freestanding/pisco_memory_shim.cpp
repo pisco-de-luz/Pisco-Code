@@ -54,4 +54,49 @@ memcmp(const void* a, const void* b, size_t n)
     }
     return 0;
 }
+
+extern "C"
+{
+    __attribute__((weak)) void __aeabi_memcpy(void* d, const void* s, size_t n)
+    {
+        (void) memcpy(d, s, n);
+    }
+    __attribute__((weak)) void __aeabi_memcpy4(void* d, const void* s, size_t n)
+    {
+        (void) memcpy(d, s, n);
+    }
+    __attribute__((weak)) void __aeabi_memcpy8(void* d, const void* s, size_t n)
+    {
+        (void) memcpy(d, s, n);
+    }
+    __attribute__((weak)) void __aeabi_memmove(void* d, const void* s, size_t n)
+    {
+        (void) memmove(d, s, n);
+    }
+    __attribute__((weak)) void __aeabi_memset(void* d, size_t n, int c)
+    {
+        (void) memset(d, c, n);
+    }
+    __attribute__((weak)) void __aeabi_memset4(void* d, size_t n, int c)
+    {
+        (void) memset(d, c, n);
+    }
+    __attribute__((weak)) void __aeabi_memset8(void* d, size_t n, int c)
+    {
+        (void) memset(d, c, n);
+    }
+    __attribute__((weak)) void __aeabi_memclr(void* d, size_t n)
+    {
+        (void) memset(d, 0, n);
+    }
+    __attribute__((weak)) void __aeabi_memclr4(void* d, size_t n)
+    {
+        (void) memset(d, 0, n);
+    }
+    __attribute__((weak)) void __aeabi_memclr8(void* d, size_t n)
+    {
+        (void) memset(d, 0, n);
+    }
+
+} // extern "C"
 #endif

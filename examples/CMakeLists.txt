@@ -1,14 +1,9 @@
-message(STATUS "Target processor ################-> ${CMAKE_SYSTEM_PROCESSOR}")
+message(STATUS "Target processor -> ${CMAKE_SYSTEM_PROCESSOR}")
 
 if(CMAKE_SYSTEM_PROCESSOR STREQUAL "avr")
   add_subdirectory(avr)
 endif()
 
-# if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-#   add_subdirectory(native)
-# endif()
-
-# Future support:
-# if(CMAKE_SYSTEM_PROCESSOR STREQUAL "esp32")
-#   add_subdirectory(esp32)
-# endif()
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm|ARM")
+  add_subdirectory(stm32/boards/nucleo-f410rb)
+endif()
