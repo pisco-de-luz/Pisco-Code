@@ -39,7 +39,9 @@ target_include_directories(stm32_f410rb_basic SYSTEM PRIVATE ${VENDOR_DIR})
 set(STM32_CPU_FLAGS  -mcpu=cortex-m4 -mthumb)
 set(STM32_FPU_FLAGS  -mfpu=fpv4-sp-d16 -mfloat-abi=softfp)
 
-
+# Feed those flags to the bus so the library is compiled for Cortex-M4 Thumb too
+target_compile_options(pisco_mcu_flags INTERFACE ${STM32_CPU_FLAGS} ${STM32_FPU_FLAGS})
+target_link_options(pisco_mcu_flags    INTERFACE ${STM32_CPU_FLAGS} ${STM32_FPU_FLAGS})
 
 # Helpful for some GCC setups that preprocess .s
 target_compile_options(stm32_f410rb_basic PRIVATE
@@ -48,7 +50,9 @@ target_compile_options(stm32_f410rb_basic PRIVATE
 )
 
 # Link against the bare-metal variant of your library
-target_link_libraries(stm32_f410rb_basic PRIVATE pisco_code::core_bare gcc)
+target_link_options(stm32_f410rb_basic PRIVATE -Wl,--start-group)
+target_link_libraries(stm32_f410rb_basic PRIVATE gcc pisco_code::core_bare)
+target_link_options(stm32_f410rb_basic PRIVATE -Wl,--end-group)
 
 # Linker script and map file
 target_link_options(stm32_f410rb_basic PRIVATE

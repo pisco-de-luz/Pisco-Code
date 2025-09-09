@@ -110,36 +110,23 @@ main()
 {
     systick_init_1ms();
     ledInit();
-    ledOn();
-    delay_ms(250);
-    ledOff();
 
     SoftwarePwmLedController controller_led1(swPwmLed1);
     SignalEmitter            emitter_led1(&controller_led1);
 
-    emitter_led1.setDimmedLevel(7);
+    emitter_led1.setDimmedLevel(1);
 
     const RepeatTimes repeats{1};
     const NumDigits   num_digits{0};
-    const SignalCode  signal_code{2};
+    const SignalCode  signal_code{-102};
 
     emitter_led1.showCode(signal_code, NumberBase::DEC, num_digits, repeats);
 
-    int i = 0;
     while (emitter_led1.isRunning())
     {
         emitter_led1.loop();
         delay_ms(1);
-        ledOn();
-        delay_ms(250);
-        ledOff();
-        delay_ms(250);
     }
-
-    ledOn();
-    delay_ms(2500);
-    ledOff();
-    delay_ms(250);
 
     for (;;)
     {

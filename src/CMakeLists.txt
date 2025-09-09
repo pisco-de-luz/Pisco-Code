@@ -26,21 +26,28 @@ target_compile_options(PiscoCodeObjects PRIVATE
   -ffunction-sections -fdata-sections
 )
 
+# A tiny "flag bus" target that will carry MCU compile/link flags
+add_library(pisco_mcu_flags INTERFACE)
+
+
 # Bare objects for embedded builds
 add_library(PiscoCodeObjectsBare OBJECT ${LIB_SOURCES})
 target_include_directories(PiscoCodeObjectsBare PUBLIC ${INCLUDE_DIR})
 target_compile_features(PiscoCodeObjectsBare PUBLIC cxx_std_11)
 target_compile_definitions(PiscoCodeObjectsBare PUBLIC PISCO_FREESTANDING=1)
 target_compile_options(PiscoCodeObjectsBare PRIVATE
-  -Wall -Wextra -Wpedantic
-  -ffunction-sections -fdata-sections
-  -ffreestanding -fno-builtin
-  $<$<COMPILE_LANGUAGE:CXX>:
-    -fno-exceptions -fno-rtti
-    -fno-unwind-tables -fno-asynchronous-unwind-tables
-    -fno-threadsafe-statics -fno-use-cxa-atexit
-  >
+-Wall -Wextra -Wpedantic
+-ffunction-sections -fdata-sections
+-ffreestanding -fno-builtin
+$<$<COMPILE_LANGUAGE:CXX>:
+-fno-exceptions -fno-rtti
+-fno-unwind-tables -fno-asynchronous-unwind-tables
+-fno-threadsafe-statics -fno-use-cxa-atexit
+>
 )
+
+# Make bare objects consume whatever flags the bus provides
+target_link_libraries(PiscoCodeObjectsBare PUBLIC pisco_mcu_flags)
 
 # Build the freestanding shims with the bare objects so they see the define
 target_sources(PiscoCodeObjectsBare PRIVATE
