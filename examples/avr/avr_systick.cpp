@@ -7,8 +7,9 @@ namespace avr_systick
 {
     volatile uint32_t g_ms_ticks = 0;
 
-    void systick_init_1ms() noexcept
+    void init_1ms() noexcept
     {
+        cli();
         // 1 kHz with prescaler 64
         const uint32_t ocr = (static_cast<uint32_t>(F_CPU) / 64u / 1000u) - 1u;
 
@@ -29,6 +30,16 @@ namespace avr_systick
 
         sei();
     }
+
+    // Busy wait using the millisecond tick
+    void delay_ms(uint32_t ms) noexcept
+    {
+        const uint32_t start = g_ms_ticks;
+        while ((g_ms_ticks - start) < ms)
+        {
+        }
+    }
+
 } // namespace avr_systick
 
 ISR(TIMER1_COMPA_vect)
