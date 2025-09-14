@@ -1,4 +1,12 @@
-# tests/CMakeLists.txt — Build and run CppUTest-based unit tests
+# //--------------------------------------------------------------------------------------------
+# // File:        CMakeLists.txt
+# // Description: CMake file for tests/ directory
+# // Author:      Andre Viegas
+# // Date:        2025.04
+# // Version:     1.1
+# //--------------------------------------------------------------------------------------------
+
+
 file(GLOB TEST_SOURCES "*.cpp")
 file(GLOB MOCK_SOURCES mocks/*.cpp)
 file(GLOB HELPER_SOURCES helpers/*.cpp)

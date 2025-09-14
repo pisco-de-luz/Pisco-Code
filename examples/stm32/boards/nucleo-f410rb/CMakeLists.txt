@@ -1,6 +1,10 @@
-# examples/stm32/boards/nucleo-f410rb/CMakeLists.txt
-
-# Build the STM32 F410RB basic example
+# //--------------------------------------------------------------------------------------------
+# // File:        CMakeLists.txt
+# // Description: CMake file for examples/stm32/boards/nucleo-f410rb/ directory
+# // Author:      Andre Viegas
+# // Date:        2025.04
+# // Version:     1.1
+# //--------------------------------------------------------------------------------------------
 
 enable_language(ASM)
 
