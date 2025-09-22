@@ -12,7 +12,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR/.."  # <— this is the fix
 
-readonly PRESETS=("native" "avr" "stm32-f410rb")
+readonly PRESETS=("native" "avr" "avr-arduino-nano" "stm32-f410rb")
 readonly ROOT_DIR="$(pwd)"
 
 
@@ -64,14 +64,16 @@ build_example() {
   cmake --build "$build_dir" --target "$target"
   echo "[${preset}] Target '$target' done."
   
-  # Show memory usage if AVR
-  if [[ "$preset" == "avr" ]]; then
-    local elf_file="$build_dir/examples/$preset/${target}"
-    if [[ -f "$elf_file" ]]; then
-      echo "[${preset}] 📊 Memory usage for '${target}':"
-      avr-size -C --mcu=atmega328p "$elf_file"
+  # If it's an AVR preset, show memory usage using avr-size
+  if [[ "$PRESET" == avr-* ]]; then
+    ELF_PATH="build/${PRESET}/examples/avr/${TARGET}"
+    if [[ -f "${ELF_PATH}" ]]; then
+      echo
+      echo "Memory usage for ${TARGET} (Device: atmega328p)"
+      avr-size -C --mcu=atmega328p "${ELF_PATH}"
+      echo
     else
-      echo "[${preset}] ⚠️  ELF not found: $elf_file"
+      echo "Warning: ELF file not found at ${ELF_PATH}, skipping memory report"
     fi
   fi
 }

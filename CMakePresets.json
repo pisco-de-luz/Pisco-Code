@@ -26,6 +26,17 @@
         "cacheVariables": {
           "CMAKE_TOOLCHAIN_FILE": "cmake/toolchains/arm-none-eabi-gcc.cmake"
         }
+      },
+      {
+        "name": "avr-arduino-nano",
+        "generator": "Unix Makefiles",
+        "binaryDir": "build/avr-arduino-nano",
+        "description": "AVR ATmega328P Arduino Nano",
+        "cacheVariables": {
+          "CMAKE_TOOLCHAIN_FILE": "cmake/toolchains/avr-gcc.cmake",
+          "BOARD": "arduino-nano",
+          "EXAMPLES": "basic_example"
+        }
       }
     ],  
     "buildPresets": [
