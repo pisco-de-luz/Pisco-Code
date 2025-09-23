@@ -36,9 +36,6 @@
           "CMAKE_TOOLCHAIN_FILE": "cmake/toolchains/avr-gcc.cmake",
           "BOARD": "arduino-nano",
           "AVR_UPLOAD_PROGRAMMER": "usbasp",
-          // "AVR_UPLOAD_PROGRAMMER": "stk500v1",
-          // "AVR_UPLOAD_PORT": "/dev/ttyACM0",
-          // "AVR_UPLOAD_BAUD": "19200",
           "EXAMPLES": "basic_example"
         }
       }
