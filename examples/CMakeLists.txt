@@ -13,5 +13,5 @@ if(CMAKE_SYSTEM_PROCESSOR STREQUAL "avr")
 endif()
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm|ARM")
-  add_subdirectory(stm32/boards/nucleo-f410rb)
+  add_subdirectory(stm32)
 endif()
