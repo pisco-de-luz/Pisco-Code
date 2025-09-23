@@ -24,7 +24,10 @@
         "binaryDir": "build/stm32-f410rb",
         "description": "Cross-compile for STM32F410RB Nucleo",
         "cacheVariables": {
-          "CMAKE_TOOLCHAIN_FILE": "cmake/toolchains/arm-none-eabi-gcc.cmake"
+          "CMAKE_TOOLCHAIN_FILE": "cmake/toolchains/arm-none-eabi-gcc.cmake",
+          "BOARD": "nucleo-f410rb",
+          "EXAMPLES": "basic_example"
+          
         }
       },
       {
