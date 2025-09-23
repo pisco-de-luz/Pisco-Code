@@ -63,43 +63,88 @@ After this initial blink, the digit-by-digit representation proceeds as usual. F
 ![Pisco-Code-Negative12-144x144.gif](https://github.com/pisco-de-luz/Pisco-Code/blob/347a2f6999becbef7c22bfab5b0d4cb3d843b71c/graphics/Pisco-Code-Negative12-144x144.gif)
 <img src="https://github.com/pisco-de-luz/Pisco-Code/blob/d46fea2847a2d3f49e9fccbcebee1c75f28df785/graphics/pisco-code-12-negative.png" height="144">
 
+
 # Usage
 
+PiscoCode is a target-independent library for LED blink-coding. You provide:
+
+- A 1 ms periodic call to loop()
+- A small function to turn your LED on or off when requested
+
+No dynamic memory, no exceptions. Ideal for safety-critical systems.
+
 ```C++
-#include "Pisco-Code.h"
+#include "pisco_code.hpp"
+using namespace pisco_code;
 
-PiscoCode      ledBuiltin;                                        // declare an object of class PiscoCode
-bool           ledBuiltinOK;                                      // It is safe to show codes with ledBuiltin?
-
-void setup() {
-  pinMode(LED_BUILTIN, OUTPUT);                                   // initialize digital pin LED_BUILTIN as an output.                  
-  if ( ledBuiltinOK = ledBuiltin.setup(&turnLedOnOff) ) {         // calling the PiscoCode class constructor.
-     ledBuiltin.showCode(1024, static_cast<uint8_t>(pisco::NumberBase::DEC));               // display the 1024 number on BUILTIN led.  
-  }
+// LED glue for your board
+bool board_led(LedCodeType c) noexcept {
+    switch (static_cast<LedControlCode>(c)) {
+        case LedControlCode::ON:      /* turn LED on  */ return true;
+        case LedControlCode::OFF:     /* turn LED off */ return true;
+        case LedControlCode::FUNC_OK:                    return true;
+        default:                                         return false;
+    }
 }
 
-void loop() {
-   if ( ledBuiltinOK && ! ledBuiltin.isSequencing() ) {           // If ledBuiltin was set up and is not sequencing any code
-      ledBuiltin.showCode(millis()/1000, PiscoCode::HEX); // display some number on BUILTIN led repeatedly.    
-   }
-   ledBuiltin.loop(millis());                                     // We should call the LOOP function regularly.
+int main() {
+    SoftwarePwmLedController controller_led1(board_led);
+    SignalEmitter            emitter_led1(&controller_led1);
 
-   // run other non-blocking function here
-}
+    emitter_led1.setDimmedLevel(3);
 
-// Before using this function to turn the LED on and off, the setup method will check if it is a valid
-// pointer to a correct function, and it should respond to a LED_FUNC_OK call returning true. 
-//
-// This function will return true only if one of these three commands are received, LED_ON,
-// LED_OFF, and LED_FUNC_OK. All other values will return false. 
-bool turnLedOnOff(uint8_t ctrlLED) {
-  bool funcOK = true;
-  if ( ctrlLED == LED_ON ) {              digitalWrite(LED_BUILTIN, HIGH);
-  } else if ( ctrlLED == LED_OFF ) {      digitalWrite(LED_BUILTIN, LOW);  
-  } else if ( ctrlLED != LED_FUNC_OK ) {  funcOK = false; }
-  return( funcOK );
+    const RepeatTimes repeats{3};
+    const NumDigits   num_digits{0};
+    const SignalCode  signal_code{-102};
+
+    emitter_led1.showCode(signal_code, NumberBase::DEC, num_digits, repeats);
+    while (emitter_led1.isRunning())
+    {
+        emitter_led1.loop();
+        avr_systick::delay_ms(1);
+    }
 }
 ```
+
+
+# AVR Build and Upload Options (CMakePresets.json)
+
+The AVR example system supports flexible configuration through `CMakePresets.json`.
+You can override variables such as the target board, programmer type, upload port, and baud rate — either by modifying the preset directly or via the command line.
+
+## Example preset (for Arduino as ISP)
+```json
+{
+  "name": "avr-arduino-nano",
+  "binaryDir": "build/avr-arduino-nano",
+  "generator": "Unix Makefiles",
+  "cacheVariables": {
+    "CMAKE_TOOLCHAIN_FILE": "cmake/toolchains/avr-gcc.cmake",
+    "BOARD": "arduino-nano",
+    "EXAMPLES": "basic_example",
+    "AVR_UPLOAD_PROGRAMMER": "stk500v1",
+    "AVR_UPLOAD_PORT": "/dev/ttyACM0",
+    "AVR_UPLOAD_BAUD": "19200"
+  }
+}
+```
+
+## Example preset (for USBasp)
+```json
+{
+  "name": "avr-arduino-nano",
+  "binaryDir": "build/avr-arduino-nano",
+  "generator": "Unix Makefiles",
+  "cacheVariables": {
+    "CMAKE_TOOLCHAIN_FILE": "cmake/toolchains/avr-gcc.cmake",
+    "BOARD": "arduino-nano",
+    "EXAMPLES": "basic_example",
+    "AVR_UPLOAD_PROGRAMMER": "usbasp"
+  }
+}
+```
+
+
 # Using on Arduino IDE
 To install, copy the Pisco-Code folder into your arduino sketchbook-libraries folder. More detailed instruction are [here](http://arduino.cc/en/Guide/Libraries).
 
