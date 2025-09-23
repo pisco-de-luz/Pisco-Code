@@ -181,8 +181,8 @@ You can customize the brightness levels used during the blink sequence using the
 
 #### Default values:
 
-PeakLevel = PWM_MAX
-DimmedLevel = DEFAULT_DIMMED_LEVEL (typically a low but visible level)
+- PeakLevel = PWM_MAX
+- DimmedLevel = DEFAULT_DIMMED_LEVEL (typically a low but visible level)
 
 These settings are optional. If not configured, the library uses defaults suitable for most cases.
 
