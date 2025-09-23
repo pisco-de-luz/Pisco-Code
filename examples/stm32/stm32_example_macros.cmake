@@ -39,6 +39,12 @@ function(add_stm32_example TARGET_NAME)
 
     set(STM32_CPU_FLAGS -mcpu=cortex-m4 -mthumb)
     set(STM32_FPU_FLAGS -mfpu=fpv4-sp-d16 -mfloat-abi=softfp)
+    set(STM32_EMBEDDED_FLAGS
+        -fno-exceptions
+        -fno-rtti
+        -fno-use-cxa-atexit
+        -fno-threadsafe-statics
+    )
     set(STM32_LINK_FLAGS
         -nostdlib
         -Wl,--gc-sections
@@ -51,6 +57,7 @@ function(add_stm32_example TARGET_NAME)
     target_compile_options(${TARGET_NAME} PRIVATE
         ${STM32_CPU_FLAGS}
         ${STM32_FPU_FLAGS}
+        ${STM32_EMBEDDED_FLAGS}
         $<$<COMPILE_LANGUAGE:ASM>:-x assembler-with-cpp>
     )
 
@@ -58,10 +65,11 @@ function(add_stm32_example TARGET_NAME)
         ${STM32_CPU_FLAGS}
         ${STM32_FPU_FLAGS}
         ${STM32_LINK_FLAGS}
+        ${STM32_EMBEDDED_FLAGS}
     )
 
     target_link_options(${TARGET_NAME} PRIVATE -Wl,--start-group)
-    target_link_libraries(${TARGET_NAME} PRIVATE gcc pisco_code::core_bare)
+    target_link_libraries(${TARGET_NAME} PRIVATE pisco_code::core_bare gcc)
     target_link_options(${TARGET_NAME} PRIVATE -Wl,--end-group)
 
     add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
