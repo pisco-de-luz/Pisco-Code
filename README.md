@@ -166,60 +166,55 @@ The showCode() function needs two arguments, the "code-to-show" and the "base" t
 ### Status Code Returned
 
 | Status Code            | Description                                            |
-| :---:                  | :---                                                   |
+| ---:                   | :---                                                   |
 | TRUE                   | This function accepted the code-to-show and base passed as arguments and will start showing the code shortly. |
 | FALSE       | This function is still working in the previous code and can not accept any new tasks. |
 
 
 ### Custom Settings
-Before calling the showCode() function, it is possible to change some characteristics to fit your needs better. 
+You can customize the brightness levels used during the blink sequence using the following methods:
 
-The LED could have sixteen bright levels using a PWM-controlled software mechanism. From zero (less bright) to 15 (maximum bright). We need to set two brightness levels to Pisco Code works, one for the dimmed phase and another for the blink phase. 
+| Method         | Desciption                                  |
+| :---           | :---                                        |
+| `setPeakLevel(LedLevel level)`   | Sets the LED brightness level for "peak" pulses (i.e., when a bit is active). Use this to adjust the maximum intensity of blinks. Valid range: `0` (off) to `PWM_MAX` (full brightness). |
+| `setDimmedLevel(LedLevel level)` | Sets the LED brightness for "dimmed" intervals between pulses. Use this to reduce contrast or prevent full-off between blinks. Valid range: `0` to value lower than or equal to `setPeakLevel()`. |
 
-When creating the Pisco Code object, these values are zero and fifteen, respectively. 
+#### Default values:
 
-We can use these two functions below to change it.
+PeakLevel = PWM_MAX
+DimmedLevel = DEFAULT_DIMMED_LEVEL (typically a low but visible level)
+
+These settings are optional. If not configured, the library uses defaults suitable for most cases.
 
 ```C++
-ledOne.setDimPwm(3);    // Define the new value of default dimmed pwm. 
-ledOne.setPwm(10);      // Define the new value of default pwm.
+SoftwarePwmLedController controller_led1(hal_led::Led1);
+SignalEmitter            emitter_led1(&controller_led1);
+
+emitter_led1.setPeakLevel(10);
+emitter_led1.setDimmedLevel(3);
 ```
 
-We can also change the others two options, the minimum number of digits to show and how many times the Pisco Code should repeat. 
+## Runtime Control
 
-In the example below, we will set the Pisco Code to have at least four digits and repeat it twice. 
+These methods allow you to monitor and control the execution of LED blink sequences.
 
-```C++
-// Define how many times the code should repeat. As we set it to one, indicate that we want it to show twice.
-ledOne.setRepeat(1);       
+| Method         | Desciption                                  |
+| :---           | :---                                        |
+| `loop()`       | Must be called exactly once per millisecond. Drives the internal timing and state machine. If not called regularly, the LED signal timing will break. This method is non-blocking and fast. |
+| `isRunning()`  | Returns `true` if a signal is currently being shown on the LED. Use this to check whether the current code has finished displaying or is still in progress. |
 
-// Define the minimum number of digits to show. If the code is 12, the system will show 0012.
-ledOne.setMinDigits(4);    
-```
-
-## More Public Functions
-
-### isSequencing()
-
-As some Pisco Code are big or need to be repeated many times, it could take a while to finish the whole process. 
-So, we create a function to check if the current process is still running or has already been finished. 
+### Example
 
 ```C++
-if ( ! ledOne.isSequencing() ) {   // If ledOne is not sequencing any more
-                                   // We can call ledOne.showCode() again to show new values
+blinker.showCode(123, NumberBase::DEC, 0, 1);
+
+while (blinker.isRunning()) {
+    blinker.loop();     // must be called every 1 ms
+    delay_1ms();        // implement this with a timer or busy wait
 }
 ```
 
-The Pisco Code is a nom blocking library that works using three main functions. 
+### Notes:
 
-The first one is setup() that we have to call as soon as we want to start using our object.
-After that, the second most crucial function is loop(). We should call it repeatedly at least 1000 times per second.  
-The last function we need to call is showCode(), the function that starts the whole sequencing of blinks to show the desired code. 
-
-As we have already shown how to use the setup() and showCode() functions, now we will start describing the mechanisms behind the loop() process. 
-
-### loop()
-
-The loop() function is the most complex algorithm in the whole class. It manages all the timing and dimerization of the Pisco Code one LED blink system. Once the others functions finish passing the information necessary to show the Pisco Code, like brightness, code, base system, times to repeat, etc., it starts the whole sequencing process. 
-
-As it is a nom blocking function, just a handful of line codes are executed and returned briefly. Each time it is called, based on the amount of time passed since the last call, the algorithm determines if it is necessary to turn the LED on, off, or do nothing. 
+* `loop()` advances the LED pattern by 1 ms. You are responsible for calling it at a steady 1 kHz rate (e.g., using `_delay_ms(1)`, `SysTick`, or RTOS task).
+* `isRunning()` is useful to wait for the current signal to complete before showing another code or putting the device to sleep.
