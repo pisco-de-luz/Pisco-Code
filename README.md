@@ -93,9 +93,9 @@ int main() {
 
     emitter_led1.setDimmedLevel(3);
 
-    const RepeatTimes repeats{3};
-    const NumDigits   num_digits{0};
     const SignalCode  signal_code{-102};
+    const NumDigits   num_digits{0};
+    const RepeatTimes repeats{3};
 
     emitter_led1.showCode(signal_code, NumberBase::DEC, num_digits, repeats);
     while (emitter_led1.isRunning())
@@ -144,102 +144,32 @@ You can override variables such as the target board, programmer type, upload por
 }
 ```
 
-
-# Using on Arduino IDE
-To install, copy the Pisco-Code folder into your arduino sketchbook-libraries folder. More detailed instruction are [here](http://arduino.cc/en/Guide/Libraries).
-
-# Basic Configuration
-You first need to include the header file and create one or more PiscoCode objects to use this library.
-
-## Initial Class setup
-
-```C++
-#include "Pisco-Code.h"
-
-PiscoCode      ledOne;         // declare an object of class PiscoCode
-PiscoCode      ledTwo;         // declare an object of class PiscoCode
-```
-
-Before we call the setup method, we have to create a local function that will be passed as a pointer to work as a layer abstraction to the hardware that we 
-will use to turn the LED on and off. 
-
-## Functions of Hardware Abstraction Examples
-
-This function should return TRUE only if one of these three commands are received, pisco::LED_ON, pisco::LED_OFF, and pisco::LED_FUNC_OK. All other values should return FALSE. 
-
-When the caller passes pisco::LED_ON, the function should turn the LED on and return TRUE if everything works well. Likewise, when the caller passes pisco::LED_OFF, it should turn the LED off and return TRUE.
-
-
-```C++
-bool turnLed1_OnOff(uint8_t ctrlLED) {
-  bool funcOK = true;
-  if ( ctrlLED == pisco::LED_ON ) {              digitalWrite(LED1_PORT, HIGH);
-  } else if ( ctrlLED == pisco::LED_OFF ) {      digitalWrite(LED1_PORT, LOW);  
-  } else if ( ctrlLED != pisco::LED_FUNC_OK ) {  funcOK = false; }
-  return( funcOK );
-}
-
-bool turnLed2_OnOff(uint8_t ctrlLED) {
-  bool funcOK = true;
-  if ( ctrlLED == pisco::LED_ON ) {              digitalWrite(LED2_PORT, HIGH);
-  } else if ( ctrlLED == pisco::LED_OFF ) {      digitalWrite(LED2_PORT, LOW);  
-  } else if ( ctrlLED != pisco::LED_FUNC_OK ) {  funcOK = false; }
-  return( funcOK );
-}
-```
-
-## Calling the Object setup() function.
-
-The setup() function has two main task. The first one is to register the pointer to the hardware abstraction function into PiscoCode::LedOnOff private variable. The second task is to certify that the pointer is valid and it is pointing to a function that seems to be working as it should. 
-
-It receives a pointer to this abstraction function and returns TRUE if everything works ok. Otherwise, it returns FALSE, indicating that the setup process of this object failed. 
-
-```C++
-// Global variables
-bool           ledOneOK;       // It is safe to show codes with ledOne?
-bool           ledTwoOK;       // It is safe to show codes with ledTwo?
-
-void setup() {
-  pinMode(LED1_PORT, OUTPUT);                                 // initialize digital pin LED1_PORT as an output.                  
-  pinMode(LED2_PORT, OUTPUT);                                 // initialize digital pin LED2_PORT as an output.    
-  ledOneOK = ledOne.setup(&turnLed1_OnOff);                   // calling the PiscoCode setup function.
-  ledTwoOK = ledTwo.setup(&turnLed2_OnOff);                   // calling the PiscoCode setup function.
-}
-```
-
 ## Showing PiscoCodes, calling showCode() Function
-The showCode() function needs two arguments, the "code-to-show" and the "base" to use. It will return three possible status codes.
 
+The showCode() function needs two arguments, the "code-to-show" and the "base" to use. It will return three possible status codes.
+ ```C++
+    const SignalCode  signal_code{-102};
+    const NumDigits   num_digits{0};
+    const RepeatTimes repeats{3};
+    emitter_led1.showCode(signal_code, NumberBase::DEC, num_digits, repeats);
+ ```
 
 ### Arguments
 
 | Argument               | Description                                            |
-| :---:                  | :---                                                   |
-| code-to-show (int32_t) | Integer number between -9999999999 and 9999999999 to show in the LED that was set up during this object initialization.  |
-| base (uint8_t)         | This function will show the code passed in the first argument using one of the following base systems. PiscoCode::BIN, PiscoCode::OCT, static_cast<uint8_t>(pisco::NumberBase::DEC) or PiscoCode::HEX  |
+| ---:                   | :---                                                   |
+| `signal_code`            | Signed integer value to be encoded as LED blinks. Valid range: `-999999999` to `999999999`.  |
+| `base`               | Numeric base used to display the code. Use one of: `NumberBase::DEC`, `NumberBase::HEX`, `NumberBase::OCT` or `NumberBase::BIN` |
+| `num_digits`   | Minimum number of digits to display. If set to `0`, the digit count is determined automatically. Use this to pad with leading zeros when needed. |
+| `repeats`      | Number of times the full code should be repeated. Set to `1` for a single display, or any positive number. |
 
 ### Status Code Returned
 
 | Status Code            | Description                                            |
 | :---:                  | :---                                                   |
-| OK                     | This function accepted the code-to-show and base passed as arguments and will start showing the code shortly. |
-| SEQUENCE_RUNNING       | This function is still working in the previous code and can not accept any new tasks. |
-| FAILED                 | Something went wrong, and this function failed to accept this code. |
+| TRUE                   | This function accepted the code-to-show and base passed as arguments and will start showing the code shortly. |
+| FALSE       | This function is still working in the previous code and can not accept any new tasks. |
 
-### Simple calling Examples
-
-```C++
-// If we could start showing Pisco Code 1024 on ledOne
-if ( ledOne.showCode(1024, static_cast<uint8_t>(pisco::NumberBase::DEC)) == static_cast<uint8_t>(pisco::status_t::OK) ) {
-   // Do something
-} 
-// Trying to start showing Pisco Code 13 in binary on ledTwo 
-uint8_t statusLedTwo = ledTwo.showCode(13, PiscoCode::BIN);
-// If we could not
-if ( statusLedTwo != static_cast<uint8_t>(pisco::status_t::OK) ) {
-   // Do something
-}
-```
 
 ### Custom Settings
 Before calling the showCode() function, it is possible to change some characteristics to fit your needs better. 
