@@ -1,43 +1,63 @@
-function(add_avr_example TARGET_NAME)
-  set(oneValueArgs SOURCE MCU)
-  cmake_parse_arguments(EX "" "${oneValueArgs}" "" ${ARGN})
+function(add_avr_example EX_NAME BOARD BOARD_CANON)
+  set(HAL_CPP "boards/${BOARD}/hal_led_${BOARD_CANON}.cpp")
+  set(HEX_FILE "${CMAKE_CURRENT_BINARY_DIR}/${EX_NAME}.hex")
+  set(MAP_FILE "${CMAKE_CURRENT_BINARY_DIR}/${EX_NAME}.map")
 
-  add_executable(${TARGET_NAME} ${EX_SOURCE})
-  target_link_libraries(${TARGET_NAME} 
-     PRIVATE 
-        PiscoCodeCore
-        gcc
+  find_program(CMAKE_OBJCOPY NAMES avr-objcopy objcopy REQUIRED)
+
+  add_executable(${EX_NAME}
+    ${EX_NAME}.cpp
+    $<TARGET_OBJECTS:avr_shared>
+    boards/${BOARD}/board_config.hpp
+    ${HAL_CPP}
   )
 
-  find_program(AVR_OBJCOPY avr-objcopy REQUIRED)
-  find_program(AVRDUDE     avrdude     REQUIRED)
+  target_include_directories(${EX_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/boards/${BOARD}
+    ${CMAKE_SOURCE_DIR}/include
+  )
 
-  set(HEX_FILE ${CMAKE_CURRENT_BINARY_DIR}/${TARGET_NAME}.hex)
-  set(ELF_FILE ${CMAKE_CURRENT_BINARY_DIR}/${TARGET_NAME})
+  target_link_libraries(${EX_NAME} PRIVATE PiscoCodeCore)
 
-  # POST-BUILD: generate .hex whenever executable is built
+  target_link_options(${EX_NAME} PRIVATE
+    -Wl,-Map=${MAP_FILE}
+    -Wl,--gc-sections
+    -Wl,--cref
+    -Wl,--start-group
+  )
+  target_link_libraries(${EX_NAME} PRIVATE c gcc m)
+  target_link_options(${EX_NAME} PRIVATE -Wl,--end-group)
+
   add_custom_command(
-    TARGET ${TARGET_NAME}
-    POST_BUILD
-    COMMAND ${AVR_OBJCOPY} -O ihex -R .eeprom ${ELF_FILE} ${HEX_FILE}
-    COMMENT "→ Generating HEX: ${HEX_FILE}"
-    VERBATIM
+    OUTPUT ${HEX_FILE}
+    COMMAND ${CMAKE_OBJCOPY} -O ihex -R .eeprom
+            $<TARGET_FILE:${EX_NAME}>
+            ${HEX_FILE}
+    DEPENDS ${EX_NAME}
+    COMMENT "Generating ${EX_NAME}.hex"
   )
 
-  set(AVR_PORT "/dev/ttyACM0" CACHE STRING "AVR upload port")
-  set(AVR_BAUD "19200"        CACHE STRING "AVR upload baud")
+  add_custom_target(${EX_NAME}_hex
+    DEPENDS ${HEX_FILE}
+  )
 
-  add_custom_target(${TARGET_NAME}_upload
-    DEPENDS ${TARGET_NAME}
-    COMMAND ${AVRDUDE}
+  set(AVR_UPLOAD_PROGRAMMER "stk500v1" CACHE STRING "Programmer used by avrdude")
+  set(AVR_UPLOAD_MCU        "atmega328p" CACHE STRING "MCU used by avrdude")
+  set(AVR_UPLOAD_PORT       "/dev/ttyACM0" CACHE STRING "Serial port used by avrdude")
+  set(AVR_UPLOAD_BAUD       "19200"       CACHE STRING "Baud rate for avrdude")
+
+  add_custom_target(${EX_NAME}_upload
+    COMMAND ${CMAKE_COMMAND} -E echo "Flashing ${HEX_FILE} to ${AVR_UPLOAD_PORT}..."
+    COMMAND avrdude
       -v
-      -p ${EX_MCU}
-      -c stk500v1
-      -P ${AVR_PORT}
-      -b ${AVR_BAUD}
-      -F
-      -e
+      -p ${AVR_UPLOAD_MCU}
+      -c ${AVR_UPLOAD_PROGRAMMER}
+      -P ${AVR_UPLOAD_PORT}
+      -b ${AVR_UPLOAD_BAUD}
       -U flash:w:${HEX_FILE}:i
-    COMMENT "→ Uploading ${TARGET_NAME}.hex to ${AVR_PORT}"
+    DEPENDS ${EX_NAME}_hex
+    USES_TERMINAL
+    COMMENT "→ Uploading ${EX_NAME}.hex to ${AVR_UPLOAD_PORT}"
   )
 endfunction()
