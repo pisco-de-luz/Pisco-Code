@@ -42,22 +42,37 @@ function(add_avr_example EX_NAME BOARD BOARD_CANON)
     DEPENDS ${HEX_FILE}
   )
 
-  set(AVR_UPLOAD_PROGRAMMER "stk500v1" CACHE STRING "Programmer used by avrdude")
-  set(AVR_UPLOAD_MCU        "atmega328p" CACHE STRING "MCU used by avrdude")
-  set(AVR_UPLOAD_PORT       "/dev/ttyACM0" CACHE STRING "Serial port used by avrdude")
-  set(AVR_UPLOAD_BAUD       "19200"       CACHE STRING "Baud rate for avrdude")
+  # Upload configuration
+  set(AVR_UPLOAD_PROGRAMMER "usbasp"      CACHE STRING "Programmer used by avrdude")
+  set(AVR_UPLOAD_MCU        "atmega328p"  CACHE STRING "MCU used by avrdude")
+  set(AVR_UPLOAD_PORT       ""            CACHE STRING "Serial port or USB device (if needed)")
+  set(AVR_UPLOAD_BAUD       ""            CACHE STRING "Baud rate for serial-based upload")
+
+  unset(UPLOAD_PORT_ARG)
+  unset(UPLOAD_BAUD_ARG)
+
+  if(AVR_UPLOAD_PROGRAMMER STREQUAL "arduino" OR AVR_UPLOAD_PROGRAMMER STREQUAL "stk500v1")
+    if(AVR_UPLOAD_PORT)
+      list(APPEND UPLOAD_PORT_ARG -P ${AVR_UPLOAD_PORT})
+    endif()
+    if(AVR_UPLOAD_BAUD)
+      list(APPEND UPLOAD_BAUD_ARG -b ${AVR_UPLOAD_BAUD})
+    endif()
+  endif()
+
 
   add_custom_target(${EX_NAME}_upload
-    COMMAND ${CMAKE_COMMAND} -E echo "Flashing ${HEX_FILE} to ${AVR_UPLOAD_PORT}..."
+    COMMAND ${CMAKE_COMMAND} -E echo "Flashing ${HEX_FILE} using ${AVR_UPLOAD_PROGRAMMER}..."
     COMMAND avrdude
       -v
       -p ${AVR_UPLOAD_MCU}
       -c ${AVR_UPLOAD_PROGRAMMER}
-      -P ${AVR_UPLOAD_PORT}
-      -b ${AVR_UPLOAD_BAUD}
+      ${UPLOAD_PORT_ARG}
+      ${UPLOAD_BAUD_ARG}
       -U flash:w:${HEX_FILE}:i
     DEPENDS ${EX_NAME}_hex
     USES_TERMINAL
-    COMMENT "→ Uploading ${EX_NAME}.hex to ${AVR_UPLOAD_PORT}"
+    COMMENT "→ Uploading ${EX_NAME}.hex"
   )
 endfunction()
+
