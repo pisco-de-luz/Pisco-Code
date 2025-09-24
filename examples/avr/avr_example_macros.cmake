@@ -44,7 +44,7 @@ function(add_avr_example EX_NAME BOARD BOARD_CANON)
 
   # Upload configuration
   set(AVR_UPLOAD_PROGRAMMER "usbasp"      CACHE STRING "Programmer used by avrdude")
-  set(AVR_UPLOAD_MCU        "atmega328pb"  CACHE STRING "MCU used by avrdude")
+  set(AVR_UPLOAD_MCU        "atmega328p"  CACHE STRING "MCU used by avrdude")
   set(AVR_UPLOAD_PORT       ""            CACHE STRING "Serial port or USB device (if needed)")
   set(AVR_UPLOAD_BAUD       ""            CACHE STRING "Baud rate for serial-based upload")
 
