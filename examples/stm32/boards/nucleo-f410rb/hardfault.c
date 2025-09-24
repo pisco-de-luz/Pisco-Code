@@ -23,7 +23,7 @@ HardFault_Handler(void)
     for (;;)
     {
         GPIOA_ODR ^= (1u << LD2_PIN);
-        for (volatile int i = 0; i < 60000; ++i)
+        for (volatile int i = 0; i < 120000; ++i)
         {
         }
     }
