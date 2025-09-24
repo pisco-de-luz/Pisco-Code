@@ -7,11 +7,11 @@ namespace
 
     inline void led_on() noexcept
     {
-        NANO_LED_PORT |= (1 << NANO_LED_BIT);
+        NANO_LED_PORT &= ~(1 << NANO_LED_BIT);
     }
     inline void led_off() noexcept
     {
-        NANO_LED_PORT &= ~(1 << NANO_LED_BIT);
+        NANO_LED_PORT |= (1 << NANO_LED_BIT);
     }
 
 } // namespace
