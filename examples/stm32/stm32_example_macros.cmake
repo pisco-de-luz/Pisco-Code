@@ -58,6 +58,11 @@ function(add_stm32_example TARGET_NAME)
         -Wl,--end-group
     )
 
+    # Feed those flags to the bus so the library is compiled for Cortex-M4 Thumb too
+    target_compile_options(pisco_mcu_flags INTERFACE ${STM32_CPU_FLAGS} ${STM32_FPU_FLAGS})
+    target_link_options(pisco_mcu_flags    INTERFACE ${STM32_CPU_FLAGS} ${STM32_FPU_FLAGS})
+
+
     target_compile_options(${TARGET_NAME} PRIVATE
         ${STM32_CPU_FLAGS}
         ${STM32_FPU_FLAGS}
