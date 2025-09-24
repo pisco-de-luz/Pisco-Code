@@ -32,6 +32,7 @@ fi
 PRESET="${INPUT%%/*}"
 TARGET="${INPUT##*/}"
 UPLOAD_TARGET="${TARGET}_upload"
+# UPLOAD_TARGET="${TARGET}"
 BUILD_DIR="build/$PRESET"
 
 say "🚀 Uploading '$TARGET' using preset '$PRESET'"

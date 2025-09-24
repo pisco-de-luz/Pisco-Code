@@ -79,6 +79,9 @@ function(add_stm32_example TARGET_NAME)
         COMMENT "Size and artifacts"
     )
 
+    set(OPENOCD_INTERFACE "interface/stlink.cfg")
+    set(OPENOCD_TARGET "target/stm32f4x.cfg")
+    
     add_custom_target(${TARGET_NAME}_upload
         COMMAND ${CMAKE_COMMAND} -E echo "Programming with OpenOCD..."
         COMMAND openocd -f ${OPENOCD_INTERFACE} -f ${OPENOCD_TARGET}
