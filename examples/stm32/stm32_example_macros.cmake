@@ -39,12 +39,16 @@ function(add_stm32_example TARGET_NAME)
 
     set(STM32_CPU_FLAGS -mcpu=cortex-m4 -mthumb)
     set(STM32_FPU_FLAGS -mfpu=fpv4-sp-d16 -mfloat-abi=softfp)
-    set(STM32_EMBEDDED_FLAGS
+
+    set(STM32_EMBEDDED_COMMON_FLAGS
         -fno-exceptions
+    )
+    set(STM32_EMBEDDED_CXX_FLAGS
         -fno-rtti
         -fno-use-cxa-atexit
         -fno-threadsafe-statics
     )
+    
     set(STM32_LINK_FLAGS
         -nostdlib
         -Wl,--gc-sections
@@ -57,7 +61,8 @@ function(add_stm32_example TARGET_NAME)
     target_compile_options(${TARGET_NAME} PRIVATE
         ${STM32_CPU_FLAGS}
         ${STM32_FPU_FLAGS}
-        ${STM32_EMBEDDED_FLAGS}
+        ${STM32_EMBEDDED_COMMON_FLAGS}
+        $<$<COMPILE_LANGUAGE:CXX>:${STM32_CXX_FLAGS}>
         $<$<COMPILE_LANGUAGE:ASM>:-x assembler-with-cpp>
     )
 
@@ -65,7 +70,8 @@ function(add_stm32_example TARGET_NAME)
         ${STM32_CPU_FLAGS}
         ${STM32_FPU_FLAGS}
         ${STM32_LINK_FLAGS}
-        ${STM32_EMBEDDED_FLAGS}
+        ${STM32_EMBEDDED_COMMON_FLAGS}
+        $<$<COMPILE_LANGUAGE:CXX>:${STM32_CXX_FLAGS}>
     )
 
     target_link_options(${TARGET_NAME} PRIVATE -Wl,--start-group)
@@ -81,7 +87,7 @@ function(add_stm32_example TARGET_NAME)
 
     set(OPENOCD_INTERFACE "interface/stlink.cfg")
     set(OPENOCD_TARGET "target/stm32f4x.cfg")
-    
+
     add_custom_target(${TARGET_NAME}_upload
         COMMAND ${CMAKE_COMMAND} -E echo "Programming with OpenOCD..."
         COMMAND openocd -f ${OPENOCD_INTERFACE} -f ${OPENOCD_TARGET}
