@@ -1,6 +1,6 @@
 include(${CMAKE_CURRENT_LIST_DIR}/stm32_example_macros.cmake)
 
-set(BOARD "nucleo-f410rb" CACHE STRING "STM32 board under boards/")
+set(BOARD "f410rb" CACHE STRING "STM32 board under boards/")
 set(EXAMPLES "basic_example" CACHE STRING "Examples to build")
 string(REPLACE "-" "_" BOARD_CANON "${BOARD}")
 separate_arguments(EXAMPLES)
