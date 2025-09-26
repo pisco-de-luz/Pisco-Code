@@ -3,63 +3,36 @@
     "cmakeMinimumRequired": { "major": 3, "minor": 19, "patch": 0 },
   
     "configurePresets": [
-      {
-        "name":       "native",
-        "generator":  "Unix Makefiles",
-        "binaryDir":  "build/native",
-        "description":"Host build (gcc/g++)"
-      },
-      {
-        "name":       "avr",
-        "generator":  "Unix Makefiles",
-        "binaryDir":  "build/avr",
-        "description":"Cross-compile for ATmega328p",
-        "cacheVariables": {
-        "CMAKE_TOOLCHAIN_FILE": "cmake/toolchains/avr-gcc.cmake"
+        {
+            "name": "native",
+            "binaryDir": "build/native",
+            "description": "Host build for unit tests"
+        },
+        {
+            "name": "avr-arduino-nano",
+            "binaryDir": "build/avr-arduino-nano",
+            "description": "Arduino Nano (ATmega328P)",
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "cmake/toolchains/avr-gcc.cmake",
+                "BOARD": "arduino-nano",
+                "EXAMPLES": "basic_example"
+            }
+        },
+        {
+            "name": "stm32-f410rb",
+            "binaryDir": "build/stm32-f410rb",
+            "description": "STM32F410RB development board",
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "cmake/toolchains/arm-none-eabi-gcc.cmake",
+                "BOARD": "f410rb",
+                "EXAMPLES": "basic_example"
+            }
         }
-      },
-      {
-        "name": "stm32-f410rb",
-        "generator": "Unix Makefiles",
-        "binaryDir": "build/stm32-f410rb",
-        "description": "Cross-compile for STM32F410RB Nucleo",
-        "cacheVariables": {
-          "CMAKE_TOOLCHAIN_FILE": "cmake/toolchains/arm-none-eabi-gcc.cmake",
-          "BOARD": "f410rb",
-          "EXAMPLES": "basic_example"
-          
-        }
-      },
-      {
-        "name": "avr-arduino-nano",
-        "generator": "Unix Makefiles",
-        "binaryDir": "build/avr-arduino-nano",
-        "description": "AVR ATmega328P Arduino Nano",
-        "cacheVariables": {
-          "CMAKE_TOOLCHAIN_FILE": "cmake/toolchains/avr-gcc.cmake",
-          "BOARD": "arduino-nano",
-          "AVR_UPLOAD_PROGRAMMER": "usbasp",
-          "EXAMPLES": "basic_example"
-        }
-      }
-    ],  
+    ],
+    
     "buildPresets": [
-      {
-        "name":            "native",
-        "configurePreset": "native",
-        "description":     "Build the native configuration"
-      },
-      {
-        "name":            "avr",
-        "configurePreset": "avr",
-        "description":     "Build the AVR configuration"
-      },
-      {
-        "name":            "stm32-f410rb",
-        "configurePreset": "stm32-f410rb",
-        "description":     "Build the STM32F410RB configuration"
-      }
+        { "name": "native", "configurePreset": "native" },
+        { "name": "avr-arduino-nano", "configurePreset": "avr-arduino-nano" },
+        { "name": "stm32-f410rb", "configurePreset": "stm32-f410rb" }
     ]
-  }
-  
-  
+}
