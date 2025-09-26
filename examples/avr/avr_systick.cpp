@@ -32,10 +32,10 @@ namespace avr_systick
     }
 
     // Busy wait using the millisecond tick
-    void delay_ms(uint32_t ms) noexcept
+    void delay_ms(uint32_t milliseconds) noexcept
     {
         const uint32_t start = g_ms_ticks;
-        while ((g_ms_ticks - start) < ms)
+        while ((g_ms_ticks - start) < milliseconds)
         {
         }
     }
