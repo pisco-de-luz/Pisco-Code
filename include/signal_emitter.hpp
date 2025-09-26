@@ -46,7 +46,6 @@ namespace pisco_code
         TickCounter         start_time_      = 0;
         TickCounter         phase_duration_  = 0;
         PhaseLoop           current_phase_   = PhaseLoop::IDLE;
-        bool                is_negative_     = false;
         bool                is_running_      = false;
         bool                is_in_gap_level_ = false;
         LedLevel            peak_level_      = DEFAULT_PULSE_LEVEL;
