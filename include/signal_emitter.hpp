@@ -1,9 +1,9 @@
 // signal_emitter.hpp
 #pragma once
 
-#include "led_controller.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
+#include "signal_controller.hpp"
 #include "signal_element.hpp"
 #include "signal_pulse_iterator.hpp"
 #include "signal_sequencer.hpp"
@@ -15,7 +15,7 @@ namespace pisco_code
     class SignalEmitter
     {
       public:
-        explicit SignalEmitter(LedController* controller);
+        explicit SignalEmitter(SignalController* controller);
 
         bool showCode(SignalCode code, NumberBase base, NumDigits num_digits,
                       RepeatTimes repeats);
@@ -38,7 +38,7 @@ namespace pisco_code
             IDLE,
         };
 
-        LedController*      controller_ = nullptr;
+        SignalController*   controller_ = nullptr;
         SignalSequencer     sequencer_;
         SignalPulseIterator pulse_iterator_;
         SignalElement       element_;

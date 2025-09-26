@@ -1,4 +1,4 @@
-// led_controller.hpp
+// signal_controller.hpp
 #pragma once
 
 #include "pisco_types.hpp"
@@ -14,7 +14,7 @@ namespace pisco_code
     };
 
     // NOLINT(cppcoreguidelines-special-member-functions)
-    class LedController
+    class SignalController
     {
       public:
         virtual void               setPeakLevel(LedLevel level)         = 0;
@@ -24,12 +24,12 @@ namespace pisco_code
         virtual void               setBlinkMode(BlinkMode mode)         = 0;
 
       protected:
-        LedController()                                = default;
-        LedController(const LedController&)            = default;
-        LedController& operator=(const LedController&) = default;
-        LedController(LedController&&)                 = default;
-        LedController& operator=(LedController&&)      = default;
-        ~LedController()                               = default;
+        SignalController()                                   = default;
+        SignalController(const SignalController&)            = default;
+        SignalController& operator=(const SignalController&) = default;
+        SignalController(SignalController&&)                 = default;
+        SignalController& operator=(SignalController&&)      = default;
+        ~SignalController()                                  = default;
     };
 
 } // namespace pisco_code

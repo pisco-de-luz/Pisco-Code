@@ -8,7 +8,7 @@ using namespace pisco_code;
 namespace
 {
 
-    class MockLedController : public LedController
+    class MockLedController : public SignalController
     {
       public:
         void setPeakLevel(LedLevel led_level) override

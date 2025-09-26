@@ -1,12 +1,12 @@
 #pragma once
 
-#include "led_controller.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
+#include "signal_controller.hpp"
 
 namespace pisco_code
 {
-    class SoftwarePwmLedController final : public LedController
+    class SoftwarePwmLedController final : public SignalController
     {
       public:
         explicit SoftwarePwmLedController(bool (*led_func)(LedControlCode));

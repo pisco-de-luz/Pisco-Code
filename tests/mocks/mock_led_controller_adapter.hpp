@@ -3,12 +3,12 @@
 
 #include <iostream>
 
-#include "led_controller.hpp"
 #include "mock_led_control_logger.hpp"
 #include "pisco_constants.hpp"
+#include "signal_controller.hpp"
 
 using namespace pisco_code;
-class MockLedControllerAdapter : public LedController
+class MockLedControllerAdapter : public SignalController
 {
   public:
     explicit MockLedControllerAdapter(MockLedControlLogger* logger) :

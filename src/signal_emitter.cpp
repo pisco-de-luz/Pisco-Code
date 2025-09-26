@@ -1,9 +1,9 @@
 // code_blinker.cpp
 #include "signal_emitter.hpp"
 
-#include "led_controller.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
+#include "signal_controller.hpp"
 #include "signal_element.hpp"
 #include "signal_sequencer.hpp"
 #include "signal_types.hpp"
@@ -11,7 +11,7 @@
 namespace pisco_code
 {
 
-    SignalEmitter::SignalEmitter(LedController* controller) :
+    SignalEmitter::SignalEmitter(SignalController* controller) :
         controller_(controller), pulse_iterator_(sequencer_.stack())
     {
     }
