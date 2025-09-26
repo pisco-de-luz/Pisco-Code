@@ -187,7 +187,7 @@ You can customize the brightness levels used during the blink sequence using the
 These settings are optional. If not configured, the library uses defaults suitable for most cases.
 
 ```C++
-SoftwarePwmLedController controller_led1(hal_led::Led1);
+SoftwarePwmLedController controller_led1(hal_led::led1);
 SignalEmitter            emitter_led1(&controller_led1);
 
 emitter_led1.setPeakLevel(10);

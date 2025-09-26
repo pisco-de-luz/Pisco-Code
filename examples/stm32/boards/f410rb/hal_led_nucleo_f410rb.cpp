@@ -25,7 +25,7 @@ hal_led::init() noexcept
 }
 
 bool
-hal_led::Led1(LedControlCode code) noexcept
+hal_led::led1(LedControlCode code) noexcept
 {
     switch (code)
     {

@@ -5,5 +5,5 @@
 namespace hal_led
 {
     void init() noexcept;
-    bool Led1(LedControlCode code) noexcept;
+    bool led1(LedControlCode code) noexcept;
 } // namespace hal_led
