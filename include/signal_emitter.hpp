@@ -17,13 +17,14 @@ namespace pisco_code
       public:
         explicit SignalEmitter(SignalController* controller);
 
-        bool showCode(SignalCode code, NumberBase base, NumDigits num_digits,
-                      RepeatTimes repeats);
+        bool showCode(SignalCode code, NumberBase base, NumDigits num_digits);
         void loop();
         [[nodiscard]] bool isRunning() const;
         [[nodiscard]] bool isLedBeingUsedNow() const;
         void               setPeakLevel(LedLevel level);
         void               setDimmedLevel(LedLevel level);
+        void               setRepeatTimes(RepeatTimes repeat_times) noexcept;
+        [[nodiscard]] RepeatTimes getRepeatTimes() const noexcept;
 
       private:
         [[nodiscard]] bool phaseElapsed(TickCounter tick_counter) const;
@@ -50,6 +51,7 @@ namespace pisco_code
         bool                is_in_gap_level_ = false;
         LedLevel            peak_level_      = DEFAULT_PULSE_LEVEL;
         LedLevel            dimmed_level_    = DEFAULT_DIMMED_LEVEL;
+        RepeatTimes         repeat_times_    = 1;
     };
 
 } // namespace pisco_code

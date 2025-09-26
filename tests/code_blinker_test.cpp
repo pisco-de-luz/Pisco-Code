@@ -84,14 +84,14 @@ TEST(SignalEmitterGroup, InitiallyPaused)
 TEST(SignalEmitterGroup, ShowCodeStartsSequence)
 {
     const bool result =
-        blinker->showCode(testutils::DEFAULT_CODE, NumberBase::DEC, 2, 1);
+        blinker->showCode(testutils::DEFAULT_CODE, NumberBase::DEC, 2);
     CHECK_TRUE(result);
     CHECK_TRUE(blinker->isRunning());
 }
 
 TEST(SignalEmitterGroup, LoopTriggersDimmedStart)
 {
-    blinker->showCode(testutils::CODE_5, NumberBase::DEC, 1, 1);
+    blinker->showCode(testutils::CODE_5, NumberBase::DEC, 1);
     blinker->loop();
     CHECK_EQUAL(1, controller.getDimmedCalls());
     CHECK_EQUAL(DEFAULT_DIMMED_LEVEL, controller.getLastDimmed());

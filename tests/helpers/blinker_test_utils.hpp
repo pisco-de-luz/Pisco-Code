@@ -136,7 +136,8 @@ namespace testutils
         const TraceCode expected_trace =
             generateExpectedTrace(code_to_show, base, num_digits, repeats);
 
-        blinker.showCode(code_to_show, base, num_digits, repeats);
+        blinker.setRepeatTimes(repeats);
+        blinker.showCode(code_to_show, base, num_digits);
         logger.setBlinker(&blinker);
         runSequencer(&blinker, &logger);
         const TraceCode actual_trace = logger.traceLogToString();

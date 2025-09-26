@@ -17,16 +17,17 @@ namespace pisco_code
     }
 
     bool SignalEmitter::showCode(SignalCode code, NumberBase base,
-                                 NumDigits num_digits, RepeatTimes repeats)
+                                 NumDigits num_digits)
     {
+        // NOLINT(bugprone-easily-swappable-parameters)
         if (controller_ == nullptr || current_phase_ != PhaseLoop::IDLE ||
-            repeats == 0 || peak_level_ == 0)
+            repeat_times_ == 0 || peak_level_ == 0)
         {
             return false;
         }
         sequencer_.clear();
+        sequencer_.setRepeatTimes(repeat_times_);
         sequencer_.loadSignalCode(code, base, num_digits);
-        sequencer_.setRepeatTimes(repeats);
         pulse_iterator_ = sequencer_.createPulseIterator();
 
         controller_->setDimmedLevel(dimmed_level_);
@@ -118,6 +119,17 @@ namespace pisco_code
         {
             dimmed_level_ = peak_level_ - MIN_PULSE_DIMMED_GAP;
         }
+    }
+
+    void SignalEmitter::setRepeatTimes(RepeatTimes repeat_times) noexcept
+    {
+        repeat_times_ = repeat_times;
+        sequencer_.setRepeatTimes(repeat_times_);
+    }
+
+    [[nodiscard]] RepeatTimes SignalEmitter::getRepeatTimes() const noexcept
+    {
+        return repeat_times_;
     }
 
     bool SignalEmitter::isLedBeingUsedNow() const
