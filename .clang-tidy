@@ -4,6 +4,7 @@ Checks: >
   modernize-*,
   -modernize-use-trailing-return-type,
   -modernize-avoid-c-arrays,
+  -modernize-loop-convert,
   performance-*,
   readability-*,
   cppcoreguidelines-*,
