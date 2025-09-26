@@ -218,3 +218,26 @@ while (blinker.isRunning()) {
 
 * `loop()` advances the LED pattern by 1 ms. You are responsible for calling it at a steady 1 kHz rate (e.g., using `_delay_ms(1)`, `SysTick`, or RTOS task).
 * `isRunning()` is useful to wait for the current signal to complete before showing another code or putting the device to sleep.
+
+### Build and Upload
+
+To build and flash the examples on different targets, use the provided scripts. 
+
+#### For the STM32F410RB board:
+```bash
+./scripts/Build.sh stm32-f410rb/basic_example
+./scripts/Upload.sh stm32-f410rb/basic_example
+```
+
+#### For the Arduino Nano:
+```bash
+./scripts/Build.sh avr-arduino-nano/basic_example
+./scripts/Upload.sh avr-arduino-nano/basic_example
+```
+
+#### To run all unit tests on the host:
+```bash
+./scripts/Build.sh native
+```
+
+These commands are backed by the `CMakePresets.json` file, which defines toolchains and build configurations for each supported target.
