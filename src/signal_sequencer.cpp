@@ -29,6 +29,23 @@ namespace pisco_code
         return SignalPulseIterator{signal_stack_};
     }
 
+    [[nodiscard]] bool SignalSequencer::shouldRepeat() const noexcept
+    {
+        return repeat_index_ < repeat_count_ - 1;
+    }
+
+    void SignalSequencer::incrementRepeatIndex() noexcept
+    {
+        if (shouldRepeat())
+        {
+            ++repeat_index_;
+        }
+    }
+    [[nodiscard]] const SignalStack& SignalSequencer::stack() const noexcept
+    {
+        return signal_stack_;
+    }
+
     void SignalSequencer::loadSignalCode(SignalCode code, NumberBase base,
                                          NumDigits num_digits) noexcept
     {

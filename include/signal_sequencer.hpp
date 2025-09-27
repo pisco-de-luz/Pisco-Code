@@ -19,21 +19,9 @@ namespace pisco_code
         void loadSignalCode(SignalCode code, NumberBase base,
                             NumDigits num_digits = 0) noexcept;
         [[nodiscard]] SignalPulseIterator createPulseIterator() const noexcept;
-        [[nodiscard]] bool                shouldRepeat() const noexcept
-        {
-            return repeat_index_ < repeat_count_ - 1;
-        }
-        void incrementRepeatIndex() noexcept
-        {
-            if (shouldRepeat())
-            {
-                ++repeat_index_;
-            }
-        }
-        [[nodiscard]] const SignalStack& stack() const noexcept
-        {
-            return signal_stack_;
-        }
+        void                              incrementRepeatIndex() noexcept;
+        [[nodiscard]] bool                shouldRepeat() const noexcept;
+        [[nodiscard]] const SignalStack&  stack() const noexcept;
 
       private:
         SignalStack         signal_stack_;
