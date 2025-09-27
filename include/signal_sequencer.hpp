@@ -4,7 +4,6 @@
 #include "pisco_types.hpp"
 #include "signal_pulse_iterator.hpp"
 #include "signal_stack.hpp"
-#include "signal_types.hpp"
 
 namespace pisco_code
 {
@@ -15,15 +14,12 @@ namespace pisco_code
         {
         }
 
-        void                clear() noexcept;
-        void                popNextPulse() noexcept;
-        void                popNextCodeToSequence() noexcept;
-        void                setRepeatTimes(RepeatTimes repeat_times) noexcept;
-        [[nodiscard]] Index getElementCount() const noexcept
-        {
-            return element_count_;
-        }
-        [[nodiscard]] bool shouldRepeat() const noexcept
+        void clear() noexcept;
+        void setRepeatTimes(RepeatTimes repeat_times) noexcept;
+        void loadSignalCode(SignalCode code, NumberBase base,
+                            NumDigits num_digits = 0) noexcept;
+        [[nodiscard]] SignalPulseIterator createPulseIterator() const noexcept;
+        [[nodiscard]] bool                shouldRepeat() const noexcept
         {
             return repeat_index_ < repeat_count_ - 1;
         }
@@ -34,18 +30,10 @@ namespace pisco_code
                 ++repeat_index_;
             }
         }
-        [[nodiscard]] bool hasMoreSignalCodeToSequence() const noexcept;
-        [[nodiscard]] bool hasMoreSignalElements() const noexcept;
-        [[nodiscard]] bool hasMorePulse() const noexcept;
-        [[nodiscard]] SignalPulseIterator createPulseIterator() const noexcept;
-        SignalElement                     popNextSignalElement() noexcept;
-        [[nodiscard]] const SignalStack&  stack() const noexcept
+        [[nodiscard]] const SignalStack& stack() const noexcept
         {
             return signal_stack_;
         }
-        // Placeholder for logic to populate based on number
-        void loadSignalCode(SignalCode code, NumberBase base,
-                            NumDigits num_digits = 0) noexcept;
 
       private:
         SignalStack         signal_stack_;
