@@ -116,7 +116,7 @@ MockLedControlLogger::traceLogToString() const
 {
     testutils::TraceCode result;
     Timestamp            next_duty_cycle_timestamp{0};
-    LedLevel             last_pwm_level{0};
+    IntensityLevel       last_pwm_level{0};
     Timestamp            last_timestamp_pwm_level_changed{0};
     DurationMs           duration_without_pwm_changed{0};
 
@@ -131,7 +131,7 @@ MockLedControlLogger::traceLogToString() const
         const Timestamp next_timestamp_event = event.timestamp + event.duration;
         while (next_duty_cycle_timestamp < next_timestamp_event)
         {
-            LedLevel pwm_level{0};
+            IntensityLevel pwm_level{0};
             if (event.state == testutils::LedEvent::ON)
             {
                 pwm_level = event.duration;

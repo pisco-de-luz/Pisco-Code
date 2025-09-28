@@ -20,8 +20,8 @@ namespace testutils
 
     struct LedLevelDuration
     {
-        LedLevel  led_level{0};
-        Timestamp duration{0};
+        IntensityLevel led_level{0};
+        Timestamp      duration{0};
     };
 
     struct TraceRepeatRule
@@ -47,13 +47,13 @@ namespace testutils
 
     struct TestBlinkerCase
     {
-        std::optional<SignalCode>  blink_code{std::nullopt};
-        std::optional<NumberBase>  number_base{std::nullopt};
-        std::optional<TraceCheck>  trace_check{std::nullopt};
-        std::optional<NumDigits>   numDigits{std::nullopt};
-        std::optional<RepeatTimes> repeats{std::nullopt};
-        std::optional<LedLevel>    expectedDimmed{};
-        std::optional<LedLevel>    expectedPulse{};
+        std::optional<SignalCode>     blink_code{std::nullopt};
+        std::optional<NumberBase>     number_base{std::nullopt};
+        std::optional<TraceCheck>     trace_check{std::nullopt};
+        std::optional<NumDigits>      numDigits{std::nullopt};
+        std::optional<RepeatTimes>    repeats{std::nullopt};
+        std::optional<IntensityLevel> expectedBase{};
+        std::optional<IntensityLevel> expectedPulse{};
     };
 
     // PatternOption — Digit composition strategies used in test generation.

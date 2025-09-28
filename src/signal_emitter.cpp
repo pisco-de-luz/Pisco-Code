@@ -29,7 +29,7 @@ namespace pisco_code
         sequencer_.loadSignalCode(code, base, num_digits);
         pulse_iterator_ = sequencer_.createPulseIterator();
 
-        controller_->setBaseLevel(dimmed_level_);
+        controller_->setBaseLevel(base_level_);
         controller_->setPeakLevel(peak_level_);
 
         tick_timestamp_ = 0;
@@ -97,27 +97,26 @@ namespace pisco_code
         return (is_running_ || current_phase_ != PhaseLoop::IDLE);
     }
 
-    void SignalEmitter::setPeakLevel(LedLevel led_level)
+    void SignalEmitter::setPeakLevel(IntensityLevel led_level)
     {
         peak_level_ = (led_level > PWM_MAX) ? PWM_MAX : led_level;
-        if (peak_level_ < MIN_PULSE_DIMMED_GAP)
+        if (peak_level_ < MIN_PULSE_BASE_GAP)
         {
-            peak_level_ = MIN_PULSE_DIMMED_GAP;
+            peak_level_ = MIN_PULSE_BASE_GAP;
         }
-        if (dimmed_level_ >= peak_level_)
+        if (base_level_ >= peak_level_)
         {
-            dimmed_level_ = peak_level_ - MIN_PULSE_DIMMED_GAP;
+            base_level_ = peak_level_ - MIN_PULSE_BASE_GAP;
         }
     }
 
-    void SignalEmitter::setBaseLevel(LedLevel led_level)
+    void SignalEmitter::setBaseLevel(IntensityLevel led_level)
     {
-        constexpr auto MAX_DIMMED_LEVEL = PWM_MAX - MIN_PULSE_DIMMED_GAP;
-        dimmed_level_ =
-            (led_level > MAX_DIMMED_LEVEL) ? MAX_DIMMED_LEVEL : led_level;
-        if (dimmed_level_ >= peak_level_)
+        constexpr auto MAX_BASE_LEVEL = PWM_MAX - MIN_PULSE_BASE_GAP;
+        base_level_ = (led_level > MAX_BASE_LEVEL) ? MAX_BASE_LEVEL : led_level;
+        if (base_level_ >= peak_level_)
         {
-            dimmed_level_ = peak_level_ - MIN_PULSE_DIMMED_GAP;
+            base_level_ = peak_level_ - MIN_PULSE_BASE_GAP;
         }
     }
 
@@ -144,7 +143,7 @@ namespace pisco_code
             case SignalLevel::GAP:
                 return BlinkMode::NONE;
             case SignalLevel::BASE:
-                return BlinkMode::DIMMED;
+                return BlinkMode::BASE;
             case SignalLevel::PEAK:
                 return BlinkMode::PULSE;
             default:

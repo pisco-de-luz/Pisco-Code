@@ -8,7 +8,7 @@ namespace pisco_code
 {
 
     SoftwarePwmLedController::SoftwarePwmLedController() :
-        peak_level_(PWM_MAX), dimmed_level_(0)
+        peak_level_(PWM_MAX), base_level_(0)
     {
     }
     SoftwarePwmLedController::SoftwarePwmLedController(
@@ -22,7 +22,7 @@ namespace pisco_code
         led_control_ = led_func;
     }
 
-    void SoftwarePwmLedController::setPeakLevel(LedLevel led_level)
+    void SoftwarePwmLedController::setPeakLevel(IntensityLevel led_level)
     {
         peak_level_ = led_level;
     }
@@ -32,9 +32,9 @@ namespace pisco_code
         mode_ = mode;
     }
 
-    void SoftwarePwmLedController::setBaseLevel(LedLevel led_level)
+    void SoftwarePwmLedController::setBaseLevel(IntensityLevel led_level)
     {
-        dimmed_level_ = led_level;
+        base_level_ = led_level;
     }
 
     void SoftwarePwmLedController::update()
@@ -57,12 +57,12 @@ namespace pisco_code
                 }
                 break;
 
-            case BlinkMode::DIMMED:
+            case BlinkMode::BASE:
                 if (pwm_tick_position_ == 0)
                 {
                     led_control_(LedControlCode::ON);
                 }
-                else if (pwm_tick_position_ == dimmed_level_)
+                else if (pwm_tick_position_ == base_level_)
                 {
                     led_control_(LedControlCode::OFF);
                 }

@@ -148,11 +148,11 @@ namespace testutils
             STRCMP_EQUAL(expected_trace.c_str(), actual_trace.c_str());
         }
 
-        // Check the dimmed and pulse levels
-        if (testCase.expectedDimmed.has_value())
+        // Check the base and pulse levels
+        if (testCase.expectedBase.has_value())
         {
-            CHECK_EQUAL_TEXT(testCase.expectedDimmed.value(),
-                             logger.getDimmedLevel(), "Dimmed level mismatch");
+            CHECK_EQUAL_TEXT(testCase.expectedBase.value(),
+                             logger.getBaseLevel(), "BASE level mismatch");
         }
         if (testCase.expectedPulse.has_value())
         {

@@ -30,7 +30,6 @@ namespace pisco_code
     using Int8            = int8_t;
     using Timestamp       = UInt32;
     using DurationMs      = UInt32;
-    using LedLevel        = UInt8;
     using IntensityLevel  = UInt8;
     using RepeatTimes     = UInt8;
     using NumDigits       = UInt8;

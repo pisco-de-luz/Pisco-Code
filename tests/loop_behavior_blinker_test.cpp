@@ -20,10 +20,10 @@ TEST_GROUP(LoopBehaviorBlinkerTest)
 
 TEST(LoopBehaviorBlinkerTest, ShouldHoldDimLightForDigitZero)
 {
-    blinker.setBaseLevel(MID_DIMMED_LEVEL);
-    const TestBlinkerCase test_case{.blink_code     = CODE_0,
-                                    .trace_check    = TraceCheck::NOT_ENFORCED,
-                                    .expectedDimmed = MID_DIMMED_LEVEL};
+    blinker.setBaseLevel(MID_BASE_LEVEL);
+    const TestBlinkerCase test_case{.blink_code   = CODE_0,
+                                    .trace_check  = TraceCheck::NOT_ENFORCED,
+                                    .expectedBase = MID_BASE_LEVEL};
 
     checkBlinkerBehavior(blinker, logger, test_case);
 }
@@ -52,7 +52,7 @@ TEST(LoopBehaviorBlinkerTest, ShouldRepeatBlinkingSequenceTwice)
     checkBlinkerBehavior(blinker, logger, test_case);
 }
 
-TEST(LoopBehaviorBlinkerTest, ShouldEndInFinalDimmedPause)
+TEST(LoopBehaviorBlinkerTest, ShouldEndInFinalBasePause)
 {
     const TestBlinkerCase test_case{.trace_check = TraceCheck::NOT_ENFORCED};
 
@@ -62,7 +62,7 @@ TEST(LoopBehaviorBlinkerTest, ShouldEndInFinalDimmedPause)
     // Find trailing LED off pattern (represented by a sequence of '-')
     using size_type = TraceCode::size_type;
     const size_type trail_off_start =
-        trace_actual.find_last_not_of(LED_DIMMED_CHARACTER) + 1;
+        trace_actual.find_last_not_of(LED_BASE_CHARACTER) + 1;
     if (trail_off_start == TraceCode::npos)
     {
         FAIL("No trailing off pattern found");

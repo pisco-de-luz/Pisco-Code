@@ -176,13 +176,13 @@ You can customize the brightness levels used during the blink sequence using the
 
 | Method         | Desciption                                  |
 | :---           | :---                                        |
-| `setPeakLevel(LedLevel level)`   | Sets the LED brightness level for "peak" pulses (i.e., when a bit is active). Use this to adjust the maximum intensity of blinks. Valid range: `0` (off) to `PWM_MAX` (full brightness). |
-| `setBaseLevel(LedLevel level)` | Sets the LED brightness for "dimmed" intervals between pulses. Use this to reduce contrast or prevent full-off between blinks. Valid range: `0` to value lower than or equal to `setPeakLevel()`. |
+| `setPeakLevel(IntensityLevel level)`   | Sets the LED brightness level for "peak" pulses (i.e., when a bit is active). Use this to adjust the maximum intensity of blinks. Valid range: `0` (off) to `PWM_MAX` (full brightness). |
+| `setBaseLevel(IntensityLevel level)` | Sets the LED brightness for "base" intervals between pulses. Use this to reduce contrast or prevent full-off between blinks. Valid range: `0` to value lower than or equal to `setPeakLevel()`. |
 
 #### Default values:
 
 - PeakLevel = PWM_MAX
-- DimmedLevel = DEFAULT_DIMMED_LEVEL (typically a low but visible level)
+- BaseLevel = DEFAULT_BASE_LEVEL (typically a low but visible level)
 
 These settings are optional. If not configured, the library uses defaults suitable for most cases.
 

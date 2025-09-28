@@ -10,9 +10,9 @@ namespace testutils
 {
 
     // Trace character constants
-    inline const TraceCode LED_OFF_CHARACTER    = "_";
-    inline const TraceCode LED_PULSE_CHARACTER  = "^";
-    inline const TraceCode LED_DIMMED_CHARACTER = "-";
+    inline const TraceCode LED_OFF_CHARACTER   = "_";
+    inline const TraceCode LED_PULSE_CHARACTER = "^";
+    inline const TraceCode LED_BASE_CHARACTER  = "-";
 
     // Duration-based repetition rules
     inline const std::array<TraceRepeatRule, 3> TRACE_REPEAT_RULES{
@@ -38,28 +38,28 @@ namespace testutils
     inline constexpr SignalCode CODE_12345                       = 12345;
     inline constexpr SignalCode CODE_12345_TRUNCATED_TO_2_DIGITS = 12345;
 
-    constexpr LedLevel LOWEST_DIMMED_LEVEL  = 1;
-    constexpr LedLevel HIGHEST_DIMMED_LEVEL = PWM_MAX - MIN_PULSE_DIMMED_GAP;
-    constexpr LedLevel MID_DIMMED_LEVEL =
-        (HIGHEST_DIMMED_LEVEL - LOWEST_DIMMED_LEVEL) / 2;
-    constexpr LedLevel TOO_HIGH_DIMMED_LEVEL = 255;
-    constexpr LedLevel TOO_LOW_DIMMED_LEVEL  = 0;
+    constexpr IntensityLevel LOWEST_BASE_LEVEL  = 1;
+    constexpr IntensityLevel HIGHEST_BASE_LEVEL = PWM_MAX - MIN_PULSE_BASE_GAP;
+    constexpr IntensityLevel MID_BASE_LEVEL =
+        (HIGHEST_BASE_LEVEL - LOWEST_BASE_LEVEL) / 2;
+    constexpr IntensityLevel TOO_HIGH_BASE_LEVEL = 255;
+    constexpr IntensityLevel TOO_LOW_BASE_LEVEL  = 0;
 
-    constexpr std::array<LedLevel, 5> ALL_DIMMED_LEVELS = {
+    constexpr std::array<IntensityLevel, 5> ALL_BASE_LEVELS = {
         {
-         LOWEST_DIMMED_LEVEL, HIGHEST_DIMMED_LEVEL,
-         MID_DIMMED_LEVEL, TOO_HIGH_DIMMED_LEVEL,
-         TOO_LOW_DIMMED_LEVEL, }
+         LOWEST_BASE_LEVEL, HIGHEST_BASE_LEVEL,
+         MID_BASE_LEVEL, TOO_HIGH_BASE_LEVEL,
+         TOO_LOW_BASE_LEVEL, }
     };
 
-    constexpr LedLevel LOWEST_PULSE_LEVEL  = 1;
-    constexpr LedLevel HIGHEST_PULSE_LEVEL = PWM_MAX;
-    constexpr LedLevel MID_PULSE_LEVEL =
+    constexpr IntensityLevel LOWEST_PULSE_LEVEL  = 1;
+    constexpr IntensityLevel HIGHEST_PULSE_LEVEL = PWM_MAX;
+    constexpr IntensityLevel MID_PULSE_LEVEL =
         (HIGHEST_PULSE_LEVEL - LOWEST_PULSE_LEVEL) / 2;
-    constexpr LedLevel TOO_HIGH_PULSE_LEVEL = 255;
-    constexpr LedLevel TOO_LOW_PULSE_LEVEL  = 0;
+    constexpr IntensityLevel TOO_HIGH_PULSE_LEVEL = 255;
+    constexpr IntensityLevel TOO_LOW_PULSE_LEVEL  = 0;
 
-    constexpr std::array<LedLevel, 5> ALL_PULSE_LEVELS = {
+    constexpr std::array<IntensityLevel, 5> ALL_PULSE_LEVELS = {
         {
          LOWEST_PULSE_LEVEL, HIGHEST_PULSE_LEVEL,
          MID_PULSE_LEVEL, TOO_HIGH_PULSE_LEVEL,

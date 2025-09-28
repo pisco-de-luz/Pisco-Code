@@ -23,7 +23,7 @@ class MockLedControllerAdapter : public SignalController
 
     void setBaseLevel(uint8_t value) override
     {
-        dimmed_level_ = value;
+        base_level_ = value;
     }
 
     void setCurrentSignalLevel(BlinkMode mode) override
@@ -51,12 +51,12 @@ class MockLedControllerAdapter : public SignalController
                 }
                 break;
 
-            case BlinkMode::DIMMED:
+            case BlinkMode::BASE:
                 if (pwm_tick_position_ == 0)
                 {
                     logger_->handle(LedControlCode::ON);
                 }
-                else if (pwm_tick_position_ == dimmed_level_)
+                else if (pwm_tick_position_ == base_level_)
                 {
                     logger_->handle(LedControlCode::OFF);
                 }
@@ -84,7 +84,7 @@ class MockLedControllerAdapter : public SignalController
   private:
     MockLedControlLogger* logger_            = nullptr;
     PwmTickPosition       peak_level_        = PWM_MAX;
-    PwmTickPosition       dimmed_level_      = DEFAULT_DIMMED_LEVEL;
+    PwmTickPosition       base_level_        = DEFAULT_BASE_LEVEL;
     BlinkMode             mode_              = BlinkMode::NONE;
     PwmTickPosition       pwm_tick_position_ = 0;
 };

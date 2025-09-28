@@ -12,13 +12,13 @@
 #include "pisco_types.hpp"
 
 using pisco_code::DurationMs;
-using pisco_code::LedLevel;
+using pisco_code::IntensityLevel;
 using pisco_code::RepeatTimes;
 using pisco_code::Timestamp;
 struct LedLevelDuration
 {
-    LedLevel   led_level{0};
-    DurationMs duration{0};
+    IntensityLevel led_level{0};
+    DurationMs     duration{0};
 };
 
 struct TraceRepeatRule
@@ -39,14 +39,14 @@ class LedBlinkPattern
 {
   public:
     void reset();
-    void append(LedLevel level, DurationMs duration);
+    void append(IntensityLevel level, DurationMs duration);
 
-    [[nodiscard]] bool     isValid() const;
-    [[nodiscard]] LedLevel getDimmedLevel() const
+    [[nodiscard]] bool           isValid() const;
+    [[nodiscard]] IntensityLevel getBaseLevel() const
     {
-        return dimmed_level_;
+        return base_level_;
     }
-    [[nodiscard]] LedLevel getPulseLevel() const
+    [[nodiscard]] IntensityLevel getPulseLevel() const
     {
         return pulse_level_;
     }
@@ -59,8 +59,8 @@ class LedBlinkPattern
 
   private:
     bool                          pattern_is_valid_{true};
-    LedLevel                      dimmed_level_{0};
-    LedLevel                      pulse_level_{0};
+    IntensityLevel                base_level_{0};
+    IntensityLevel                pulse_level_{0};
     std::vector<LedLevelDuration> led_events_{};
-    std::set<LedLevel>            used_levels_{};
+    std::set<IntensityLevel>      used_levels_{};
 };

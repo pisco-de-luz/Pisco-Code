@@ -21,8 +21,8 @@ namespace pisco_code
         void loop();
         [[nodiscard]] bool isRunning() const;
         [[nodiscard]] bool isLedBeingUsedNow() const;
-        void               setPeakLevel(LedLevel level);
-        void               setBaseLevel(LedLevel level);
+        void               setPeakLevel(IntensityLevel level);
+        void               setBaseLevel(IntensityLevel level);
         void               setRepeatTimes(RepeatTimes repeat_times) noexcept;
         [[nodiscard]] RepeatTimes getRepeatTimes() const noexcept;
 
@@ -49,8 +49,8 @@ namespace pisco_code
         PhaseLoop           current_phase_   = PhaseLoop::IDLE;
         bool                is_running_      = false;
         bool                is_in_gap_level_ = false;
-        LedLevel            peak_level_      = DEFAULT_PULSE_LEVEL;
-        LedLevel            dimmed_level_    = DEFAULT_DIMMED_LEVEL;
+        IntensityLevel      peak_level_      = DEFAULT_PULSE_LEVEL;
+        IntensityLevel      base_level_      = DEFAULT_BASE_LEVEL;
         RepeatTimes         repeat_times_    = 1;
     };
 

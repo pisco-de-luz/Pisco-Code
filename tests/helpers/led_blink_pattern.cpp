@@ -12,14 +12,14 @@ void
 LedBlinkPattern::reset()
 {
     pattern_is_valid_ = true;
-    dimmed_level_     = 0;
+    base_level_       = 0;
     pulse_level_      = 0;
     led_events_.clear();
     used_levels_.clear();
 }
 
 void
-LedBlinkPattern::append(LedLevel level, DurationMs duration)
+LedBlinkPattern::append(IntensityLevel level, DurationMs duration)
 {
     led_events_.push_back({level, duration});
 
@@ -44,16 +44,16 @@ LedBlinkPattern::append(LedLevel level, DurationMs duration)
 
     if (used_levels_.size() == 1)
     {
-        dimmed_level_ = *used_levels_.begin();
-        pulse_level_  = 0;
+        base_level_  = *used_levels_.begin();
+        pulse_level_ = 0;
     }
 
     // Only calculate levels when we reach exactly 2 unique non-zero levels
     if (used_levels_.size() == 2)
     {
-        auto dimmed_first_it = used_levels_.begin();
-        dimmed_level_        = *dimmed_first_it++;
-        pulse_level_         = *dimmed_first_it;
+        auto base_first_it = used_levels_.begin();
+        base_level_        = *base_first_it++;
+        pulse_level_       = *base_first_it;
     }
 }
 
@@ -77,9 +77,9 @@ LedBlinkPattern::tracePatternToString() const
         {
             symbol_ptr = &testutils::LED_OFF_CHARACTER;
         }
-        else if (event.led_level == dimmed_level_)
+        else if (event.led_level == base_level_)
         {
-            symbol_ptr = &testutils::LED_DIMMED_CHARACTER;
+            symbol_ptr = &testutils::LED_BASE_CHARACTER;
         }
         else if (event.led_level == pulse_level_)
         {

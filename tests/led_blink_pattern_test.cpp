@@ -7,7 +7,7 @@ TEST_GROUP(LedBlinkPatternTests){};
 TEST(LedBlinkPatternTests, ShouldOutputOneCharacterForShortDurations)
 {
     LedBlinkPattern pattern;
-    pattern.append(3, 100);  // DIMMED
+    pattern.append(3, 100);  // BASE
     pattern.append(10, 100); // PULSE
     pattern.append(0, 100);  // NONE
 
@@ -17,7 +17,7 @@ TEST(LedBlinkPatternTests, ShouldOutputOneCharacterForShortDurations)
 TEST(LedBlinkPatternTests, ShouldOutputThreeCharactersForMediumDurations)
 {
     LedBlinkPattern pattern;
-    pattern.append(3, 1500);  // DIMMED
+    pattern.append(3, 1500);  // BASE
     pattern.append(10, 1500); // PULSE
     pattern.append(0, 1500);  // NONE
 
@@ -52,7 +52,7 @@ TEST(LedBlinkPatternTests, ShouldProvideCorrectLevelGetters)
     pattern.append(10, 100);
 
     CHECK_TRUE(pattern.isValid());
-    CHECK_EQUAL(3, pattern.getDimmedLevel());
+    CHECK_EQUAL(3, pattern.getBaseLevel());
     CHECK_EQUAL(10, pattern.getPulseLevel());
 }
 

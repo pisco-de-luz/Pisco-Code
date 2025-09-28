@@ -33,11 +33,11 @@ class MockLedControlLogger
     [[nodiscard]] const std::vector<LedStateChange>& getEvents() const;
     void                                             flush();
     void setTraceResolution(Timestamp resolutionMs); // default: 100
-    [[nodiscard]] LedLevel getDimmedLevel() const
+    [[nodiscard]] IntensityLevel getBaseLevel() const
     {
-        return led_blink_pattern_.getDimmedLevel();
+        return led_blink_pattern_.getBaseLevel();
     }
-    [[nodiscard]] LedLevel getPulseLevel() const
+    [[nodiscard]] IntensityLevel getPulseLevel() const
     {
         return led_blink_pattern_.getPulseLevel();
     }
