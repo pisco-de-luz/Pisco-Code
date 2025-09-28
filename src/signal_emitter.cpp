@@ -63,7 +63,8 @@ namespace pisco_code
                     signalDurationToPhaseDuration(element.get_duration());
                 const auto level = element.get_level();
                 is_in_gap_level_ = (level == SignalLevel::GAP);
-                controller_->setBlinkMode(signalLevelToBlinkMode(level));
+                controller_->setCurrentSignalLevel(
+                    signalLevelToBlinkMode(level));
             }
             else
             {

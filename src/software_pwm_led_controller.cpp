@@ -27,7 +27,7 @@ namespace pisco_code
         peak_level_ = led_level;
     }
 
-    void SoftwarePwmLedController::setBlinkMode(BlinkMode mode)
+    void SoftwarePwmLedController::setCurrentSignalLevel(BlinkMode mode)
     {
         mode_ = mode;
     }
