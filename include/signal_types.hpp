@@ -10,9 +10,9 @@ namespace pisco_code
     enum class SignalLevel : SignalLevelType
     {
         NOT_DEFINED = 0,
-        GAP,    // Represents silent or idle pulse (e.g., digit 0)
-        MIDDLE, // Represents a middle level, not used in current logic
-        PEAK,   // Represents active/visible/strong pulse
+        GAP,  // Represents silent or idle pulse (e.g., digit 0)
+        BASE, // Represents a middle level, not used in current logic
+        PEAK, // Represents active/visible/strong pulse
         MAX_VALUE,
     };
 

@@ -143,7 +143,7 @@ namespace pisco_code
         {
             case SignalLevel::GAP:
                 return BlinkMode::NONE;
-            case SignalLevel::MIDDLE:
+            case SignalLevel::BASE:
                 return BlinkMode::DIMMED;
             case SignalLevel::PEAK:
                 return BlinkMode::PULSE;

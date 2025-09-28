@@ -39,7 +39,7 @@ namespace testutils
         {
             case SignalLevel::GAP:
                 return GAP_LUT[duration_value];
-            case SignalLevel::MIDDLE:
+            case SignalLevel::BASE:
                 return MIDDLE_LUT[duration_value];
             case SignalLevel::PEAK:
                 return PEAK_LUT[duration_value];
