@@ -111,9 +111,9 @@ namespace pisco_code
 
     void SignalEmitter::setDimmedLevel(LedLevel led_level)
     {
-        dimmed_level_ = (led_level > (PWM_MAX - MIN_PULSE_DIMMED_GAP))
-                            ? (PWM_MAX - MIN_PULSE_DIMMED_GAP)
-                            : led_level;
+        constexpr auto MAX_DIMMED_LEVEL = PWM_MAX - MIN_PULSE_DIMMED_GAP;
+        dimmed_level_ =
+            (led_level > MAX_DIMMED_LEVEL) ? MAX_DIMMED_LEVEL : led_level;
         if (dimmed_level_ >= peak_level_)
         {
             dimmed_level_ = peak_level_ - MIN_PULSE_DIMMED_GAP;
