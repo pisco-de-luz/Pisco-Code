@@ -19,7 +19,6 @@ namespace pisco_code
     bool SignalEmitter::showCode(SignalCode code, NumberBase base,
                                  NumDigits num_digits)
     {
-        // NOLINT(bugprone-easily-swappable-parameters)
         if (controller_ == nullptr || current_phase_ != PhaseLoop::IDLE ||
             repeat_times_ == 0 || peak_level_ == 0)
         {
