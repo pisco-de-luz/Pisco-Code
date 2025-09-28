@@ -1,5 +1,6 @@
 #include "CppUTest/TestHarness.h"
 
+#include "helpers/signal_element_test.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 #include "signal_element.hpp"
@@ -25,147 +26,74 @@ TEST_GROUP(SignalSequencerTests)
 TEST(SignalSequencerTests, DefaultConstructor_InitializesCorrectly)
 {
     CHECK_FALSE(sequencer.shouldRepeat());
+    const SignalPulseIterator iterator = sequencer.createPulseIterator();
+    CHECK_FALSE(iterator.hasNext());
 }
 
 TEST(SignalSequencerTests, ShouldHaveNextIterator_AfterLoad)
 {
     sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
-    const SignalPulseIterator iter = sequencer.createPulseIterator();
-    CHECK_TRUE(iter.hasNext());
+    const SignalPulseIterator iterator = sequencer.createPulseIterator();
+    CHECK_TRUE(iterator.hasNext());
 }
 
 TEST(SignalSequencerTests, ShouldNotHaveNextIterator_AfterLoadAndClear)
 {
     sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
     sequencer.clear();
-    const SignalPulseIterator iter = sequencer.createPulseIterator();
-    // const SignalElement element = iter.next();
-    CHECK_FALSE(iter.hasNext());
+    const SignalPulseIterator iterator = sequencer.createPulseIterator();
+    CHECK_FALSE(iterator.hasNext());
 }
 
-// TEST(SignalSequencerTests, ShouldNotHaveMoreSignalElements_AfterLoad)
-// {
-//     sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
-//     CHECK_FALSE(sequencer.hasMoreSignalElements());
-// }
-// TEST(SignalSequencerTests,
-//      ShouldHaveMoreSignalElements_AfterPopNextCodeToSequence)
-// {
-//     sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
-//     sequencer.popNextCodeToSequence();
-//     CHECK_TRUE(sequencer.hasMoreSignalElements());
-// }
+TEST(SignalSequencerTests, CodeMinus103_IteratesCorrectly)
+{
+    sequencer.loadSignalCode(CODE_NEG_103, NumberBase::DEC, 0);
 
-// TEST(SignalSequencerTests, ShouldNotHaveMorePulse_AfterLoad)
-// {
-//     sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
-//     CHECK_FALSE(sequencer.hasMorePulse());
-// }
-// TEST(SignalSequencerTests, ShouldNotHaveMorePulse_AfterClear)
-// {
-//     sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
-//     sequencer.clear();
-//     CHECK_FALSE(sequencer.hasMorePulse());
-// }
+    SignalPulseIterator iterator = sequencer.createPulseIterator();
 
-// TEST(SignalSequencerTests, ShouldEncodeSingleDigitPositiveNumber)
-// {
-//     sequencer.loadSignalCode(CODE_2, NumberBase::DEC, 0);
-//     CHECK_TRUE(sequencer.hasMoreSignalCodeToSequence());
-//     sequencer.popNextCodeToSequence();
-//     CHECK_TRUE(sequencer.hasMoreSignalElements());
-//     check_next_signal_element(signal_element_digit(2));
-// }
+    const auto expected_framing      = SIGNAL_ELEMENT_FRAMING;
+    const auto expected_inter_symbol = SIGNAL_ELEMENT_INTER_SYMBOL;
+    const auto expected_negative     = SIGNAL_ELEMENT_NEGATIVE;
+    const auto expected_zero         = SIGNAL_ELEMENT_ZERO;
+    const auto expected_digit        = SIGNAL_ELEMENT_DIGIT;
+    const auto expected_intra_digit  = SIGNAL_ELEMENT_INTRA_DIGIT;
 
-// TEST(SignalSequencerTests, ShouldNotHaveMoreSignalElements_ReadLastOne)
-// {
-//     sequencer.loadSignalCode(CODE_2, NumberBase::DEC, 0);
-//     sequencer.popNextCodeToSequence();
-//     CHECK_TRUE(sequencer.hasMoreSignalElements());
-//     check_next_signal_element(signal_element_digit(2));
-//     CHECK_FALSE(sequencer.hasMoreSignalElements());
-// }
+    CHECK_TRUE(iterator.hasNext());
+    auto actual = iterator.next(); // leading framing
+    CHECK_EQUAL(expected_framing, actual);
 
-// TEST(SignalSequencerTests, ShouldHaveMorePulse_AfterPopNextSignalElement)
-// {
-//     sequencer.loadSignalCode(CODE_2, NumberBase::DEC, 0);
-//     sequencer.popNextCodeToSequence();
-//     CHECK_TRUE(sequencer.hasMoreSignalElements());
-//     CHECK_FALSE(sequencer.hasMorePulse());
-//     sequencer.popNextSignalElement();
-//     CHECK_TRUE(sequencer.hasMorePulse());
-// }
+    actual = iterator.next(); // inter before negative
+    CHECK_EQUAL(expected_inter_symbol, actual);
+    actual = iterator.next(); // negative sign
+    CHECK_EQUAL(expected_negative, actual);
 
-// TEST(SignalSequencerTests, ShouldPulseFiveTimesForCode5)
-// {
-//     sequencer.loadSignalCode(CODE_5, NumberBase::DEC, 0);
-//     sequencer.popNextCodeToSequence();
-//     sequencer.popNextSignalElement();
-//     testutils::Counter actual_pulse_count = 0;
-//     while (sequencer.hasMorePulse())
-//     {
-//         sequencer.popNextPulse();
-//         ++actual_pulse_count;
-//     }
-//     CHECK_EQUAL(to_value(CODE_5), actual_pulse_count);
-// }
+    actual = iterator.next(); // inter before '1'
+    CHECK_EQUAL(expected_inter_symbol, actual);
+    actual = iterator.next(); // digit '1'
+    CHECK_EQUAL(expected_digit, actual);
 
-// TEST(SignalSequencerTests, ShouldEncodeZeroAsGap)
-// {
-//     sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
-//     sequencer.popNextCodeToSequence();
-//     check_next_signal_element(SIGNAL_ELEMENT_ZERO);
-// }
-// TEST(SignalSequencerTests, ShouldEncodeZeroWithMinDigits)
-// {
-//     sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 3);
-//     sequencer.popNextCodeToSequence();
-//     check_next_signal_element(SIGNAL_ELEMENT_ZERO);
-//     check_next_signal_element(SIGNAL_ELEMENT_ZERO);
-//     check_next_signal_element(SIGNAL_ELEMENT_ZERO);
-// }
+    actual = iterator.next(); // inter before '0'
+    CHECK_EQUAL(expected_inter_symbol, actual);
+    actual = iterator.next(); // zero digit
+    CHECK_EQUAL(expected_zero, actual);
 
-// TEST(SignalSequencerTests, ShouldPulseFiveTimesOnTheLastDigitForCode12345)
-// {
-//     sequencer.loadSignalCode(CODE_12345, NumberBase::DEC, 0);
-//     sequencer.popNextCodeToSequence();
-//     testutils::Counter actual_pulse_count{0};
-//     while (sequencer.hasMoreSignalElements())
-//     {
-//         sequencer.popNextSignalElement();
-//         actual_pulse_count = 0;
-//         while (sequencer.hasMorePulse())
-//         {
-//             sequencer.popNextPulse();
-//             ++actual_pulse_count;
-//         }
-//     }
-//     CHECK_EQUAL(to_value(CODE_5), actual_pulse_count);
-// }
+    actual = iterator.next(); // inter before '3'
+    CHECK_EQUAL(expected_inter_symbol, actual);
+    actual = iterator.next(); // first pulse of '3'
+    CHECK_EQUAL(expected_digit, actual);
+    actual = iterator.next(); // intra digit gap
+    CHECK_EQUAL(expected_intra_digit, actual);
+    actual = iterator.next(); // second pulse of '3'
+    CHECK_EQUAL(expected_digit, actual);
+    actual = iterator.next(); // intra digit gap
+    CHECK_EQUAL(expected_intra_digit, actual);
+    actual = iterator.next(); // third pulse of '3'
+    CHECK_EQUAL(expected_digit, actual);
 
-// TEST(SignalSequencerTests, ShouldRepeatCode120Twice)
-// {
-//     sequencer.loadSignalCode(CODE_120, NumberBase::DEC, 0);
-//     const auto expected_element_count = 3;
-//     const auto expected_repeat_count  = 2;
-//     sequencer.setRepeatTimes(expected_repeat_count);
-//     testutils::Counter actual_repeat_count{0};
-//     testutils::Counter actual_element_count{0};
-//     while (sequencer.hasMoreSignalCodeToSequence())
-//     {
-//         sequencer.popNextCodeToSequence();
-//         actual_element_count = 0;
-//         while (sequencer.hasMoreSignalElements())
-//         {
-//             sequencer.popNextSignalElement();
-//             while (sequencer.hasMorePulse())
-//             {
-//                 sequencer.popNextPulse();
-//             }
-//             ++actual_element_count;
-//         }
-//         ++actual_repeat_count;
-//     }
-//     CHECK_EQUAL(expected_repeat_count, actual_repeat_count);
-//     CHECK_EQUAL(expected_element_count, actual_element_count);
-// }
+    actual = iterator.next(); // trailing inter and framing
+    CHECK_EQUAL(expected_inter_symbol, actual);
+    actual = iterator.next();
+    CHECK_EQUAL(expected_framing, actual);
+
+    CHECK_FALSE(iterator.hasNext());
+}
