@@ -21,7 +21,7 @@ class MockLedControllerAdapter : public SignalController
         peak_level_ = value;
     }
 
-    void setDimmedLevel(uint8_t value) override
+    void setBaseLevel(uint8_t value) override
     {
         dimmed_level_ = value;
     }

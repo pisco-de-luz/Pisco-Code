@@ -75,7 +75,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldUseDefaultDimmedLevel)
 TEST(SetterBehaviorBlinkerTest, ShouldUseCustomDimmedLevel)
 {
 
-    blinker.setDimmedLevel(MID_DIMMED_LEVEL);
+    blinker.setBaseLevel(MID_DIMMED_LEVEL);
     const TestBlinkerCase test_case{
         .trace_check    = TraceCheck::NOT_ENFORCED,
         .expectedDimmed = MID_DIMMED_LEVEL,
@@ -87,7 +87,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldUseCustomDimmedLevel)
 // Expect dimmed level to be clamped to safe default when above allowed maximum.
 TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighDimmedLevel)
 {
-    blinker.setDimmedLevel(TOO_HIGH_DIMMED_LEVEL);
+    blinker.setBaseLevel(TOO_HIGH_DIMMED_LEVEL);
     const TestBlinkerCase test_case{
         .trace_check    = TraceCheck::NOT_ENFORCED,
         .expectedDimmed = HIGHEST_DIMMED_LEVEL,
@@ -101,7 +101,7 @@ TEST(SetterBehaviorBlinkerTest,
 {
     for (auto led_level : ALL_DIMMED_LEVELS)
     {
-        blinker.setDimmedLevel(led_level);
+        blinker.setBaseLevel(led_level);
 
         const TestBlinkerCase test_case{
             .trace_check   = TraceCheck::NOT_ENFORCED,
@@ -118,7 +118,7 @@ TEST(SetterBehaviorBlinkerTest,
     for (auto led_level : ALL_PULSE_LEVELS)
     {
         blinker.setPeakLevel(led_level);
-        blinker.setDimmedLevel(LOWEST_DIMMED_LEVEL);
+        blinker.setBaseLevel(LOWEST_DIMMED_LEVEL);
         const TestBlinkerCase test_case{
             .trace_check    = TraceCheck::NOT_ENFORCED,
             .expectedDimmed = LOWEST_DIMMED_LEVEL,

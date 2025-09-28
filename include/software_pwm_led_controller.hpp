@@ -13,7 +13,7 @@ namespace pisco_code
         explicit SoftwarePwmLedController();
         void               attachLedControl(bool (*led_func)(LedControlCode));
         void               setPeakLevel(LedLevel level) override;
-        void               setDimmedLevel(LedLevel level) override;
+        void               setBaseLevel(LedLevel level) override;
         void               setCurrentSignalLevel(BlinkMode mode) override;
         void               update() override;
         [[nodiscard]] bool readyForPhaseChange() const noexcept override;

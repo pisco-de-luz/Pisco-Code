@@ -29,7 +29,7 @@ namespace pisco_code
         sequencer_.loadSignalCode(code, base, num_digits);
         pulse_iterator_ = sequencer_.createPulseIterator();
 
-        controller_->setDimmedLevel(dimmed_level_);
+        controller_->setBaseLevel(dimmed_level_);
         controller_->setPeakLevel(peak_level_);
 
         tick_timestamp_ = 0;
@@ -110,7 +110,7 @@ namespace pisco_code
         }
     }
 
-    void SignalEmitter::setDimmedLevel(LedLevel led_level)
+    void SignalEmitter::setBaseLevel(LedLevel led_level)
     {
         constexpr auto MAX_DIMMED_LEVEL = PWM_MAX - MIN_PULSE_DIMMED_GAP;
         dimmed_level_ =

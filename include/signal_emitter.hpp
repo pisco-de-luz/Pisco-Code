@@ -22,7 +22,7 @@ namespace pisco_code
         [[nodiscard]] bool isRunning() const;
         [[nodiscard]] bool isLedBeingUsedNow() const;
         void               setPeakLevel(LedLevel level);
-        void               setDimmedLevel(LedLevel level);
+        void               setBaseLevel(LedLevel level);
         void               setRepeatTimes(RepeatTimes repeat_times) noexcept;
         [[nodiscard]] RepeatTimes getRepeatTimes() const noexcept;
 

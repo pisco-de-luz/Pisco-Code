@@ -20,7 +20,7 @@ TEST_GROUP(LoopBehaviorBlinkerTest)
 
 TEST(LoopBehaviorBlinkerTest, ShouldHoldDimLightForDigitZero)
 {
-    blinker.setDimmedLevel(MID_DIMMED_LEVEL);
+    blinker.setBaseLevel(MID_DIMMED_LEVEL);
     const TestBlinkerCase test_case{.blink_code     = CODE_0,
                                     .trace_check    = TraceCheck::NOT_ENFORCED,
                                     .expectedDimmed = MID_DIMMED_LEVEL};

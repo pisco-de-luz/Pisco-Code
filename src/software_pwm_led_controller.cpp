@@ -32,7 +32,7 @@ namespace pisco_code
         mode_ = mode;
     }
 
-    void SoftwarePwmLedController::setDimmedLevel(LedLevel led_level)
+    void SoftwarePwmLedController::setBaseLevel(LedLevel led_level)
     {
         dimmed_level_ = led_level;
     }

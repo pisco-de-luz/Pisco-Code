@@ -18,7 +18,7 @@ namespace
             last_peak = led_level;
         }
 
-        void setDimmedLevel(LedLevel led_level) override
+        void setBaseLevel(LedLevel led_level) override
         {
             dimmed_calls++;
             last_dimmed = led_level;
