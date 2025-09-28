@@ -38,8 +38,9 @@ namespace testutils
     inline constexpr SignalCode CODE_12345                       = 12345;
     inline constexpr SignalCode CODE_12345_TRUNCATED_TO_2_DIGITS = 12345;
 
-    constexpr IntensityLevel LOWEST_BASE_LEVEL  = 1;
-    constexpr IntensityLevel HIGHEST_BASE_LEVEL = PWM_MAX - MIN_PULSE_BASE_GAP;
+    constexpr IntensityLevel LOWEST_BASE_LEVEL = 1;
+    constexpr IntensityLevel HIGHEST_BASE_LEVEL =
+        PWM_MAX - MIN_INTENSITY_DIFFERENCE;
     constexpr IntensityLevel MID_BASE_LEVEL =
         (HIGHEST_BASE_LEVEL - LOWEST_BASE_LEVEL) / 2;
     constexpr IntensityLevel TOO_HIGH_BASE_LEVEL = 255;

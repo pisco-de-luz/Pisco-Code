@@ -100,23 +100,23 @@ namespace pisco_code
     void SignalEmitter::setPeakLevel(IntensityLevel led_level)
     {
         peak_level_ = (led_level > PWM_MAX) ? PWM_MAX : led_level;
-        if (peak_level_ < MIN_PULSE_BASE_GAP)
+        if (peak_level_ < MIN_INTENSITY_DIFFERENCE)
         {
-            peak_level_ = MIN_PULSE_BASE_GAP;
+            peak_level_ = MIN_INTENSITY_DIFFERENCE;
         }
         if (base_level_ >= peak_level_)
         {
-            base_level_ = peak_level_ - MIN_PULSE_BASE_GAP;
+            base_level_ = peak_level_ - MIN_INTENSITY_DIFFERENCE;
         }
     }
 
     void SignalEmitter::setBaseLevel(IntensityLevel led_level)
     {
-        constexpr auto MAX_BASE_LEVEL = PWM_MAX - MIN_PULSE_BASE_GAP;
+        constexpr auto MAX_BASE_LEVEL = PWM_MAX - MIN_INTENSITY_DIFFERENCE;
         base_level_ = (led_level > MAX_BASE_LEVEL) ? MAX_BASE_LEVEL : led_level;
         if (base_level_ >= peak_level_)
         {
-            base_level_ = peak_level_ - MIN_PULSE_BASE_GAP;
+            base_level_ = peak_level_ - MIN_INTENSITY_DIFFERENCE;
         }
     }
 
