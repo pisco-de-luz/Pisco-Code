@@ -31,6 +31,7 @@ namespace pisco_code
     using Timestamp       = UInt32;
     using DurationMs      = UInt32;
     using LedLevel        = UInt8;
+    using IntensityLevel  = UInt8;
     using RepeatTimes     = UInt8;
     using NumDigits       = UInt8;
     using DigitValue      = UInt8;
