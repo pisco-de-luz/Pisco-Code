@@ -16,17 +16,6 @@ static_assert(std::is_trivially_copyable<SignalStack>::value,
 
 TEST_GROUP(SignalPulseIteratorTests)
 {
-    // void check_next(const SignalElement& expected)
-    // {
-    //     const auto actual = sequence_stack.pop();
-    //     CHECK_EQUAL(to_value(expected.get_level()),
-    //                 to_value(actual.get_level()));
-    //     CHECK_EQUAL(to_value(expected.get_times()),
-    //                 to_value(actual.get_times()));
-    //     CHECK_EQUAL(to_value(expected.get_duration()),
-    //                 to_value(actual.get_duration()));
-    // }
-
     SignalStack signal_stack;
 
     void teardown() override
@@ -38,18 +27,8 @@ TEST_GROUP(SignalPulseIteratorTests)
 TEST(SignalPulseIteratorTests, SignalStackEmpty_IteratesCorrectly)
 {
     signal_stack.clear();
-    SignalPulseIterator iterator(signal_stack);
+    const SignalPulseIterator iterator(signal_stack);
 
-    CHECK_TRUE(iterator.hasNext());
-    const auto expected_framing      = SIGNAL_ELEMENT_FRAMING;
-    const auto expected_inter_symbol = SIGNAL_ELEMENT_INTER_SYMBOL;
-
-    auto actual = iterator.next();
-    CHECK_EQUAL(expected_framing, actual);
-    actual = iterator.next();
-    CHECK_EQUAL(expected_inter_symbol, actual);
-    actual = iterator.next();
-    CHECK_EQUAL(expected_framing, actual);
     CHECK_FALSE(iterator.hasNext());
 }
 

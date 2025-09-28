@@ -89,7 +89,15 @@ namespace pisco_code
 
         [[nodiscard]] bool hasNext() const noexcept
         {
-            return (current_phase_ != Phase::DONE || need_inter_symbol_);
+            if (current_phase_ == Phase::DONE)
+            {
+                return false;
+            }
+            if (current_phase_ == Phase::LEADING_FRAME)
+            {
+                return (symbol_remaining_ > 0);
+            }
+            return true;
         }
 
         void reset() noexcept

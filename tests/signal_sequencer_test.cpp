@@ -3,6 +3,7 @@
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 #include "signal_element.hpp"
+#include "signal_pulse_iterator.hpp"
 #include "signal_sequencer.hpp"
 #include "signal_types.hpp"
 #include "tests_constants.hpp"
@@ -21,26 +22,27 @@ TEST_GROUP(SignalSequencerTests)
     }
 };
 
-// TEST(SignalSequencerTests, DefaultConstructor_InitializesToZero)
-// {
-//     CHECK_EQUAL(0, sequencer.getElementCount());
-//     CHECK_FALSE(sequencer.hasMoreSignalCodeToSequence());
-//     CHECK_FALSE(sequencer.hasMoreSignalElements());
-//     CHECK_FALSE(sequencer.hasMorePulse());
-// }
+TEST(SignalSequencerTests, DefaultConstructor_InitializesCorrectly)
+{
+    CHECK_FALSE(sequencer.shouldRepeat());
+}
 
-// TEST(SignalSequencerTests, ShouldHaveMoreSignalCodeToSequence_AfterLoad)
-// {
-//     sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
-//     CHECK_TRUE(sequencer.hasMoreSignalCodeToSequence());
-// }
-// TEST(SignalSequencerTests, ShouldNotHaveMoreSignalCodeToSequence_AfterClear)
-// {
-//     sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
-//     CHECK_TRUE(sequencer.hasMoreSignalCodeToSequence());
-//     sequencer.clear();
-//     CHECK_FALSE(sequencer.hasMoreSignalCodeToSequence());
-// }
+TEST(SignalSequencerTests, ShouldHaveNextIterator_AfterLoad)
+{
+    sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
+    const SignalPulseIterator iter = sequencer.createPulseIterator();
+    CHECK_TRUE(iter.hasNext());
+}
+
+TEST(SignalSequencerTests, ShouldNotHaveNextIterator_AfterLoadAndClear)
+{
+    sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
+    sequencer.clear();
+    const SignalPulseIterator iter = sequencer.createPulseIterator();
+    // const SignalElement element = iter.next();
+    CHECK_FALSE(iter.hasNext());
+}
+
 // TEST(SignalSequencerTests, ShouldNotHaveMoreSignalElements_AfterLoad)
 // {
 //     sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
