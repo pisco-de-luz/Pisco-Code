@@ -17,7 +17,6 @@ struct LedStateChange
     Timestamp           timestamp{0};
     testutils::LedEvent state{testutils::LedEvent::INVALID};
     DurationMs          duration{0};
-    bool                isLedBeingUsedNow{false};
     bool                isRunning{false};
 };
 
@@ -32,7 +31,7 @@ class MockLedControlLogger
     void clear();
     [[nodiscard]] const std::vector<LedStateChange>& getEvents() const;
     void                                             flush();
-    void setTraceResolution(Timestamp resolutionMs); // default: 100
+    void                         setTraceResolution(Timestamp resolutionMs);
     [[nodiscard]] IntensityLevel getBaseLevel() const
     {
         return led_blink_pattern_.getBaseLevel();

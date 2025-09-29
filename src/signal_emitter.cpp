@@ -61,9 +61,7 @@ namespace pisco_code
                 const SignalElement element = pulse_iterator_.next();
                 phase_duration_ =
                     signalDurationToPhaseDuration(element.get_duration());
-                const auto mode = element.get_mode();
-                is_in_gap_mode_ = (mode == SignalMode::GAP);
-                controller_->setCurrentSignalMode(mode);
+                controller_->setCurrentSignalMode(element.get_mode());
             }
             else
             {
@@ -128,11 +126,6 @@ namespace pisco_code
     [[nodiscard]] RepeatTimes SignalEmitter::getRepeatTimes() const noexcept
     {
         return repeat_times_;
-    }
-
-    bool SignalEmitter::isLedBeingUsedNow() const
-    {
-        return is_running_ && !is_in_gap_mode_;
     }
 
     TickCounter

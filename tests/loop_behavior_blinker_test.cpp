@@ -76,18 +76,3 @@ TEST(LoopBehaviorBlinkerTest, ShouldHandleMixOfZeroAndOne)
 
     checkBlinkerBehavior(blinker, logger, test_case);
 }
-
-TEST(LoopBehaviorBlinkerTest, ShouldNotTurnOnLedDuringIdlePhases)
-{
-    const TestBlinkerCase test_case{.trace_check = TraceCheck::NOT_ENFORCED};
-
-    checkBlinkerBehavior(blinker, logger, test_case);
-
-    for (const auto& e : logger.getEvents())
-    {
-        if (e.state == LedEvent::ON && !e.isLedBeingUsedNow)
-        {
-            FAIL("LED turned ON during an idle phase");
-        }
-    }
-}

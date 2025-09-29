@@ -20,7 +20,6 @@ namespace pisco_code
         bool showCode(SignalCode code, NumberBase base, NumDigits num_digits);
         void loop();
         [[nodiscard]] bool isRunning() const;
-        [[nodiscard]] bool isLedBeingUsedNow() const;
         void               setPeakLevel(IntensityLevel level);
         void               setBaseLevel(IntensityLevel level);
         void               setRepeatTimes(RepeatTimes repeat_times) noexcept;
@@ -47,7 +46,6 @@ namespace pisco_code
         TickCounter         phase_duration_ = 0;
         PhaseLoop           current_phase_  = PhaseLoop::IDLE;
         bool                is_running_     = false;
-        bool                is_in_gap_mode_ = false;
         IntensityLevel      peak_level_     = DEFAULT_PULSE_LEVEL;
         IntensityLevel      base_level_     = DEFAULT_BASE_LEVEL;
         RepeatTimes         repeat_times_   = 1;

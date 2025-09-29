@@ -47,8 +47,7 @@ MockLedControlLogger::log(testutils::LedEvent ledEvent)
         // Capture context if blinker is set
         if (blinker_ != nullptr)
         {
-            state_change.isLedBeingUsedNow = blinker_->isLedBeingUsedNow();
-            state_change.isRunning         = blinker_->isRunning();
+            state_change.isRunning = blinker_->isRunning();
         }
         events_.push_back(state_change);
     }
