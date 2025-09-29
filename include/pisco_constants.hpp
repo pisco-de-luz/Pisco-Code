@@ -3,38 +3,38 @@
 #include "pisco_types.hpp"
 namespace pisco_code
 {
-    constexpr Timestamp LOOP_INTERVAL_MS    = 16;
-    constexpr Timestamp SHORT_BLINK_MS      = 400;
-    constexpr Timestamp MEDIUM_BLINK_MS     = 600;
-    constexpr Timestamp LONG_BLINK_MS       = 1200;
-    constexpr Timestamp EXTRA_LONG_BLINK_MS = 1900;
+    constexpr Timestamp LOOP_INTERVAL_MS    = 16U;
+    constexpr Timestamp SHORT_BLINK_MS      = 400U;
+    constexpr Timestamp MEDIUM_BLINK_MS     = 600U;
+    constexpr Timestamp LONG_BLINK_MS       = 1200U;
+    constexpr Timestamp EXTRA_LONG_BLINK_MS = 1900U;
 
     static_assert((SHORT_BLINK_MS / LOOP_INTERVAL_MS) <
-                      sizeof(TickCounter) * (MAX_BYTE_VALUE + 1),
+                      sizeof(TickCounter) * (MAX_BYTE_VALUE + 1U),
                   "LOOP_INTERVAL_MS too small");
     static_assert((MEDIUM_BLINK_MS / LOOP_INTERVAL_MS) <
-                      sizeof(TickCounter) * (MAX_BYTE_VALUE + 1),
+                      sizeof(TickCounter) * (MAX_BYTE_VALUE + 1U),
                   "LOOP_INTERVAL_MS too small");
     static_assert((LONG_BLINK_MS / LOOP_INTERVAL_MS) <
-                      sizeof(TickCounter) * (MAX_BYTE_VALUE + 1),
+                      sizeof(TickCounter) * (MAX_BYTE_VALUE + 1U),
                   "LOOP_INTERVAL_MS too small");
     static_assert((EXTRA_LONG_BLINK_MS / LOOP_INTERVAL_MS) <
-                      sizeof(TickCounter) * (MAX_BYTE_VALUE + 1),
+                      sizeof(TickCounter) * (MAX_BYTE_VALUE + 1U),
                   "LOOP_INTERVAL_MS too small");
 
     enum class LedControlCode : LedCodeType
     {
-        ON      = 0,
-        OFF     = 1,
-        FUNC_OK = 100,
+        ON      = 0U,
+        OFF     = 1U,
+        FUNC_OK = 100U,
     };
 
     enum class NumberBase : BaseType
     {
-        BIN = 2,
-        OCT = 8,
-        DEC = 10,
-        HEX = 16
+        BIN = 2U,
+        OCT = 8U,
+        DEC = 10U,
+        HEX = 16U
     };
 
     constexpr DigitValue to_value(NumberBase base) noexcept
@@ -129,16 +129,16 @@ namespace pisco_code
     static_assert(limits_for(NumberBase::HEX).max_value == MAX_VALUE_HEX,
                   "HEX max value mismatch");
 
-    constexpr IntensityLevel DEFAULT_BASE_LEVEL = 3;
-    constexpr IntensityLevel PWM_MAX            = 15;
+    constexpr IntensityLevel DEFAULT_BASE_LEVEL = 3U;
+    constexpr IntensityLevel PWM_MAX            = 15U;
 
     // Minimum intensity separation for BASE/PEAK levels to be
     // distinguishable
-    constexpr IntensityLevel MIN_INTENSITY_DIFFERENCE = 2;
+    constexpr IntensityLevel MIN_INTENSITY_DIFFERENCE = 2U;
     constexpr IntensityLevel DEFAULT_PULSE_LEVEL      = PWM_MAX;
-    constexpr NumBits        TIMES_BITS               = 4;
-    constexpr NumBits        LEVEL_BITS               = 2;
-    constexpr NumBits        DURATION_BITS            = 2;
+    constexpr NumBits        TIMES_BITS               = 4U;
+    constexpr NumBits        LEVEL_BITS               = 2U;
+    constexpr NumBits        DURATION_BITS            = 2U;
 
     constexpr UInt32 bit_mask(NumBits bits) noexcept
     {
