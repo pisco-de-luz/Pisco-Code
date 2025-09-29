@@ -72,33 +72,6 @@ namespace testutils
         logger->flush();
     }
 
-    inline TraceCode repeatTracePattern(const TraceCode& trace_code,
-                                        RepeatTimes      repeat_count)
-    {
-        if (repeat_count <= 1 || trace_code.empty())
-        {
-            return {};
-        }
-
-        // Find trailing LED off pattern (represented by a sequence of '_')
-        using size_type = TraceCode::size_type;
-        const size_type trail_off_start =
-            trace_code.find_last_not_of(LED_OFF_CHARACTER) + 1;
-        if (trail_off_start == TraceCode::npos)
-        {
-            return "No trailing off pattern found";
-        }
-
-        const TraceCode leading_off = trace_code.substr(0, trail_off_start);
-        TraceCode       result      = leading_off;
-        for (RepeatTimes i = 1; i < repeat_count; ++i)
-        {
-            result += trace_code; // skip first repetition's trailing off
-        }
-
-        return result;
-    }
-
     inline TraceCode generateExpectedTrace(SignalCode code, NumberBase base,
                                            NumDigits   num_digits = 0,
                                            RepeatTimes repeats    = 1)
