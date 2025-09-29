@@ -6,13 +6,12 @@ namespace pisco_code
 {
     constexpr Counter MAX_SIGNAL_ELEMENTS = 10;
 
-    // Signal strength or symbolic meaning
     enum class SignalMode : SignalModeType
     {
         NOT_DEFINED = 0,
-        GAP,  // Represents silent or idle pulse (e.g., digit 0)
-        BASE, // Represents a middle level, not used in current logic
-        PEAK, // Represents active/visible/strong pulse
+        GAP,
+        BASE,
+        PEAK,
         MAX_VALUE,
     };
 
