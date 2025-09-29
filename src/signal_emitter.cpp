@@ -62,8 +62,8 @@ namespace pisco_code
                 phase_duration_ =
                     signalDurationToPhaseDuration(element.get_duration());
                 const auto level = element.get_level();
-                is_in_gap_level_ = (level == SignalLevel::GAP);
-                controller_->setCurrentSignalLevel(
+                is_in_gap_level_ = (level == SignalMode::GAP);
+                controller_->setCurrentSignalMode(
                     signalLevelToBlinkMode(level));
             }
             else
@@ -136,15 +136,15 @@ namespace pisco_code
         return is_running_ && !is_in_gap_level_;
     }
 
-    BlinkMode SignalEmitter::signalLevelToBlinkMode(SignalLevel level)
+    BlinkMode SignalEmitter::signalLevelToBlinkMode(SignalMode level)
     {
         switch (level)
         {
-            case SignalLevel::GAP:
+            case SignalMode::GAP:
                 return BlinkMode::NONE;
-            case SignalLevel::BASE:
+            case SignalMode::BASE:
                 return BlinkMode::BASE;
-            case SignalLevel::PEAK:
+            case SignalMode::PEAK:
                 return BlinkMode::PULSE;
             default:
                 return BlinkMode::NONE; // Not defined or invalid

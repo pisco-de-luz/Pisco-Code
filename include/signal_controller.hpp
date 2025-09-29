@@ -17,11 +17,11 @@ namespace pisco_code
     class SignalController
     {
       public:
-        virtual void               setPeakLevel(IntensityLevel level)    = 0;
-        virtual void               setBaseLevel(IntensityLevel level)    = 0;
-        virtual void               update()                              = 0;
-        [[nodiscard]] virtual bool readyForPhaseChange() const noexcept  = 0;
-        virtual void               setCurrentSignalLevel(BlinkMode mode) = 0;
+        virtual void               setPeakLevel(IntensityLevel level)   = 0;
+        virtual void               setBaseLevel(IntensityLevel level)   = 0;
+        virtual void               update()                             = 0;
+        [[nodiscard]] virtual bool readyForPhaseChange() const noexcept = 0;
+        virtual void               setCurrentSignalMode(BlinkMode mode) = 0;
 
       protected:
         SignalController()                                   = default;

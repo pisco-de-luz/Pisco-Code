@@ -15,9 +15,12 @@ TEST_GROUP(SignalStackTests)
     void check_next(const SignalElement& expected)
     {
         const auto actual = sequence_stack.pop();
-        CHECK_EQUAL(to_value(expected.get_level()), to_value(actual.get_level()));
-        CHECK_EQUAL(to_value(expected.get_times()), to_value(actual.get_times()));
-        CHECK_EQUAL(to_value(expected.get_duration()), to_value(actual.get_duration()));
+        CHECK_EQUAL(to_value(expected.get_level()),
+                    to_value(actual.get_level()));
+        CHECK_EQUAL(to_value(expected.get_times()),
+                    to_value(actual.get_times()));
+        CHECK_EQUAL(to_value(expected.get_duration()),
+                    to_value(actual.get_duration()));
     }
 
     SignalStack sequence_stack;
@@ -36,7 +39,7 @@ TEST(SignalStackTests, DefaultConstructor_InitializesToZero)
 }
 TEST(SignalStackTests, PushAndPop_SingleElement)
 {
-    const SignalElement element(SignalLevel::PEAK, 1, SignalDuration::SHORT);
+    const SignalElement element(SignalMode::PEAK, 1, SignalDuration::SHORT);
     sequence_stack.push(element);
 
     CHECK_EQUAL(1, sequence_stack.size());
@@ -47,8 +50,8 @@ TEST(SignalStackTests, PushAndPop_SingleElement)
 }
 TEST(SignalStackTests, PushAndPop_MultipleElements)
 {
-    const SignalElement element1(SignalLevel::PEAK, 1, SignalDuration::SHORT);
-    const SignalElement element2(SignalLevel::GAP, 2, SignalDuration::MEDIUM);
+    const SignalElement element1(SignalMode::PEAK, 1, SignalDuration::SHORT);
+    const SignalElement element2(SignalMode::GAP, 2, SignalDuration::MEDIUM);
 
     sequence_stack.push(element1);
     sequence_stack.push(element2);
@@ -63,13 +66,15 @@ TEST(SignalStackTests, PushAndPop_MultipleElements)
 TEST(SignalStackTests, Pop_EmptyStack_ReturnsNotDefined)
 {
     const auto element = sequence_stack.pop();
-    CHECK_EQUAL(to_value(SignalLevel::NOT_DEFINED), to_value(element.get_level()));
+    CHECK_EQUAL(to_value(SignalMode::NOT_DEFINED),
+                to_value(element.get_level()));
     CHECK_EQUAL(0, element.get_times());
-    CHECK_EQUAL(to_value(SignalDuration::SHORT), to_value(element.get_duration()));
+    CHECK_EQUAL(to_value(SignalDuration::SHORT),
+                to_value(element.get_duration()));
 }
 TEST(SignalStackTests, IsEmpty_AfterClear)
 {
-    const SignalElement element(SignalLevel::PEAK, 1, SignalDuration::SHORT);
+    const SignalElement element(SignalMode::PEAK, 1, SignalDuration::SHORT);
     sequence_stack.push(element);
 
     CHECK_FALSE(sequence_stack.isEmpty());
@@ -83,20 +88,22 @@ TEST(SignalStackTests, IsFull_AfterMaxPushes)
 {
     for (testutils::Counter i = 0; i < MAX_SIGNAL_ELEMENTS; ++i)
     {
-        sequence_stack.push(SignalElement(SignalLevel::PEAK, 1, SignalDuration::SHORT));
+        sequence_stack.push(
+            SignalElement(SignalMode::PEAK, 1, SignalDuration::SHORT));
     }
 
     CHECK_TRUE(sequence_stack.isFull());
     CHECK_EQUAL(MAX_SIGNAL_ELEMENTS, sequence_stack.size());
 
     // Attempting to push more should not change the size
-    sequence_stack.push(SignalElement(SignalLevel::GAP, 2, SignalDuration::MEDIUM));
+    sequence_stack.push(
+        SignalElement(SignalMode::GAP, 2, SignalDuration::MEDIUM));
     CHECK_EQUAL(MAX_SIGNAL_ELEMENTS, sequence_stack.size());
 }
 TEST(SignalStackTests, Rewind_ResetsReadIndex)
 {
-    const SignalElement element1(SignalLevel::PEAK, 1, SignalDuration::SHORT);
-    const SignalElement element2(SignalLevel::GAP, 2, SignalDuration::MEDIUM);
+    const SignalElement element1(SignalMode::PEAK, 1, SignalDuration::SHORT);
+    const SignalElement element2(SignalMode::GAP, 2, SignalDuration::MEDIUM);
 
     sequence_stack.push(element1);
     sequence_stack.push(element2);
@@ -113,8 +120,8 @@ TEST(SignalStackTests, Rewind_ResetsReadIndex)
 }
 TEST(SignalStackTests, Clear_EmptiesStack)
 {
-    const SignalElement element1(SignalLevel::PEAK, 1, SignalDuration::SHORT);
-    const SignalElement element2(SignalLevel::GAP, 2, SignalDuration::MEDIUM);
+    const SignalElement element1(SignalMode::PEAK, 1, SignalDuration::SHORT);
+    const SignalElement element2(SignalMode::GAP, 2, SignalDuration::MEDIUM);
 
     sequence_stack.push(element1);
     sequence_stack.push(element2);
@@ -130,7 +137,8 @@ TEST(SignalStackTests, PushBeyondMaxSize_DoesNotIncreaseSize)
 {
     for (testutils::Counter i = 0; i < MAX_SIGNAL_ELEMENTS + 5; ++i)
     {
-        sequence_stack.push(SignalElement(SignalLevel::PEAK, 1, SignalDuration::SHORT));
+        sequence_stack.push(
+            SignalElement(SignalMode::PEAK, 1, SignalDuration::SHORT));
     }
 
     CHECK_TRUE(sequence_stack.isFull());
@@ -138,8 +146,8 @@ TEST(SignalStackTests, PushBeyondMaxSize_DoesNotIncreaseSize)
 }
 TEST(SignalStackTests, PopUntilEmpty)
 {
-    const SignalElement element1(SignalLevel::PEAK, 1, SignalDuration::SHORT);
-    const SignalElement element2(SignalLevel::GAP, 2, SignalDuration::MEDIUM);
+    const SignalElement element1(SignalMode::PEAK, 1, SignalDuration::SHORT);
+    const SignalElement element2(SignalMode::GAP, 2, SignalDuration::MEDIUM);
 
     sequence_stack.push(element1);
     sequence_stack.push(element2);

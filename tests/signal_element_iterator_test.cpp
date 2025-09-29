@@ -110,7 +110,7 @@ TEST(SignalElementIteratorTests,
      GAP_SHORT_Times_greaterThanOne_MustNotEmitBetween)
 {
     const SignalTimesType times{3};
-    const SignalElement   expected = {SignalLevel::GAP, times,
+    const SignalElement   expected = {SignalMode::GAP, times,
                                       SignalDuration::SHORT};
     SignalElementIterator iterator(expected);
     SignalTimesType       peak_pulse_count{0};
@@ -129,7 +129,7 @@ TEST(SignalElementIteratorTests,
      PEAK_LONG_Times_greaterThanOne_MustNotEmitBetween)
 {
     const SignalTimesType times{2};
-    const SignalElement   expected = {SignalLevel::PEAK, times,
+    const SignalElement   expected = {SignalMode::PEAK, times,
                                       SignalDuration::LONG};
     SignalElementIterator iterator(expected);
     SignalTimesType       peak_pulse_count{0};
@@ -148,7 +148,7 @@ TEST(SignalElementIteratorTests,
      PEAK_EXTRA_LONG_Times_greaterThanOne_MustNotEmitBetween)
 {
     const SignalTimesType times{3};
-    const SignalElement   expected = {SignalLevel::PEAK, times,
+    const SignalElement   expected = {SignalMode::PEAK, times,
                                       SignalDuration::EXTRA_LONG};
     SignalElementIterator iterator(expected);
     SignalTimesType       peak_pulse_count{0};
@@ -166,7 +166,7 @@ TEST(SignalElementIteratorTests,
 TEST(SignalElementIteratorTests, TimesEqualToZero_MustNotEmitPulse)
 {
     const SignalTimesType       times{0};
-    const SignalElement         expected = {SignalLevel::PEAK, times,
+    const SignalElement         expected = {SignalMode::PEAK, times,
                                             SignalDuration::EXTRA_LONG};
     const SignalElementIterator iterator(expected);
     CHECK_FALSE(iterator.hasNext());

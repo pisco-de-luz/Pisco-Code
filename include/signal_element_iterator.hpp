@@ -55,7 +55,7 @@ namespace pisco_code
         bool               is_pulse_between_{false};
         [[nodiscard]] bool isPeakShort() const noexcept
         {
-            return element_.get_level() == SignalLevel::PEAK &&
+            return element_.get_level() == SignalMode::PEAK &&
                    element_.get_duration() == SignalDuration::SHORT;
         }
     };

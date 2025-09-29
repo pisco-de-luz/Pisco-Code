@@ -12,20 +12,20 @@ namespace pisco_code
     {
       public:
         constexpr SignalElement() noexcept :
-            level_(to_value(SignalLevel::NOT_DEFINED)), times_(0),
+            level_(to_value(SignalMode::NOT_DEFINED)), times_(0),
             duration_(to_value(SignalDuration::SHORT))
         {
         }
 
-        constexpr SignalElement(SignalLevel lvl, SignalTimesType cnt,
+        constexpr SignalElement(SignalMode lvl, SignalTimesType cnt,
                                 SignalDuration dur) noexcept :
             level_(to_value(lvl)), times_(cnt), duration_(to_value(dur))
         {
         }
 
-        [[nodiscard]] constexpr SignalLevel get_level() const noexcept
+        [[nodiscard]] constexpr SignalMode get_level() const noexcept
         {
-            return static_cast<SignalLevel>(level_);
+            return static_cast<SignalMode>(level_);
         }
         [[nodiscard]] constexpr SignalDuration get_duration() const noexcept
         {
@@ -37,30 +37,30 @@ namespace pisco_code
         }
 
       private:
-        SignalLevelType level_ : LEVEL_BITS;
+        SignalModeType  level_ : LEVEL_BITS;
         SignalTimesType times_
             : TIMES_BITS; // Times this unit can repeats (0–15)
         SignalDurationType duration_ : DURATION_BITS;
     };
 
-    inline constexpr SignalElement SIGNAL_ELEMENT_FRAMING{SignalLevel::GAP, 1,
+    inline constexpr SignalElement SIGNAL_ELEMENT_FRAMING{SignalMode::GAP, 1,
                                                           SignalDuration::LONG};
     inline constexpr SignalElement SIGNAL_ELEMENT_INTER_SYMBOL{
-        SignalLevel::BASE, 1, SignalDuration::LONG};
+        SignalMode::BASE, 1, SignalDuration::LONG};
     inline constexpr SignalElement SIGNAL_ELEMENT_NEGATIVE{
-        SignalLevel::PEAK, 1, SignalDuration::LONG};
-    inline constexpr SignalElement SIGNAL_ELEMENT_ZERO{SignalLevel::GAP, 1,
+        SignalMode::PEAK, 1, SignalDuration::LONG};
+    inline constexpr SignalElement SIGNAL_ELEMENT_ZERO{SignalMode::GAP, 1,
                                                        SignalDuration::SHORT};
     inline constexpr SignalElement SIGNAL_ELEMENT_NOT_DEFINED{
-        SignalLevel::NOT_DEFINED, 0, SignalDuration::SHORT};
+        SignalMode::NOT_DEFINED, 0, SignalDuration::SHORT};
     inline constexpr SignalElement SIGNAL_ELEMENT_INTRA_DIGIT{
-        SignalLevel::BASE, 1, SignalDuration::SHORT};
-    inline constexpr SignalElement SIGNAL_ELEMENT_DIGIT{SignalLevel::PEAK, 1,
+        SignalMode::BASE, 1, SignalDuration::SHORT};
+    inline constexpr SignalElement SIGNAL_ELEMENT_DIGIT{SignalMode::PEAK, 1,
                                                         SignalDuration::SHORT};
 
     constexpr auto signal_element_digit(DigitValue digit) noexcept
     {
-        return SignalElement(SignalLevel::PEAK, digit, SignalDuration::SHORT);
+        return SignalElement(SignalMode::PEAK, digit, SignalDuration::SHORT);
     }
     [[nodiscard]] constexpr SignalElement
     signal_element_from_digit(DigitValue digit) noexcept

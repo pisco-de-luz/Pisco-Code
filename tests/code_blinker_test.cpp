@@ -24,7 +24,7 @@ namespace
             last_base = led_level;
         }
 
-        void setCurrentSignalLevel(BlinkMode mode) override
+        void setCurrentSignalMode(BlinkMode mode) override
         {
             blink_mode = mode;
         }

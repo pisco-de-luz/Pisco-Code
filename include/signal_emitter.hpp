@@ -28,7 +28,7 @@ namespace pisco_code
 
       private:
         [[nodiscard]] bool phaseElapsed(TickCounter tick_counter) const;
-        static BlinkMode   signalLevelToBlinkMode(SignalLevel level);
+        static BlinkMode   signalLevelToBlinkMode(SignalMode level);
         static TickCounter
         signalDurationToPhaseDuration(SignalDuration duration);
 

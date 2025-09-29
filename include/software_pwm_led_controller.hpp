@@ -14,7 +14,7 @@ namespace pisco_code
         void               attachLedControl(bool (*led_func)(LedControlCode));
         void               setPeakLevel(IntensityLevel level) override;
         void               setBaseLevel(IntensityLevel level) override;
-        void               setCurrentSignalLevel(BlinkMode mode) override;
+        void               setCurrentSignalMode(BlinkMode mode) override;
         void               update() override;
         [[nodiscard]] bool readyForPhaseChange() const noexcept override;
 

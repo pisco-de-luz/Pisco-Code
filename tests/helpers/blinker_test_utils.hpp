@@ -20,13 +20,13 @@ using pisco_code::SignalEmitter;
 
 namespace testutils
 {
-    // Two LUTs for GAP and PEAK (SignalLevel::GAP == 1, PEAK == 2)
+    // Two LUTs for GAP and PEAK (SignalMode::GAP == 1, PEAK == 2)
     constexpr const char* GAP_LUT[]    = {"_", "__", "___", "______"};
     constexpr const char* MIDDLE_LUT[] = {"-", "--", "---", "------"};
     constexpr const char* PEAK_LUT[]   = {"^", "^^", "^^^", "^^^^^^"};
 
     // Returns a pointer to a static string literal (no dynamic allocation)
-    [[nodiscard]] inline TraceCode toTraceCode(SignalLevel    level,
+    [[nodiscard]] inline TraceCode toTraceCode(SignalMode     level,
                                                SignalDuration duration) noexcept
     {
         const auto duration_value = to_value(duration);
@@ -37,11 +37,11 @@ namespace testutils
         }
         switch (level)
         {
-            case SignalLevel::GAP:
+            case SignalMode::GAP:
                 return GAP_LUT[duration_value];
-            case SignalLevel::BASE:
+            case SignalMode::BASE:
                 return MIDDLE_LUT[duration_value];
-            case SignalLevel::PEAK:
+            case SignalMode::PEAK:
                 return PEAK_LUT[duration_value];
             default:
                 return ""; // NOT_DEFINED or invalid

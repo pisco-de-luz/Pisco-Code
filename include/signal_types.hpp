@@ -7,7 +7,7 @@ namespace pisco_code
     constexpr Counter MAX_SIGNAL_ELEMENTS = 10;
 
     // Signal strength or symbolic meaning
-    enum class SignalLevel : SignalLevelType
+    enum class SignalMode : SignalModeType
     {
         NOT_DEFINED = 0,
         GAP,  // Represents silent or idle pulse (e.g., digit 0)
@@ -26,16 +26,16 @@ namespace pisco_code
         MAX_VALUE,
     };
 
-    static_assert(static_cast<unsigned>(SignalLevel::MAX_VALUE) <=
+    static_assert(static_cast<unsigned>(SignalMode::MAX_VALUE) <=
                       bit_mask(LEVEL_BITS),
-                  "SignalLevel fits LEVEL_BITS");
+                  "SignalMode fits LEVEL_BITS");
     static_assert(static_cast<unsigned>(SignalDuration::MAX_VALUE) <=
                       bit_mask(DURATION_BITS),
                   "SignalDuration fits DURATION_BITS");
 
-    static constexpr SignalLevelType to_value(SignalLevel level) noexcept
+    static constexpr SignalModeType to_value(SignalMode level) noexcept
     {
-        return static_cast<SignalLevelType>(level);
+        return static_cast<SignalModeType>(level);
     }
 
     static constexpr SignalDurationType

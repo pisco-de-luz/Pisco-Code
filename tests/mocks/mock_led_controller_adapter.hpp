@@ -26,7 +26,7 @@ class MockLedControllerAdapter : public SignalController
         base_level_ = value;
     }
 
-    void setCurrentSignalLevel(BlinkMode mode) override
+    void setCurrentSignalMode(BlinkMode mode) override
     {
         mode_ = mode;
     }
