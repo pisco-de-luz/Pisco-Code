@@ -19,10 +19,12 @@ namespace pisco_code
 
         bool showCode(SignalCode code, NumberBase base, NumDigits num_digits);
         void loop();
-        [[nodiscard]] bool isRunning() const;
-        void               setPeakLevel(IntensityLevel level);
-        void               setBaseLevel(IntensityLevel level);
-        void               setRepeatTimes(RepeatTimes repeat_times) noexcept;
+        [[nodiscard]] bool           isRunning() const;
+        void                         setPeakLevel(IntensityLevel level);
+        [[nodiscard]] IntensityLevel getPeakLevel() const noexcept;
+        void                         setBaseLevel(IntensityLevel level);
+        [[nodiscard]] IntensityLevel getBaseLevel() const noexcept;
+        void setRepeatTimes(RepeatTimes repeat_times) noexcept;
         [[nodiscard]] RepeatTimes getRepeatTimes() const noexcept;
 
       private:

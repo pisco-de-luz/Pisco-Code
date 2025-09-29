@@ -107,6 +107,11 @@ namespace pisco_code
         }
     }
 
+    [[nodiscard]] IntensityLevel SignalEmitter::getPeakLevel() const noexcept
+    {
+        return peak_level_;
+    }
+
     void SignalEmitter::setBaseLevel(IntensityLevel level)
     {
         constexpr auto MAX_BASE_LEVEL = PWM_MAX - MIN_INTENSITY_DIFFERENCE;
@@ -115,6 +120,11 @@ namespace pisco_code
         {
             base_level_ = peak_level_ - MIN_INTENSITY_DIFFERENCE;
         }
+    }
+
+    [[nodiscard]] IntensityLevel SignalEmitter::getBaseLevel() const noexcept
+    {
+        return base_level_;
     }
 
     void SignalEmitter::setRepeatTimes(RepeatTimes repeat_times) noexcept
