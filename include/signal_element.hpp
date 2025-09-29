@@ -6,8 +6,6 @@
 
 namespace pisco_code
 {
-
-    // Single encoded unit (pulse)
     struct SignalElement
     {
       public:
@@ -17,9 +15,9 @@ namespace pisco_code
         {
         }
 
-        constexpr SignalElement(SignalMode lvl, SignalTimesType cnt,
-                                SignalDuration dur) noexcept :
-            mode_(to_value(lvl)), times_(cnt), duration_(to_value(dur))
+        constexpr SignalElement(SignalMode mode, SignalTimesType times,
+                                SignalDuration duration) noexcept :
+            mode_(to_value(mode)), times_(times), duration_(to_value(duration))
         {
         }
 
