@@ -26,7 +26,7 @@ namespace pisco_code
                 return SIGNAL_ELEMENT_INTRA_DIGIT;
             }
             advance();
-            return {element_.get_level(), Byte{1}, element_.get_duration()};
+            return {element_.get_mode(), Byte{1}, element_.get_duration()};
         }
 
         [[nodiscard]] bool hasNext() const noexcept
@@ -55,7 +55,7 @@ namespace pisco_code
         bool               is_pulse_between_{false};
         [[nodiscard]] bool isPeakShort() const noexcept
         {
-            return element_.get_level() == SignalMode::PEAK &&
+            return element_.get_mode() == SignalMode::PEAK &&
                    element_.get_duration() == SignalDuration::SHORT;
         }
     };

@@ -26,7 +26,7 @@ namespace testutils
     constexpr const char* PEAK_LUT[]   = {"^", "^^", "^^^", "^^^^^^"};
 
     // Returns a pointer to a static string literal (no dynamic allocation)
-    [[nodiscard]] inline TraceCode toTraceCode(SignalMode     level,
+    [[nodiscard]] inline TraceCode toTraceCode(SignalMode     mode,
                                                SignalDuration duration) noexcept
     {
         const auto duration_value = to_value(duration);
@@ -35,7 +35,7 @@ namespace testutils
         {
             return ""; // fail-safe: invalid duration
         }
-        switch (level)
+        switch (mode)
         {
             case SignalMode::GAP:
                 return GAP_LUT[duration_value];
@@ -115,7 +115,7 @@ namespace testutils
             {
                 auto element = pulse_iterator.next();
                 trace +=
-                    toTraceCode(element.get_level(), element.get_duration());
+                    toTraceCode(element.get_mode(), element.get_duration());
             }
         }
 

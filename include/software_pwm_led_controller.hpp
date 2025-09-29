@@ -3,6 +3,7 @@
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 #include "signal_controller.hpp"
+#include "signal_types.hpp"
 
 namespace pisco_code
 {
@@ -14,7 +15,7 @@ namespace pisco_code
         void               attachLedControl(bool (*led_func)(LedControlCode));
         void               setPeakLevel(IntensityLevel level) override;
         void               setBaseLevel(IntensityLevel level) override;
-        void               setCurrentSignalMode(BlinkMode mode) override;
+        void               setCurrentSignalMode(SignalMode mode) override;
         void               update() override;
         [[nodiscard]] bool readyForPhaseChange() const noexcept override;
 
@@ -22,7 +23,7 @@ namespace pisco_code
         IntensityLevel peak_level_           = PWM_MAX;
         IntensityLevel base_level_           = DEFAULT_BASE_LEVEL;
         bool (*led_control_)(LedControlCode) = nullptr;
-        BlinkMode       mode_                = BlinkMode::NONE;
+        SignalMode      mode_                = SignalMode::NOT_DEFINED;
         PwmTickPosition pwm_tick_position_   = 0;
     };
 

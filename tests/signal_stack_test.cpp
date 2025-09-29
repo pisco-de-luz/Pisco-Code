@@ -15,8 +15,7 @@ TEST_GROUP(SignalStackTests)
     void check_next(const SignalElement& expected)
     {
         const auto actual = sequence_stack.pop();
-        CHECK_EQUAL(to_value(expected.get_level()),
-                    to_value(actual.get_level()));
+        CHECK_EQUAL(to_value(expected.get_mode()), to_value(actual.get_mode()));
         CHECK_EQUAL(to_value(expected.get_times()),
                     to_value(actual.get_times()));
         CHECK_EQUAL(to_value(expected.get_duration()),
@@ -67,7 +66,7 @@ TEST(SignalStackTests, Pop_EmptyStack_ReturnsNotDefined)
 {
     const auto element = sequence_stack.pop();
     CHECK_EQUAL(to_value(SignalMode::NOT_DEFINED),
-                to_value(element.get_level()));
+                to_value(element.get_mode()));
     CHECK_EQUAL(0, element.get_times());
     CHECK_EQUAL(to_value(SignalDuration::SHORT),
                 to_value(element.get_duration()));

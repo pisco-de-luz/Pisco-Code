@@ -2,7 +2,7 @@
 
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
-#include "signal_controller.hpp"
+#include "signal_types.hpp"
 
 namespace pisco_code
 {
@@ -27,7 +27,7 @@ namespace pisco_code
         peak_level_ = led_level;
     }
 
-    void SoftwarePwmLedController::setCurrentSignalMode(BlinkMode mode)
+    void SoftwarePwmLedController::setCurrentSignalMode(SignalMode mode)
     {
         mode_ = mode;
     }
@@ -46,7 +46,7 @@ namespace pisco_code
 
         switch (mode_)
         {
-            case BlinkMode::PULSE:
+            case SignalMode::PEAK:
                 if (pwm_tick_position_ == 0)
                 {
                     led_control_(LedControlCode::ON);
@@ -57,7 +57,7 @@ namespace pisco_code
                 }
                 break;
 
-            case BlinkMode::BASE:
+            case SignalMode::BASE:
                 if (pwm_tick_position_ == 0)
                 {
                     led_control_(LedControlCode::ON);
@@ -68,7 +68,7 @@ namespace pisco_code
                 }
                 break;
 
-            case BlinkMode::NONE:
+            case SignalMode::GAP:
             default:
                 if (pwm_tick_position_ == 0)
                 {

@@ -61,10 +61,9 @@ namespace pisco_code
                 const SignalElement element = pulse_iterator_.next();
                 phase_duration_ =
                     signalDurationToPhaseDuration(element.get_duration());
-                const auto level = element.get_level();
-                is_in_gap_level_ = (level == SignalMode::GAP);
-                controller_->setCurrentSignalMode(
-                    signalLevelToBlinkMode(level));
+                const auto mode = element.get_mode();
+                is_in_gap_mode_ = (mode == SignalMode::GAP);
+                controller_->setCurrentSignalMode(mode);
             }
             else
             {
@@ -133,22 +132,7 @@ namespace pisco_code
 
     bool SignalEmitter::isLedBeingUsedNow() const
     {
-        return is_running_ && !is_in_gap_level_;
-    }
-
-    BlinkMode SignalEmitter::signalLevelToBlinkMode(SignalMode level)
-    {
-        switch (level)
-        {
-            case SignalMode::GAP:
-                return BlinkMode::NONE;
-            case SignalMode::BASE:
-                return BlinkMode::BASE;
-            case SignalMode::PEAK:
-                return BlinkMode::PULSE;
-            default:
-                return BlinkMode::NONE; // Not defined or invalid
-        }
+        return is_running_ && !is_in_gap_mode_;
     }
 
     TickCounter

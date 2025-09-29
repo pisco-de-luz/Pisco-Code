@@ -40,8 +40,7 @@ namespace
     void checkEqualLevelDuration(SignalElement expected,
                                  SignalElement actual) noexcept
     {
-        CHECK_EQUAL(to_value(expected.get_level()),
-                    to_value(actual.get_level()));
+        CHECK_EQUAL(to_value(expected.get_mode()), to_value(actual.get_mode()));
         CHECK_EQUAL(to_value(expected.get_duration()),
                     to_value(actual.get_duration()));
     }

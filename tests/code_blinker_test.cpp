@@ -24,7 +24,7 @@ namespace
             last_base = led_level;
         }
 
-        void setCurrentSignalMode(BlinkMode mode) override
+        void setCurrentSignalMode(SignalMode mode) override
         {
             blink_mode = mode;
         }
@@ -54,7 +54,7 @@ namespace
         Int32          off_calls    = 0;
         IntensityLevel last_peak    = 0;
         IntensityLevel last_base    = 0;
-        BlinkMode      blink_mode   = BlinkMode::NONE;
+        SignalMode     blink_mode   = SignalMode::NOT_DEFINED;
         bool           phase_ready_ = true;
     };
 

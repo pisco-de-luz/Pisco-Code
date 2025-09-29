@@ -28,7 +28,6 @@ namespace pisco_code
 
       private:
         [[nodiscard]] bool phaseElapsed(TickCounter tick_counter) const;
-        static BlinkMode   signalLevelToBlinkMode(SignalMode level);
         static TickCounter
         signalDurationToPhaseDuration(SignalDuration duration);
 
@@ -43,15 +42,15 @@ namespace pisco_code
         SignalSequencer     sequencer_;
         SignalPulseIterator pulse_iterator_;
         SignalElement       element_;
-        Timestamp           tick_timestamp_  = 0;
-        TickCounter         start_time_      = 0;
-        TickCounter         phase_duration_  = 0;
-        PhaseLoop           current_phase_   = PhaseLoop::IDLE;
-        bool                is_running_      = false;
-        bool                is_in_gap_level_ = false;
-        IntensityLevel      peak_level_      = DEFAULT_PULSE_LEVEL;
-        IntensityLevel      base_level_      = DEFAULT_BASE_LEVEL;
-        RepeatTimes         repeat_times_    = 1;
+        Timestamp           tick_timestamp_ = 0;
+        TickCounter         start_time_     = 0;
+        TickCounter         phase_duration_ = 0;
+        PhaseLoop           current_phase_  = PhaseLoop::IDLE;
+        bool                is_running_     = false;
+        bool                is_in_gap_mode_ = false;
+        IntensityLevel      peak_level_     = DEFAULT_PULSE_LEVEL;
+        IntensityLevel      base_level_     = DEFAULT_BASE_LEVEL;
+        RepeatTimes         repeat_times_   = 1;
     };
 
 } // namespace pisco_code

@@ -12,20 +12,20 @@ namespace pisco_code
     {
       public:
         constexpr SignalElement() noexcept :
-            level_(to_value(SignalMode::NOT_DEFINED)), times_(0),
+            mode_(to_value(SignalMode::NOT_DEFINED)), times_(0),
             duration_(to_value(SignalDuration::SHORT))
         {
         }
 
         constexpr SignalElement(SignalMode lvl, SignalTimesType cnt,
                                 SignalDuration dur) noexcept :
-            level_(to_value(lvl)), times_(cnt), duration_(to_value(dur))
+            mode_(to_value(lvl)), times_(cnt), duration_(to_value(dur))
         {
         }
 
-        [[nodiscard]] constexpr SignalMode get_level() const noexcept
+        [[nodiscard]] constexpr SignalMode get_mode() const noexcept
         {
-            return static_cast<SignalMode>(level_);
+            return static_cast<SignalMode>(mode_);
         }
         [[nodiscard]] constexpr SignalDuration get_duration() const noexcept
         {
@@ -37,7 +37,7 @@ namespace pisco_code
         }
 
       private:
-        SignalModeType  level_ : LEVEL_BITS;
+        SignalModeType  mode_ : MODE_BITS;
         SignalTimesType times_
             : TIMES_BITS; // Times this unit can repeats (0–15)
         SignalDurationType duration_ : DURATION_BITS;

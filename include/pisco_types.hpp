@@ -50,7 +50,6 @@ namespace pisco_code
     using BaseType           = Byte;
     using LedCodeType        = Byte;
     using PhaseType          = Byte;
-    using BlinkModeType      = Byte;
     using SignalModeType     = Byte;
     using SignalDurationType = Byte;
     using SignalTimesType    = Byte;

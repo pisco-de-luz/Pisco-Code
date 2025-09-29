@@ -137,7 +137,7 @@ namespace pisco_code
     constexpr IntensityLevel MIN_INTENSITY_DIFFERENCE = 2U;
     constexpr IntensityLevel DEFAULT_PULSE_LEVEL      = PWM_MAX;
     constexpr NumBits        TIMES_BITS               = 4U;
-    constexpr NumBits        LEVEL_BITS               = 2U;
+    constexpr NumBits        MODE_BITS                = 2U;
     constexpr NumBits        DURATION_BITS            = 2U;
 
     constexpr UInt32 bit_mask(NumBits bits) noexcept

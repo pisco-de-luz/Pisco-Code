@@ -26,7 +26,7 @@ class MockLedControllerAdapter : public SignalController
         base_level_ = value;
     }
 
-    void setCurrentSignalMode(BlinkMode mode) override
+    void setCurrentSignalMode(SignalMode mode) override
     {
         mode_ = mode;
     }
@@ -40,7 +40,7 @@ class MockLedControllerAdapter : public SignalController
 
         switch (mode_)
         {
-            case BlinkMode::PULSE:
+            case SignalMode::PEAK:
                 if (pwm_tick_position_ == 0)
                 {
                     logger_->handle(LedControlCode::ON);
@@ -51,7 +51,7 @@ class MockLedControllerAdapter : public SignalController
                 }
                 break;
 
-            case BlinkMode::BASE:
+            case SignalMode::BASE:
                 if (pwm_tick_position_ == 0)
                 {
                     logger_->handle(LedControlCode::ON);
@@ -62,7 +62,7 @@ class MockLedControllerAdapter : public SignalController
                 }
                 break;
 
-            case BlinkMode::NONE:
+            case SignalMode::GAP:
             default:
                 if (pwm_tick_position_ == 0)
                 {
@@ -85,7 +85,7 @@ class MockLedControllerAdapter : public SignalController
     MockLedControlLogger* logger_            = nullptr;
     PwmTickPosition       peak_level_        = PWM_MAX;
     PwmTickPosition       base_level_        = DEFAULT_BASE_LEVEL;
-    BlinkMode             mode_              = BlinkMode::NONE;
+    SignalMode            mode_              = SignalMode::NOT_DEFINED;
     PwmTickPosition       pwm_tick_position_ = 0;
 };
 
