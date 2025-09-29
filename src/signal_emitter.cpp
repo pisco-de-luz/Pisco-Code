@@ -19,13 +19,11 @@ namespace pisco_code
     bool SignalEmitter::showCode(SignalCode code, NumberBase base,
                                  NumDigits num_digits)
     {
-        if (controller_ == nullptr || current_phase_ != PhaseLoop::IDLE ||
-            repeat_times_ == 0 || peak_level_ == 0)
+        if (controller_ == nullptr || current_phase_ != PhaseLoop::IDLE)
         {
             return false;
         }
         sequencer_.clear();
-        sequencer_.setRepeatTimes(repeat_times_);
         sequencer_.loadSignalCode(code, base, num_digits);
         pulse_iterator_ = sequencer_.createPulseIterator();
 
@@ -129,13 +127,14 @@ namespace pisco_code
 
     void SignalEmitter::setRepeatTimes(RepeatTimes repeat_times) noexcept
     {
-        repeat_times_ = repeat_times;
-        sequencer_.setRepeatTimes(repeat_times_);
+        //        repeat_times_ = repeat_times;
+        sequencer_.setRepeatTimes(repeat_times);
     }
 
     [[nodiscard]] RepeatTimes SignalEmitter::getRepeatTimes() const noexcept
     {
-        return repeat_times_;
+        //        return repeat_times_;
+        return sequencer_.getRepeatTimes();
     }
 
     TickCounter

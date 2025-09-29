@@ -50,7 +50,6 @@ namespace pisco_code
         bool                is_running_     = false;
         IntensityLevel      peak_level_     = DEFAULT_PULSE_LEVEL;
         IntensityLevel      base_level_     = DEFAULT_BASE_LEVEL;
-        RepeatTimes         repeat_times_   = 1;
     };
 
 } // namespace pisco_code

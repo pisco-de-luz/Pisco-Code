@@ -10,7 +10,6 @@ namespace pisco_code
     void SignalSequencer::clear() noexcept
     {
         signal_stack_.clear();
-        repeat_count_       = 1;
         repeat_index_       = 0;
         element_count_      = 0;
         element_index_      = 0;
@@ -21,6 +20,11 @@ namespace pisco_code
     void SignalSequencer::setRepeatTimes(RepeatTimes repeat_times) noexcept
     {
         repeat_count_ = repeat_times;
+    }
+
+    [[nodiscard]] RepeatTimes SignalSequencer::getRepeatTimes() const noexcept
+    {
+        return repeat_count_;
     }
 
     [[nodiscard]] SignalPulseIterator
