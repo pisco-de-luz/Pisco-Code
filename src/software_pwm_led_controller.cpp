@@ -48,7 +48,6 @@ namespace pisco_code
             return;
         }
 
-        // Determine target intensity level for current mode
         IntensityLevel target_level = 0;
         switch (mode_)
         {
