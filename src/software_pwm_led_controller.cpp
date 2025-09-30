@@ -41,6 +41,24 @@ namespace pisco_code
         base_level_ = led_level;
     }
 
+    [[nodiscard]] IntensityLevel
+    SoftwarePwmLedController::getPeakLevel() const noexcept
+    {
+        return peak_level_;
+    }
+
+    [[nodiscard]] IntensityLevel
+    SoftwarePwmLedController::getBaseLevel() const noexcept
+    {
+        return base_level_;
+    }
+
+    [[nodiscard]] SignalMode
+    SoftwarePwmLedController::getCurrentSignalMode() const noexcept
+    {
+        return mode_;
+    }
+
     void SoftwarePwmLedController::update()
     {
         if (led_control_ == nullptr)
@@ -48,20 +66,7 @@ namespace pisco_code
             return;
         }
 
-        IntensityLevel target_level = 0;
-        switch (mode_)
-        {
-            case SignalMode::PEAK:
-                target_level = peak_level_;
-                break;
-            case SignalMode::BASE:
-                target_level = base_level_;
-                break;
-            case SignalMode::GAP:
-            default:
-                target_level = 0; // Always OFF for GAP
-                break;
-        }
+        const IntensityLevel target_level = getCurrentIntensityLevel();
 
         // PWM logic: ON at start, OFF when reaching target level
         if (pwm_tick_position_ == 0 && target_level > 0)

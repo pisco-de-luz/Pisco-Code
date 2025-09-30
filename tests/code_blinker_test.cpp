@@ -29,6 +29,21 @@ namespace
             blink_mode = mode;
         }
 
+        [[nodiscard]] IntensityLevel getPeakLevel() const noexcept override
+        {
+            return last_peak;
+        }
+
+        [[nodiscard]] IntensityLevel getBaseLevel() const noexcept override
+        {
+            return last_base;
+        }
+
+        [[nodiscard]] SignalMode getCurrentSignalMode() const noexcept override
+        {
+            return blink_mode;
+        }
+
         [[nodiscard]] Int32 getBaseCalls() const noexcept
         {
             return base_calls;

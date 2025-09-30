@@ -20,6 +20,10 @@ namespace pisco_code
         void               update() override;
         [[nodiscard]] bool readyForPhaseChange() const noexcept override;
 
+        [[nodiscard]] IntensityLevel getPeakLevel() const noexcept override;
+        [[nodiscard]] IntensityLevel getBaseLevel() const noexcept override;
+        [[nodiscard]] SignalMode getCurrentSignalMode() const noexcept override;
+
       private:
         IntensityLevel peak_level_           = PWM_MAX;
         IntensityLevel base_level_           = DEFAULT_BASE_LEVEL;

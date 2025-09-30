@@ -31,6 +31,21 @@ class MockLedControllerAdapter : public SignalController
         mode_ = mode;
     }
 
+    [[nodiscard]] IntensityLevel getPeakLevel() const noexcept override
+    {
+        return peak_level_;
+    }
+
+    [[nodiscard]] IntensityLevel getBaseLevel() const noexcept override
+    {
+        return base_level_;
+    }
+
+    [[nodiscard]] SignalMode getCurrentSignalMode() const noexcept override
+    {
+        return mode_;
+    }
+
     void update() override
     {
         if (logger_ == nullptr)
@@ -38,39 +53,18 @@ class MockLedControllerAdapter : public SignalController
             return;
         }
 
-        switch (mode_)
+        IntensityLevel target_level = getCurrentIntensityLevel();
+
+        // PWM logic: ON at start, OFF when reaching target level
+        if (pwm_tick_position_ == 0 && target_level > 0)
         {
-            case SignalMode::PEAK:
-                if (pwm_tick_position_ == 0)
-                {
-                    logger_->handle(LedControlCode::ON);
-                }
-                else if (pwm_tick_position_ == peak_level_)
-                {
-                    logger_->handle(LedControlCode::OFF);
-                }
-                break;
-
-            case SignalMode::BASE:
-                if (pwm_tick_position_ == 0)
-                {
-                    logger_->handle(LedControlCode::ON);
-                }
-                else if (pwm_tick_position_ == base_level_)
-                {
-                    logger_->handle(LedControlCode::OFF);
-                }
-                break;
-
-            case SignalMode::GAP:
-            default:
-                if (pwm_tick_position_ == 0)
-                {
-                    // Ensure LED is OFF during idle periods
-                    logger_->handle(LedControlCode::OFF);
-                }
-                break;
+            logger_->handle(LedControlCode::ON);
         }
+        else if (pwm_tick_position_ == target_level)
+        {
+            logger_->handle(LedControlCode::OFF);
+        }
+
         if (++pwm_tick_position_ > PWM_MAX)
         {
             pwm_tick_position_ = 0;
