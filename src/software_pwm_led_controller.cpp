@@ -48,39 +48,32 @@ namespace pisco_code
             return;
         }
 
+        // Determine target intensity level for current mode
+        IntensityLevel target_level = 0;
         switch (mode_)
         {
             case SignalMode::PEAK:
-                if (pwm_tick_position_ == 0)
-                {
-                    led_control_(LedControlCode::ON);
-                }
-                else if (pwm_tick_position_ == peak_level_)
-                {
-                    led_control_(LedControlCode::OFF);
-                }
+                target_level = peak_level_;
                 break;
-
             case SignalMode::BASE:
-                if (pwm_tick_position_ == 0)
-                {
-                    led_control_(LedControlCode::ON);
-                }
-                else if (pwm_tick_position_ == base_level_)
-                {
-                    led_control_(LedControlCode::OFF);
-                }
+                target_level = base_level_;
                 break;
-
             case SignalMode::GAP:
             default:
-                if (pwm_tick_position_ == 0)
-                {
-                    // Ensure LED is OFF during idle periods
-                    led_control_(LedControlCode::OFF);
-                }
+                target_level = 0; // Always OFF for GAP
                 break;
         }
+
+        // PWM logic: ON at start, OFF when reaching target level
+        if (pwm_tick_position_ == 0 && target_level > 0)
+        {
+            led_control_(LedControlCode::ON);
+        }
+        else if (pwm_tick_position_ == target_level)
+        {
+            led_control_(LedControlCode::OFF);
+        }
+
         if (++pwm_tick_position_ > PWM_MAX)
         {
             pwm_tick_position_ = 0;
