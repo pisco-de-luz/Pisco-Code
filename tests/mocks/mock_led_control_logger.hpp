@@ -44,13 +44,13 @@ class MockLedControlLogger
     [[nodiscard]] testutils::TraceCode traceLogToString() const;
 
   private:
-    void                        log(testutils::LedEvent ledEvent);
-    Timestamp                   currentTime_{0};
-    Timestamp                   lastTime_{0};
-    DurationMs                  duration_{1};
-    mutable LedBlinkPattern     led_blink_pattern_{};
-    testutils::LedEvent         lastState_{testutils::LedEvent::INVALID};
-    std::vector<LedStateChange> events_{};
-    Timestamp                   traceResolutionMs_{100};
-    SignalEmitter*              blinker_{nullptr};
+    void                               log(testutils::LedEvent ledEvent);
+    Timestamp                          currentTime_{0};
+    Timestamp                          lastTime_{0};
+    DurationMs                         duration_{1};
+    mutable testutils::LedBlinkPattern led_blink_pattern_{};
+    testutils::LedEvent                lastState_{testutils::LedEvent::INVALID};
+    std::vector<LedStateChange>        events_{};
+    Timestamp                          traceResolutionMs_{100};
+    SignalEmitter*                     blinker_{nullptr};
 };

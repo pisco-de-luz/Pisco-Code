@@ -7,6 +7,7 @@
 #include "tests_types.hpp"
 
 using namespace pisco_code;
+using testutils::LedBlinkPattern;
 
 void
 LedBlinkPattern::reset()

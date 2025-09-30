@@ -2,6 +2,8 @@
 
 #include "helpers/led_blink_pattern.hpp"
 
+using testutils::LedBlinkPattern;
+
 TEST_GROUP(LedBlinkPatternTests){};
 
 TEST(LedBlinkPatternTests, ShouldOutputOneCharacterForShortDurations)

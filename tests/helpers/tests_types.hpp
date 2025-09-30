@@ -5,6 +5,7 @@
 #include <optional>
 #include <string>
 
+#include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 
 using namespace pisco_code;

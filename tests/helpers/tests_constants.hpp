@@ -16,7 +16,7 @@ namespace testutils
 
     // Duration-based repetition rules
     inline const std::array<TraceRepeatRule, 3> TRACE_REPEAT_RULES{
-        {{0U, 1U}, {1101U, 3U}, {2201U, 5U}}
+        {{0U, 1U}, {1101U, 3U}, {2201U, 6U}}
     };
 
     // Commonly used trace patterns

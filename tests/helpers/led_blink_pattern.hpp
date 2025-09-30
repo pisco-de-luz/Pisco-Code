@@ -10,57 +10,43 @@
 #include <vector>
 
 #include "pisco_types.hpp"
+#include "tests_types.hpp"
 
 using pisco_code::DurationMs;
 using pisco_code::IntensityLevel;
 using pisco_code::RepeatTimes;
 using pisco_code::Timestamp;
-struct LedLevelDuration
+
+namespace testutils
 {
-    IntensityLevel led_level{0};
-    DurationMs     duration{0};
-};
 
-struct TraceRepeatRule
-{
-    DurationMs min_duration{0};
-    uint8_t    repeat_count{0};
-};
-
-constexpr std::array<TraceRepeatRule, 3> TRACE_REPEAT_RULES{
+    class LedBlinkPattern
     {
-     {0, 1},    // 0–1100
-        {1101, 3}, // 1101–2200
-        {2201, 6}, // 2201+
-    }
-};
+      public:
+        void reset();
+        void append(IntensityLevel level, DurationMs duration);
 
-class LedBlinkPattern
-{
-  public:
-    void reset();
-    void append(IntensityLevel level, DurationMs duration);
+        [[nodiscard]] bool           isValid() const;
+        [[nodiscard]] IntensityLevel getBaseLevel() const
+        {
+            return base_level_;
+        }
+        [[nodiscard]] IntensityLevel getPulseLevel() const
+        {
+            return pulse_level_;
+        }
+        [[nodiscard]] const std::vector<LedLevelDuration>& getEvents() const
+        {
+            return led_events_;
+        }
+        [[nodiscard]] std::string        tracePatternToString() const;
+        [[nodiscard]] static RepeatTimes getRepeatCount(DurationMs duration);
 
-    [[nodiscard]] bool           isValid() const;
-    [[nodiscard]] IntensityLevel getBaseLevel() const
-    {
-        return base_level_;
-    }
-    [[nodiscard]] IntensityLevel getPulseLevel() const
-    {
-        return pulse_level_;
-    }
-    [[nodiscard]] const std::vector<LedLevelDuration>& getEvents() const
-    {
-        return led_events_;
-    }
-    [[nodiscard]] std::string        tracePatternToString() const;
-    [[nodiscard]] static RepeatTimes getRepeatCount(DurationMs duration);
-
-  private:
-    bool                          pattern_is_valid_{true};
-    IntensityLevel                base_level_{0};
-    IntensityLevel                pulse_level_{0};
-    std::vector<LedLevelDuration> led_events_{};
-    std::set<IntensityLevel>      used_levels_{};
-};
+      private:
+        bool                          pattern_is_valid_{true};
+        IntensityLevel                base_level_{0};
+        IntensityLevel                pulse_level_{0};
+        std::vector<LedLevelDuration> led_events_{};
+        std::set<IntensityLevel>      used_levels_{};
+    };
+} // namespace testutils
