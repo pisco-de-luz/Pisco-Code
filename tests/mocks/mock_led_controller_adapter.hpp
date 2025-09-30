@@ -1,5 +1,4 @@
-#ifndef MOCK_LED_CONTROLLER_ADAPTER_HPP
-#define MOCK_LED_CONTROLLER_ADAPTER_HPP
+#pragma once
 
 #include <iostream>
 
@@ -14,36 +13,6 @@ class MockLedControllerAdapter : public SignalController
     explicit MockLedControllerAdapter(MockLedControlLogger* logger) :
         logger_(logger)
     {
-    }
-
-    void setPeakLevel(uint8_t value) override
-    {
-        peak_level_ = value;
-    }
-
-    void setBaseLevel(uint8_t value) override
-    {
-        base_level_ = value;
-    }
-
-    void setCurrentSignalMode(SignalMode mode) override
-    {
-        mode_ = mode;
-    }
-
-    [[nodiscard]] IntensityLevel getPeakLevel() const noexcept override
-    {
-        return peak_level_;
-    }
-
-    [[nodiscard]] IntensityLevel getBaseLevel() const noexcept override
-    {
-        return base_level_;
-    }
-
-    [[nodiscard]] SignalMode getCurrentSignalMode() const noexcept override
-    {
-        return mode_;
     }
 
     void update() override
@@ -82,5 +51,3 @@ class MockLedControllerAdapter : public SignalController
     SignalMode            mode_              = SignalMode::NOT_DEFINED;
     PwmTickPosition       pwm_tick_position_ = 0;
 };
-
-#endif // MOCK_LED_CONTROLLER_ADAPTER_HPP

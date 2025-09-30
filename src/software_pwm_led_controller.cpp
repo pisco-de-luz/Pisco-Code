@@ -7,8 +7,7 @@
 namespace pisco_code
 {
 
-    SoftwarePwmLedController::SoftwarePwmLedController() :
-        peak_level_(PWM_MAX), base_level_(0)
+    SoftwarePwmLedController::SoftwarePwmLedController()
     {
     }
     SoftwarePwmLedController::SoftwarePwmLedController(
@@ -24,39 +23,6 @@ namespace pisco_code
     [[nodiscard]] bool SoftwarePwmLedController::isAttached() const noexcept
     {
         return led_control_ != nullptr;
-    }
-
-    void SoftwarePwmLedController::setPeakLevel(IntensityLevel led_level)
-    {
-        peak_level_ = led_level;
-    }
-
-    void SoftwarePwmLedController::setCurrentSignalMode(SignalMode mode)
-    {
-        mode_ = mode;
-    }
-
-    void SoftwarePwmLedController::setBaseLevel(IntensityLevel led_level)
-    {
-        base_level_ = led_level;
-    }
-
-    [[nodiscard]] IntensityLevel
-    SoftwarePwmLedController::getPeakLevel() const noexcept
-    {
-        return peak_level_;
-    }
-
-    [[nodiscard]] IntensityLevel
-    SoftwarePwmLedController::getBaseLevel() const noexcept
-    {
-        return base_level_;
-    }
-
-    [[nodiscard]] SignalMode
-    SoftwarePwmLedController::getCurrentSignalMode() const noexcept
-    {
-        return mode_;
     }
 
     void SoftwarePwmLedController::update()

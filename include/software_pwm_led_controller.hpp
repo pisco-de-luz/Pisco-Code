@@ -14,21 +14,15 @@ namespace pisco_code
         explicit SoftwarePwmLedController();
         void               attachLedControl(bool (*led_func)(LedControlCode));
         [[nodiscard]] bool isAttached() const noexcept;
-        void               setPeakLevel(IntensityLevel level) override;
-        void               setBaseLevel(IntensityLevel level) override;
-        void               setCurrentSignalMode(SignalMode mode) override;
         void               update() override;
         [[nodiscard]] bool readyForPhaseChange() const noexcept override;
 
-        [[nodiscard]] IntensityLevel getPeakLevel() const noexcept override;
-        [[nodiscard]] IntensityLevel getBaseLevel() const noexcept override;
-        [[nodiscard]] SignalMode getCurrentSignalMode() const noexcept override;
-
       private:
-        IntensityLevel peak_level_           = PWM_MAX;
-        IntensityLevel base_level_           = DEFAULT_BASE_LEVEL;
+        //        IntensityLevel peak_level_           = PWM_MAX;
+        //        IntensityLevel base_level_           = DEFAULT_BASE_LEVEL;
+        //        SignalMode      mode_                =
+        //        SignalMode::NOT_DEFINED;
         bool (*led_control_)(LedControlCode) = nullptr;
-        SignalMode      mode_                = SignalMode::NOT_DEFINED;
         PwmTickPosition pwm_tick_position_   = 0;
     };
 

@@ -12,38 +12,6 @@ namespace
     class MockLedController : public SignalController
     {
       public:
-        void setPeakLevel(IntensityLevel led_level) override
-        {
-            peak_calls++;
-            last_peak = led_level;
-        }
-
-        void setBaseLevel(IntensityLevel led_level) override
-        {
-            base_calls++;
-            last_base = led_level;
-        }
-
-        void setCurrentSignalMode(SignalMode mode) override
-        {
-            blink_mode = mode;
-        }
-
-        [[nodiscard]] IntensityLevel getPeakLevel() const noexcept override
-        {
-            return last_peak;
-        }
-
-        [[nodiscard]] IntensityLevel getBaseLevel() const noexcept override
-        {
-            return last_base;
-        }
-
-        [[nodiscard]] SignalMode getCurrentSignalMode() const noexcept override
-        {
-            return blink_mode;
-        }
-
         [[nodiscard]] Int32 getBaseCalls() const noexcept
         {
             return base_calls;
@@ -102,12 +70,4 @@ TEST(SignalEmitterGroup, ShowCodeStartsSequence)
         blinker->showCode(testutils::DEFAULT_CODE, NumberBase::DEC, 2);
     CHECK_TRUE(result);
     CHECK_TRUE(blinker->isRunning());
-}
-
-TEST(SignalEmitterGroup, LoopTriggersBaseStart)
-{
-    blinker->showCode(testutils::CODE_5, NumberBase::DEC, 1);
-    blinker->loop();
-    CHECK_EQUAL(1, controller.getBaseCalls());
-    CHECK_EQUAL(DEFAULT_BASE_LEVEL, controller.getLastBase());
 }
