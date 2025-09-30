@@ -18,14 +18,14 @@ using namespace testutils;
 namespace
 {
 
-    std::string toBaseString(SignalCode code, NumberBase base,
-                             NumDigits num_digits)
+    TraceCode toBaseString(SignalCode code, NumberBase base,
+                           NumDigits num_digits)
     {
-        std::string      result("");
+        TraceCode        result("");
         const DigitValue base_value = to_value(base);
         for (uint8_t i = 0; i < num_digits; ++i)
         {
-            testutils::Index digit_index = to_index(code % base_value);
+            const testutils::Index digit_index = to_index(code % base_value);
             result += "0123456789abcdef"[digit_index];
             code /= base_value;
         }
@@ -42,8 +42,8 @@ namespace
         params.num_digits  = num_digits;
         params.digit       = 1U;
 
-        const SignalCode  result = generatePatternOfDigits(params);
-        const std::string actual = toBaseString(result, base, num_digits);
+        const SignalCode result = generatePatternOfDigits(params);
+        const TraceCode  actual = toBaseString(result, base, num_digits);
 
         STRCMP_EQUAL_TEXT(expected, actual.c_str(),
                           ("Base=" + std::to_string(to_value(base)) +
