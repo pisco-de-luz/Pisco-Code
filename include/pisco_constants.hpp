@@ -52,9 +52,9 @@ namespace pisco_code
         return static_cast<DigitValue>(value);
     }
 
-    constexpr UInt8 to_index(Index value) noexcept
+    constexpr Index to_index(UInt32 value) noexcept
     {
-        return static_cast<UInt8>(value);
+        return static_cast<Index>(value);
     }
 
     constexpr TickCounter to_tick_counter(Timestamp timestamp_ms) noexcept
