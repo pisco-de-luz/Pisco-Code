@@ -13,6 +13,7 @@ namespace pisco_code
         explicit SoftwarePwmLedController(bool (*led_func)(LedControlCode));
         explicit SoftwarePwmLedController();
         void               attachLedControl(bool (*led_func)(LedControlCode));
+        [[nodiscard]] bool isAttached() const noexcept;
         void               setPeakLevel(IntensityLevel level) override;
         void               setBaseLevel(IntensityLevel level) override;
         void               setCurrentSignalMode(SignalMode mode) override;

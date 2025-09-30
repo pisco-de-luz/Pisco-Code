@@ -21,6 +21,10 @@ namespace pisco_code
     {
         led_control_ = led_func;
     }
+    [[nodiscard]] bool SoftwarePwmLedController::isAttached() const noexcept
+    {
+        return led_control_ != nullptr;
+    }
 
     void SoftwarePwmLedController::setPeakLevel(IntensityLevel led_level)
     {
@@ -82,6 +86,7 @@ namespace pisco_code
             pwm_tick_position_ = 0;
         }
     }
+
     [[nodiscard]] bool
     SoftwarePwmLedController::readyForPhaseChange() const noexcept
     {
