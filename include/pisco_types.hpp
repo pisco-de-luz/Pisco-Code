@@ -39,7 +39,7 @@ namespace pisco_code
     using SignalCode      = Int32;
     using Byte            = UInt8;
     using NumBits         = UInt8;
-    using Counter         = Int8;
+    using Counter         = UInt8;
     using Index           = UInt8;
 
     // Type aliases for various enums and types used in the code
