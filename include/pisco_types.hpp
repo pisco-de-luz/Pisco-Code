@@ -37,14 +37,10 @@ namespace pisco_code
     using TickCounter     = UInt8;
     using PwmTickPosition = UInt8;
     using SignalCode      = Int32;
-    using Index8          = UInt8;
-    using Index16         = UInt16;
-    using Counter8        = Int8;
-    using Counter16       = Int16;
     using Byte            = UInt8;
     using NumBits         = UInt8;
-    using Counter         = Counter8;
-    using Index           = Index8;
+    using Counter         = Int8;
+    using Index           = UInt8;
 
     // Type aliases for various enums and types used in the code
     using BaseType           = Byte;
