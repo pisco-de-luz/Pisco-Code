@@ -52,11 +52,6 @@ namespace pisco_code
         return static_cast<DigitValue>(value);
     }
 
-    constexpr Counter to_count(UInt32 value) noexcept
-    {
-        return static_cast<Counter>(value);
-    }
-
     constexpr UInt8 to_index(Index value) noexcept
     {
         return static_cast<UInt8>(value);
