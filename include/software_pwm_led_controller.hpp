@@ -18,10 +18,6 @@ namespace pisco_code
         [[nodiscard]] bool readyForPhaseChange() const noexcept override;
 
       private:
-        //        IntensityLevel peak_level_           = PWM_MAX;
-        //        IntensityLevel base_level_           = DEFAULT_BASE_LEVEL;
-        //        SignalMode      mode_                =
-        //        SignalMode::NOT_DEFINED;
         bool (*led_control_)(LedControlCode) = nullptr;
         PwmTickPosition pwm_tick_position_   = 0;
     };
