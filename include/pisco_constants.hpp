@@ -65,7 +65,7 @@ namespace pisco_code
     struct BaseLimits
     {
         NumDigits  max_digits;
-        SignalCode max_value; // maximum |code| allowed for this base
+        SignalCode max_value;
     };
 
     constexpr DigitValue MAX_DIGITS_BIN = 8U;
