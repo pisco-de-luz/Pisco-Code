@@ -1,5 +1,6 @@
 #pragma once
 
+#include "hardware_pwm_led_controller.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 #include "signal_emitter.hpp"
