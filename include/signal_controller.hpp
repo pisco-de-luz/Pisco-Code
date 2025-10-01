@@ -1,4 +1,3 @@
-// signal_controller.hpp
 #pragma once
 
 #include "pisco_constants.hpp"
@@ -7,57 +6,22 @@
 
 namespace pisco_code
 {
-    // NOLINT(cppcoreguidelines-special-member-functions)
     class SignalController
     {
       public:
+        // Pure virtual interface
         virtual void               update()                             = 0;
         [[nodiscard]] virtual bool readyForPhaseChange() const noexcept = 0;
 
-        void setPeakLevel(IntensityLevel level)
-        {
-            peak_level_ = level;
-        }
-        void setBaseLevel(IntensityLevel level)
-        {
-            base_level_ = level;
-        }
-        void setCurrentSignalMode(SignalMode mode)
-        {
-            mode_ = mode;
-        }
-        [[nodiscard]] IntensityLevel getPeakLevel() const noexcept
-        {
-            return peak_level_;
-        }
-        [[nodiscard]] IntensityLevel getBaseLevel() const noexcept
-        {
-            return base_level_;
-        }
-        [[nodiscard]] SignalMode getCurrentSignalMode() const noexcept
-        {
-            return mode_;
-        }
+        // State management - declared but not implemented
+        void setPeakLevel(IntensityLevel level);
+        void setBaseLevel(IntensityLevel level);
+        void setCurrentSignalMode(SignalMode mode);
 
-        // Template method - implemented once in base class
-        [[nodiscard]] IntensityLevel getCurrentIntensityLevel() const noexcept
-        {
-            switch (getCurrentSignalMode())
-            {
-                case SignalMode::PEAK:
-                    return getPeakLevel();
-                case SignalMode::BASE:
-                    return getBaseLevel();
-                case SignalMode::GAP:
-                default:
-                    return 0;
-            }
-        }
-
-      private:
-        IntensityLevel peak_level_ = PWM_MAX;
-        IntensityLevel base_level_ = DEFAULT_BASE_LEVEL;
-        SignalMode     mode_       = SignalMode::NOT_DEFINED;
+        [[nodiscard]] IntensityLevel getPeakLevel() const noexcept;
+        [[nodiscard]] IntensityLevel getBaseLevel() const noexcept;
+        [[nodiscard]] SignalMode     getCurrentSignalMode() const noexcept;
+        [[nodiscard]] IntensityLevel getCurrentIntensityLevel() const noexcept;
 
       protected:
         SignalController()                                   = default;
@@ -66,6 +30,11 @@ namespace pisco_code
         SignalController(SignalController&&)                 = default;
         SignalController& operator=(SignalController&&)      = default;
         ~SignalController()                                  = default;
+
+      private:
+        IntensityLevel peak_level_ = PWM_MAX;
+        IntensityLevel base_level_ = DEFAULT_BASE_LEVEL;
+        SignalMode     mode_       = SignalMode::NOT_DEFINED;
     };
 
 } // namespace pisco_code
