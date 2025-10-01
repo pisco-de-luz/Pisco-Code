@@ -16,11 +16,11 @@ main()
     pisco_code::SignalEmitter emitter_led1(&controller_led1);
     pisco_code::SignalEmitter emitter_led2(&controller_led2);
 
-    controller_led1.setLowLevel(3);
+    controller_led1.setLowLevel(20);
     emitter_led1.setRepeatTimes(2);
     emitter_led1.showCode(SignalCode{123}, NumberBase::DEC, NumDigits{0});
 
-    controller_led2.setLowLevel(3);
+    controller_led2.setLowLevel(20);
     emitter_led2.setRepeatTimes(2);
     emitter_led2.showCode(SignalCode{-103}, NumberBase::DEC, NumDigits{0});
 

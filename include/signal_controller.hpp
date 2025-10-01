@@ -34,7 +34,7 @@ namespace pisco_code
         ~SignalController()                                  = default;
 
       private:
-        IntensityLevel high_level_ = PWM_MAX;
+        IntensityLevel high_level_ = DEFAULT_HIGH_LEVEL;
         IntensityLevel low_level_  = DEFAULT_LOW_LEVEL;
         SignalMode     mode_       = SignalMode::NOT_DEFINED;
     };

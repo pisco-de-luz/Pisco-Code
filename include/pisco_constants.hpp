@@ -43,6 +43,12 @@ namespace pisco_code
         return static_cast<Index>(value);
     }
 
+    constexpr IntensityLevel SW_PWM_LEVEL_FACTOR = 16U;
+    constexpr IntensityLevel to_sw_pwm_level(IntensityLevel level) noexcept
+    {
+        return ((level / SW_PWM_LEVEL_FACTOR) + 0U);
+    }
+
     struct BaseLimits
     {
         NumDigits  max_digits;
@@ -112,9 +118,9 @@ namespace pisco_code
     constexpr NumBits        DURATION_BITS            = 2U;
     constexpr UInt8          MAX_BYTE_VALUE           = 255;
     constexpr IntensityLevel PWM_MAX                  = 15U;
-    constexpr IntensityLevel DEFAULT_LOW_LEVEL        = 3U;
-    constexpr IntensityLevel DEFAULT_HIGH_LEVEL       = PWM_MAX;
-    constexpr IntensityLevel MIN_INTENSITY_DIFFERENCE = 2U;
+    constexpr IntensityLevel DEFAULT_LOW_LEVEL        = 50U;
+    constexpr IntensityLevel DEFAULT_HIGH_LEVEL       = 200U;
+    constexpr IntensityLevel MIN_INTENSITY_DIFFERENCE = 32U;
     constexpr IntensityLevel MIN_HIGH_LEVEL = MIN_INTENSITY_DIFFERENCE;
     constexpr IntensityLevel MAX_LOW_LEVEL =
         MAX_BYTE_VALUE - MIN_INTENSITY_DIFFERENCE;
