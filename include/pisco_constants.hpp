@@ -105,17 +105,19 @@ namespace pisco_code
     static_assert(limits_for(NumberBase::HEX).max_value == MAX_VALUE_HEX,
                   "HEX max value mismatch");
 
-    constexpr IntensityLevel DEFAULT_BASE_LEVEL = 3U;
-    constexpr IntensityLevel PWM_MAX            = 15U;
-
     // Minimum intensity separation for BASE/PEAK levels to be
     // distinguishable
-    constexpr IntensityLevel MIN_INTENSITY_DIFFERENCE = 2U;
-    constexpr IntensityLevel DEFAULT_PULSE_LEVEL      = PWM_MAX;
     constexpr NumBits        TIMES_BITS               = 4U;
     constexpr NumBits        MODE_BITS                = 2U;
     constexpr NumBits        DURATION_BITS            = 2U;
-
+    constexpr UInt8          MAX_BYTE_VALUE           = 255;
+    constexpr IntensityLevel PWM_MAX                  = 15U;
+    constexpr IntensityLevel DEFAULT_BASE_LEVEL       = 3U;
+    constexpr IntensityLevel DEFAULT_PULSE_LEVEL      = PWM_MAX;
+    constexpr IntensityLevel MIN_INTENSITY_DIFFERENCE = 2U;
+    constexpr IntensityLevel MIN_HIGH_LEVEL = MIN_INTENSITY_DIFFERENCE;
+    constexpr IntensityLevel MAX_LOW_LEVEL =
+        MAX_BYTE_VALUE - MIN_INTENSITY_DIFFERENCE;
     constexpr UInt32 bit_mask(NumBits bits) noexcept
     {
         return bits == 0 ? 0U : ((1U << bits));

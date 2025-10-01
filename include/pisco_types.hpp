@@ -49,6 +49,4 @@ namespace pisco_code
     using SignalDurationType = Byte;
     using SignalTimesType    = Byte;
 
-    constexpr UInt8 MAX_BYTE_VALUE = 255;
-
 } // namespace pisco_code
