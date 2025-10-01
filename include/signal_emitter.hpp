@@ -28,9 +28,8 @@ namespace pisco_code
         [[nodiscard]] RepeatTimes getRepeatTimes() const noexcept;
 
       private:
-        [[nodiscard]] bool phaseElapsed(TickCounter tick_counter) const;
-        static TickCounter
-        signalDurationToPhaseDuration(SignalDuration duration);
+        [[nodiscard]] bool phaseElapsed(Timestamp current_ts) const;
+        static Timestamp signalDurationToPhaseDuration(SignalDuration duration);
 
         enum class PhaseLoop : PhaseType
         {
@@ -43,9 +42,9 @@ namespace pisco_code
         SignalSequencer     sequencer_;
         SignalPulseIterator pulse_iterator_;
         SignalElement       element_;
-        Timestamp           tick_timestamp_ = 0;
-        TickCounter         start_time_     = 0;
-        TickCounter         phase_duration_ = 0;
+        Timestamp           current_ts_     = 0;
+        Timestamp           start_time_     = 0;
+        Timestamp           phase_duration_ = 0;
         PhaseLoop           current_phase_  = PhaseLoop::IDLE;
         bool                is_running_     = false;
         IntensityLevel      peak_level_     = DEFAULT_PULSE_LEVEL;

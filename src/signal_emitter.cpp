@@ -29,8 +29,8 @@ namespace pisco_code
         controller_->setBaseLevel(base_level_);
         controller_->setPeakLevel(peak_level_);
 
-        tick_timestamp_ = 0;
-        current_phase_  = PhaseLoop::STARTING;
+        current_ts_    = 0;
+        current_phase_ = PhaseLoop::STARTING;
         return true;
     }
 
@@ -40,21 +40,21 @@ namespace pisco_code
         {
             return;
         }
-        ++tick_timestamp_;
+        ++current_ts_;
         if (current_phase_ == PhaseLoop::STARTING)
         {
             pulse_iterator_.reset();
             is_running_     = true;
-            start_time_     = to_tick_counter(tick_timestamp_);
+            start_time_     = current_ts_;
             phase_duration_ = 0;
             current_phase_  = PhaseLoop::APPLYING_PULSE;
         }
 
-        if (phaseElapsed(to_tick_counter(tick_timestamp_)) && is_running_)
+        if (phaseElapsed(current_ts_) && is_running_)
         {
             if (pulse_iterator_.hasNext())
             {
-                start_time_                 = to_tick_counter(tick_timestamp_);
+                start_time_                 = current_ts_;
                 const SignalElement element = pulse_iterator_.next();
                 phase_duration_ =
                     signalDurationToPhaseDuration(element.get_duration());
@@ -77,10 +77,9 @@ namespace pisco_code
         controller_->update();
     }
 
-    bool SignalEmitter::phaseElapsed(TickCounter tick_counter) const
+    bool SignalEmitter::phaseElapsed(Timestamp current_ts) const
     {
-        const auto elapsed =
-            static_cast<TickCounter>(tick_counter - start_time_);
+        const auto elapsed    = (current_ts - start_time_);
         const bool phase_done = elapsed > phase_duration_;
 
         return phase_done && controller_->readyForPhaseChange();
@@ -134,21 +133,21 @@ namespace pisco_code
         return sequencer_.getRepeatTimes();
     }
 
-    TickCounter
+    Timestamp
     SignalEmitter::signalDurationToPhaseDuration(SignalDuration duration)
     {
         switch (duration)
         {
             case SignalDuration::SHORT:
-                return to_tick_counter(SHORT_BLINK_MS);
+                return SHORT_BLINK_MS;
             case SignalDuration::MEDIUM:
-                return to_tick_counter(MEDIUM_BLINK_MS);
+                return MEDIUM_BLINK_MS;
             case SignalDuration::LONG:
-                return to_tick_counter(LONG_BLINK_MS);
+                return LONG_BLINK_MS;
             case SignalDuration::EXTRA_LONG:
-                return to_tick_counter(EXTRA_LONG_BLINK_MS);
+                return EXTRA_LONG_BLINK_MS;
             default:
-                return to_tick_counter(0);
+                return 0;
         }
     }
 } // namespace pisco_code

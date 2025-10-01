@@ -3,24 +3,10 @@
 #include "pisco_types.hpp"
 namespace pisco_code
 {
-    constexpr Timestamp LOOP_INTERVAL_MS    = 16U;
     constexpr Timestamp SHORT_BLINK_MS      = 400U;
     constexpr Timestamp MEDIUM_BLINK_MS     = 600U;
     constexpr Timestamp LONG_BLINK_MS       = 1200U;
     constexpr Timestamp EXTRA_LONG_BLINK_MS = 1900U;
-
-    static_assert((SHORT_BLINK_MS / LOOP_INTERVAL_MS) <
-                      sizeof(TickCounter) * (MAX_BYTE_VALUE + 1U),
-                  "LOOP_INTERVAL_MS too small");
-    static_assert((MEDIUM_BLINK_MS / LOOP_INTERVAL_MS) <
-                      sizeof(TickCounter) * (MAX_BYTE_VALUE + 1U),
-                  "LOOP_INTERVAL_MS too small");
-    static_assert((LONG_BLINK_MS / LOOP_INTERVAL_MS) <
-                      sizeof(TickCounter) * (MAX_BYTE_VALUE + 1U),
-                  "LOOP_INTERVAL_MS too small");
-    static_assert((EXTRA_LONG_BLINK_MS / LOOP_INTERVAL_MS) <
-                      sizeof(TickCounter) * (MAX_BYTE_VALUE + 1U),
-                  "LOOP_INTERVAL_MS too small");
 
     enum class LedControlCode : LedCodeType
     {
@@ -55,11 +41,6 @@ namespace pisco_code
     constexpr Index to_index(UInt32 value) noexcept
     {
         return static_cast<Index>(value);
-    }
-
-    constexpr TickCounter to_tick_counter(Timestamp timestamp_ms) noexcept
-    {
-        return static_cast<TickCounter>(timestamp_ms / LOOP_INTERVAL_MS);
     }
 
     struct BaseLimits
