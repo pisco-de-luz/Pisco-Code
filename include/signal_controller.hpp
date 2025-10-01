@@ -4,6 +4,8 @@
 #include "pisco_types.hpp"
 #include "signal_types.hpp"
 
+using pisco_code::IntensityLevel;
+using pisco_code::SignalMode;
 namespace pisco_code
 {
     class SignalController
