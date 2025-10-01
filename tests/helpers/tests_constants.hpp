@@ -38,12 +38,12 @@ namespace testutils
     inline constexpr SignalCode CODE_12345                       = 12345;
     inline constexpr SignalCode CODE_12345_TRUNCATED_TO_2_DIGITS = 12345;
 
-    constexpr IntensityLevel LOWEST_LOW_LEVEL = 1U;
+    constexpr IntensityLevel LOWEST_LOW_LEVEL = 16U;
     constexpr IntensityLevel HIGHEST_LOW_LEVEL =
-        PWM_MAX - MIN_INTENSITY_DIFFERENCE;
+        MAX_BYTE_VALUE - MIN_INTENSITY_DIFFERENCE;
     constexpr IntensityLevel MID_LOW_LEVEL =
         (HIGHEST_LOW_LEVEL - LOWEST_LOW_LEVEL) / 2U;
-    constexpr IntensityLevel TOO_HIGH_LOW_LEVEL = 255U;
+    constexpr IntensityLevel TOO_HIGH_LOW_LEVEL = MAX_BYTE_VALUE;
     constexpr IntensityLevel TOO_LOW_LOW_LEVEL  = 0U;
 
     constexpr std::array<IntensityLevel, 5> ALL_LOW_LEVELS = {
@@ -53,11 +53,11 @@ namespace testutils
          TOO_LOW_LOW_LEVEL, }
     };
 
-    constexpr IntensityLevel LOWEST_HIGH_LEVEL  = 1U;
-    constexpr IntensityLevel HIGHEST_HIGH_LEVEL = PWM_MAX;
+    constexpr IntensityLevel LOWEST_HIGH_LEVEL  = 16U;
+    constexpr IntensityLevel HIGHEST_HIGH_LEVEL = MAX_BYTE_VALUE;
     constexpr IntensityLevel MID_HIGH_LEVEL =
         (HIGHEST_HIGH_LEVEL - LOWEST_HIGH_LEVEL) / 2U;
-    constexpr IntensityLevel TOO_HIGH_HIGH_LEVEL = 255U;
+    constexpr IntensityLevel TOO_HIGH_HIGH_LEVEL = MAX_BYTE_VALUE;
     constexpr IntensityLevel TOO_LOW_HIGH_LEVEL  = 0U;
 
     constexpr std::array<IntensityLevel, 5> ALL_HIGH_LEVELS = {

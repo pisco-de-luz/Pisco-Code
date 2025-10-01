@@ -22,14 +22,15 @@ class MockLedControllerAdapter : public SignalController
             return;
         }
 
-        IntensityLevel target_level = getCurrentIntensityLevel();
+        IntensityLevel current_level = getCurrentIntensityLevel();
+        IntensityLevel sw_pwm_level  = to_sw_pwm_level(current_level);
 
         // PWM logic: ON at start, OFF when reaching target level
-        if (pwm_tick_position_ == 0 && target_level > 0)
+        if (pwm_tick_position_ == 0 && sw_pwm_level > 0)
         {
             logger_->handle(LedControlCode::ON);
         }
-        else if (pwm_tick_position_ == target_level)
+        else if (pwm_tick_position_ == sw_pwm_level)
         {
             logger_->handle(LedControlCode::OFF);
         }
