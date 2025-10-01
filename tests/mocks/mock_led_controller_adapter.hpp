@@ -46,8 +46,8 @@ class MockLedControllerAdapter : public SignalController
 
   private:
     MockLedControlLogger* logger_            = nullptr;
-    PwmTickPosition       peak_level_        = PWM_MAX;
-    PwmTickPosition       base_level_        = DEFAULT_BASE_LEVEL;
+    IntensityLevel        peak_level_        = PWM_MAX;
+    IntensityLevel        base_level_        = DEFAULT_BASE_LEVEL;
     SignalMode            mode_              = SignalMode::NOT_DEFINED;
     PwmTickPosition       pwm_tick_position_ = 0;
 };
