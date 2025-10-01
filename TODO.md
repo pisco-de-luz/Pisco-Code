@@ -32,7 +32,7 @@
 - [x] Implement setter/getter methods directly in base class
 - [x] Remove duplicate state between classes
 - [x] Use consistent type system (`Counter`, `Index`, `IntensityLevel`)
-- [p] Rename terminology: "dimmed" → "base" → "low", "pulse" → "peak" → "high"
+- [x] Rename terminology: "dimmed" → "base" → "low", "pulse" → "peak" → "high"
 - [x] Change `SignalLevel` to `SignalMode` for clarity
 
 ## Code Quality Improvements Made
