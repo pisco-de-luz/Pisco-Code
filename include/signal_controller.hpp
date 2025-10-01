@@ -11,11 +11,9 @@ namespace pisco_code
     class SignalController
     {
       public:
-        // Pure virtual interface
         virtual void               update()                             = 0;
         [[nodiscard]] virtual bool readyForPhaseChange() const noexcept = 0;
 
-        // State management - declared but not implemented
         void setHighLevel(IntensityLevel level);
         void setLowLevel(IntensityLevel level);
         void setCurrentSignalMode(SignalMode mode);
