@@ -15,6 +15,7 @@ set(LIB_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/signal_sequencer.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/signal_stack.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/software_pwm_led_controller.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/hardware_pwm_led_controller.cpp
 )
 
 # Hosted objects for tests and hosted builds
