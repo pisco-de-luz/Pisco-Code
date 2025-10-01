@@ -1,4 +1,3 @@
-// code_blinker.cpp
 #include "signal_emitter.hpp"
 
 #include "pisco_constants.hpp"
@@ -127,13 +126,11 @@ namespace pisco_code
 
     void SignalEmitter::setRepeatTimes(RepeatTimes repeat_times) noexcept
     {
-        //        repeat_times_ = repeat_times;
         sequencer_.setRepeatTimes(repeat_times);
     }
 
     [[nodiscard]] RepeatTimes SignalEmitter::getRepeatTimes() const noexcept
     {
-        //        return repeat_times_;
         return sequencer_.getRepeatTimes();
     }
 
