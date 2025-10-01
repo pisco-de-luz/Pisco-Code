@@ -20,22 +20,22 @@ namespace
         CHECK_EQUAL(expected, actual);
     }
 
-    auto checkElementIterator(SignalElement          expected_peak,
+    auto checkElementIterator(SignalElement          expected_high_level,
                               SignalElementIterator& iterator,
                               SignalElement          expected_between) noexcept
     {
-        SignalTimesType actual_peak_count{0};
+        SignalTimesType actual_high_level_count{0};
         while (iterator.hasNext())
         {
-            checkNextElementIterator(iterator, expected_peak);
-            ++actual_peak_count;
+            checkNextElementIterator(iterator, expected_high_level);
+            ++actual_high_level_count;
 
             if (iterator.hasNext())
             {
                 checkNextElementIterator(iterator, expected_between);
             }
         }
-        return (actual_peak_count);
+        return (actual_high_level_count);
     }
     void checkEqualLevelDuration(SignalElement expected,
                                  SignalElement actual) noexcept
@@ -68,13 +68,13 @@ TEST(SignalElementIteratorTests, NUMBER_One_IteratesCorrectly)
 {
     const SignalTimesType digit_value{1};
     const auto            digit_element = signal_element_digit(digit_value);
-    const auto            expected_peak = SIGNAL_ELEMENT_DIGIT;
+    const auto            expected_high_level = SIGNAL_ELEMENT_DIGIT;
 
     SignalElementIterator iterator(digit_element);
 
     if (iterator.hasNext())
     {
-        checkNextElementIterator(iterator, expected_peak);
+        checkNextElementIterator(iterator, expected_high_level);
     }
     CHECK_FALSE(iterator.hasNext());
 }
@@ -82,27 +82,27 @@ TEST(SignalElementIteratorTests, NUMBER_One_IteratesCorrectly)
 TEST(SignalElementIteratorTests, NUMBER_Two_IteratesCorrectly)
 {
     const SignalTimesType digit_value{2};
-    const auto            digit_element    = signal_element_digit(digit_value);
-    const auto            expected_peak    = SIGNAL_ELEMENT_DIGIT;
-    const auto            expected_between = SIGNAL_ELEMENT_INTRA_DIGIT;
+    const auto            digit_element = signal_element_digit(digit_value);
+    const auto            expected_high_level = SIGNAL_ELEMENT_DIGIT;
+    const auto            expected_between    = SIGNAL_ELEMENT_INTRA_DIGIT;
 
     SignalElementIterator iterator(digit_element);
-    const SignalTimesType peak_pulse_count =
-        checkElementIterator(expected_peak, iterator, expected_between);
-    CHECK_EQUAL(digit_value, peak_pulse_count);
+    const SignalTimesType high_level_pulse_count =
+        checkElementIterator(expected_high_level, iterator, expected_between);
+    CHECK_EQUAL(digit_value, high_level_pulse_count);
 }
 
 TEST(SignalElementIteratorTests, NUMBER_Fifteen_IteratesCorrectly)
 {
     const SignalTimesType digit_value{15};
-    const auto            digit_element    = signal_element_digit(digit_value);
-    const auto            expected_peak    = SIGNAL_ELEMENT_DIGIT;
-    const auto            expected_between = SIGNAL_ELEMENT_INTRA_DIGIT;
+    const auto            digit_element = signal_element_digit(digit_value);
+    const auto            expected_high_level = SIGNAL_ELEMENT_DIGIT;
+    const auto            expected_between    = SIGNAL_ELEMENT_INTRA_DIGIT;
 
     SignalElementIterator iterator(digit_element);
-    const SignalTimesType peak_pulse_count =
-        checkElementIterator(expected_peak, iterator, expected_between);
-    CHECK_EQUAL(digit_value, peak_pulse_count);
+    const SignalTimesType high_level_pulse_count =
+        checkElementIterator(expected_high_level, iterator, expected_between);
+    CHECK_EQUAL(digit_value, high_level_pulse_count);
 }
 
 TEST(SignalElementIteratorTests,
@@ -112,15 +112,15 @@ TEST(SignalElementIteratorTests,
     const SignalElement   expected = {SignalMode::GAP, times,
                                       SignalDuration::SHORT};
     SignalElementIterator iterator(expected);
-    SignalTimesType       peak_pulse_count{0};
+    SignalTimesType       high_level_pulse_count{0};
     CHECK_TRUE(iterator.hasNext());
     while (iterator.hasNext())
     {
         const auto actual = iterator.next();
         checkEqualLevelDuration(expected, actual);
-        ++peak_pulse_count;
+        ++high_level_pulse_count;
     }
-    CHECK_EQUAL(times, peak_pulse_count);
+    CHECK_EQUAL(times, high_level_pulse_count);
     CHECK_FALSE(iterator.hasNext());
 }
 
@@ -131,15 +131,15 @@ TEST(SignalElementIteratorTests,
     const SignalElement   expected = {SignalMode::PEAK, times,
                                       SignalDuration::LONG};
     SignalElementIterator iterator(expected);
-    SignalTimesType       peak_pulse_count{0};
+    SignalTimesType       high_level_pulse_count{0};
     CHECK_TRUE(iterator.hasNext());
     while (iterator.hasNext())
     {
         const auto actual = iterator.next();
         checkEqualLevelDuration(expected, actual);
-        ++peak_pulse_count;
+        ++high_level_pulse_count;
     }
-    CHECK_EQUAL(times, peak_pulse_count);
+    CHECK_EQUAL(times, high_level_pulse_count);
     CHECK_FALSE(iterator.hasNext());
 }
 
@@ -150,15 +150,15 @@ TEST(SignalElementIteratorTests,
     const SignalElement   expected = {SignalMode::PEAK, times,
                                       SignalDuration::EXTRA_LONG};
     SignalElementIterator iterator(expected);
-    SignalTimesType       peak_pulse_count{0};
+    SignalTimesType       high_level_pulse_count{0};
     CHECK_TRUE(iterator.hasNext());
     while (iterator.hasNext())
     {
         const auto actual = iterator.next();
         checkEqualLevelDuration(expected, actual);
-        ++peak_pulse_count;
+        ++high_level_pulse_count;
     }
-    CHECK_EQUAL(times, peak_pulse_count);
+    CHECK_EQUAL(times, high_level_pulse_count);
     CHECK_FALSE(iterator.hasNext());
 }
 
@@ -175,18 +175,18 @@ TEST(SignalElementIteratorTests, ResetMustIterateAgain)
 {
     const SignalTimesType digit_value{3};
     Byte                  reset_count{2};
-    const auto            digit_element    = signal_element_digit(digit_value);
-    const auto            expected_peak    = SIGNAL_ELEMENT_DIGIT;
-    const auto            expected_between = SIGNAL_ELEMENT_INTRA_DIGIT;
+    const auto            digit_element = signal_element_digit(digit_value);
+    const auto            expected_high_level = SIGNAL_ELEMENT_DIGIT;
+    const auto            expected_between    = SIGNAL_ELEMENT_INTRA_DIGIT;
 
     SignalElementIterator iterator(digit_element);
     while (reset_count > 0)
     {
         iterator.reset();
-        const SignalTimesType peak_pulse_count =
-            checkElementIterator(expected_peak, iterator, expected_between);
+        const SignalTimesType high_level_pulse_count = checkElementIterator(
+            expected_high_level, iterator, expected_between);
         CHECK_FALSE(iterator.hasNext());
-        CHECK_EQUAL(digit_value, peak_pulse_count);
+        CHECK_EQUAL(digit_value, high_level_pulse_count);
         --reset_count;
     }
 }

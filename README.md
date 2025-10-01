@@ -91,7 +91,7 @@ int main() {
     SoftwarePwmLedController controller_led1(board_led);
     SignalEmitter            emitter_led1(&controller_led1);
 
-    emitter_led1.setBaseLevel(3);
+    emitter_led1.setLowLevel(3);
 
     const SignalCode  signal_code{-102};
     const NumDigits   num_digits{0};
@@ -176,13 +176,13 @@ You can customize the brightness levels used during the blink sequence using the
 
 | Method         | Desciption                                  |
 | :---           | :---                                        |
-| `setPeakLevel(IntensityLevel level)`   | Sets the LED brightness level for "peak" pulses (i.e., when a bit is active). Use this to adjust the maximum intensity of blinks. Valid range: `0` (off) to `PWM_MAX` (full brightness). |
-| `setBaseLevel(IntensityLevel level)` | Sets the LED brightness for "base" intervals between pulses. Use this to reduce contrast or prevent full-off between blinks. Valid range: `0` to value lower than or equal to `setPeakLevel()`. |
+| `setHighLevel(IntensityLevel level)`   | Sets the LED brightness level for "high_level" pulses (i.e., when a bit is active). Use this to adjust the maximum intensity of blinks. Valid range: `0` (off) to `PWM_MAX` (full brightness). |
+| `setLowLevel(IntensityLevel level)` | Sets the LED brightness for "base" intervals between pulses. Use this to reduce contrast or prevent full-off between blinks. Valid range: `0` to value lower than or equal to `setHighLevel()`. |
 
 #### Default values:
 
 - PeakLevel = PWM_MAX
-- BaseLevel = DEFAULT_BASE_LEVEL (typically a low but visible level)
+- BaseLevel = DEFAULT_LOW_LEVEL (typically a low but visible level)
 
 These settings are optional. If not configured, the library uses defaults suitable for most cases.
 
@@ -190,8 +190,8 @@ These settings are optional. If not configured, the library uses defaults suitab
 SoftwarePwmLedController controller_led1(hal_led::led1);
 SignalEmitter            emitter_led1(&controller_led1);
 
-emitter_led1.setPeakLevel(10);
-emitter_led1.setBaseLevel(3);
+emitter_led1.setHighLevel(10);
+emitter_led1.setLowLevel(3);
 ```
 
 ## Runtime Control

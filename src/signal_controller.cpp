@@ -2,14 +2,14 @@
 
 namespace pisco_code
 {
-    void SignalController::setPeakLevel(IntensityLevel level)
+    void SignalController::setHighLevel(IntensityLevel level)
     {
-        peak_level_ = level;
+        high_level_ = level;
     }
 
-    void SignalController::setBaseLevel(IntensityLevel level)
+    void SignalController::setLowLevel(IntensityLevel level)
     {
-        base_level_ = level;
+        low_level_ = level;
     }
 
     void SignalController::setCurrentSignalMode(SignalMode mode)
@@ -19,12 +19,12 @@ namespace pisco_code
 
     IntensityLevel SignalController::getPeakLevel() const noexcept
     {
-        return peak_level_;
+        return high_level_;
     }
 
     IntensityLevel SignalController::getBaseLevel() const noexcept
     {
-        return base_level_;
+        return low_level_;
     }
 
     SignalMode SignalController::getCurrentSignalMode() const noexcept

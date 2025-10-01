@@ -16,8 +16,8 @@ namespace pisco_code
         [[nodiscard]] virtual bool readyForPhaseChange() const noexcept = 0;
 
         // State management - declared but not implemented
-        void setPeakLevel(IntensityLevel level);
-        void setBaseLevel(IntensityLevel level);
+        void setHighLevel(IntensityLevel level);
+        void setLowLevel(IntensityLevel level);
         void setCurrentSignalMode(SignalMode mode);
 
         [[nodiscard]] IntensityLevel getPeakLevel() const noexcept;
@@ -34,8 +34,8 @@ namespace pisco_code
         ~SignalController()                                  = default;
 
       private:
-        IntensityLevel peak_level_ = PWM_MAX;
-        IntensityLevel base_level_ = DEFAULT_BASE_LEVEL;
+        IntensityLevel high_level_ = PWM_MAX;
+        IntensityLevel low_level_  = DEFAULT_LOW_LEVEL;
         SignalMode     mode_       = SignalMode::NOT_DEFINED;
     };
 

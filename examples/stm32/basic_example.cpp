@@ -11,7 +11,7 @@ main()
     pisco_code::SoftwarePwmLedController controller_led1(hal_led::led1);
     pisco_code::SignalEmitter            emitter_led1(&controller_led1);
 
-    controller_led1.setBaseLevel(3);
+    controller_led1.setLowLevel(3);
     emitter_led1.setRepeatTimes(2);
     emitter_led1.showCode(SignalCode{123}, NumberBase::DEC, NumDigits{0});
 

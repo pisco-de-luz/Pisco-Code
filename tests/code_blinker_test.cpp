@@ -32,13 +32,13 @@ namespace
         }
 
       private:
-        Int32          peak_calls   = 0;
-        Int32          base_calls   = 0;
-        Int32          off_calls    = 0;
-        IntensityLevel last_peak    = 0;
-        IntensityLevel last_base    = 0;
-        SignalMode     blink_mode   = SignalMode::NOT_DEFINED;
-        bool           phase_ready_ = true;
+        Int32          high_level_calls = 0;
+        Int32          base_calls       = 0;
+        Int32          off_calls        = 0;
+        IntensityLevel last_high_level  = 0;
+        IntensityLevel last_base        = 0;
+        SignalMode     blink_mode       = SignalMode::NOT_DEFINED;
+        bool           phase_ready_     = true;
     };
 
 } // namespace

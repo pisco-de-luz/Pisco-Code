@@ -55,7 +55,8 @@ TEST(SignalElementTests, SIGNAL_ELEMENT_NOT_DEFINED_HasExpectedValues)
     CHECK_EQUAL(0, SIGNAL_ELEMENT_NOT_DEFINED.get_times());
 }
 
-TEST(SignalElementTests, signal_element_digit_peak_GeneratesCorrectElement)
+TEST(SignalElementTests,
+     signal_element_digit_high_level_GeneratesCorrectElement)
 {
     for (Counter val = 1; val < to_value(NumberBase::HEX); ++val)
     {

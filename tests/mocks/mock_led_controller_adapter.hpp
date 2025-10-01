@@ -43,32 +43,32 @@ class MockLedControllerAdapter : public SignalController
     {
         return (pwm_tick_position_ == 0);
     }
-    void setPeakLevel(IntensityLevel level)
+    void setHighLevel(IntensityLevel level)
     {
-        peak_level_ = (level > PWM_MAX) ? PWM_MAX : level;
-        if (peak_level_ < MIN_INTENSITY_DIFFERENCE)
+        high_level_ = (level > PWM_MAX) ? PWM_MAX : level;
+        if (high_level_ < MIN_INTENSITY_DIFFERENCE)
         {
-            peak_level_ = MIN_INTENSITY_DIFFERENCE;
+            high_level_ = MIN_INTENSITY_DIFFERENCE;
         }
-        if (base_level_ >= peak_level_)
+        if (low_level_ >= high_level_)
         {
-            base_level_ = peak_level_ - MIN_INTENSITY_DIFFERENCE;
+            low_level_ = high_level_ - MIN_INTENSITY_DIFFERENCE;
         }
     }
-    void setBaseLevel(IntensityLevel level)
+    void setLowLevel(IntensityLevel level)
     {
-        constexpr auto MAX_BASE_LEVEL = PWM_MAX - MIN_INTENSITY_DIFFERENCE;
-        base_level_ = (level > MAX_BASE_LEVEL) ? MAX_BASE_LEVEL : level;
-        if (base_level_ >= peak_level_)
+        constexpr auto MAX_LOW_LEVEL = PWM_MAX - MIN_INTENSITY_DIFFERENCE;
+        low_level_ = (level > MAX_LOW_LEVEL) ? MAX_LOW_LEVEL : level;
+        if (low_level_ >= high_level_)
         {
-            base_level_ = peak_level_ - MIN_INTENSITY_DIFFERENCE;
+            low_level_ = high_level_ - MIN_INTENSITY_DIFFERENCE;
         }
     }
 
   private:
     MockLedControlLogger* logger_            = nullptr;
-    IntensityLevel        peak_level_        = PWM_MAX;
-    IntensityLevel        base_level_        = DEFAULT_BASE_LEVEL;
+    IntensityLevel        high_level_        = PWM_MAX;
+    IntensityLevel        low_level_         = DEFAULT_LOW_LEVEL;
     SignalMode            mode_              = SignalMode::NOT_DEFINED;
     PwmTickPosition       pwm_tick_position_ = 0;
 };

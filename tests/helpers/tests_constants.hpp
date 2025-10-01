@@ -38,33 +38,33 @@ namespace testutils
     inline constexpr SignalCode CODE_12345                       = 12345;
     inline constexpr SignalCode CODE_12345_TRUNCATED_TO_2_DIGITS = 12345;
 
-    constexpr IntensityLevel LOWEST_BASE_LEVEL = 1U;
-    constexpr IntensityLevel HIGHEST_BASE_LEVEL =
+    constexpr IntensityLevel LOWEST_LOW_LEVEL = 1U;
+    constexpr IntensityLevel HIGHEST_LOW_LEVEL =
         PWM_MAX - MIN_INTENSITY_DIFFERENCE;
-    constexpr IntensityLevel MID_BASE_LEVEL =
-        (HIGHEST_BASE_LEVEL - LOWEST_BASE_LEVEL) / 2U;
-    constexpr IntensityLevel TOO_HIGH_BASE_LEVEL = 255U;
-    constexpr IntensityLevel TOO_LOW_BASE_LEVEL  = 0U;
+    constexpr IntensityLevel MID_LOW_LEVEL =
+        (HIGHEST_LOW_LEVEL - LOWEST_LOW_LEVEL) / 2U;
+    constexpr IntensityLevel TOO_HIGH_LOW_LEVEL = 255U;
+    constexpr IntensityLevel TOO_LOW_LOW_LEVEL  = 0U;
 
-    constexpr std::array<IntensityLevel, 5> ALL_BASE_LEVELS = {
+    constexpr std::array<IntensityLevel, 5> ALL_LOW_LEVELS = {
         {
-         LOWEST_BASE_LEVEL, HIGHEST_BASE_LEVEL,
-         MID_BASE_LEVEL, TOO_HIGH_BASE_LEVEL,
-         TOO_LOW_BASE_LEVEL, }
+         LOWEST_LOW_LEVEL, HIGHEST_LOW_LEVEL,
+         MID_LOW_LEVEL, TOO_HIGH_LOW_LEVEL,
+         TOO_LOW_LOW_LEVEL, }
     };
 
-    constexpr IntensityLevel LOWEST_PULSE_LEVEL  = 1U;
-    constexpr IntensityLevel HIGHEST_PULSE_LEVEL = PWM_MAX;
-    constexpr IntensityLevel MID_PULSE_LEVEL =
-        (HIGHEST_PULSE_LEVEL - LOWEST_PULSE_LEVEL) / 2U;
-    constexpr IntensityLevel TOO_HIGH_PULSE_LEVEL = 255U;
-    constexpr IntensityLevel TOO_LOW_PULSE_LEVEL  = 0U;
+    constexpr IntensityLevel LOWEST_HIGH_LEVEL  = 1U;
+    constexpr IntensityLevel HIGHEST_HIGH_LEVEL = PWM_MAX;
+    constexpr IntensityLevel MID_HIGH_LEVEL =
+        (HIGHEST_HIGH_LEVEL - LOWEST_HIGH_LEVEL) / 2U;
+    constexpr IntensityLevel TOO_HIGH_HIGH_LEVEL = 255U;
+    constexpr IntensityLevel TOO_LOW_HIGH_LEVEL  = 0U;
 
-    constexpr std::array<IntensityLevel, 5> ALL_PULSE_LEVELS = {
+    constexpr std::array<IntensityLevel, 5> ALL_HIGH_LEVELS = {
         {
-         LOWEST_PULSE_LEVEL, HIGHEST_PULSE_LEVEL,
-         MID_PULSE_LEVEL, TOO_HIGH_PULSE_LEVEL,
-         TOO_LOW_PULSE_LEVEL, }
+         LOWEST_HIGH_LEVEL, HIGHEST_HIGH_LEVEL,
+         MID_HIGH_LEVEL, TOO_HIGH_HIGH_LEVEL,
+         TOO_LOW_HIGH_LEVEL, }
     };
 
 } // namespace testutils

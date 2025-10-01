@@ -13,8 +13,8 @@ void
 LedBlinkPattern::reset()
 {
     pattern_is_valid_ = true;
-    base_level_       = 0;
-    peak_level_       = 0;
+    low_level_        = 0;
+    high_level_       = 0;
     led_events_.clear();
     used_levels_.clear();
 }
@@ -45,16 +45,16 @@ LedBlinkPattern::append(IntensityLevel level, DurationMs duration)
 
     if (used_levels_.size() == 1)
     {
-        base_level_ = *used_levels_.begin();
-        peak_level_ = 0;
+        low_level_  = *used_levels_.begin();
+        high_level_ = 0;
     }
 
     // Only calculate levels when we reach exactly 2 unique non-zero levels
     if (used_levels_.size() == 2)
     {
         auto base_first_it = used_levels_.begin();
-        base_level_        = *base_first_it++;
-        peak_level_        = *base_first_it;
+        low_level_         = *base_first_it++;
+        high_level_        = *base_first_it;
     }
 }
 
@@ -78,11 +78,11 @@ LedBlinkPattern::tracePatternToString() const
         {
             symbol_ptr = &testutils::LED_OFF_CHARACTER;
         }
-        else if (event.led_level == base_level_)
+        else if (event.led_level == low_level_)
         {
             symbol_ptr = &testutils::LED_BASE_CHARACTER;
         }
-        else if (event.led_level == peak_level_)
+        else if (event.led_level == high_level_)
         {
             symbol_ptr = &testutils::LED_PULSE_CHARACTER;
         }

@@ -22,7 +22,7 @@ IGNORE_TEST(SetterBehaviorBlinkerTest, ShouldUseDefaultPwmLevel)
 {
     const TestBlinkerCase test_case{
         .trace_check   = TraceCheck::NOT_ENFORCED,
-        .expectedPulse = DEFAULT_PULSE_LEVEL,
+        .expectedPulse = DEFAULT_HIGH_LEVEL,
     };
 
     checkBlinkerBehavior(blinker, logger, test_case);
@@ -31,10 +31,10 @@ IGNORE_TEST(SetterBehaviorBlinkerTest, ShouldUseDefaultPwmLevel)
 IGNORE_TEST(SetterBehaviorBlinkerTest, ShouldUseCustomPwmLevel)
 {
 
-    controller.setPeakLevel(MID_PULSE_LEVEL);
+    controller.setHighLevel(MID_HIGH_LEVEL);
     const TestBlinkerCase test_case{
         .trace_check   = TraceCheck::NOT_ENFORCED,
-        .expectedPulse = MID_PULSE_LEVEL,
+        .expectedPulse = MID_HIGH_LEVEL,
     };
 
     checkBlinkerBehavior(blinker, logger, test_case);
@@ -42,10 +42,10 @@ IGNORE_TEST(SetterBehaviorBlinkerTest, ShouldUseCustomPwmLevel)
 
 TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighPwmLevel)
 {
-    controller.setPeakLevel(TOO_HIGH_PULSE_LEVEL);
+    controller.setHighLevel(TOO_HIGH_HIGH_LEVEL);
     const TestBlinkerCase test_case{
         .trace_check   = TraceCheck::NOT_ENFORCED,
-        .expectedPulse = HIGHEST_PULSE_LEVEL,
+        .expectedPulse = HIGHEST_HIGH_LEVEL,
     };
 
     checkBlinkerBehavior(blinker, logger, test_case);
@@ -53,10 +53,10 @@ TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighPwmLevel)
 
 TEST(SetterBehaviorBlinkerTest, ShouldRejectSlightHighPwmLevel)
 {
-    controller.setPeakLevel(HIGHEST_PULSE_LEVEL + 1);
+    controller.setHighLevel(HIGHEST_HIGH_LEVEL + 1);
     const TestBlinkerCase test_case{
         .trace_check   = TraceCheck::NOT_ENFORCED,
-        .expectedPulse = HIGHEST_PULSE_LEVEL,
+        .expectedPulse = HIGHEST_HIGH_LEVEL,
     };
 
     checkBlinkerBehavior(blinker, logger, test_case);
@@ -66,7 +66,7 @@ TEST(SetterBehaviorBlinkerTest, ShouldUseDefaultBaseLevel)
 {
     const TestBlinkerCase test_case{
         .trace_check  = TraceCheck::NOT_ENFORCED,
-        .expectedBase = DEFAULT_BASE_LEVEL,
+        .expectedBase = DEFAULT_LOW_LEVEL,
     };
 
     checkBlinkerBehavior(blinker, logger, test_case);
@@ -75,10 +75,10 @@ TEST(SetterBehaviorBlinkerTest, ShouldUseDefaultBaseLevel)
 IGNORE_TEST(SetterBehaviorBlinkerTest, ShouldUseCustomBaseLevel)
 {
 
-    controller.setBaseLevel(MID_BASE_LEVEL);
+    controller.setLowLevel(MID_LOW_LEVEL);
     const TestBlinkerCase test_case{
         .trace_check  = TraceCheck::NOT_ENFORCED,
-        .expectedBase = MID_BASE_LEVEL,
+        .expectedBase = MID_LOW_LEVEL,
     };
 
     checkBlinkerBehavior(blinker, logger, test_case);
@@ -87,10 +87,10 @@ IGNORE_TEST(SetterBehaviorBlinkerTest, ShouldUseCustomBaseLevel)
 // Expect base level to be clamped to safe default when above allowed maximum.
 IGNORE_TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighBaseLevel)
 {
-    controller.setBaseLevel(TOO_HIGH_BASE_LEVEL);
+    controller.setLowLevel(TOO_HIGH_LOW_LEVEL);
     const TestBlinkerCase test_case{
         .trace_check  = TraceCheck::NOT_ENFORCED,
-        .expectedBase = HIGHEST_BASE_LEVEL,
+        .expectedBase = HIGHEST_LOW_LEVEL,
     };
 
     checkBlinkerBehavior(blinker, logger, test_case);
@@ -99,13 +99,13 @@ IGNORE_TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighBaseLevel)
 TEST(SetterBehaviorBlinkerTest,
      ShouldNotAffectDefaultPulseLevelWhenSettingBaseLevel)
 {
-    for (auto led_level : ALL_BASE_LEVELS)
+    for (auto led_level : ALL_LOW_LEVELS)
     {
-        controller.setBaseLevel(led_level);
+        controller.setLowLevel(led_level);
 
         const TestBlinkerCase test_case{
             .trace_check   = TraceCheck::NOT_ENFORCED,
-            .expectedPulse = DEFAULT_PULSE_LEVEL,
+            .expectedPulse = DEFAULT_HIGH_LEVEL,
         };
 
         checkBlinkerBehavior(blinker, logger, test_case);
@@ -115,13 +115,13 @@ TEST(SetterBehaviorBlinkerTest,
 IGNORE_TEST(SetterBehaviorBlinkerTest,
             ShouldNotAffecLowestBaseLevelWhenSettingPulseLevel)
 {
-    for (auto led_level : ALL_PULSE_LEVELS)
+    for (auto led_level : ALL_HIGH_LEVELS)
     {
-        controller.setPeakLevel(led_level);
-        controller.setBaseLevel(LOWEST_BASE_LEVEL);
+        controller.setHighLevel(led_level);
+        controller.setLowLevel(LOWEST_LOW_LEVEL);
         const TestBlinkerCase test_case{
             .trace_check  = TraceCheck::NOT_ENFORCED,
-            .expectedBase = LOWEST_BASE_LEVEL,
+            .expectedBase = LOWEST_LOW_LEVEL,
         };
 
         checkBlinkerBehavior(blinker, logger, test_case);

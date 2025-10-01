@@ -20,10 +20,10 @@ TEST_GROUP(LoopBehaviorBlinkerTest)
 
 IGNORE_TEST(LoopBehaviorBlinkerTest, ShouldHoldDimLightForDigitZero)
 {
-    controller.setBaseLevel(MID_BASE_LEVEL);
+    controller.setLowLevel(MID_LOW_LEVEL);
     const TestBlinkerCase test_case{.blink_code   = CODE_0,
                                     .trace_check  = TraceCheck::NOT_ENFORCED,
-                                    .expectedBase = MID_BASE_LEVEL};
+                                    .expectedBase = MID_LOW_LEVEL};
 
     checkBlinkerBehavior(blinker, logger, test_case);
 }
