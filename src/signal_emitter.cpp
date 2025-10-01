@@ -26,9 +26,6 @@ namespace pisco_code
         sequencer_.loadSignalCode(code, base, num_digits);
         pulse_iterator_ = sequencer_.createPulseIterator();
 
-        // controller_->setBaseLevel(base_level_);
-        // controller_->setPeakLevel(peak_level_);
-
         current_ts_    = 0;
         current_phase_ = PhaseLoop::STARTING;
         return true;
@@ -89,39 +86,6 @@ namespace pisco_code
     {
         return (is_running_ || current_phase_ != PhaseLoop::IDLE);
     }
-
-    // void SignalEmitter::setPeakLevel(IntensityLevel level)
-    // {
-    //     peak_level_ = (level > PWM_MAX) ? PWM_MAX : level;
-    //     if (peak_level_ < MIN_INTENSITY_DIFFERENCE)
-    //     {
-    //         peak_level_ = MIN_INTENSITY_DIFFERENCE;
-    //     }
-    //     if (base_level_ >= peak_level_)
-    //     {
-    //         base_level_ = peak_level_ - MIN_INTENSITY_DIFFERENCE;
-    //     }
-    // }
-
-    // [[nodiscard]] IntensityLevel SignalEmitter::getPeakLevel() const noexcept
-    // {
-    //     return peak_level_;
-    // }
-
-    // void SignalEmitter::setBaseLevel(IntensityLevel level)
-    // {
-    //     constexpr auto MAX_BASE_LEVEL = PWM_MAX - MIN_INTENSITY_DIFFERENCE;
-    //     base_level_ = (level > MAX_BASE_LEVEL) ? MAX_BASE_LEVEL : level;
-    //     if (base_level_ >= peak_level_)
-    //     {
-    //         base_level_ = peak_level_ - MIN_INTENSITY_DIFFERENCE;
-    //     }
-    // }
-
-    // [[nodiscard]] IntensityLevel SignalEmitter::getBaseLevel() const noexcept
-    // {
-    //     return base_level_;
-    // }
 
     void SignalEmitter::setRepeatTimes(RepeatTimes repeat_times) noexcept
     {
