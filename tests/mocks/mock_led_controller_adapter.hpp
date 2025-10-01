@@ -43,6 +43,27 @@ class MockLedControllerAdapter : public SignalController
     {
         return (pwm_tick_position_ == 0);
     }
+    void setPeakLevel(IntensityLevel level)
+    {
+        peak_level_ = (level > PWM_MAX) ? PWM_MAX : level;
+        if (peak_level_ < MIN_INTENSITY_DIFFERENCE)
+        {
+            peak_level_ = MIN_INTENSITY_DIFFERENCE;
+        }
+        if (base_level_ >= peak_level_)
+        {
+            base_level_ = peak_level_ - MIN_INTENSITY_DIFFERENCE;
+        }
+    }
+    void setBaseLevel(IntensityLevel level)
+    {
+        constexpr auto MAX_BASE_LEVEL = PWM_MAX - MIN_INTENSITY_DIFFERENCE;
+        base_level_ = (level > MAX_BASE_LEVEL) ? MAX_BASE_LEVEL : level;
+        if (base_level_ >= peak_level_)
+        {
+            base_level_ = peak_level_ - MIN_INTENSITY_DIFFERENCE;
+        }
+    }
 
   private:
     MockLedControlLogger* logger_            = nullptr;

@@ -19,11 +19,11 @@ namespace pisco_code
 
         bool showCode(SignalCode code, NumberBase base, NumDigits num_digits);
         void loop();
-        [[nodiscard]] bool           isRunning() const;
-        void                         setPeakLevel(IntensityLevel level);
-        [[nodiscard]] IntensityLevel getPeakLevel() const noexcept;
-        void                         setBaseLevel(IntensityLevel level);
-        [[nodiscard]] IntensityLevel getBaseLevel() const noexcept;
+        [[nodiscard]] bool isRunning() const;
+        // void                         setPeakLevel(IntensityLevel level);
+        // [[nodiscard]] IntensityLevel getPeakLevel() const noexcept;
+        // void                         setBaseLevel(IntensityLevel level);
+        // [[nodiscard]] IntensityLevel getBaseLevel() const noexcept;
         void setRepeatTimes(RepeatTimes repeat_times) noexcept;
         [[nodiscard]] RepeatTimes getRepeatTimes() const noexcept;
 
@@ -47,8 +47,8 @@ namespace pisco_code
         Timestamp           phase_duration_ = 0;
         PhaseLoop           current_phase_  = PhaseLoop::IDLE;
         bool                is_running_     = false;
-        IntensityLevel      peak_level_     = DEFAULT_PULSE_LEVEL;
-        IntensityLevel      base_level_     = DEFAULT_BASE_LEVEL;
+        // IntensityLevel      peak_level_     = DEFAULT_PULSE_LEVEL;
+        // IntensityLevel      base_level_     = DEFAULT_BASE_LEVEL;
     };
 
 } // namespace pisco_code

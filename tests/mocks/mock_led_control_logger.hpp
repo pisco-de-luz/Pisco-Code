@@ -36,9 +36,9 @@ class MockLedControlLogger
     {
         return led_blink_pattern_.getBaseLevel();
     }
-    [[nodiscard]] IntensityLevel getPulseLevel() const
+    [[nodiscard]] IntensityLevel getPeakLevel() const
     {
-        return led_blink_pattern_.getPulseLevel();
+        return led_blink_pattern_.getPeakLevel();
     }
 
     [[nodiscard]] testutils::TraceCode traceLogToString() const;

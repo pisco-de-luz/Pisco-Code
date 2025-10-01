@@ -130,7 +130,7 @@ namespace testutils
         if (testCase.expectedPulse.has_value())
         {
             CHECK_EQUAL_TEXT(testCase.expectedPulse.value(),
-                             logger.getPulseLevel(), "Pulse level mismatch");
+                             logger.getPeakLevel(), "Pulse level mismatch");
         }
     }
 

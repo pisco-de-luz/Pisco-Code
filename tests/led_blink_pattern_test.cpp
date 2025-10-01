@@ -55,7 +55,7 @@ TEST(LedBlinkPatternTests, ShouldProvideCorrectLevelGetters)
 
     CHECK_TRUE(pattern.isValid());
     CHECK_EQUAL(3, pattern.getBaseLevel());
-    CHECK_EQUAL(10, pattern.getPulseLevel());
+    CHECK_EQUAL(10, pattern.getPeakLevel());
 }
 
 TEST(LedBlinkPatternTests, ShouldTreatZeroAsAlwaysAllowed)
