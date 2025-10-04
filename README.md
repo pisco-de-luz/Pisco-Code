@@ -77,31 +77,30 @@ No dynamic memory, no exceptions. Ideal for safety-critical systems.
 #include "pisco_code.hpp"
 using namespace pisco_code;
 
-// LED glue for your board
-bool board_led(LedCodeType c) noexcept {
-    switch (static_cast<LedControlCode>(c)) {
-        case LedControlCode::ON:      /* turn LED on  */ return true;
-        case LedControlCode::OFF:     /* turn LED off */ return true;
-        case LedControlCode::FUNC_OK:                    return true;
-        default:                                         return false;
-    }
-}
+int main()
+{
+    avr_systick::init_1ms();
+    hal_led::ledOnboardInit();
+    hal_led::ledHwPwmInit();
 
-int main() {
-    LedControllerSoftwarePwm controller_led1(board_led);
-    SignalEmitter            emitter_led1(&controller_led1);
+    // pisco_code::LedControllerSoftwarePwm controller_led1(hal_led::ledHwPwm);
+    pisco_code::LedControllerSoftwarePwm controller_led1(hal_led::ledOnboard);
+    pisco_code::LedControllerHardwarePwm controller_led2(hal_led::ledHwPwmSetLevel);
+        
+    pisco_code::SignalEmitter emitter_led1(&controller_led1);
+    pisco_code::SignalEmitter emitter_led2(&controller_led2);
 
-    emitter_led1.setLowLevel(3);
+    emitter_led1.showCode(SignalCode{123}, NumberBase::DEC, NumDigits{0});
+    emitter_led2.showCode(SignalCode{-103}, NumberBase::DEC, NumDigits{0});
 
-    const SignalCode  signal_code{-102};
-    const NumDigits   num_digits{0};
-    const RepeatTimes repeats{3};
-
-    emitter_led1.showCode(signal_code, NumberBase::DEC, num_digits, repeats);
-    while (emitter_led1.isRunning())
+    while (emitter_led1.isRunning() || emitter_led2.isRunning())
     {
         emitter_led1.loop();
+        emitter_led2.loop();
         avr_systick::delay_ms(1);
+    }
+    for (;;)
+    {
     }
 }
 ```
