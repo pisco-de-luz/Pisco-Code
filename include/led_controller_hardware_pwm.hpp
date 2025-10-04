@@ -6,11 +6,11 @@
 
 namespace pisco_code
 {
-    class HardwarePwmLedController final : public SignalController
+    class LedControllerHardwarePwm final : public SignalController
     {
       public:
-        explicit HardwarePwmLedController(void (*led_func)(IntensityLevel));
-        explicit HardwarePwmLedController();
+        explicit LedControllerHardwarePwm(void (*led_func)(IntensityLevel));
+        explicit LedControllerHardwarePwm();
         void               attachLedControl(void (*led_func)(IntensityLevel));
         [[nodiscard]] bool isAttached() const noexcept;
         void               update() override;

@@ -1,5 +1,4 @@
-#include "software_pwm_led_controller.hpp"
-
+#include "led_controller_software_pwm.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 #include "signal_types.hpp"
@@ -7,25 +6,25 @@
 namespace pisco_code
 {
 
-    SoftwarePwmLedController::SoftwarePwmLedController()
+    LedControllerSoftwarePwm::LedControllerSoftwarePwm()
     {
     }
-    SoftwarePwmLedController::SoftwarePwmLedController(
+    LedControllerSoftwarePwm::LedControllerSoftwarePwm(
         bool (*led_func)(LedControlCode)) : led_control_(led_func)
     {
     }
 
     void
-    SoftwarePwmLedController::attachLedControl(bool (*led_func)(LedControlCode))
+    LedControllerSoftwarePwm::attachLedControl(bool (*led_func)(LedControlCode))
     {
         led_control_ = led_func;
     }
-    [[nodiscard]] bool SoftwarePwmLedController::isAttached() const noexcept
+    [[nodiscard]] bool LedControllerSoftwarePwm::isAttached() const noexcept
     {
         return led_control_ != nullptr;
     }
 
-    void SoftwarePwmLedController::update()
+    void LedControllerSoftwarePwm::update()
     {
         if (led_control_ == nullptr)
         {
@@ -52,7 +51,7 @@ namespace pisco_code
     }
 
     [[nodiscard]] bool
-    SoftwarePwmLedController::readyForPhaseChange() const noexcept
+    LedControllerSoftwarePwm::readyForPhaseChange() const noexcept
     {
         return (pwm_tick_position_ == 0);
     }

@@ -9,9 +9,9 @@ main()
     hal_led::ledOnboardInit();
     hal_led::ledHwPwmInit();
 
-    // pisco_code::SoftwarePwmLedController controller_led1(hal_led::ledHwPwm);
-    pisco_code::SoftwarePwmLedController controller_led1(hal_led::ledOnboard);
-    pisco_code::HardwarePwmLedController controller_led2(
+    // pisco_code::LedControllerSoftwarePwm controller_led1(hal_led::ledHwPwm);
+    pisco_code::LedControllerSoftwarePwm controller_led1(hal_led::ledOnboard);
+    pisco_code::LedControllerHardwarePwm controller_led2(
         hal_led::ledHwPwmSetLevel);
     pisco_code::SignalEmitter emitter_led1(&controller_led1);
     pisco_code::SignalEmitter emitter_led2(&controller_led2);

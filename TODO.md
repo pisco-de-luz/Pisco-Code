@@ -6,7 +6,7 @@
 - [x] Change intensity levels to full 0-255 range (`IntensityLevel` type)
 - [ ] Remove level setter/getters from `SignalEmitter` (delegate to controller)
 - [x] Rename `tick_timestamp_` to `current_ts_`
-- [x] Create `HardwarePwmLedController` class
+- [x] Create `LedControllerHardwarePwm` class
 - [x] Improve PWM LED turn-off behavior (disconnect PWM for true OFF)
 
 ## Medium Priority

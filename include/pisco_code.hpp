@@ -1,10 +1,10 @@
 #pragma once
 
-#include "hardware_pwm_led_controller.hpp"
+#include "led_controller_hardware_pwm.hpp"
+#include "led_controller_software_pwm.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 #include "signal_emitter.hpp"
-#include "software_pwm_led_controller.hpp"
 
 using pisco_code::LedControlCode;
 using pisco_code::NumberBase;

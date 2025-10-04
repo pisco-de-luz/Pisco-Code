@@ -1,5 +1,4 @@
-#include "hardware_pwm_led_controller.hpp"
-
+#include "led_controller_hardware_pwm.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 #include "signal_types.hpp"
@@ -7,26 +6,26 @@
 namespace pisco_code
 {
 
-    HardwarePwmLedController::HardwarePwmLedController()
+    LedControllerHardwarePwm::LedControllerHardwarePwm()
     {
     }
-    HardwarePwmLedController::HardwarePwmLedController(
+    LedControllerHardwarePwm::LedControllerHardwarePwm(
         void (*led_func)(IntensityLevel)) : led_control_(led_func)
     {
     }
 
     void
-    HardwarePwmLedController::attachLedControl(void (*led_func)(IntensityLevel))
+    LedControllerHardwarePwm::attachLedControl(void (*led_func)(IntensityLevel))
     {
         led_control_ = led_func;
     }
 
-    [[nodiscard]] bool HardwarePwmLedController::isAttached() const noexcept
+    [[nodiscard]] bool LedControllerHardwarePwm::isAttached() const noexcept
     {
         return led_control_ != nullptr;
     }
 
-    void HardwarePwmLedController::update()
+    void LedControllerHardwarePwm::update()
     {
         if (led_control_ == nullptr)
         {
@@ -38,7 +37,7 @@ namespace pisco_code
     }
 
     [[nodiscard]] bool
-    HardwarePwmLedController::readyForPhaseChange() const noexcept
+    LedControllerHardwarePwm::readyForPhaseChange() const noexcept
     {
         return (true);
     }
