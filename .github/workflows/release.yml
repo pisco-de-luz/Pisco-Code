@@ -1,0 +1,133 @@
+name: Create Release Package
+
+on:
+  push:
+    tags:
+      - 'v*'  # Triggers on version tags like v1.0.0, v1.2.3, etc.
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Extract version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        
+      - name: Create release directory
+        run: |
+          mkdir -p release/pisco-code-${{ steps.get_version.outputs.VERSION }}
+          
+      - name: Copy library files only
+        run: |
+          cp -r include/ release/pisco-code-${{ steps.get_version.outputs.VERSION }}/
+          cp -r src/ release/pisco-code-${{ steps.get_version.outputs.VERSION }}/
+          cp CMakeLists.txt release/pisco-code-${{ steps.get_version.outputs.VERSION }}/
+          cp README.md release/pisco-code-${{ steps.get_version.outputs.VERSION }}/
+          cp LICENSE release/pisco-code-${{ steps.get_version.outputs.VERSION }}/
+          
+      - name: Create library-only CMakeLists.txt
+        run: |
+          cat > release/pisco-code-${{ steps.get_version.outputs.VERSION }}/CMakeLists.txt << 'EOF'
+          cmake_minimum_required(VERSION 3.17)
+          project(pisco_code VERSION 1.0.0 LANGUAGES CXX)
+          
+          set(CMAKE_CXX_STANDARD 17)
+          set(CMAKE_CXX_STANDARD_REQUIRED ON)
+          
+          # Library definition
+          add_library(pisco_code
+              src/signal_emitter.cpp
+              src/signal_controller.cpp
+              src/led_controller_software_pwm.cpp
+              src/led_controller_hardware_pwm.cpp
+          )
+          
+          target_include_directories(pisco_code 
+              PUBLIC 
+                  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+                  $<INSTALL_INTERFACE:include>
+          )
+          
+          target_compile_features(pisco_code PUBLIC cxx_std_17)
+          EOF
+          
+      - name: Create archives
+        run: |
+          cd release
+          tar -czf pisco-code-${{ steps.get_version.outputs.VERSION }}.tar.gz pisco-code-${{ steps.get_version.outputs.VERSION }}/
+          zip -r pisco-code-${{ steps.get_version.outputs.VERSION }}.zip pisco-code-${{ steps.get_version.outputs.VERSION }}/
+          
+      - name: Generate checksums
+        run: |
+          cd release
+          sha256sum *.tar.gz *.zip > checksums.txt
+          
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            release/pisco-code-${{ steps.get_version.outputs.VERSION }}.tar.gz
+            release/pisco-code-${{ steps.get_version.outputs.VERSION }}.zip
+            release/checksums.txt
+          body: |
+            # Pisco Code Library ${{ steps.get_version.outputs.VERSION }}
+            
+            ## Library-Only Distribution
+            
+            This release contains only the library files needed for integration:
+            - `include/` - Header files
+            - `src/` - Implementation files  
+            - `CMakeLists.txt` - Library build configuration
+            - `README.md` - Usage documentation
+            - `LICENSE` - License information
+            
+            ## Integration
+            
+            ### Download and Extract
+            ```bash
+            wget https://github.com/${{ github.repository }}/releases/download/${{ steps.get_version.outputs.VERSION }}/pisco-code-${{ steps.get_version.outputs.VERSION }}.tar.gz
+            tar -xzf pisco-code-${{ steps.get_version.outputs.VERSION }}.tar.gz -C libs/
+            ```
+            
+            ### CMake Integration
+            ```cmake
+            add_subdirectory(libs/pisco-code-${{ steps.get_version.outputs.VERSION }})
+            target_link_libraries(your_project pisco_code)
+            ```
+            
+            ## Checksums
+            Verify your download with the provided checksums.txt file.
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Generate Changelog
+        id: changelog
+        run: |
+          # Get commits since last tag
+          LAST_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          if [ -n "$LAST_TAG" ]; then
+            CHANGELOG=$(git log --pretty=format:"- %s" $LAST_TAG..HEAD)
+          else
+            CHANGELOG=$(git log --pretty=format:"- %s")
+          fi
+          echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          # ... files section same as above
+          body: |
+            # Pisco Code Library ${{ steps.get_version.outputs.VERSION }}
+            
+            ## Changes
+            ${{ steps.changelog.outputs.CHANGELOG }}
+            
+            ## Library-Only Distribution
+            # ... rest same as above
