@@ -4,7 +4,7 @@
 - [x] Split `signal_controller.hpp` into header/implementation files
 - [x] Remove `TickCounter` abstraction, use `Timestamp` (uint32) everywhere
 - [x] Change intensity levels to full 0-255 range (`IntensityLevel` type)
-- [ ] Remove level setter/getters from `SignalEmitter` (delegate to controller)
+- [x] Remove level setter/getters from `SignalEmitter` (delegate to controller)
 - [x] Rename `tick_timestamp_` to `current_ts_`
 - [x] Create `LedControllerHardwarePwm` class
 - [x] Improve PWM LED turn-off behavior (disconnect PWM for true OFF)
@@ -37,7 +37,7 @@
 
 ## Code Quality Improvements Made
 - [x] Refactor `SignalElement` constructor parameters
-- [p] Update constants with 'U' suffix for consistency
+- [ ] Update constants with 'U' suffix for consistency
 - [x] Rename `MIN_PULSE_BASE_GAP` to `MIN_INTENSITY_DIFFERENCE`
 - [x] Improve type safety with `NumDigits`, `Index`, `Counter` types
 - [x] Remove unused type aliases (`Index8`, `Index16`, etc.)
@@ -56,14 +56,14 @@
 - [x] Add `CODE_NEG_103` test constant
 
 ## Documentation & Organization
-- [p] API reference documentation
+- [ ] API reference documentation
 - [ ] Usage examples for different controller types
 - [ ] Porting guide for new hardware platforms
 - [ ] Performance characteristics documentation
 
 ## Safety-Critical Considerations
 - [ ] Implement fail-safe behavior for invalid controller states
-- [p] Add static analysis tool configuration
+- [ ] Add static analysis tool configuration
 - [ ] Create safety validation test suite
 - [ ] Add error handling for hardware failures
 
@@ -74,8 +74,6 @@
 - [ ] Performance benchmarking on target hardware
 
 ---
-[x] = Completed
-[p] = Partially Completed
 
 ## Recent Major Refactors Completed ✅
 - **Timing System**: Simplified from `TickCounter` to direct `Timestamp` usage
