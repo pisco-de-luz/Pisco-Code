@@ -240,3 +240,27 @@ To build and flash the examples on different targets, use the provided scripts.
 ```
 
 These commands are backed by the `CMakePresets.json` file, which defines toolchains and build configurations for each supported target.
+
+## Installation
+
+### Download Release Package (Recommended)
+
+1. Go to [Releases](https://github.com/andrev/Pisco-Code/releases)
+2. Download the latest `pisco-code-vX.X.X.tar.gz` 
+3. Extract to your project:
+
+```bash
+tar -xzf pisco-code-v1.0.0.tar.gz -C libs/
+```
+
+4. Add to your CMakeLists.txt:
+```cmake
+add_subdirectory(libs/pisco-code-v1.0.0)
+target_link_libraries(your_project pisco_code)
+```
+
+### Verify Download
+```bash
+sha256sum pisco-code-v1.0.0.tar.gz
+# Compare with checksums.txt from release
+```
