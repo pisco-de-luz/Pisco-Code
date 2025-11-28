@@ -1,119 +1,346 @@
-# Pisco Code Library Integration Guide
+# Pisco Code Library Integration# Pisco Code Library Integration# Pisco Code Library Integration Guide
 
-This guide shows how to integrate the Pisco Code library into your project using various methods.
+
 
 ## Quick Start
 
-The Pisco Code library provides two library targets:
-- **`PiscoCodeCore`** - Full C++ standard library support (for hosted environments)
-- **`PiscoCodeCoreBare`** - Freestanding/bare-metal support (no standard library)
 
-## Requirements
 
-- CMake 3.19 or later
-- C++11 compatible compiler
-- For AVR: avr-gcc toolchain
-- For STM32: arm-none-eabi-gcc toolchain
+Add this to your `CMakeLists.txt`:## Quick Start (Recommended)This guide shows how to integrate the Pisco Code library into your project using various methods.
 
-## Integration Method 1: Download Release Package
 
-Best for: Offline builds, air-gapped systems, safety-critical projects requiring version pinning.
 
-### Step 1: Download
-```bash
-# From GitHub releases page or:
-wget https://github.com/pisco-de-luz/Pisco-Code/releases/download/v2.0.0/pisco-code-v2.0.0.tar.gz
-
-# Verify checksum
-sha256sum pisco-code-v2.0.0.tar.gz
-# Compare with checksums.txt from release
-
-# Extract
-tar -xzf pisco-code-v2.0.0.tar.gz -C libs/
-```
-
-### Step 2: Add to Your CMakeLists.txt
 ```cmake
-cmake_minimum_required(VERSION 3.19)
-project(MyProject LANGUAGES CXX)
 
-# Add Pisco Code library
-add_subdirectory(libs/pisco-code-v2.0.0)
+# Choose your version
 
-# Link to your executable
-add_executable(my_app main.cpp)
-target_link_libraries(my_app PRIVATE PiscoCodeCore)
-```
+set(PISCO_CODE_VERSION "v1.0.1" CACHE STRING "Pisco Code version to use")Add this to your `CMakeLists.txt`:## Quick Start
 
-## Integration Method 2: CMake FetchContent
 
-Best for: Modern CMake projects, automatic dependency management.
-
-### CMakeLists.txt
-```cmake
-cmake_minimum_required(VERSION 3.19)
-project(MyProject LANGUAGES CXX)
 
 include(FetchContent)
 
-# Option 1: Fetch from specific release (recommended for reproducible builds)
-FetchContent_Declare(
-  pisco_code
-  URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/v2.0.0/pisco-code-v2.0.0.tar.gz
-  URL_HASH SHA256=<hash_from_checksums.txt>  # Add for security
-)
+FetchContent_Declare(pisco_code
 
-# Option 2: Fetch from git (always gets latest from branch)
-# FetchContent_Declare(
-#   pisco_code
-#   GIT_REPOSITORY https://github.com/pisco-de-luz/Pisco-Code.git
-#   GIT_TAG v2.0.0  # Or main for latest
-# )
+  URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/${PISCO_CODE_VERSION}/pisco-code-${PISCO_CODE_VERSION}.tar.gz```cmakeThe Pisco Code library provides two library targets:
+
+  # URL_HASH SHA256=<hash>  # Add hash from release checksums.txt for verification
+
+)include(FetchContent)- **`PiscoCodeCore`** - Full C++ standard library support (for hosted environments)
 
 FetchContent_MakeAvailable(pisco_code)
 
-# Link to your executable
-add_executable(my_app main.cpp)
-target_link_libraries(my_app PRIVATE PiscoCodeCore)
-```
+FetchContent_Declare(pisco_code- **`PiscoCodeCoreBare`** - Freestanding/bare-metal support (no standard library)
 
-## Integration Method 3: Git Submodule
+# Link to your target
 
-Best for: Active development, contributing back to the library.
+target_link_libraries(your_target PRIVATE PiscoCodeCore)  URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/v2.0.0/pisco-code-v2.0.0.tar.gz
 
-### Setup
-```bash
-# Add as submodule
-git submodule add https://github.com/pisco-de-luz/Pisco-Code.git libs/pisco-code
-git submodule update --init --recursive
+# Or for bare-metal: target_link_libraries(your_target PRIVATE PiscoCodeCoreBare)
 
-# Clone a project with submodules
-git clone --recurse-submodules https://your-repo.git
-```
+```  # URL_HASH SHA256=<hash>  # Uncomment and add hash from release checksums.txt for verification## Requirements
 
-### CMakeLists.txt
+
+
+That's it! CMake will automatically:)
+
+- Download the release package (cached in `build/_deps/`)
+
+- Build only the library (examples/tests are auto-disabled)FetchContent_MakeAvailable(pisco_code)- CMake 3.19 or later
+
+- Make headers available to your project
+
+- C++11 compatible compiler
+
+## Available Targets
+
+# Link to your target- For AVR: avr-gcc toolchain
+
+| Target | Use Case |
+
+|--------|----------|target_link_libraries(your_target PRIVATE PiscoCodeCore)- For STM32: arm-none-eabi-gcc toolchain
+
+| `PiscoCodeCore` | Hosted environments (Linux, Windows, tests) |
+
+| `PiscoCodeCoreBare` | Bare-metal/freestanding (AVR, STM32, embedded) |# Or for bare-metal: target_link_libraries(your_target PRIVATE PiscoCodeCoreBare)
+
+
+
+## Requirements```## Integration Method 1: Download Release Package
+
+
+
+- CMake 3.14 or later
+
+- C++11 compatible compiler
+
+That's it! CMake will automatically:Best for: Offline builds, air-gapped systems, safety-critical projects requiring version pinning.
+
+## Complete Example
+
+- Download the release package (only once, cached in `build/_deps/`)
+
 ```cmake
-cmake_minimum_required(VERSION 3.19)
-project(MyProject LANGUAGES CXX)
 
-# Add Pisco Code library
-add_subdirectory(libs/pisco-code)
+cmake_minimum_required(VERSION 3.14)- Verify checksum if provided### Step 1: Download
+
+project(MyBlinkProject LANGUAGES CXX)
+
+- Build only the library (examples/tests are auto-disabled)```bash
+
+# --- Pisco Code Library ---
+
+set(PISCO_CODE_VERSION "v1.0.1")- Make headers available to your project# From GitHub releases page or:
+
+
+
+include(FetchContent)wget https://github.com/pisco-de-luz/Pisco-Code/releases/download/v2.0.0/pisco-code-v2.0.0.tar.gz
+
+FetchContent_Declare(pisco_code
+
+  URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/${PISCO_CODE_VERSION}/pisco-code-${PISCO_CODE_VERSION}.tar.gz## Available Targets
+
+)
+
+FetchContent_MakeAvailable(pisco_code)# Verify checksum
+
+
+
+# --- Your Application ---| Target | Use Case |sha256sum pisco-code-v2.0.0.tar.gz
+
+add_executable(my_firmware main.cpp hal_led.cpp)
+
+target_link_libraries(my_firmware PRIVATE PiscoCodeCoreBare)|--------|----------|# Compare with checksums.txt from release
+
+```
+
+| `PiscoCodeCore` | Hosted environments (Linux, macOS, Windows, tests) |
+
+### Example main.cpp
+
+| `PiscoCodeCoreBare` | Bare-metal/freestanding (AVR, STM32, embedded) |# Extract
+
+```cpp
+
+#include "pisco_code.hpp"tar -xzf pisco-code-v2.0.0.tar.gz -C libs/
+
+
+
+int main() {## Version Selection```
+
+    pisco_code::LedControllerSoftwarePwm led(my_led_callback);
+
+    pisco_code::SignalEmitter emitter(&led);
+
+    
+
+    emitter.showCode(SignalCode{42}, NumberBase::DEC, NumDigits{0});Change the URL to use a different version:### Step 2: Add to Your CMakeLists.txt
+
+    
+
+    while (emitter.isRunning()) {```cmake
+
+        emitter.loop();
+
+        delay_1ms();  // Your platform's delay```cmakecmake_minimum_required(VERSION 3.19)
+
+    }
+
+}# For version 2.1.0:project(MyProject LANGUAGES CXX)
+
+```
+
+URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/v2.1.0/pisco-code-v2.1.0.tar.gz
+
+## Offline/Air-Gapped Systems
+
+```# Add Pisco Code library
+
+For builds without internet access:
+
+add_subdirectory(libs/pisco-code-v2.0.0)
+
+1. Download the release tarball
+
+2. Place in your project (e.g., `deps/`)## Requirements
+
+3. Use local path:
 
 # Link to your executable
-add_executable(my_app main.cpp)
+
+```cmake
+
+set(PISCO_CODE_VERSION "v1.0.1")- CMake 3.19 or lateradd_executable(my_app main.cpp)
+
+
+
+FetchContent_Declare(pisco_code- C++11 compatible compilertarget_link_libraries(my_app PRIVATE PiscoCodeCore)
+
+  URL ${CMAKE_CURRENT_SOURCE_DIR}/deps/pisco-code-${PISCO_CODE_VERSION}.tar.gz
+
+  URL_HASH SHA256=<hash_from_checksums.txt>- For AVR: avr-gcc toolchain```
+
+)
+
+```- For ARM: arm-none-eabi-gcc toolchain
+
+
+
+## Troubleshooting## Integration Method 2: CMake FetchContent
+
+
+
+**"Cannot find pisco_code.hpp"**  ## Example Project
+
+Ensure you linked against the library:
+
+```cmakeBest for: Modern CMake projects, automatic dependency management.
+
+target_link_libraries(your_target PRIVATE PiscoCodeCore)
+
+``````cmake
+
+
+
+**Bare-metal build errors**  cmake_minimum_required(VERSION 3.19)### CMakeLists.txt
+
+Use `PiscoCodeCoreBare` for freestanding builds.
+
+project(MyBlinkProject LANGUAGES CXX)```cmake
+
+**C++ standard**  
+
+Pisco Code requires C++11 minimum. Your project can use C++11, 14, 17, 20, etc.cmake_minimum_required(VERSION 3.19)
+
+
+
+## Licenseinclude(FetchContent)project(MyProject LANGUAGES CXX)
+
+
+
+MIT License - See [LICENSE](LICENSE)FetchContent_Declare(pisco_code
+
+
+  URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/v2.0.0/pisco-code-v2.0.0.tar.gzinclude(FetchContent)
+
+)
+
+FetchContent_MakeAvailable(pisco_code)# Option 1: Fetch from specific release (recommended for reproducible builds)
+
+FetchContent_Declare(
+
+add_executable(my_firmware main.cpp hal_led.cpp)  pisco_code
+
+target_link_libraries(my_firmware PRIVATE PiscoCodeCoreBare)  URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/v2.0.0/pisco-code-v2.0.0.tar.gz
+
+```  URL_HASH SHA256=<hash_from_checksums.txt>  # Add for security
+
+)
+
+```cpp
+
+// main.cpp# Option 2: Fetch from git (always gets latest from branch)
+
+#include "pisco_code.hpp"# FetchContent_Declare(
+
+#   pisco_code
+
+int main() {#   GIT_REPOSITORY https://github.com/pisco-de-luz/Pisco-Code.git
+
+    pisco_code::LedControllerSoftwarePwm led(my_led_callback);#   GIT_TAG v2.0.0  # Or main for latest
+
+    pisco_code::SignalEmitter emitter(&led);# )
+
+    
+
+    emitter.showCode(SignalCode{42}, NumberBase::DEC, NumDigits{0});FetchContent_MakeAvailable(pisco_code)
+
+    
+
+    while (emitter.isRunning()) {# Link to your executable
+
+        emitter.loop();add_executable(my_app main.cpp)
+
+        delay_1ms();target_link_libraries(my_app PRIVATE PiscoCodeCore)
+
+    }```
+
+}
+
+```## Integration Method 3: Git Submodule
+
+
+
+## Offline/Air-Gapped SystemsBest for: Active development, contributing back to the library.
+
+
+
+For systems without internet access during build:### Setup
+
+```bash
+
+1. Download the release tarball manually# Add as submodule
+
+2. Place it in your project (e.g., `deps/pisco-code-v2.0.0.tar.gz`)git submodule add https://github.com/pisco-de-luz/Pisco-Code.git libs/pisco-code
+
+3. Use a local path:git submodule update --init --recursive
+
+
+
+```cmake# Clone a project with submodules
+
+FetchContent_Declare(pisco_codegit clone --recurse-submodules https://your-repo.git
+
+  URL ${CMAKE_CURRENT_SOURCE_DIR}/deps/pisco-code-v2.0.0.tar.gz```
+
+  URL_HASH SHA256=<hash_from_checksums.txt>
+
+)### CMakeLists.txt
+
+``````cmake
+
+cmake_minimum_required(VERSION 3.19)
+
+## Troubleshootingproject(MyProject LANGUAGES CXX)
+
+
+
+### "Cannot find pisco_code.hpp"# Add Pisco Code library
+
+Ensure you're linking against the library:add_subdirectory(libs/pisco-code)
+
+```cmake
+
+target_link_libraries(your_target PRIVATE PiscoCodeCore)# Link to your executable
+
+```add_executable(my_app main.cpp)
+
 target_link_libraries(my_app PRIVATE PiscoCodeCore)
-```
+
+### Build errors with bare-metal```
+
+Use `PiscoCodeCoreBare` instead of `PiscoCodeCore` for freestanding builds.
 
 ## Using PiscoCodeCoreBare (Bare-Metal/Freestanding)
 
-For embedded systems without standard library:
+### Want to use a specific C++ standard
+
+Pisco Code requires C++11 minimum. Your project can use any standard >= C++11:For embedded systems without standard library:
 
 ```cmake
-add_executable(firmware main.cpp)
+
+set(CMAKE_CXX_STANDARD 17)  # Your choice```cmake
+
+```add_executable(firmware main.cpp)
+
 target_link_libraries(firmware PRIVATE PiscoCodeCoreBare)
 
+## License
+
 # The bare library includes:
-# - Freestanding compilation (-ffreestanding)
+
+See [LICENSE](LICENSE) file.# - Freestanding compilation (-ffreestanding)
+
 # - No exceptions/RTTI
 # - Custom memory management shims
 # - Minimal runtime dependencies
