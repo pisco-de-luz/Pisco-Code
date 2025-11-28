@@ -106,41 +106,36 @@ int main()
 ```
 
 
-# AVR Build and Upload Options (CMakePresets.json)
+# AVR Build and Upload Options
 
-The AVR example system supports flexible configuration through `CMakePresets.json`.
-You can override variables such as the target board, programmer type, upload port, and baud rate — either by modifying the preset directly or via the command line.
+The AVR example system supports flexible configuration via CMake variables.
+You can override variables such as the target board, programmer type, upload port, and baud rate via command-line arguments.
 
-## Example preset (for Arduino as ISP)
-```json
-{
-  "name": "avr-arduino-nano",
-  "binaryDir": "build/avr-arduino-nano",
-  "generator": "Unix Makefiles",
-  "cacheVariables": {
-    "CMAKE_TOOLCHAIN_FILE": "cmake/toolchains/avr-gcc.cmake",
-    "BOARD": "arduino-nano",
-    "EXAMPLES": "basic_example",
-    "AVR_UPLOAD_PROGRAMMER": "stk500v1",
-    "AVR_UPLOAD_PORT": "/dev/ttyACM0",
-    "AVR_UPLOAD_BAUD": "19200"
-  }
-}
+## Build Configuration Variables
+
+Configure builds by passing variables to CMake:
+
+```bash
+# Example: Build with Arduino as ISP programmer
+cmake -S . -B build/avr-arduino-nano \
+    -DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/avr-gcc.cmake \
+    -DBOARD=arduino-nano \
+    -DEXAMPLES=basic_example \
+    -DAVR_UPLOAD_PROGRAMMER=stk500v1 \
+    -DAVR_UPLOAD_PORT=/dev/ttyACM0 \
+    -DAVR_UPLOAD_BAUD=19200
 ```
 
-## Example preset (for USBasp)
-```json
-{
-  "name": "avr-arduino-nano",
-  "binaryDir": "build/avr-arduino-nano",
-  "generator": "Unix Makefiles",
-  "cacheVariables": {
-    "CMAKE_TOOLCHAIN_FILE": "cmake/toolchains/avr-gcc.cmake",
-    "BOARD": "arduino-nano",
-    "EXAMPLES": "basic_example",
-    "AVR_UPLOAD_PROGRAMMER": "usbasp"
-  }
-}
+```bash
+# Example: Build with USBasp programmer
+cmake -S . -B build/avr-arduino-nano \
+    -DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/avr-gcc.cmake \
+    -DBOARD=arduino-nano \
+    -DEXAMPLES=basic_example \
+    -DAVR_UPLOAD_PROGRAMMER=usbasp
+```
+
+Or use the convenience script `./scripts/Build.sh avr-arduino-nano` which handles default configuration.
 ```
 
 ## Showing PiscoCodes, calling showCode() Function
@@ -244,8 +239,6 @@ To build and flash the examples on different targets, use the provided scripts.
 ./scripts/test-cmake-integration.sh
 ```
 This script verifies that the library works correctly in all modes: native builds, cross-compilation (AVR/STM32), and as a subproject.
-
-These commands are backed by the `CMakePresets.json` file, which defines toolchains and build configurations for each supported target.
 
 ## Installation
 

@@ -1,4 +1,4 @@
-# Pisco Code Library Integration# Pisco Code Library Integration# Pisco Code Library Integration Guide
+# Pisco Code Library Integration Guide# Pisco Code Library Integration# Pisco Code Library Integration# Pisco Code Library Integration Guide
 
 
 
@@ -6,7 +6,7 @@
 
 
 
-Add this to your `CMakeLists.txt`:## Quick Start (Recommended)This guide shows how to integrate the Pisco Code library into your project using various methods.
+Add this to your `CMakeLists.txt`:## Quick Start
 
 
 
@@ -14,7 +14,7 @@ Add this to your `CMakeLists.txt`:## Quick Start (Recommended)This guide shows h
 
 # Choose your version
 
-set(PISCO_CODE_VERSION "v1.0.1" CACHE STRING "Pisco Code version to use")Add this to your `CMakeLists.txt`:## Quick Start
+set(PISCO_CODE_VERSION "v1.0.1" CACHE STRING "Pisco Code version to use")Add this to your `CMakeLists.txt`:## Quick Start (Recommended)This guide shows how to integrate the Pisco Code library into your project using various methods.
 
 
 
@@ -22,73 +22,165 @@ include(FetchContent)
 
 FetchContent_Declare(pisco_code
 
-  URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/${PISCO_CODE_VERSION}/pisco-code-${PISCO_CODE_VERSION}.tar.gz```cmakeThe Pisco Code library provides two library targets:
+  URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/${PISCO_CODE_VERSION}/pisco-code-${PISCO_CODE_VERSION}.tar.gz```cmake
 
   # URL_HASH SHA256=<hash>  # Add hash from release checksums.txt for verification
 
-)include(FetchContent)- **`PiscoCodeCore`** - Full C++ standard library support (for hosted environments)
+)# Choose your version
 
 FetchContent_MakeAvailable(pisco_code)
 
-FetchContent_Declare(pisco_code- **`PiscoCodeCoreBare`** - Freestanding/bare-metal support (no standard library)
+set(PISCO_CODE_VERSION "v1.0.1" CACHE STRING "Pisco Code version to use")Add this to your `CMakeLists.txt`:## Quick Start
 
-# Link to your target
+target_link_libraries(your_project PRIVATE PiscoCodeCore)
 
-target_link_libraries(your_target PRIVATE PiscoCodeCore)  URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/v2.0.0/pisco-code-v2.0.0.tar.gz
-
-# Or for bare-metal: target_link_libraries(your_target PRIVATE PiscoCodeCoreBare)
-
-```  # URL_HASH SHA256=<hash>  # Uncomment and add hash from release checksums.txt for verification## Requirements
+```
 
 
 
-That's it! CMake will automatically:)
+## Requirementsinclude(FetchContent)
 
-- Download the release package (cached in `build/_deps/`)
 
-- Build only the library (examples/tests are auto-disabled)FetchContent_MakeAvailable(pisco_code)- CMake 3.19 or later
 
-- Make headers available to your project
+- CMake 3.14 or laterFetchContent_Declare(pisco_code
 
-- C++11 compatible compiler
+- C++11 compatible compiler (library uses C++17 internally but only requires C++11 from consumers)
+
+  URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/${PISCO_CODE_VERSION}/pisco-code-${PISCO_CODE_VERSION}.tar.gz```cmakeThe Pisco Code library provides two library targets:
 
 ## Available Targets
 
-# Link to your target- For AVR: avr-gcc toolchain
+  # URL_HASH SHA256=<hash>  # Add hash from release checksums.txt for verification
 
-| Target | Use Case |
+| Target | Description | Use Case |
 
-|--------|----------|target_link_libraries(your_target PRIVATE PiscoCodeCore)- For STM32: arm-none-eabi-gcc toolchain
+|--------|-------------|----------|)include(FetchContent)- **`PiscoCodeCore`** - Full C++ standard library support (for hosted environments)
 
-| `PiscoCodeCore` | Hosted environments (Linux, Windows, tests) |
+| `PiscoCodeCore` | Full C++ standard library support | Desktop, Linux, hosted environments |
 
-| `PiscoCodeCoreBare` | Bare-metal/freestanding (AVR, STM32, embedded) |# Or for bare-metal: target_link_libraries(your_target PRIVATE PiscoCodeCoreBare)
-
-
-
-## Requirements```## Integration Method 1: Download Release Package
+| `PiscoCodeCoreBare` | Freestanding mode (`-ffreestanding`) | Bare-metal, AVR, STM32, embedded |FetchContent_MakeAvailable(pisco_code)
 
 
 
-- CMake 3.14 or later
+## Version Pinning with Hash VerificationFetchContent_Declare(pisco_code- **`PiscoCodeCoreBare`** - Freestanding/bare-metal support (no standard library)
 
-- C++11 compatible compiler
 
-That's it! CMake will automatically:Best for: Offline builds, air-gapped systems, safety-critical projects requiring version pinning.
 
-## Complete Example
+For production/safety-critical applications, pin to a specific version with hash verification:# Link to your target
 
-- Download the release package (only once, cached in `build/_deps/`)
+
+
+```cmaketarget_link_libraries(your_target PRIVATE PiscoCodeCore)  URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/v2.0.0/pisco-code-v2.0.0.tar.gz
+
+set(PISCO_CODE_VERSION "v1.0.1" CACHE STRING "Pisco Code version")
+
+# Or for bare-metal: target_link_libraries(your_target PRIVATE PiscoCodeCoreBare)
+
+include(FetchContent)
+
+FetchContent_Declare(pisco_code```  # URL_HASH SHA256=<hash>  # Uncomment and add hash from release checksums.txt for verification## Requirements
+
+  URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/${PISCO_CODE_VERSION}/pisco-code-${PISCO_CODE_VERSION}.tar.gz
+
+  URL_HASH SHA256=abc123...  # Get from release checksums.txt
+
+)
+
+FetchContent_MakeAvailable(pisco_code)That's it! CMake will automatically:)
+
+```
+
+- Download the release package (cached in `build/_deps/`)
+
+## Bare-Metal / Embedded Example
+
+- Build only the library (examples/tests are auto-disabled)FetchContent_MakeAvailable(pisco_code)- CMake 3.19 or later
 
 ```cmake
 
-cmake_minimum_required(VERSION 3.14)- Verify checksum if provided### Step 1: Download
+cmake_minimum_required(VERSION 3.14)- Make headers available to your project
 
-project(MyBlinkProject LANGUAGES CXX)
+project(MyEmbeddedProject LANGUAGES C CXX)
 
-- Build only the library (examples/tests are auto-disabled)```bash
+- C++11 compatible compiler
 
-# --- Pisco Code Library ---
+set(CMAKE_CXX_STANDARD 17)
+
+## Available Targets
+
+set(PISCO_CODE_VERSION "v1.0.1")
+
+# Link to your target- For AVR: avr-gcc toolchain
+
+include(FetchContent)
+
+FetchContent_Declare(pisco_code| Target | Use Case |
+
+  URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/${PISCO_CODE_VERSION}/pisco-code-${PISCO_CODE_VERSION}.tar.gz
+
+)|--------|----------|target_link_libraries(your_target PRIVATE PiscoCodeCore)- For STM32: arm-none-eabi-gcc toolchain
+
+FetchContent_MakeAvailable(pisco_code)
+
+| `PiscoCodeCore` | Hosted environments (Linux, Windows, tests) |
+
+add_executable(firmware main.cpp)
+
+target_link_libraries(firmware PRIVATE PiscoCodeCoreBare)| `PiscoCodeCoreBare` | Bare-metal/freestanding (AVR, STM32, embedded) |# Or for bare-metal: target_link_libraries(your_target PRIVATE PiscoCodeCoreBare)
+
+```
+
+
+
+## What Gets Propagated to Your Project
+
+## Requirements```## Integration Method 1: Download Release Package
+
+The library is designed to be non-invasive:
+
+
+
+| Property | Propagation | Notes |
+
+|----------|-------------|-------|- CMake 3.14 or later
+
+| Include directories | PUBLIC | Required for headers |
+
+| C++11 minimum | PUBLIC | Minimum language requirement |- C++11 compatible compiler
+
+| Compile warnings | PRIVATE | Not forced on consumers |
+
+| Optimization flags | PRIVATE | Not forced on consumers |That's it! CMake will automatically:Best for: Offline builds, air-gapped systems, safety-critical projects requiring version pinning.
+
+| Link flags | PRIVATE | Not forced on consumers |
+
+## Complete Example
+
+## Troubleshooting
+
+- Download the release package (only once, cached in `build/_deps/`)
+
+### "PiscoCodeCore target not found"
+
+Ensure `FetchContent_MakeAvailable(pisco_code)` is called before `target_link_libraries()`.```cmake
+
+
+
+### Compiler errors about C++ standardcmake_minimum_required(VERSION 3.14)- Verify checksum if provided### Step 1: Download
+
+The library requires C++11 minimum. Set your project's standard:
+
+```cmakeproject(MyBlinkProject LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)  # or 11, 14, 20, etc.
+
+```- Build only the library (examples/tests are auto-disabled)```bash
+
+
+
+### Hash verification fails# --- Pisco Code Library ---
+
+Download the `checksums.txt` file from the release and use the correct SHA256 hash for your version.
 
 set(PISCO_CODE_VERSION "v1.0.1")- Make headers available to your project# From GitHub releases page or:
 

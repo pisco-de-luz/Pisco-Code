@@ -2,74 +2,107 @@
 set -euo pipefail
 
 #------------------------------------------------------------------------------
-# Build.sh — Unified build script using CMake presets + example support
+# Build.sh — Unified build script for PiscoCode
 # Usage:
-#   Build.sh <preset>                → build core + tests if native
-#   Build.sh <preset>/<example>     → build only specific example
-#   Build.sh all                    → build everything
+#   Build.sh <config>                → build core + tests if native
+#   Build.sh <config>/<example>      → build only specific example
+#   Build.sh all                     → build everything
 #------------------------------------------------------------------------------
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR/.."  # <— this is the fix
+cd "$SCRIPT_DIR/.."
 
-readonly PRESETS=("native" "avr" "avr-arduino-nano" "stm32-f410rb")
+readonly CONFIGS=("native" "avr-arduino-nano" "stm32-f410rb")
 readonly ROOT_DIR="$(pwd)"
-
 
 print_usage() {
   echo "Usage:"
-  echo "  $(basename "$0") <preset>              → build preset (e.g. native, avr)"
-  echo "  $(basename "$0") <preset>/<example>    → build specific example"
-  echo "  $(basename "$0") all                   → build all presets"
+  echo "  $(basename "$0") <config>              → build config (e.g. native, avr-arduino-nano)"
+  echo "  $(basename "$0") <config>/<example>    → build specific example"
+  echo "  $(basename "$0") all                   → build all configs"
   echo
-  echo "Available presets:"
-  for p in "${PRESETS[@]}"; do echo "  - $p"; done
+  echo "Available configs:"
+  for c in "${CONFIGS[@]}"; do echo "  - $c"; done
 }
 
-# Configure and build a preset
-build_preset() {
-  local preset="$1"
-  local build_dir="$ROOT_DIR/build/$preset"
+# Get CMake arguments for a configuration
+get_cmake_args() {
+  local config="$1"
+  local args=""
+  
+  case "$config" in
+    native)
+      # No extra args needed for native
+      ;;
+    avr-arduino-nano)
+      args="-DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/avr-gcc.cmake"
+      args+=" -DBOARD=arduino-nano"
+      args+=" -DEXAMPLES=basic_example"
+      ;;
+    stm32-f410rb)
+      args="-DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/arm-none-eabi-gcc.cmake"
+      args+=" -DBOARD=f410rb"
+      args+=" -DEXAMPLES=basic_example"
+      ;;
+    *)
+      echo "❌ Unknown configuration: $config"
+      exit 1
+      ;;
+  esac
+  
+  echo "$args"
+}
+
+# Configure and build a configuration
+build_config() {
+  local config="$1"
+  local build_dir="$ROOT_DIR/build/$config"
+  local cmake_args
+  cmake_args=$(get_cmake_args "$config")
 
   if [[ ! -f "$build_dir/CMakeCache.txt" ]]; then
-    echo "[${preset}] Configuring..."
-    cmake --preset "$preset"
+    echo "[$config] Configuring..."
+    # shellcheck disable=SC2086
+    cmake -S . -B "$build_dir" $cmake_args
   else
-    echo "[${preset}] Already configured. Skipping cmake --preset."
+    echo "[$config] Already configured. Skipping configure step."
   fi
 
-  echo "[${preset}] Building..."
-  cmake --build --preset "$preset" --parallel
+  echo "[$config] Building..."
+  cmake --build "$build_dir" --parallel
 
-  if [[ "$preset" == "native" ]]; then
-    echo "[${preset}] Testing..."
-    ctest --test-dir "$build_dir" -R PiscoCodeTests  --verbose --output-on-failure
+  if [[ "$config" == "native" ]]; then
+    echo "[$config] Testing..."
+    ctest --test-dir "$build_dir" -R PiscoCodeTests --verbose --output-on-failure
   fi
 
-  echo "[${preset}] Done."
+  echo "[$config] Done."
 }
 
 # Build single example target
 build_example() {
-  local preset="$1"
+  local config="$1"
   local target="$2"
-  local build_dir="$ROOT_DIR/build/$preset"
+  local build_dir="$ROOT_DIR/build/$config"
+  local cmake_args
+  cmake_args=$(get_cmake_args "$config")
 
   if [[ ! -f "$build_dir/CMakeCache.txt" ]]; then
-    echo "[${preset}] Configuring..."
-    cmake --preset "$preset"
+    echo "[$config] Configuring..."
+    # shellcheck disable=SC2086
+    cmake -S . -B "$build_dir" $cmake_args
   fi
 
-  echo "[${preset}] Building target: $target"
+  echo "[$config] Building target: $target"
   cmake --build "$build_dir" --target "$target"
-  echo "[${preset}] Target '$target' done."
+  echo "[$config] Target '$target' done."
   
-  # If it's an AVR preset, show memory usage using avr-size
-  if [[ "$PRESET" == avr-* ]]; then
-    ELF_PATH="build/${PRESET}/examples/avr/${TARGET}"
+  # If it's an AVR config, show memory usage using avr-size
+  if [[ "$config" == avr-* ]]; then
+    ELF_PATH="build/${config}/examples/avr/${target}"
     if [[ -f "${ELF_PATH}" ]]; then
       echo
-      echo "Memory usage for ${TARGET} (Device: atmega328p)"
+      echo "Memory usage for ${target} (Device: atmega328p)"
       avr-size -C --mcu=atmega328p "${ELF_PATH}"
       echo
     else
@@ -87,20 +120,20 @@ fi
 INPUT="$1"
 
 if [[ "$INPUT" == "all" ]]; then
-  for p in "${PRESETS[@]}"; do
-    build_preset "$p"
+  for c in "${CONFIGS[@]}"; do
+    build_config "$c"
   done
 elif [[ "$INPUT" == */* ]]; then
-  PRESET="${INPUT%%/*}"
+  CONFIG="${INPUT%%/*}"
   TARGET="${INPUT##*/}"
-  if [[ ! " ${PRESETS[*]} " =~ " ${PRESET} " ]]; then
-    echo "❌ Error: unknown preset '${PRESET}'"
+  if [[ ! " ${CONFIGS[*]} " =~ " ${CONFIG} " ]]; then
+    echo "❌ Error: unknown config '${CONFIG}'"
     print_usage
     exit 1
   fi
-  build_example "$PRESET" "$TARGET"
-elif [[ " ${PRESETS[*]} " =~ " ${INPUT} " ]]; then
-  build_preset "$INPUT"
+  build_example "$CONFIG" "$TARGET"
+elif [[ " ${CONFIGS[*]} " =~ " ${INPUT} " ]]; then
+  build_config "$INPUT"
 else
   echo "❌ Error: unknown input '$INPUT'"
   print_usage

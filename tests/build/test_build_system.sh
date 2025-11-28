@@ -33,22 +33,25 @@ EXAMPLES=(
 )
 
 say "🔁 Cleaning previous build output..."
-rm -rf "$ROOT_DIR/build/avr" "$ROOT_DIR/build/native"
+rm -rf "$ROOT_DIR/build/avr-arduino-nano" "$ROOT_DIR/build/native"
 
-say "🔧 Configuring AVR preset..."
-cmake --preset avr > "$BUILD_LOG" 2>&1 || { fail "❌ AVR configuration failed"; cat "$BUILD_LOG"; exit 1; }
+say "🔧 Configuring AVR build..."
+cmake -S . -B build/avr-arduino-nano \
+    -DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/avr-gcc.cmake \
+    -DBOARD=arduino-nano \
+    -DEXAMPLES=basic_example > "$BUILD_LOG" 2>&1 || { fail "❌ AVR configuration failed"; cat "$BUILD_LOG"; exit 1; }
 
 for EXAMPLE in "${EXAMPLES[@]}"; do
   TARGET="${EXAMPLE##*/}"
-  HEX="build/avr/examples/avr/${TARGET}.hex"
+  HEX="build/avr-arduino-nano/examples/avr/${TARGET}.hex"
   say "🔨 Building example: $EXAMPLE"
-  cmake --build build/avr --target "$TARGET" > "$BUILD_LOG" 2>&1 || { fail "❌ Build failed for $TARGET"; cat "$BUILD_LOG"; exit 1; }
+  cmake --build build/avr-arduino-nano --target "$TARGET" > "$BUILD_LOG" 2>&1 || { fail "❌ Build failed for $TARGET"; cat "$BUILD_LOG"; exit 1; }
   say "🧪 Verifying hex output for: $TARGET"
   assert_file_exists "$HEX"
 done
 
-say "🔧 Configuring native preset..."
-cmake --preset native > "$BUILD_LOG" 2>&1 || { fail "❌ Native configuration failed"; cat "$BUILD_LOG"; exit 1; }
+say "🔧 Configuring native build..."
+cmake -S . -B build/native > "$BUILD_LOG" 2>&1 || { fail "❌ Native configuration failed"; cat "$BUILD_LOG"; exit 1; }
 
 say "🔨 Building native (library + tests)..."
 cmake --build build/native > "$BUILD_LOG" 2>&1 || { fail "❌ Native build failed"; cat "$BUILD_LOG"; exit 1; }

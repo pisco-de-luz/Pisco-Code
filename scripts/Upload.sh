@@ -3,7 +3,7 @@ set -euo pipefail
 
 # -----------------------------------------------------------------------------
 # Upload.sh — Unified uploader using CMake custom upload targets
-# Usage: Upload.sh <preset>/<example> [--dry-run]
+# Usage: Upload.sh <config>/<example> [--dry-run]
 # -----------------------------------------------------------------------------
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -16,8 +16,8 @@ function fail() { echo -e "\033[1;31m$1\033[0m"; }
 
 # --- Args ---
 if [[ $# -lt 1 || $# -gt 2 ]]; then
-  fail "❌ Usage: ./scripts/Upload.sh <preset>/<example> [--dry-run]"
-  say  "Example: ./scripts/Upload.sh avr/basic_example"
+  fail "❌ Usage: ./scripts/Upload.sh <config>/<example> [--dry-run]"
+  say  "Example: ./scripts/Upload.sh avr-arduino-nano/basic_example"
   exit 1
 fi
 
@@ -25,17 +25,16 @@ INPUT="$1"
 DRY_RUN="${2:-}"
 
 if [[ "$INPUT" != */* ]]; then
-  fail "❌ Invalid format. Use: <preset>/<example>"
+  fail "❌ Invalid format. Use: <config>/<example>"
   exit 1
 fi
 
-PRESET="${INPUT%%/*}"
+CONFIG="${INPUT%%/*}"
 TARGET="${INPUT##*/}"
 UPLOAD_TARGET="${TARGET}_upload"
-# UPLOAD_TARGET="${TARGET}"
-BUILD_DIR="build/$PRESET"
+BUILD_DIR="build/$CONFIG"
 
-say "🚀 Uploading '$TARGET' using preset '$PRESET'"
+say "🚀 Uploading '$TARGET' using config '$CONFIG'"
 say "📁 Build folder: $BUILD_DIR"
 say "🎯 CMake target: $UPLOAD_TARGET"
 

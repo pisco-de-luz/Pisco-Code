@@ -132,8 +132,8 @@ echo "Test 1: Native Build (with tests)"
 echo "=========================================="
 cd "$PROJECT_ROOT"
 rm -rf build/native
-cmake --preset=native
-cmake --build --preset=native
+cmake -S . -B build/native
+cmake --build build/native
 echo "✅ Native build succeeded"
 echo ""
 
@@ -143,8 +143,11 @@ echo "Test 2: AVR Build (Arduino Nano)"
 echo "=========================================="
 cd "$PROJECT_ROOT"
 rm -rf build/avr-arduino-nano
-cmake --preset=avr-arduino-nano
-cmake --build --preset=avr-arduino-nano
+cmake -S . -B build/avr-arduino-nano \
+    -DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/avr-gcc.cmake \
+    -DBOARD=arduino-nano \
+    -DEXAMPLES=basic_example
+cmake --build build/avr-arduino-nano
 echo "✅ AVR build succeeded"
 echo ""
 
@@ -154,7 +157,10 @@ echo "Test 3: STM32 Build (Nucleo F410RB)"
 echo "=========================================="
 cd "$PROJECT_ROOT"
 rm -rf build/stm32-f410rb
-cmake --preset=stm32-f410rb
+cmake -S . -B build/stm32-f410rb \
+    -DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/arm-none-eabi-gcc.cmake \
+    -DBOARD=f410rb \
+    -DEXAMPLES=basic_example
 cmake --build build/stm32-f410rb --target basic_example
 echo "✅ STM32 build succeeded"
 echo ""
@@ -168,7 +174,7 @@ rm -rf "$TEMP_PROJECT"
 mkdir -p "$TEMP_PROJECT"
 
 cat > "$TEMP_PROJECT/CMakeLists.txt" << 'EOFTEST'
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.14)
 project(TestConsumer LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 20)
