@@ -27,7 +27,7 @@ set(PISCO_CODE_LIB_SOURCES
 # Hosted objects for tests and hosted builds
 add_library(PiscoCodeObjects OBJECT ${PISCO_CODE_LIB_SOURCES})
 target_include_directories(PiscoCodeObjects PUBLIC ${PISCO_CODE_INCLUDE_DIR})
-target_compile_features(PiscoCodeObjects PUBLIC cxx_std_11)
+target_compile_features(PiscoCodeObjects PUBLIC cxx_std_17)
 target_compile_options(PiscoCodeObjects PRIVATE
   -Wall -Wextra -Wpedantic
   -ffunction-sections -fdata-sections
@@ -40,7 +40,7 @@ add_library(pisco_mcu_flags INTERFACE)
 # Bare objects for embedded builds
 add_library(PiscoCodeObjectsBare OBJECT ${PISCO_CODE_LIB_SOURCES})
 target_include_directories(PiscoCodeObjectsBare PUBLIC ${PISCO_CODE_INCLUDE_DIR})
-target_compile_features(PiscoCodeObjectsBare PUBLIC cxx_std_11)
+target_compile_features(PiscoCodeObjectsBare PUBLIC cxx_std_17)
 target_compile_definitions(PiscoCodeObjectsBare PUBLIC PISCO_FREESTANDING=1)
 target_compile_options(PiscoCodeObjectsBare PRIVATE
 -Wall -Wextra -Wpedantic
