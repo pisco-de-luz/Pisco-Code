@@ -239,6 +239,12 @@ To build and flash the examples on different targets, use the provided scripts.
 ./scripts/Build.sh native
 ```
 
+#### To test CMake integration (for developers):
+```bash
+./scripts/test-cmake-integration.sh
+```
+This script verifies that the library works correctly in all modes: native builds, cross-compilation (AVR/STM32), and as a subproject.
+
 These commands are backed by the `CMakePresets.json` file, which defines toolchains and build configurations for each supported target.
 
 ## Installation
