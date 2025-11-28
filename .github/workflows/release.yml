@@ -62,56 +62,33 @@ jobs:
           body: |
             # Pisco Code Library ${{ steps.get_version.outputs.VERSION }}
             
-            ## Library-Only Distribution
+            ## Quick Integration (CMake FetchContent)
             
-            This release contains only the library files needed for integration:
-            - `include/` - Header files
-            - `src/` - Implementation files  
-            - `CMakeLists.txt` - Library build configuration
-            - `README.md` - Usage documentation
-            - `LICENSE` - License information
-            
-            ## Integration Methods
-            
-            ### Method 1: Download and Extract (Offline-Friendly)
-            ```bash
-            wget https://github.com/${{ github.repository }}/releases/download/${{ steps.get_version.outputs.VERSION }}/pisco-code-${{ steps.get_version.outputs.VERSION }}.tar.gz
-            tar -xzf pisco-code-${{ steps.get_version.outputs.VERSION }}.tar.gz -C libs/
-            ```
-            
-            CMakeLists.txt:
             ```cmake
-            add_subdirectory(libs/pisco-code-${{ steps.get_version.outputs.VERSION }})
-            target_link_libraries(your_project PRIVATE PiscoCodeCore)
-            # Or for bare-metal/freestanding: target_link_libraries(your_project PRIVATE PiscoCodeCoreBare)
-            ```
+            set(PISCO_CODE_VERSION "${{ steps.get_version.outputs.VERSION }}")
             
-            ### Method 2: CMake FetchContent (Automatic Download)
-            ```cmake
             include(FetchContent)
-            FetchContent_Declare(
-              pisco_code
-              URL https://github.com/${{ github.repository }}/releases/download/${{ steps.get_version.outputs.VERSION }}/pisco-code-${{ steps.get_version.outputs.VERSION }}.tar.gz
+            FetchContent_Declare(pisco_code
+              URL https://github.com/${{ github.repository }}/releases/download/${PISCO_CODE_VERSION}/pisco-code-${PISCO_CODE_VERSION}.tar.gz
             )
             FetchContent_MakeAvailable(pisco_code)
             
             target_link_libraries(your_project PRIVATE PiscoCodeCore)
+            # Or for bare-metal: target_link_libraries(your_project PRIVATE PiscoCodeCoreBare)
             ```
             
-            ### Method 3: Git Submodule
-            ```bash
-            git submodule add https://github.com/${{ github.repository }}.git libs/pisco-code
-            git submodule update --init
-            ```
+            ## Requirements
+            - CMake 3.14+
+            - C++11 compatible compiler
             
-            CMakeLists.txt:
-            ```cmake
-            add_subdirectory(libs/pisco-code)
-            target_link_libraries(your_project PRIVATE PiscoCodeCore)
-            ```
+            ## Package Contents
+            - `include/` - Header files
+            - `src/` - Implementation files  
+            - `CMakeLists.txt` - Build configuration
+            - `INTEGRATION.md` - Detailed integration guide
             
             ## Checksums
-            Verify your download with the provided checksums.txt file.
+            Verify your download with checksums.txt
           draft: false
           prerelease: false
         env:
