@@ -3,19 +3,19 @@
 # // Description: CMake file for src directory
 # // Author:      Andre Viegas
 # // Date:        2025.04
-# // Version:     1.1
+# // Version:     1.3
 # //--------------------------------------------------------------------------------------------
 
 # Public headers
 # Support both main project and subproject modes
 if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
-    set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
+    set(PISCO_CODE_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 else()
-    set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../include)
+    set(PISCO_CODE_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 endif()
 
 # Sources listed explicitly
-set(LIB_SOURCES
+set(PISCO_CODE_LIB_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/signal_emitter.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/signal_sequencer.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/signal_stack.cpp
@@ -25,8 +25,8 @@ set(LIB_SOURCES
 )
 
 # Hosted objects for tests and hosted builds
-add_library(PiscoCodeObjects OBJECT ${LIB_SOURCES})
-target_include_directories(PiscoCodeObjects PUBLIC ${INCLUDE_DIR})
+add_library(PiscoCodeObjects OBJECT ${PISCO_CODE_LIB_SOURCES})
+target_include_directories(PiscoCodeObjects PUBLIC ${PISCO_CODE_INCLUDE_DIR})
 target_compile_features(PiscoCodeObjects PUBLIC cxx_std_11)
 target_compile_options(PiscoCodeObjects PRIVATE
   -Wall -Wextra -Wpedantic
@@ -38,8 +38,8 @@ add_library(pisco_mcu_flags INTERFACE)
 
 
 # Bare objects for embedded builds
-add_library(PiscoCodeObjectsBare OBJECT ${LIB_SOURCES})
-target_include_directories(PiscoCodeObjectsBare PUBLIC ${INCLUDE_DIR})
+add_library(PiscoCodeObjectsBare OBJECT ${PISCO_CODE_LIB_SOURCES})
+target_include_directories(PiscoCodeObjectsBare PUBLIC ${PISCO_CODE_INCLUDE_DIR})
 target_compile_features(PiscoCodeObjectsBare PUBLIC cxx_std_11)
 target_compile_definitions(PiscoCodeObjectsBare PUBLIC PISCO_FREESTANDING=1)
 target_compile_options(PiscoCodeObjectsBare PRIVATE
@@ -65,13 +65,13 @@ target_sources(PiscoCodeObjectsBare PRIVATE
 
 # Hosted static lib
 add_library(PiscoCodeCore STATIC $<TARGET_OBJECTS:PiscoCodeObjects>)
-target_include_directories(PiscoCodeCore PUBLIC ${INCLUDE_DIR})
+target_include_directories(PiscoCodeCore PUBLIC ${PISCO_CODE_INCLUDE_DIR})
 # Note: --gc-sections is useful but shouldn't be forced on consumers
 # Consumers can add it themselves if needed via CMAKE_EXE_LINKER_FLAGS
 
 # Bare static lib
 add_library(PiscoCodeCoreBare STATIC $<TARGET_OBJECTS:PiscoCodeObjectsBare>)
-target_include_directories(PiscoCodeCoreBare PUBLIC ${INCLUDE_DIR})
+target_include_directories(PiscoCodeCoreBare PUBLIC ${PISCO_CODE_INCLUDE_DIR})
 # Note: --gc-sections is useful but shouldn't be forced on consumers
 # Consumers can add it themselves if needed via CMAKE_EXE_LINKER_FLAGS
 
