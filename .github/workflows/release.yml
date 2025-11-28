@@ -27,33 +27,19 @@ jobs:
           cp -r src/ release/pisco-code-${{ steps.get_version.outputs.VERSION }}/
           cp CMakeLists.txt release/pisco-code-${{ steps.get_version.outputs.VERSION }}/
           cp README.md release/pisco-code-${{ steps.get_version.outputs.VERSION }}/
+          cp INTEGRATION.md release/pisco-code-${{ steps.get_version.outputs.VERSION }}/
           cp LICENSE release/pisco-code-${{ steps.get_version.outputs.VERSION }}/
           
-      - name: Create library-only CMakeLists.txt
+      - name: Verify release package structure
         run: |
-          cat > release/pisco-code-${{ steps.get_version.outputs.VERSION }}/CMakeLists.txt << 'EOF'
-          cmake_minimum_required(VERSION 3.17)
-          project(pisco_code VERSION 1.0.0 LANGUAGES CXX)
-          
-          set(CMAKE_CXX_STANDARD 17)
-          set(CMAKE_CXX_STANDARD_REQUIRED ON)
-          
-          # Library definition
-          add_library(pisco_code
-              src/signal_emitter.cpp
-              src/signal_controller.cpp
-              src/led_controller_software_pwm.cpp
-              src/led_controller_hardware_pwm.cpp
-          )
-          
-          target_include_directories(pisco_code 
-              PUBLIC 
-                  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-                  $<INSTALL_INTERFACE:include>
-          )
-          
-          target_compile_features(pisco_code PUBLIC cxx_std_17)
-          EOF
+          echo "=== Release Package Contents ==="
+          ls -la release/pisco-code-${{ steps.get_version.outputs.VERSION }}/
+          echo "=== Source Files ==="
+          ls -la release/pisco-code-${{ steps.get_version.outputs.VERSION }}/src/
+          echo "=== Freestanding Shims ==="
+          ls -la release/pisco-code-${{ steps.get_version.outputs.VERSION }}/src/freestanding/
+          echo "=== Header Files ==="
+          ls -la release/pisco-code-${{ steps.get_version.outputs.VERSION }}/include/
           
       - name: Create archives
         run: |
@@ -85,18 +71,43 @@ jobs:
             - `README.md` - Usage documentation
             - `LICENSE` - License information
             
-            ## Integration
+            ## Integration Methods
             
-            ### Download and Extract
+            ### Method 1: Download and Extract (Offline-Friendly)
             ```bash
             wget https://github.com/${{ github.repository }}/releases/download/${{ steps.get_version.outputs.VERSION }}/pisco-code-${{ steps.get_version.outputs.VERSION }}.tar.gz
             tar -xzf pisco-code-${{ steps.get_version.outputs.VERSION }}.tar.gz -C libs/
             ```
             
-            ### CMake Integration
+            CMakeLists.txt:
             ```cmake
             add_subdirectory(libs/pisco-code-${{ steps.get_version.outputs.VERSION }})
-            target_link_libraries(your_project pisco_code)
+            target_link_libraries(your_project PRIVATE PiscoCodeCore)
+            # Or for bare-metal/freestanding: target_link_libraries(your_project PRIVATE PiscoCodeCoreBare)
+            ```
+            
+            ### Method 2: CMake FetchContent (Automatic Download)
+            ```cmake
+            include(FetchContent)
+            FetchContent_Declare(
+              pisco_code
+              URL https://github.com/${{ github.repository }}/releases/download/${{ steps.get_version.outputs.VERSION }}/pisco-code-${{ steps.get_version.outputs.VERSION }}.tar.gz
+            )
+            FetchContent_MakeAvailable(pisco_code)
+            
+            target_link_libraries(your_project PRIVATE PiscoCodeCore)
+            ```
+            
+            ### Method 3: Git Submodule
+            ```bash
+            git submodule add https://github.com/${{ github.repository }}.git libs/pisco-code
+            git submodule update --init
+            ```
+            
+            CMakeLists.txt:
+            ```cmake
+            add_subdirectory(libs/pisco-code)
+            target_link_libraries(your_project PRIVATE PiscoCodeCore)
             ```
             
             ## Checksums
