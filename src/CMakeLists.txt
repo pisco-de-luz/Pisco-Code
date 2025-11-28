@@ -66,12 +66,14 @@ target_sources(PiscoCodeObjectsBare PRIVATE
 # Hosted static lib
 add_library(PiscoCodeCore STATIC $<TARGET_OBJECTS:PiscoCodeObjects>)
 target_include_directories(PiscoCodeCore PUBLIC ${INCLUDE_DIR})
-target_link_options(PiscoCodeCore INTERFACE -Wl,--gc-sections)
+# Note: --gc-sections is useful but shouldn't be forced on consumers
+# Consumers can add it themselves if needed via CMAKE_EXE_LINKER_FLAGS
 
 # Bare static lib
 add_library(PiscoCodeCoreBare STATIC $<TARGET_OBJECTS:PiscoCodeObjectsBare>)
 target_include_directories(PiscoCodeCoreBare PUBLIC ${INCLUDE_DIR})
-target_link_options(PiscoCodeCoreBare INTERFACE -Wl,--gc-sections)
+# Note: --gc-sections is useful but shouldn't be forced on consumers
+# Consumers can add it themselves if needed via CMAKE_EXE_LINKER_FLAGS
 
 # Aliases for consumers
 add_library(pisco_code::core      ALIAS PiscoCodeCore)
