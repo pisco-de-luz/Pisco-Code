@@ -7,7 +7,12 @@
 # //--------------------------------------------------------------------------------------------
 
 # Public headers
-set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
+# Support both main project and subproject modes
+if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+    set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
+else()
+    set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../include)
+endif()
 
 # Sources listed explicitly
 set(LIB_SOURCES
