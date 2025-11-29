@@ -58,10 +58,6 @@ function(add_stm32_example TARGET_NAME)
         -Wl,--end-group
     )
 
-    # Feed board-specific flags to the library
-    target_compile_options(pisco_mcu_flags INTERFACE ${BOARD_CPU_FLAGS} ${BOARD_FPU_FLAGS})
-    target_link_options(pisco_mcu_flags    INTERFACE ${BOARD_CPU_FLAGS} ${BOARD_FPU_FLAGS})
-
     target_compile_options(${TARGET_NAME} PRIVATE
         ${BOARD_CPU_FLAGS}
         ${BOARD_FPU_FLAGS}

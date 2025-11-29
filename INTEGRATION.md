@@ -1,8 +1,8 @@
-# Pisco Code Library Integration Guide# Pisco Code Library Integration# Pisco Code Library Integration# Pisco Code Library Integration Guide
+# Pisco Code Library Integration Guide# Pisco Code Library Integration Guide# Pisco Code Library Integration# Pisco Code Library Integration# Pisco Code Library Integration Guide
 
 
 
-## Quick Start
+## Quick Start (Hosted Environments)
 
 
 
@@ -12,123 +12,255 @@ Add this to your `CMakeLists.txt`:## Quick Start
 
 ```cmake
 
-# Choose your version
+cmake_minimum_required(VERSION 3.14)
 
-set(PISCO_CODE_VERSION "v1.0.1" CACHE STRING "Pisco Code version to use")Add this to your `CMakeLists.txt`:## Quick Start (Recommended)This guide shows how to integrate the Pisco Code library into your project using various methods.
+project(MyProject LANGUAGES CXX)Add this to your `CMakeLists.txt`:## Quick Start
 
 
 
-include(FetchContent)
+set(PISCO_CODE_VERSION "v1.0.2" CACHE STRING "Pisco Code version")
+
+
+
+include(FetchContent)```cmake
 
 FetchContent_Declare(pisco_code
 
-  URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/${PISCO_CODE_VERSION}/pisco-code-${PISCO_CODE_VERSION}.tar.gz```cmake
+  URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/${PISCO_CODE_VERSION}/pisco-code-${PISCO_CODE_VERSION}.tar.gz# Choose your version
 
-  # URL_HASH SHA256=<hash>  # Add hash from release checksums.txt for verification
+  # URL_HASH SHA256=<hash>  # Add from release checksums.txt for verification
 
-)# Choose your version
+)set(PISCO_CODE_VERSION "v1.0.1" CACHE STRING "Pisco Code version to use")Add this to your `CMakeLists.txt`:## Quick Start (Recommended)This guide shows how to integrate the Pisco Code library into your project using various methods.
 
 FetchContent_MakeAvailable(pisco_code)
 
-set(PISCO_CODE_VERSION "v1.0.1" CACHE STRING "Pisco Code version to use")Add this to your `CMakeLists.txt`:## Quick Start
 
-target_link_libraries(your_project PRIVATE PiscoCodeCore)
+
+add_executable(my_app main.cpp)
+
+target_link_libraries(my_app PRIVATE PiscoCodeCore)include(FetchContent)
 
 ```
 
+FetchContent_Declare(pisco_code
 
+## Requirements
+
+  URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/${PISCO_CODE_VERSION}/pisco-code-${PISCO_CODE_VERSION}.tar.gz```cmake
+
+- CMake 3.14 or later
+
+- C++17 compatible compiler  # URL_HASH SHA256=<hash>  # Add hash from release checksums.txt for verification
+
+
+
+## Available Targets)# Choose your version
+
+
+
+| Target | Description | Use Case |FetchContent_MakeAvailable(pisco_code)
+
+|--------|-------------|----------|
+
+| `PiscoCodeCore` | Full C++ standard library support | Desktop, Linux, hosted environments |set(PISCO_CODE_VERSION "v1.0.1" CACHE STRING "Pisco Code version to use")Add this to your `CMakeLists.txt`:## Quick Start
+
+| `PiscoCodeCoreBare` | Freestanding mode (`-ffreestanding`) | Bare-metal, AVR, STM32, embedded |
+
+target_link_libraries(your_project PRIVATE PiscoCodeCore)
+
+## Bare-Metal / Embedded Integration
+
+```
+
+For embedded targets (AVR, STM32, etc.), use `PiscoCodeCoreBare` with a proper toolchain file.
+
+
+
+**Important**: Your toolchain file must set MCU-specific flags in `CMAKE_CXX_FLAGS_INIT` so they apply to all targets including the library.
 
 ## Requirementsinclude(FetchContent)
 
+### Example: ARM Cortex-M Toolchain
 
 
-- CMake 3.14 or laterFetchContent_Declare(pisco_code
 
-- C++11 compatible compiler (library uses C++17 internally but only requires C++11 from consumers)
+```cmake
 
-  URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/${PISCO_CODE_VERSION}/pisco-code-${PISCO_CODE_VERSION}.tar.gz```cmakeThe Pisco Code library provides two library targets:
+# toolchain-arm-cortex-m4.cmake- CMake 3.14 or laterFetchContent_Declare(pisco_code
+
+set(CMAKE_SYSTEM_NAME Generic)
+
+set(CMAKE_SYSTEM_PROCESSOR arm)- C++11 compatible compiler (library uses C++17 internally but only requires C++11 from consumers)
+
+
+
+set(CMAKE_C_COMPILER arm-none-eabi-gcc)  URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/${PISCO_CODE_VERSION}/pisco-code-${PISCO_CODE_VERSION}.tar.gz```cmakeThe Pisco Code library provides two library targets:
+
+set(CMAKE_CXX_COMPILER arm-none-eabi-g++)
 
 ## Available Targets
 
-  # URL_HASH SHA256=<hash>  # Add hash from release checksums.txt for verification
+# MCU flags - applied to ALL targets
+
+set(CMAKE_C_FLAGS_INIT "-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=softfp")  # URL_HASH SHA256=<hash>  # Add hash from release checksums.txt for verification
+
+set(CMAKE_CXX_FLAGS_INIT "-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=softfp")
 
 | Target | Description | Use Case |
 
-|--------|-------------|----------|)include(FetchContent)- **`PiscoCodeCore`** - Full C++ standard library support (for hosted environments)
+set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
-| `PiscoCodeCore` | Full C++ standard library support | Desktop, Linux, hosted environments |
-
-| `PiscoCodeCoreBare` | Freestanding mode (`-ffreestanding`) | Bare-metal, AVR, STM32, embedded |FetchContent_MakeAvailable(pisco_code)
+```|--------|-------------|----------|)include(FetchContent)- **`PiscoCodeCore`** - Full C++ standard library support (for hosted environments)
 
 
+
+### Example: AVR Toolchain| `PiscoCodeCore` | Full C++ standard library support | Desktop, Linux, hosted environments |
+
+
+
+```cmake| `PiscoCodeCoreBare` | Freestanding mode (`-ffreestanding`) | Bare-metal, AVR, STM32, embedded |FetchContent_MakeAvailable(pisco_code)
+
+# toolchain-avr-atmega328p.cmake
+
+set(CMAKE_SYSTEM_NAME Generic)
+
+set(CMAKE_SYSTEM_PROCESSOR avr)
 
 ## Version Pinning with Hash VerificationFetchContent_Declare(pisco_code- **`PiscoCodeCoreBare`** - Freestanding/bare-metal support (no standard library)
 
+set(CMAKE_C_COMPILER avr-gcc)
+
+set(CMAKE_CXX_COMPILER avr-g++)
 
 
-For production/safety-critical applications, pin to a specific version with hash verification:# Link to your target
+
+# MCU flags - applied to ALL targetsFor production/safety-critical applications, pin to a specific version with hash verification:# Link to your target
+
+set(CMAKE_C_FLAGS_INIT "-mmcu=atmega328p -DF_CPU=16000000UL")
+
+set(CMAKE_CXX_FLAGS_INIT "-mmcu=atmega328p -DF_CPU=16000000UL")
 
 
 
-```cmaketarget_link_libraries(your_target PRIVATE PiscoCodeCore)  URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/v2.0.0/pisco-code-v2.0.0.tar.gz
+set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)```cmaketarget_link_libraries(your_target PRIVATE PiscoCodeCore)  URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/v2.0.0/pisco-code-v2.0.0.tar.gz
+
+```
 
 set(PISCO_CODE_VERSION "v1.0.1" CACHE STRING "Pisco Code version")
 
+### Bare-Metal CMakeLists.txt
+
 # Or for bare-metal: target_link_libraries(your_target PRIVATE PiscoCodeCoreBare)
 
-include(FetchContent)
+```cmake
+
+cmake_minimum_required(VERSION 3.14)include(FetchContent)
+
+project(MyFirmware LANGUAGES C CXX ASM)
 
 FetchContent_Declare(pisco_code```  # URL_HASH SHA256=<hash>  # Uncomment and add hash from release checksums.txt for verification## Requirements
 
+set(PISCO_CODE_VERSION "v1.0.2")
+
   URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/${PISCO_CODE_VERSION}/pisco-code-${PISCO_CODE_VERSION}.tar.gz
 
-  URL_HASH SHA256=abc123...  # Get from release checksums.txt
+include(FetchContent)
 
-)
+FetchContent_Declare(pisco_code  URL_HASH SHA256=abc123...  # Get from release checksums.txt
+
+  URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/${PISCO_CODE_VERSION}/pisco-code-${PISCO_CODE_VERSION}.tar.gz
+
+))
+
+FetchContent_MakeAvailable(pisco_code)
 
 FetchContent_MakeAvailable(pisco_code)That's it! CMake will automatically:)
+
+add_executable(firmware main.cpp startup.s)
+
+target_link_libraries(firmware PRIVATE PiscoCodeCoreBare)```
 
 ```
 
 - Download the release package (cached in `build/_deps/`)
 
-## Bare-Metal / Embedded Example
+Build with:
 
-- Build only the library (examples/tests are auto-disabled)FetchContent_MakeAvailable(pisco_code)- CMake 3.19 or later
+```bash## Bare-Metal / Embedded Example
+
+cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=toolchain-arm-cortex-m4.cmake
+
+cmake --build build- Build only the library (examples/tests are auto-disabled)FetchContent_MakeAvailable(pisco_code)- CMake 3.19 or later
+
+```
 
 ```cmake
 
+## Version Pinning with Hash Verification
+
 cmake_minimum_required(VERSION 3.14)- Make headers available to your project
+
+For safety-critical applications, verify the download with SHA256:
 
 project(MyEmbeddedProject LANGUAGES C CXX)
 
-- C++11 compatible compiler
+```cmake
 
-set(CMAKE_CXX_STANDARD 17)
-
-## Available Targets
-
-set(PISCO_CODE_VERSION "v1.0.1")
-
-# Link to your target- For AVR: avr-gcc toolchain
-
-include(FetchContent)
-
-FetchContent_Declare(pisco_code| Target | Use Case |
+FetchContent_Declare(pisco_code- C++11 compatible compiler
 
   URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/${PISCO_CODE_VERSION}/pisco-code-${PISCO_CODE_VERSION}.tar.gz
 
-)|--------|----------|target_link_libraries(your_target PRIVATE PiscoCodeCore)- For STM32: arm-none-eabi-gcc toolchain
+  URL_HASH SHA256=<hash-from-checksums.txt>set(CMAKE_CXX_STANDARD 17)
 
-FetchContent_MakeAvailable(pisco_code)
+)
 
-| `PiscoCodeCore` | Hosted environments (Linux, Windows, tests) |
+```## Available Targets
+
+
+
+## What Gets Propagated to Your Projectset(PISCO_CODE_VERSION "v1.0.1")
+
+
+
+The library is designed to be non-invasive:# Link to your target- For AVR: avr-gcc toolchain
+
+
+
+| Property | Propagation | Notes |include(FetchContent)
+
+|----------|-------------|-------|
+
+| Include directories | PUBLIC | Required for headers |FetchContent_Declare(pisco_code| Target | Use Case |
+
+| C++17 minimum | PUBLIC | Minimum language requirement |
+
+| Compile warnings | PRIVATE | Not forced on consumers |  URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/${PISCO_CODE_VERSION}/pisco-code-${PISCO_CODE_VERSION}.tar.gz
+
+| Optimization flags | PRIVATE | Not forced on consumers |
+
+| Link flags | PRIVATE | Not forced on consumers |)|--------|----------|target_link_libraries(your_target PRIVATE PiscoCodeCore)- For STM32: arm-none-eabi-gcc toolchain
+
+
+
+## TroubleshootingFetchContent_MakeAvailable(pisco_code)
+
+
+
+### "PiscoCodeCore target not found"| `PiscoCodeCore` | Hosted environments (Linux, Windows, tests) |
+
+Ensure `FetchContent_MakeAvailable(pisco_code)` is called before `target_link_libraries()`.
 
 add_executable(firmware main.cpp)
 
-target_link_libraries(firmware PRIVATE PiscoCodeCoreBare)| `PiscoCodeCoreBare` | Bare-metal/freestanding (AVR, STM32, embedded) |# Or for bare-metal: target_link_libraries(your_target PRIVATE PiscoCodeCoreBare)
+### Binary too large on embedded target
 
-```
+Verify your toolchain sets MCU flags in `CMAKE_CXX_FLAGS_INIT`. Without proper flags, the compiler generates generic code.target_link_libraries(firmware PRIVATE PiscoCodeCoreBare)| `PiscoCodeCoreBare` | Bare-metal/freestanding (AVR, STM32, embedded) |# Or for bare-metal: target_link_libraries(your_target PRIVATE PiscoCodeCoreBare)
+
+
+
+### Hash verification fails```
+
+Download `checksums.txt` from the release page and use the correct SHA256 hash.
 
 
 

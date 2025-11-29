@@ -3,7 +3,7 @@
 # // Description: CMake file for src directory
 # // Author:      Andre Viegas
 # // Date:        2025.04
-# // Version:     1.3
+# // Version:     1.4
 # //--------------------------------------------------------------------------------------------
 
 # Public headers
@@ -33,9 +33,6 @@ target_compile_options(PiscoCodeObjects PRIVATE
   -ffunction-sections -fdata-sections
 )
 
-# A tiny "flag bus" target that will carry MCU compile/link flags
-add_library(pisco_mcu_flags INTERFACE)
-
 
 # Bare objects for embedded builds
 add_library(PiscoCodeObjectsBare OBJECT ${PISCO_CODE_LIB_SOURCES})
@@ -52,9 +49,6 @@ $<$<COMPILE_LANGUAGE:CXX>:
 -fno-threadsafe-statics -fno-use-cxa-atexit
 >
 )
-
-# Make bare objects consume whatever flags the bus provides
-target_link_libraries(PiscoCodeObjectsBare PUBLIC pisco_mcu_flags)
 
 # Build the freestanding shims with the bare objects so they see the define
 target_sources(PiscoCodeObjectsBare PRIVATE
