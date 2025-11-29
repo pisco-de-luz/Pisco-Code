@@ -26,7 +26,7 @@ main()
 
     // Start displaying codes
     emitter_led1.showCode(SignalCode{123}, NumberBase::DEC, NumDigits{0});
-    emitter_led2.showCode(SignalCode{-102}, NumberBase::DEC, NumDigits{0});
+    emitter_led2.showCode(SignalCode{321}, NumberBase::DEC, NumDigits{0});
 
     // Main loop - call every 1ms
     while (emitter_led1.isRunning() || emitter_led2.isRunning())
