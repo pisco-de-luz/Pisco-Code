@@ -3,7 +3,7 @@
 # // Description: CMake file for tests/ directory - Unit tests using CppUTest
 # // Author:      Andre Viegas
 # // Date:        2025.11
-# // Version:     1.3
+# // Version:     1.4
 # //--------------------------------------------------------------------------------------------
 
 set(PISCO_CODE_TEST_SOURCES
@@ -39,7 +39,8 @@ add_executable(PiscoCodeTests
     ${PISCO_CODE_HELPER_SOURCES}
 )
 
-target_compile_features(PiscoCodeTests PRIVATE cxx_std_17)
+# C20 features for tests (designated initializers, etc.)
+target_compile_features(PiscoCodeTests PRIVATE cxx_std_20)
 target_compile_options(PiscoCodeTests PRIVATE -Wall -Wextra -Wpedantic)
 
 target_include_directories(PiscoCodeTests PRIVATE
