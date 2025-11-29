@@ -6,6 +6,9 @@
 # // Version:     2.0
 # //--------------------------------------------------------------------------------------------
 
+# Enable ASM language for startup files
+enable_language(ASM)
+
 include(${CMAKE_CURRENT_LIST_DIR}/stm32_example_macros.cmake)
 
 set(BOARD "f410rb" CACHE STRING "STM32 board under boards/")

@@ -8,8 +8,6 @@
 # // This file only handles example-specific setup: sources, linker script, upload target.
 # //--------------------------------------------------------------------------------------------
 
-enable_language(ASM)
-
 function(add_stm32_example TARGET_NAME)
     set(BOARD_DIR  ${CMAKE_CURRENT_LIST_DIR}/boards/${BOARD})
     set(VENDOR_DIR ${BOARD_DIR}/vendor)
