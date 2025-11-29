@@ -1,4 +1,14 @@
-/* stm32f410rb.ld */
+/* //--------------------------------------------------------------------------------------------
+ * // Linker Script: stm32f410rb.ld
+ * // Description:   Minimal memory layout for STM32F410RB (Nucleo-F410RB board)
+ * // MCU:           STM32F410RB - ARM Cortex-M4 with FPU
+ * // Flash:         128KB
+ * // RAM:           32KB
+ * // 
+ * // Note: Simplified linker script for PiscoCode examples.
+ * //       Based on common ARM Cortex-M linker script patterns.
+ * //--------------------------------------------------------------------------------------------
+ */
 
 MEMORY
 {
