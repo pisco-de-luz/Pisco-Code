@@ -74,12 +74,12 @@ jobs:
             FetchContent_MakeAvailable(pisco_code)
             
             target_link_libraries(your_project PRIVATE PiscoCodeCore)
-            # Or for bare-metal: target_link_libraries(your_project PRIVATE PiscoCodeCoreBare)
+            # Or for bare-metal: target_link_libraries(your_project PRIVATE PiscoCodeBare)
             ```
             
             ## Requirements
             - CMake 3.14+
-            - C++11 compatible compiler
+            - C++17 compatible compiler
             
             ## Package Contents
             - `include/` - Header files

@@ -181,9 +181,13 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_subdirectory(pisco-code)
 
-# Test that library is available
+# Test that library targets are available
 if(NOT TARGET PiscoCodeCore)
     message(FATAL_ERROR "PiscoCodeCore target not found")
+endif()
+
+if(NOT TARGET PiscoCodeBare)
+    message(FATAL_ERROR "PiscoCodeBare target not found")
 endif()
 
 # Create a simple test executable

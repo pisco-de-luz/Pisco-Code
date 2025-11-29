@@ -1,76 +1,71 @@
 # //--------------------------------------------------------------------------------------------
 # // File:        CMakeLists.txt
-# // Description: CMake file for src directory
+# // Description: CMake file for src directory - Library targets only
 # // Author:      Andre Viegas
 # // Date:        2025.04
-# // Version:     1.4
+# // Version:     2.0
+# //--------------------------------------------------------------------------------------------
+# 
+# This file defines the library targets. All compilation flags come from:
+# - The consumer's toolchain file (MCU flags, optimization, embedded C++ flags)
+# - The consumer's CMakeLists.txt
+# 
+# The library only specifies:
+# - Source files
+# - Include directories (PUBLIC)
+# - Minimum C++ standard (PUBLIC)
+# - PISCO_FREESTANDING define for bare-metal target (PUBLIC)
 # //--------------------------------------------------------------------------------------------
 
-# Public headers
-# Support both main project and subproject modes
+# Include directory - support both standalone and subproject modes
 if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
     set(PISCO_CODE_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 else()
     set(PISCO_CODE_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 endif()
 
-# Sources listed explicitly
+# Library source files
 set(PISCO_CODE_LIB_SOURCES
-  ${CMAKE_CURRENT_SOURCE_DIR}/signal_emitter.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/signal_sequencer.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/signal_stack.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/signal_controller.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/led_controller_software_pwm.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/led_controller_hardware_pwm.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/signal_emitter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/signal_sequencer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/signal_stack.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/signal_controller.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/led_controller_software_pwm.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/led_controller_hardware_pwm.cpp
 )
 
-# Hosted objects for tests and hosted builds
-add_library(PiscoCodeObjects OBJECT ${PISCO_CODE_LIB_SOURCES})
-target_include_directories(PiscoCodeObjects PUBLIC ${PISCO_CODE_INCLUDE_DIR})
-target_compile_features(PiscoCodeObjects PUBLIC cxx_std_17)
-target_compile_options(PiscoCodeObjects PRIVATE
-  -Wall -Wextra -Wpedantic
-  -ffunction-sections -fdata-sections
+# Freestanding shims for bare-metal builds
+set(PISCO_CODE_FREESTANDING_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/freestanding/pisco_runtime_shim.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/freestanding/pisco_memory_shim.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/freestanding/pisco_exit_shim.cpp
 )
 
-
-# Bare objects for embedded builds
-add_library(PiscoCodeObjectsBare OBJECT ${PISCO_CODE_LIB_SOURCES})
-target_include_directories(PiscoCodeObjectsBare PUBLIC ${PISCO_CODE_INCLUDE_DIR})
-target_compile_features(PiscoCodeObjectsBare PUBLIC cxx_std_17)
-target_compile_definitions(PiscoCodeObjectsBare PUBLIC PISCO_FREESTANDING=1)
-target_compile_options(PiscoCodeObjectsBare PRIVATE
--Wall -Wextra -Wpedantic
--ffunction-sections -fdata-sections
--ffreestanding -fno-builtin
-$<$<COMPILE_LANGUAGE:CXX>:
--fno-exceptions -fno-rtti
--fno-unwind-tables -fno-asynchronous-unwind-tables
--fno-threadsafe-statics -fno-use-cxa-atexit
->
-)
-
-# Build the freestanding shims with the bare objects so they see the define
-target_sources(PiscoCodeObjectsBare PRIVATE
-  ${CMAKE_CURRENT_SOURCE_DIR}/freestanding/pisco_runtime_shim.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/freestanding/pisco_memory_shim.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/freestanding/pisco_exit_shim.cpp
-)
-
-# Hosted static lib
-add_library(PiscoCodeCore STATIC $<TARGET_OBJECTS:PiscoCodeObjects>)
+# =============================================================================
+# PiscoCodeCore - Hosted library (desktop, Linux, unit tests)
+# =============================================================================
+# Uses standard C++ library. For desktop development and testing.
+#
+add_library(PiscoCodeCore STATIC ${PISCO_CODE_LIB_SOURCES})
 target_include_directories(PiscoCodeCore PUBLIC ${PISCO_CODE_INCLUDE_DIR})
-target_compile_features(PiscoCodeCore PUBLIC cxx_std_11)
-# Note: --gc-sections is useful but shouldn't be forced on consumers
-# Consumers can add it themselves if needed via CMAKE_EXE_LINKER_FLAGS
+target_compile_features(PiscoCodeCore PUBLIC cxx_std_17)
 
-# Bare static lib
-add_library(PiscoCodeCoreBare STATIC $<TARGET_OBJECTS:PiscoCodeObjectsBare>)
-target_include_directories(PiscoCodeCoreBare PUBLIC ${PISCO_CODE_INCLUDE_DIR})
-target_compile_features(PiscoCodeCoreBare PUBLIC cxx_std_11)
-# Note: --gc-sections is useful but shouldn't be forced on consumers
-# Consumers can add it themselves if needed via CMAKE_EXE_LINKER_FLAGS
+# =============================================================================
+# PiscoCodeBare - Bare-metal library (AVR, STM32, embedded)
+# =============================================================================
+# For freestanding/embedded environments. Consumer's toolchain must provide
+# appropriate flags (-fno-exceptions, -fno-rtti, etc.)
+#
+add_library(PiscoCodeBare STATIC 
+    ${PISCO_CODE_LIB_SOURCES}
+    ${PISCO_CODE_FREESTANDING_SOURCES}
+)
+target_include_directories(PiscoCodeBare PUBLIC ${PISCO_CODE_INCLUDE_DIR})
+target_compile_features(PiscoCodeBare PUBLIC cxx_std_17)
+target_compile_definitions(PiscoCodeBare PUBLIC PISCO_FREESTANDING=1)
 
-# Aliases for consumers
-add_library(pisco_code::core      ALIAS PiscoCodeCore)
-add_library(pisco_code::core_bare ALIAS PiscoCodeCoreBare)
+# =============================================================================
+# Aliases for modern CMake consumers
+# =============================================================================
+add_library(pisco_code::core ALIAS PiscoCodeCore)
+add_library(pisco_code::bare ALIAS PiscoCodeBare)
