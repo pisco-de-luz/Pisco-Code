@@ -1,73 +1,57 @@
+// //--------------------------------------------------------------------------------------------
+// // HAL LED implementation for Arduino Nano (ATmega328P)
+// //
+// // LED1 (Onboard): PB5 (D13) - Software PWM (on/off toggle)
+// // LED2 (PWM):     PD3 (D3)  - Hardware PWM via Timer2/OC2B
+// //--------------------------------------------------------------------------------------------
+
 #include "board_config.hpp"
 #include "hal_led.hpp"
-#include "pisco_constants.hpp"
-#include "pisco_types.hpp"
 #include <avr/io.h>
 
 using LedControlCode = pisco_code::LedControlCode;
 using IntensityLevel = pisco_code::IntensityLevel;
+
 namespace
 {
+    inline void ledOnboardOn() noexcept
+    {
+        LED_ONBOARD_PORT |= (1 << LED_ONBOARD_BIT);
+    }
 
     inline void ledOnboardOff() noexcept
     {
-        LED_PORT &= ~(1 << LED_BIT);
+        LED_ONBOARD_PORT &= ~(1 << LED_ONBOARD_BIT);
     }
-    inline void ledOnboardOn() noexcept
+
+    void initOnboardLed() noexcept
     {
-        LED_PORT |= (1 << LED_BIT);
+        // Configure onboard LED (D13/PB5) as output, start OFF
+        LED_ONBOARD_DDR |= (1 << LED_ONBOARD_BIT);
+        ledOnboardOff();
     }
-    inline void ledHwPwmOff() noexcept
+
+    void initPwmLed() noexcept
     {
-        hal_led::ledHwPwmSetLevel(0);
-    }
-    inline void ledHwPwmOn() noexcept
-    {
-        hal_led::ledHwPwmSetLevel(255);
+        // Configure PWM LED (D3/PD3) as output
+        LED_PWM_DDR |= (1 << LED_PWM_BIT);
+
+        // Setup Timer2 for Fast PWM mode on OC2B (PD3)
+        TCCR2A |= (1 << WGM21) | (1 << WGM20); // Fast PWM mode
+        TCCR2B |= (1 << CS21);                 // Prescaler 8
+
+        // Start with LED OFF
+        OCR2B = 0;
+        LED_PWM_PORT &= ~(1 << LED_PWM_BIT);
     }
 
 } // namespace
 
 void
-hal_led::ledOnboardInit() noexcept
+hal_led::init() noexcept
 {
-    // Configure LED1 (D13/PB5) as output
-    LED_DDR |= (1 << LED_BIT);
-    LED_PORT &= ~(1 << LED_BIT); // Start OFF
-}
-
-void
-hal_led::ledHwPwmInit() noexcept
-{
-    // Configure LED2 (D3/PD3) as output
-    PWM_LED_DDR |= (1 << PWM_LED_BIT);
-
-    // Setup Timer2 for Fast PWM mode on OC2B (PD3)
-    TCCR2A |= (1 << WGM21) | (1 << WGM20); // Fast PWM mode
-    TCCR2B |= (1 << CS21);                 // Prescaler 8
-
-    // Start with LED OFF
-    OCR2B = 0; // 0% duty cycle = LED OFF
-    PWM_LED_PORT &= ~(1 << PWM_LED_BIT);
-}
-
-void
-hal_led::ledHwPwmSetLevel(IntensityLevel level) noexcept
-{
-    if (level == 0)
-    {
-        // Disconnect PWM from pin and force LOW
-        TCCR2A &= ~(1 << COM2B1); // Disconnect OC2B from pin
-        TCCR2A &= ~(1 << COM2B0);
-        PWM_LED_PORT &= ~(1 << PWM_LED_BIT); // Force pin LOW
-    }
-    else
-    {
-        // Reconnect PWM to pin
-        TCCR2A |= (1 << COM2B1);  // Clear OC2B on compare match
-        TCCR2A &= ~(1 << COM2B0); // (COM2B1:0 = 10)
-        OCR2B = level;            // Set PWM duty cycle
-    }
+    initOnboardLed();
+    initPwmLed();
 }
 
 bool
@@ -88,20 +72,19 @@ hal_led::ledOnboard(LedControlCode code) noexcept
     }
 }
 
-bool
-hal_led::ledHwPwm(LedControlCode code) noexcept
+void
+hal_led::ledPwmSetLevel(IntensityLevel level) noexcept
 {
-    switch (code)
+    if (level == 0)
     {
-        case LedControlCode::ON:
-            ledHwPwmOn();
-            return true;
-        case LedControlCode::OFF:
-            ledHwPwmOff();
-            return true;
-        case LedControlCode::FUNC_OK:
-            return true;
-        default:
-            return false;
+        // Disconnect PWM from pin and force LOW
+        TCCR2A &= ~((1 << COM2B1) | (1 << COM2B0));
+        LED_PWM_PORT &= ~(1 << LED_PWM_BIT);
+    }
+    else
+    {
+        // Connect PWM to pin (Clear OC2B on compare match)
+        TCCR2A = (TCCR2A & ~(1 << COM2B0)) | (1 << COM2B1);
+        OCR2B  = level;
     }
 }

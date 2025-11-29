@@ -3,12 +3,15 @@
 #include "pisco_code.hpp"
 #include "pisco_types.hpp"
 
-using IntensityLevel = pisco_code::IntensityLevel;
 namespace hal_led
 {
-    void ledOnboardInit() noexcept;
+    // Initialize all LEDs (onboard + PWM)
+    void init() noexcept;
+
+    // Software PWM callback for onboard LED (directly toggled on/off)
     bool ledOnboard(LedControlCode code) noexcept;
-    void ledHwPwmInit() noexcept;
-    void ledHwPwmSetLevel(IntensityLevel level) noexcept;
-    bool ledHwPwm(LedControlCode code) noexcept;
+
+    // Hardware PWM level setter for external LED (0-255 intensity)
+    void ledPwmSetLevel(pisco_code::IntensityLevel level) noexcept;
+
 } // namespace hal_led
