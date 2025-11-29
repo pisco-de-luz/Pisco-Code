@@ -2,25 +2,22 @@
 # // File:        CMakeLists.txt
 # // Description: Main CMake file for the PiscoCode project.
 # // Author:      Andre Viegas
-# // Date:        2025.04
-# // Version:     2.0
+# // Date:        2025.11
+# // Version:     1.3
 # //--------------------------------------------------------------------------------------------
 
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.14)
 project(PiscoCode LANGUAGES C CXX)
 
-# Consumer-friendly options
 option(PISCO_CODE_BUILD_EXAMPLES "Build PiscoCode examples" ON)
 option(PISCO_CODE_BUILD_TESTS "Build PiscoCode tests" ON)
 
 # Detect if we're being included as a subproject
 if(NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-    # We're a subproject - default to not building examples/tests
     set(PISCO_CODE_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
     set(PISCO_CODE_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 endif()
 
-# Build Settings (only if not set by parent project)
 if(NOT CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_STANDARD 17)
 endif()
@@ -34,15 +31,12 @@ endif()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Always build the library
 add_subdirectory(src)
 
-# Conditionally build examples
 if(PISCO_CODE_BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
-# Unit tests (only for native builds and if enabled)
 if(PISCO_CODE_BUILD_TESTS AND NOT CMAKE_CROSSCOMPILING)
     message(STATUS "Native build detected — enabling unit tests.")
     set(CPPUTEST_BUILD_TESTS OFF CACHE BOOL "" FORCE)
