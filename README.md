@@ -74,37 +74,41 @@ PiscoCode is a target-independent library for LED blink-coding. You provide:
 No dynamic memory, no exceptions. Ideal for safety-critical systems.
 
 ```C++
+#include "avr_systick.hpp"
+#include "hal_led.hpp"
 #include "pisco_code.hpp"
-using namespace pisco_code;
 
 int main()
 {
     avr_systick::init_1ms();
-    hal_led::ledOnboardInit();
-    hal_led::ledHwPwmInit();
+    hal_led::init();
 
-    // pisco_code::LedControllerSoftwarePwm controller_led1(hal_led::ledHwPwm);
+    // LED1: Software PWM controller (on/off toggle for onboard LED)
     pisco_code::LedControllerSoftwarePwm controller_led1(hal_led::ledOnboard);
-    pisco_code::LedControllerHardwarePwm controller_led2(hal_led::ledHwPwmSetLevel);
-        
-    pisco_code::SignalEmitter emitter_led1(&controller_led1);
-    pisco_code::SignalEmitter emitter_led2(&controller_led2);
+    pisco_code::SignalEmitter            emitter_led1(&controller_led1);
 
+    // LED2: Hardware PWM controller (smooth dimming for external LED)
+    pisco_code::LedControllerHardwarePwm controller_led2(hal_led::ledPwmSetLevel);
+    pisco_code::SignalEmitter            emitter_led2(&controller_led2);
+
+    // Start displaying codes
     emitter_led1.showCode(SignalCode{123}, NumberBase::DEC, NumDigits{0});
-    emitter_led2.showCode(SignalCode{-103}, NumberBase::DEC, NumDigits{0});
+    emitter_led2.showCode(SignalCode{-102}, NumberBase::DEC, NumDigits{0});
 
+    // Main loop - call every 1ms
     while (emitter_led1.isRunning() || emitter_led2.isRunning())
     {
         emitter_led1.loop();
         emitter_led2.loop();
         avr_systick::delay_ms(1);
     }
-    for (;;)
-    {
-    }
+
+    // Halt
+    for (;;) {}
 }
 ```
 
+For detailed CMake integration instructions, see [INTEGRATION.md](INTEGRATION.md).
 
 # AVR Build and Upload Options
 
@@ -116,104 +120,192 @@ You can override variables such as the target board, programmer type, upload por
 Configure builds by passing variables to CMake:
 
 ```bash
-# Example: Build with Arduino as ISP programmer
+# Example: Build with Arduino bootloader programmer
 cmake -S . -B build/avr-arduino-nano \
     -DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/avr-gcc.cmake \
     -DBOARD=arduino-nano \
     -DEXAMPLES=basic_example \
-    -DAVR_UPLOAD_PROGRAMMER=stk500v1 \
-    -DAVR_UPLOAD_PORT=/dev/ttyACM0 \
-    -DAVR_UPLOAD_BAUD=19200
+    -DBOARD_UPLOAD_PROGRAMMER=arduino \
+    -DBOARD_UPLOAD_PORT=/dev/ttyUSB0 \
+    -DBOARD_UPLOAD_BAUD=57600
 ```
 
 ```bash
-# Example: Build with USBasp programmer
+# Example: Build with USBasp programmer (default)
 cmake -S . -B build/avr-arduino-nano \
     -DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/avr-gcc.cmake \
     -DBOARD=arduino-nano \
-    -DEXAMPLES=basic_example \
-    -DAVR_UPLOAD_PROGRAMMER=usbasp
+    -DEXAMPLES=basic_example
 ```
 
-Or use the convenience script `./scripts/Build.sh avr-arduino-nano` which handles default configuration.
+Or use the convenience script which handles default configuration:
+
+```bash
+./scripts/Build.sh avr-arduino-nano
 ```
 
-## Showing PiscoCodes, calling showCode() Function
+## Showing PiscoCodes - The showCode() Method
 
-The showCode() function needs two arguments, the "code-to-show" and the "base" to use. It will return three possible status codes.
- ```C++
-    const SignalCode  signal_code{-102};
-    const NumDigits   num_digits{0};
-    const RepeatTimes repeats{3};
-    emitter_led1.showCode(signal_code, NumberBase::DEC, num_digits, repeats);
- ```
+The `showCode()` method starts displaying a numeric code on the LED. It takes three arguments.
+
+```C++
+emitter.showCode(SignalCode{-102}, NumberBase::DEC, NumDigits{0});
+```
 
 ### Arguments
 
-| Argument               | Description                                            |
-| ---:                   | :---                                                   |
-| `signal_code`            | Signed integer value to be encoded as LED blinks. Valid range: `-999999999` to `999999999`.  |
-| `base`               | Numeric base used to display the code. Use one of: `NumberBase::DEC`, `NumberBase::HEX`, `NumberBase::OCT` or `NumberBase::BIN` |
-| `num_digits`   | Minimum number of digits to display. If set to `0`, the digit count is determined automatically. Use this to pad with leading zeros when needed. |
-| `repeats`      | Number of times the full code should be repeated. Set to `1` for a single display, or any positive number. |
+| Argument       | Type         | Description                                            |
+| :---           | :---         | :---                                                   |
+| `code`         | `SignalCode` | Signed integer value to be encoded as LED blinks. Valid range depends on base (e.g., `-999999999` to `999999999` for decimal). |
+| `base`         | `NumberBase` | Numeric base: `NumberBase::DEC`, `NumberBase::HEX`, `NumberBase::OCT`, or `NumberBase::BIN` |
+| `num_digits`   | `NumDigits`  | Minimum number of digits to display. Set to `0` for automatic, or use a value to pad with leading zeros. |
 
-### Status Code Returned
+### Return Value
 
-| Status Code            | Description                                            |
-| ---:                   | :---                                                   |
-| TRUE                   | This function accepted the code-to-show and base passed as arguments and will start showing the code shortly. |
-| FALSE       | This function is still working in the previous code and can not accept any new tasks. |
+| Return Value | Description                                            |
+| :---         | :---                                                   |
+| `true`       | Code accepted and will start displaying shortly. |
+| `false`      | Emitter is busy with a previous code. Wait for `isRunning()` to return `false`. |
+
+### Repeat Control
+
+To repeat the code multiple times, use `setRepeatTimes()` before calling `showCode()`:
+
+```C++
+emitter.setRepeatTimes(RepeatTimes{3});  // Repeat 3 times
+emitter.showCode(SignalCode{42}, NumberBase::DEC, NumDigits{0});
+```
+
+| Method                              | Description                                  |
+| :---                                | :---                                         |
+| `setRepeatTimes(RepeatTimes times)` | Sets how many times to repeat the full code sequence. Default is `1`. |
+| `getRepeatTimes()`                  | Returns the current repeat count setting. |
 
 
 ### Custom Settings
-You can customize the brightness levels used during the blink sequence using the following methods:
 
-| Method         | Desciption                                  |
-| :---           | :---                                        |
-| `setHighLevel(IntensityLevel level)`   | Sets the LED brightness level for "high_level" pulses (i.e., when a bit is active). Use this to adjust the maximum intensity of blinks. Valid range: `0` (off) to `PWM_MAX` (full brightness). |
-| `setLowLevel(IntensityLevel level)` | Sets the LED brightness for "base" intervals between pulses. Use this to reduce contrast or prevent full-off between blinks. Valid range: `0` to value lower than or equal to `setHighLevel()`. |
+Customize the brightness levels used during the blink sequence. These methods are called on the **controller**, not the emitter.
+
+| Method                              | Description                                  |
+| :---                                | :---                                         |
+| `setHighLevel(IntensityLevel level)` | Sets brightness for "on" pulses (blinks). Valid range: `0` to `255`. |
+| `setLowLevel(IntensityLevel level)`  | Sets brightness for "base" state between pulses. Valid range: `0` to `255`. |
+| `getPeakLevel()`                     | Returns the current high level setting. |
+| `getBaseLevel()`                     | Returns the current low level setting. |
 
 #### Default values:
 
-- PeakLevel = PWM_MAX
-- BaseLevel = DEFAULT_LOW_LEVEL (typically a low but visible level)
+| Constant             | Value | Description |
+| :---                 | :---  | :---        |
+| `DEFAULT_HIGH_LEVEL` | 200   | Default brightness for blinks |
+| `DEFAULT_LOW_LEVEL`  | 50    | Default brightness for base state |
 
 These settings are optional. If not configured, the library uses defaults suitable for most cases.
 
 ```C++
-LedControllerSoftwarePwm controller_led1(hal_led::led1);
-SignalEmitter            emitter_led1(&controller_led1);
+pisco_code::LedControllerSoftwarePwm controller(hal_led::ledOnboard);
+pisco_code::SignalEmitter            emitter(&controller);
 
-emitter_led1.setHighLevel(10);
-emitter_led1.setLowLevel(3);
+// Customize brightness levels on the CONTROLLER
+controller.setHighLevel(180);
+controller.setLowLevel(30);
+
+// Set repeat count on the EMITTER  
+emitter.setRepeatTimes(RepeatTimes{2});
+
+// Start displaying
+emitter.showCode(SignalCode{123}, NumberBase::DEC, NumDigits{0});
+```
+
+## Controller Types
+
+PiscoCode provides two controller types for different LED hardware configurations:
+
+### LedControllerSoftwarePwm
+
+For LEDs controlled via GPIO on/off (software-simulated PWM). The callback receives `LedControlCode::ON` or `LedControlCode::OFF`.
+
+```C++
+// Callback signature: bool function(LedControlCode)
+bool ledCallback(LedControlCode code) {
+    if (code == LedControlCode::ON) {
+        // Turn LED on
+    } else {
+        // Turn LED off
+    }
+    return true;
+}
+
+pisco_code::LedControllerSoftwarePwm controller(ledCallback);
+```
+
+### LedControllerHardwarePwm
+
+For LEDs with hardware PWM support. The callback receives an intensity level (0-255).
+
+```C++
+// Callback signature: void function(IntensityLevel)
+void pwmCallback(IntensityLevel level) {
+    // Set PWM duty cycle (0-255)
+    TIM2->CCR1 = level;
+}
+
+pisco_code::LedControllerHardwarePwm controller(pwmCallback);
+```
+
+### Deferred Attachment
+
+Both controllers support deferred attachment for cases where the callback isn't available at construction time:
+
+```C++
+pisco_code::LedControllerSoftwarePwm controller;  // Default constructor
+
+// Later, when ready:
+controller.attachLedControl(ledCallback);
+
+if (controller.isAttached()) {
+    // Ready to use
+}
 ```
 
 ## Runtime Control
 
 These methods allow you to monitor and control the execution of LED blink sequences.
 
-| Method         | Desciption                                  |
-| :---           | :---                                        |
-| `loop()`       | Must be called exactly once per millisecond. Drives the internal timing and state machine. If not called regularly, the LED signal timing will break. This method is non-blocking and fast. |
-| `isRunning()`  | Returns `true` if a signal is currently being shown on the LED. Use this to check whether the current code has finished displaying or is still in progress. |
+| Method         | Description                                  |
+| :---           | :---                                         |
+| `loop()`       | Must be called exactly once per millisecond. Drives the internal timing and state machine. Non-blocking and fast. |
+| `isRunning()`  | Returns `true` if a signal is currently being displayed. |
 
 ### Example
 
 ```C++
-blinker.showCode(123, NumberBase::DEC, 0, 1);
+pisco_code::LedControllerSoftwarePwm controller(hal_led::ledOnboard);
+pisco_code::SignalEmitter            emitter(&controller);
 
-while (blinker.isRunning()) {
-    blinker.loop();     // must be called every 1 ms
-    delay_1ms();        // implement this with a timer or busy wait
+emitter.showCode(SignalCode{123}, NumberBase::DEC, NumDigits{0});
+
+while (emitter.isRunning()) {
+    emitter.loop();     // Must be called every 1 ms
+    delay_1ms();        // Your platform's delay function
 }
 ```
 
-### Notes:
+### Notes
 
-* `loop()` advances the LED pattern by 1 ms. You are responsible for calling it at a steady 1 kHz rate (e.g., using `_delay_ms(1)`, `SysTick`, or RTOS task).
+* `loop()` advances the LED pattern by 1 ms. You are responsible for calling it at a steady 1 kHz rate (e.g., using `_delay_ms(1)`, `SysTick`, or RTOS task).
 * `isRunning()` is useful to wait for the current signal to complete before showing another code or putting the device to sleep.
 
-### Build and Upload
+## Value Limits by Base
+
+| Base  | Max Digits | Value Range |
+| :---  | :---       | :---        |
+| BIN   | 8          | ±0b11111111 |
+| OCT   | 9          | ±0777777777 |
+| DEC   | 9          | ±999999999 |
+| HEX   | 7          | ±0xFFFFFFF |
+
+## Build and Upload
 
 To build and flash the examples on different targets, use the provided scripts. 
 
@@ -244,7 +336,7 @@ This script verifies that the library works correctly in all modes: native build
 
 ### Download Release Package (Recommended)
 
-1. Go to [Releases](https://github.com/andrev/Pisco-Code/releases)
+1. Go to [Releases](https://github.com/pisco-de-luz/Pisco-Code/releases)
 2. Download the latest `pisco-code-vX.X.X.tar.gz` 
 3. Extract to your project:
 
@@ -255,8 +347,12 @@ tar -xzf pisco-code-v1.0.0.tar.gz -C libs/
 4. Add to your CMakeLists.txt:
 ```cmake
 add_subdirectory(libs/pisco-code-v1.0.0)
-target_link_libraries(your_project pisco_code)
+target_link_libraries(your_project PRIVATE pisco_code::core)  # For desktop/tests
+# OR
+target_link_libraries(your_project PRIVATE pisco_code::bare)  # For embedded (AVR, STM32)
 ```
+
+For detailed CMake integration examples including cross-compilation toolchains, FetchContent usage, and subproject integration, see [INTEGRATION.md](INTEGRATION.md).
 
 ### Verify Download
 ```bash
