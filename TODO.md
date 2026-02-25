@@ -20,6 +20,7 @@
 - [ ] Create comprehensive unit tests for new controller architecture
 
 ## Low Priority / Future
+- [ ] Replace `limits_for(base)` `constexpr switch` with a policy template `BaseLimits<NumberBase::DEC>` for zero-overhead compile-time dispatch
 - [ ] Add sound signal controller
 - [ ] Add vibration signal controller  
 - [ ] Performance optimization for embedded systems
@@ -37,6 +38,8 @@
 
 ## Code Quality Improvements Made
 - [x] Refactor `SignalElement` constructor parameters
+- [ ] Rename `bit_mask()` to `capacity_for_bits()` — current name is misleading; the function computes the maximum number of values that fit in N bits, not a bitmask
+- [ ] Express `DEFAULT_HIGH_LEVEL`, `DEFAULT_LOW_LEVEL` and `MIN_INTENSITY_DIFFERENCE` as percentages of `MAX_BYTE_VALUE` instead of hardcoded absolute values
 - [ ] Update constants with 'U' suffix for consistency
 - [x] Rename `MIN_PULSE_BASE_GAP` to `MIN_INTENSITY_DIFFERENCE`
 - [x] Improve type safety with `NumDigits`, `Index`, `Counter` types
@@ -62,6 +65,7 @@
 - [ ] Performance characteristics documentation
 
 ## Safety-Critical Considerations
+- [ ] Delete copy constructor and copy assignment in `SignalEmitter` (`= delete`) to prevent two emitters sharing the same raw `SignalController*` pointer and corrupting state
 - [ ] Implement fail-safe behavior for invalid controller states
 - [ ] Add static analysis tool configuration
 - [ ] Create safety validation test suite
