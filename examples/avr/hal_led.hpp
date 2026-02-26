@@ -9,7 +9,7 @@ namespace hal_led
     void init() noexcept;
 
     // Software PWM callback for onboard LED (directly toggled on/off)
-    bool ledOnboard(LedControlCode code) noexcept;
+    bool ledOnboard(pisco_code::LedControlCode code) noexcept;
 
     // Hardware PWM level setter for external LED (0-255 intensity)
     void ledPwmSetLevel(pisco_code::IntensityLevel level) noexcept;
