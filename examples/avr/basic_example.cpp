@@ -9,6 +9,10 @@
 #include "hal_led.hpp"
 #include "pisco_code.hpp"
 
+using pisco_code::NumberBase;
+using pisco_code::NumDigits;
+using pisco_code::SignalCode;
+
 int
 main()
 {

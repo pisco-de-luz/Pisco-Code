@@ -9,6 +9,10 @@
 #include "pisco_code.hpp"
 #include "stm32_systick.hpp"
 
+using pisco_code::NumberBase;
+using pisco_code::NumDigits;
+using pisco_code::SignalCode;
+
 int
 main()
 {
