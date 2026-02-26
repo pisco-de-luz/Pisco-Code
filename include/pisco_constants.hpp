@@ -93,7 +93,7 @@ namespace pisco_code
         return (code >= -limits.max_value) && (code <= limits.max_value);
     }
 
-    constexpr bool base_supported(NumberBase base)
+    constexpr bool base_supported(NumberBase base) noexcept
     {
         return max_digits_for_base(base) != 0;
     }

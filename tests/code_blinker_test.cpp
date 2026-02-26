@@ -22,7 +22,7 @@ namespace
             return last_base;
         }
 
-        void update() override
+        void update() noexcept override
         {
         }
 

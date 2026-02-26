@@ -15,7 +15,7 @@ class MockLedControllerAdapter : public SignalController
     {
     }
 
-    void update() override
+    void update() noexcept override
     {
         if (logger_ == nullptr)
         {

@@ -15,17 +15,19 @@ namespace pisco_code
     class SignalEmitter
     {
       public:
-        explicit SignalEmitter(SignalController* controller);
+        explicit SignalEmitter(SignalController* controller) noexcept;
 
-        bool showCode(SignalCode code, NumberBase base, NumDigits num_digits);
-        void loop();
-        [[nodiscard]] bool isRunning() const;
+        bool               showCode(SignalCode code, NumberBase base,
+                                    NumDigits num_digits) noexcept;
+        void               loop() noexcept;
+        [[nodiscard]] bool isRunning() const noexcept;
         void               setRepeatTimes(RepeatTimes repeat_times) noexcept;
         [[nodiscard]] RepeatTimes getRepeatTimes() const noexcept;
 
       private:
-        [[nodiscard]] bool phaseElapsed(Timestamp current_ts) const;
-        static Timestamp signalDurationToPhaseDuration(SignalDuration duration);
+        [[nodiscard]] bool phaseElapsed(Timestamp current_ts) const noexcept;
+        static Timestamp
+        signalDurationToPhaseDuration(SignalDuration duration) noexcept;
 
         enum class PhaseLoop : PhaseType
         {

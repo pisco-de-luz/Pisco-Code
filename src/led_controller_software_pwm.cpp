@@ -1,4 +1,5 @@
 #include "led_controller_software_pwm.hpp"
+
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
 #include "signal_types.hpp"
@@ -6,16 +7,16 @@
 namespace pisco_code
 {
 
-    LedControllerSoftwarePwm::LedControllerSoftwarePwm()
+    LedControllerSoftwarePwm::LedControllerSoftwarePwm() noexcept
     {
     }
     LedControllerSoftwarePwm::LedControllerSoftwarePwm(
-        bool (*led_func)(LedControlCode)) : led_control_(led_func)
+        bool (*led_func)(LedControlCode)) noexcept : led_control_(led_func)
     {
     }
 
-    void
-    LedControllerSoftwarePwm::attachLedControl(bool (*led_func)(LedControlCode))
+    void LedControllerSoftwarePwm::attachLedControl(
+        bool (*led_func)(LedControlCode)) noexcept
     {
         led_control_ = led_func;
     }
@@ -24,7 +25,7 @@ namespace pisco_code
         return led_control_ != nullptr;
     }
 
-    void LedControllerSoftwarePwm::update()
+    void LedControllerSoftwarePwm::update() noexcept
     {
         if (led_control_ == nullptr)
         {

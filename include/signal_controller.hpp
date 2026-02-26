@@ -9,12 +9,12 @@ namespace pisco_code
     class SignalController
     {
       public:
-        virtual void               update()                             = 0;
+        virtual void               update() noexcept                    = 0;
         [[nodiscard]] virtual bool readyForPhaseChange() const noexcept = 0;
 
-        void setHighLevel(IntensityLevel level);
-        void setLowLevel(IntensityLevel level);
-        void setCurrentSignalMode(SignalMode mode);
+        void setHighLevel(IntensityLevel level) noexcept;
+        void setLowLevel(IntensityLevel level) noexcept;
+        void setCurrentSignalMode(SignalMode mode) noexcept;
 
         [[nodiscard]] IntensityLevel getPeakLevel() const noexcept;
         [[nodiscard]] IntensityLevel getBaseLevel() const noexcept;

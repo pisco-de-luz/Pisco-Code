@@ -6,7 +6,7 @@
 
 namespace pisco_code
 {
-    void SignalController::setHighLevel(IntensityLevel level)
+    void SignalController::setHighLevel(IntensityLevel level) noexcept
     {
         high_level_ = (level < MIN_INTENSITY_DIFFERENCE)
                           ? MIN_INTENSITY_DIFFERENCE
@@ -21,7 +21,7 @@ namespace pisco_code
         }
     }
 
-    void SignalController::setLowLevel(IntensityLevel level)
+    void SignalController::setLowLevel(IntensityLevel level) noexcept
     {
         low_level_ = (level > MAX_LOW_LEVEL) ? MAX_LOW_LEVEL : level;
 
@@ -32,7 +32,7 @@ namespace pisco_code
         }
     }
 
-    void SignalController::setCurrentSignalMode(SignalMode mode)
+    void SignalController::setCurrentSignalMode(SignalMode mode) noexcept
     {
         mode_ = mode;
     }
