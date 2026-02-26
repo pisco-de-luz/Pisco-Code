@@ -4,14 +4,6 @@
 #if defined(__cplusplus)
 #if __has_include(<cstdint>)
 #include <cstdint>
-using std::int16_t;
-using std::int32_t;
-using std::int64_t;
-using std::int8_t;
-using std::uint16_t;
-using std::uint32_t;
-using std::uint64_t;
-using std::uint8_t;
 #else
 #include <stdint.h>
 #endif
@@ -21,6 +13,16 @@ using std::uint8_t;
 
 namespace pisco_code
 {
+#if defined(__cplusplus) && __has_include(<cstdint>)
+    using std::int16_t;
+    using std::int32_t;
+    using std::int64_t;
+    using std::int8_t;
+    using std::uint16_t;
+    using std::uint32_t;
+    using std::uint64_t;
+    using std::uint8_t;
+#endif
 
     using UInt32          = uint32_t;
     using Int32           = int32_t;
