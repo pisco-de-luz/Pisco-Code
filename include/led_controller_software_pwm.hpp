@@ -11,6 +11,7 @@ namespace pisco_code
       public:
         explicit LedControllerSoftwarePwm(
             bool (*led_func)(LedControlCode)) noexcept;
+        LedControllerSoftwarePwm(decltype(nullptr)) = delete;
         void               update() noexcept override;
         [[nodiscard]] bool readyForPhaseChange() const noexcept override;
 

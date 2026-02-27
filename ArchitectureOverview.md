@@ -160,7 +160,7 @@ tests/
 ```cpp
 // Declare controller with a user HAL callback
 pisco_code::LedControllerSoftwarePwm controller(hal_led::ledOnboard);
-pisco_code::SignalEmitter             emitter(&controller);
+pisco_code::SignalEmitter             emitter(controller);
 
 // Show value 123 in decimal, auto digit count
 emitter.showCode(SignalCode{123}, NumberBase::DEC, NumDigits{0});

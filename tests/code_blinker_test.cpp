@@ -50,7 +50,7 @@ TEST_GROUP(SignalEmitterGroup)
 
     void setup() override
     {
-        blinker = new SignalEmitter(&controller);
+        blinker = new SignalEmitter(controller);
     }
 
     void teardown() override

@@ -11,6 +11,7 @@ namespace pisco_code
       public:
         explicit LedControllerHardwarePwm(
             void (*led_func)(IntensityLevel)) noexcept;
+        LedControllerHardwarePwm(decltype(nullptr)) = delete;
         void               update() noexcept override;
         [[nodiscard]] bool readyForPhaseChange() const noexcept override;
 

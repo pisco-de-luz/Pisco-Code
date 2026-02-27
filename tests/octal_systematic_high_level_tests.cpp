@@ -14,7 +14,7 @@ TEST_GROUP(OctalSystematicHighLevelTests)
 {
     MockLedControlLogger     logger;
     MockLedControllerAdapter controller{&logger};
-    SignalEmitter            blinker{&controller};
+    SignalEmitter            blinker{controller};
 };
 
 TEST(OctalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigits)

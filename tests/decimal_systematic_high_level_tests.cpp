@@ -14,7 +14,7 @@ TEST_GROUP(DecimalSystematicHighLevelTests)
 {
     MockLedControlLogger     logger;
     MockLedControllerAdapter controller{&logger};
-    SignalEmitter            blinker{&controller};
+    SignalEmitter            blinker{controller};
 };
 
 TEST(DecimalSystematicHighLevelTests, ShouldBlinkSameDigitsUpToMaxDigits)

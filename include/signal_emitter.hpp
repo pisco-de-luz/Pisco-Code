@@ -15,7 +15,7 @@ namespace pisco_code
     class SignalEmitter
     {
       public:
-        explicit SignalEmitter(SignalController* controller) noexcept;
+        explicit SignalEmitter(SignalController& controller) noexcept;
 
         bool               showCode(SignalCode code, NumberBase base,
                                     NumDigits num_digits) noexcept;
@@ -36,7 +36,7 @@ namespace pisco_code
             IDLE,
         };
 
-        SignalController*   controller_ = nullptr;
+        SignalController&    controller_;
         SignalSequencer     sequencer_;
         SignalPulseIterator pulse_iterator_;
         SignalElement       element_;

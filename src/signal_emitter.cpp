@@ -10,7 +10,7 @@
 namespace pisco_code
 {
 
-    SignalEmitter::SignalEmitter(SignalController* controller) noexcept :
+    SignalEmitter::SignalEmitter(SignalController& controller) noexcept :
         controller_(controller), pulse_iterator_(sequencer_.stack())
     {
     }
@@ -18,7 +18,7 @@ namespace pisco_code
     bool SignalEmitter::showCode(SignalCode code, NumberBase base,
                                  NumDigits num_digits) noexcept
     {
-        if (controller_ == nullptr || current_phase_ != PhaseLoop::IDLE)
+        if (current_phase_ != PhaseLoop::IDLE)
         {
             return false;
         }
@@ -33,10 +33,6 @@ namespace pisco_code
 
     void SignalEmitter::loop() noexcept
     {
-        if (controller_ == nullptr)
-        {
-            return;
-        }
         ++current_ts_;
         if (current_phase_ == PhaseLoop::STARTING)
         {
@@ -55,7 +51,7 @@ namespace pisco_code
                 const SignalElement element = pulse_iterator_.next();
                 phase_duration_ =
                     signalDurationToPhaseDuration(element.get_duration());
-                controller_->setCurrentSignalMode(element.get_mode());
+                controller_.setCurrentSignalMode(element.get_mode());
             }
             else
             {
@@ -71,7 +67,7 @@ namespace pisco_code
                 }
             }
         }
-        controller_->update();
+        controller_.update();
     }
 
     bool SignalEmitter::phaseElapsed(Timestamp current_ts) const noexcept
@@ -79,7 +75,7 @@ namespace pisco_code
         const auto elapsed    = (current_ts - start_time_);
         const bool phase_done = elapsed > phase_duration_;
 
-        return phase_done && controller_->readyForPhaseChange();
+        return phase_done && controller_.readyForPhaseChange();
     }
 
     bool SignalEmitter::isRunning() const noexcept

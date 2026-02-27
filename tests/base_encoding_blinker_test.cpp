@@ -16,7 +16,7 @@ TEST_GROUP(BaseEncodingBlinkerTest)
 {
     MockLedControlLogger     logger;
     MockLedControllerAdapter controller{&logger};
-    SignalEmitter            blinker{&controller};
+    SignalEmitter            blinker{controller};
 };
 
 TEST(BaseEncodingBlinkerTest, CanShowDecimal10)

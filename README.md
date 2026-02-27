@@ -85,11 +85,11 @@ int main()
 
     // LED1: Software PWM controller (on/off toggle for onboard LED)
     pisco_code::LedControllerSoftwarePwm controller_led1(hal_led::ledOnboard);
-    pisco_code::SignalEmitter            emitter_led1(&controller_led1);
+    pisco_code::SignalEmitter            emitter_led1(controller_led1);
 
     // LED2: Hardware PWM controller (smooth dimming for external LED)
     pisco_code::LedControllerHardwarePwm controller_led2(hal_led::ledPwmSetLevel);
-    pisco_code::SignalEmitter            emitter_led2(&controller_led2);
+    pisco_code::SignalEmitter            emitter_led2(controller_led2);
 
     // Start displaying codes
     emitter_led1.showCode(SignalCode{123}, NumberBase::DEC, NumDigits{0});
@@ -204,7 +204,7 @@ These settings are optional. If not configured, the library uses defaults suitab
 
 ```C++
 pisco_code::LedControllerSoftwarePwm controller(hal_led::ledOnboard);
-pisco_code::SignalEmitter            emitter(&controller);
+pisco_code::SignalEmitter            emitter(controller);
 
 // Customize brightness levels on the CONTROLLER
 controller.setHighLevel(180);
@@ -266,7 +266,7 @@ These methods allow you to monitor and control the execution of LED blink sequen
 
 ```C++
 pisco_code::LedControllerSoftwarePwm controller(hal_led::ledOnboard);
-pisco_code::SignalEmitter            emitter(&controller);
+pisco_code::SignalEmitter            emitter(controller);
 
 emitter.showCode(SignalCode{123}, NumberBase::DEC, NumDigits{0});
 

@@ -15,7 +15,7 @@ TEST_GROUP(LoopBehaviorBlinkerTest)
 {
     MockLedControlLogger     logger;
     MockLedControllerAdapter controller{&logger};
-    SignalEmitter            blinker{&controller};
+    SignalEmitter            blinker{controller};
 };
 
 IGNORE_TEST(LoopBehaviorBlinkerTest, ShouldHoldDimLightForDigitZero)
