@@ -84,7 +84,7 @@ namespace pisco_code
     {
         return limits_for(base).max_digits;
     }
-    inline bool isCodeInRange(NumberBase base, SignalCode code) noexcept
+    constexpr bool is_code_in_range(NumberBase base, SignalCode code) noexcept
     {
         const BaseLimits limits = limits_for(base);
         if (limits.max_digits == 0)
