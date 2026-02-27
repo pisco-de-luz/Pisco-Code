@@ -1,8 +1,6 @@
 #include "CppUTest/TestHarness.h"
 
 #include <algorithm>
-#include <iomanip>
-#include <sstream>
 #include <string>
 
 #include "blinker_test_utils.hpp"
