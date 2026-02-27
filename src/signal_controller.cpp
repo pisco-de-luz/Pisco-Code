@@ -12,8 +12,7 @@ namespace pisco_code
                           ? MIN_INTENSITY_DIFFERENCE
                           : level;
 
-        // Ensure low/high level maintains minimum difference
-        if (low_level_ > high_level_ - MIN_INTENSITY_DIFFERENCE)
+        if (levelsAreTooClose())
         {
             low_level_ = (high_level_ >= MIN_INTENSITY_DIFFERENCE)
                              ? high_level_ - MIN_INTENSITY_DIFFERENCE
@@ -25,8 +24,7 @@ namespace pisco_code
     {
         low_level_ = (level > MAX_LOW_LEVEL) ? MAX_LOW_LEVEL : level;
 
-        // Ensure low/high level maintains minimum difference
-        if (high_level_ < low_level_ + MIN_INTENSITY_DIFFERENCE)
+        if (levelsAreTooClose())
         {
             high_level_ = low_level_ + MIN_INTENSITY_DIFFERENCE;
         }
@@ -64,6 +62,11 @@ namespace pisco_code
             default:
                 return 0;
         }
+    }
+
+    bool SignalController::levelsAreTooClose() const noexcept
+    {
+        return high_level_ - low_level_ < MIN_INTENSITY_DIFFERENCE;
     }
 
 } // namespace pisco_code

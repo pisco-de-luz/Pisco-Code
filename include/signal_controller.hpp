@@ -30,6 +30,8 @@ namespace pisco_code
         ~SignalController()                                  = default;
 
       private:
+        [[nodiscard]] bool levelsAreTooClose() const noexcept;
+
         IntensityLevel high_level_ = DEFAULT_HIGH_LEVEL;
         IntensityLevel low_level_  = DEFAULT_LOW_LEVEL;
         SignalMode     mode_       = SignalMode::NOT_DEFINED;
