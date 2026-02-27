@@ -22,16 +22,32 @@ namespace pisco_code
         const IntensityLevel current_level = getCurrentIntensityLevel();
         const IntensityLevel sw_pwm_level  = to_sw_pwm_level(current_level);
 
-        // PWM logic: ON at start, OFF when reaching target level
-        if (pwm_tick_position_ == 0 && sw_pwm_level > 0)
+        if (shouldTurnLedOn(sw_pwm_level))
         {
             led_control_(LedControlCode::ON);
         }
-        else if (pwm_tick_position_ == sw_pwm_level)
+        else if (shouldTurnLedOff(sw_pwm_level))
         {
             led_control_(LedControlCode::OFF);
         }
 
+        advancePwmTick();
+    }
+
+    bool LedControllerSoftwarePwm::shouldTurnLedOn(
+        IntensityLevel sw_pwm_level) const noexcept
+    {
+        return pwm_tick_position_ == 0 && sw_pwm_level > 0;
+    }
+
+    bool LedControllerSoftwarePwm::shouldTurnLedOff(
+        IntensityLevel sw_pwm_level) const noexcept
+    {
+        return pwm_tick_position_ == sw_pwm_level;
+    }
+
+    void LedControllerSoftwarePwm::advancePwmTick() noexcept
+    {
         if (++pwm_tick_position_ > PWM_MAX)
         {
             pwm_tick_position_ = 0;

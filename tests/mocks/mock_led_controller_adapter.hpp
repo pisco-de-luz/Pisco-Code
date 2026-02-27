@@ -23,20 +23,16 @@ class MockLedControllerAdapter : public SignalController
         IntensityLevel current_level = getCurrentIntensityLevel();
         IntensityLevel sw_pwm_level  = to_sw_pwm_level(current_level);
 
-        // PWM logic: ON at start, OFF when reaching target level
-        if (pwm_tick_position_ == 0 && sw_pwm_level > 0)
+        if (shouldTurnLedOn(sw_pwm_level))
         {
             logger_->handle(LedControlCode::ON);
         }
-        else if (pwm_tick_position_ == sw_pwm_level)
+        else if (shouldTurnLedOff(sw_pwm_level))
         {
             logger_->handle(LedControlCode::OFF);
         }
 
-        if (++pwm_tick_position_ > PWM_MAX)
-        {
-            pwm_tick_position_ = 0;
-        }
+        advancePwmTick();
     }
     [[nodiscard]] bool readyForPhaseChange() const noexcept
     {
@@ -44,6 +40,24 @@ class MockLedControllerAdapter : public SignalController
     }
 
   private:
+    [[nodiscard]] bool
+    shouldTurnLedOn(IntensityLevel sw_pwm_level) const noexcept
+    {
+        return pwm_tick_position_ == 0 && sw_pwm_level > 0;
+    }
+    [[nodiscard]] bool
+    shouldTurnLedOff(IntensityLevel sw_pwm_level) const noexcept
+    {
+        return pwm_tick_position_ == sw_pwm_level;
+    }
+    void advancePwmTick() noexcept
+    {
+        if (++pwm_tick_position_ > PWM_MAX)
+        {
+            pwm_tick_position_ = 0;
+        }
+    }
+
     MockLedControlLogger* logger_            = nullptr;
     PwmTickPosition       pwm_tick_position_ = 0;
 };
