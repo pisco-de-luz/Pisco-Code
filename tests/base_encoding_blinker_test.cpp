@@ -1,23 +1,15 @@
 #include "CppUTest/TestHarness.h"
 
+#include "helpers/blinker_test_fixture.hpp"
 #include "helpers/blinker_test_utils.hpp"
-#include "mocks/mock_led_control_logger.hpp"
-#include "mocks/mock_led_controller_adapter.hpp"
 #include "pisco_constants.hpp"
 #include "pisco_types.hpp"
-#include "signal_emitter.hpp"
 #include "tests_constants.hpp"
 #include "tests_types.hpp"
 
-using namespace pisco_code;
 using namespace testutils;
 
-TEST_GROUP(BaseEncodingBlinkerTest)
-{
-    MockLedControlLogger     logger;
-    MockLedControllerAdapter controller{&logger};
-    SignalEmitter            blinker{controller};
-};
+TEST_GROUP_BASE(BaseEncodingBlinkerTest, BlinkerTestFixture){};
 
 TEST(BaseEncodingBlinkerTest, CanShowDecimal10)
 {

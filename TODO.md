@@ -81,8 +81,8 @@
 ## Code Duplication Reduction
 ### High Priority
 - [x] **#1** Collapse 4 systematic test files (`binary_`, `octal_`, `decimal_`, `hexadecimal_systematic_high_level_tests.cpp`) into 1 data-driven file — they are structurally identical, differing only in `NumberBase` (~240 redundant lines)
-- [ ] **#2** Collapse 4 internal blocks in `generate_pattern_of_digits_test.cpp` into a data-driven table (~180 redundant lines)
-- [ ] **#3** Extract shared `BlinkerTestFixture` (macro or base) for the `logger`/`controller`/`blinker` trio repeated across 7 TEST_GROUPs (~18 redundant lines, but 7 touch-points on any API change)
+- ~~**#2**~~ Keep `generate_pattern_of_digits_test.cpp` verbose — each test has unique expected data; macro would hurt debuggability
+- [x] **#3** Extract shared `BlinkerTestFixture` via `TEST_GROUP_BASE` for the `logger`/`controller`/`blinker` trio — reduces API-change touch-points from 7 to 1
 
 ### Medium Priority
 - [ ] **#4** Extract software PWM tick logic so `MockLedControllerAdapter` doesn't duplicate `LedControllerSoftwarePwm::update()` (~10 duplicated lines)
@@ -93,7 +93,7 @@
 - [ ] **#7** Move identical `hal_led.hpp` to shared `examples/common/` — both platform copies are byte-for-byte identical (17 lines × 2)
 - [ ] **#8** Extract `verifyCodeMinus103Iteration()` helper — assertion sequence is copy-pasted between `signal_pulse_iterator_test.cpp` and `signal_sequencer_test.cpp` (~50 duplicated lines)
 - [ ] **#9** Unify `code_blinker_test.cpp` standalone mock with shared `MockLedControllerAdapter`; migrate from `new`/`delete` to stack allocation
-- [ ] **#10** Fix include path inconsistency in `loop_behavior_blinker_test.cpp` — uses bare paths instead of `helpers/`/`mocks/` prefixes
+- [x] **#10** Fix include path inconsistency in `loop_behavior_blinker_test.cpp` — now uses `helpers/`/`mocks/` prefixes via fixture
 
 ## Next Release Goals
 - [x] Complete removal of `SignalEmitter` level methods

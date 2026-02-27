@@ -1,13 +1,9 @@
 #include "CppUTest/TestHarness.h"
 
+#include "helpers/blinker_test_fixture.hpp"
 #include "helpers/blinker_test_utils.hpp"
 #include "helpers/test_patterns_common.hpp"
-#include "mocks/mock_led_control_logger.hpp"
-#include "mocks/mock_led_controller_adapter.hpp"
 #include "pisco_constants.hpp"
-#include "signal_emitter.hpp"
-
-using namespace pisco_code;
 
 // clang-format off
 
@@ -16,12 +12,7 @@ using namespace pisco_code;
 // (e.g. -g BinarySystematic...) and IGNORE_TEST behaviour are unchanged.
 #define SYSTEMATIC_TESTS_FOR_BASE(GroupName, Base)                             \
                                                                                \
-    TEST_GROUP(GroupName)                                                       \
-    {                                                                          \
-        MockLedControlLogger     logger;                                       \
-        MockLedControllerAdapter controller{&logger};                          \
-        SignalEmitter            blinker{controller};                           \
-    };                                                                         \
+    TEST_GROUP_BASE(GroupName, BlinkerTestFixture){};                           \
                                                                                \
     TEST(GroupName, ShouldBlinkSameDigitsUpToMaxDigits)                         \
     {                                                                          \

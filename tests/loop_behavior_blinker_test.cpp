@@ -1,22 +1,15 @@
 #include "CppUTest/TestHarness.h"
 
-#include "blinker_test_utils.hpp"
-#include "mock_led_control_logger.hpp"
-#include "mock_led_controller_adapter.hpp"
+#include "helpers/blinker_test_fixture.hpp"
+#include "helpers/blinker_test_utils.hpp"
 #include "pisco_constants.hpp"
 #include "signal_emitter.hpp"
 #include "tests_constants.hpp"
 #include "tests_types.hpp"
 
-using namespace pisco_code;
 using namespace testutils;
 
-TEST_GROUP(LoopBehaviorBlinkerTest)
-{
-    MockLedControlLogger     logger;
-    MockLedControllerAdapter controller{&logger};
-    SignalEmitter            blinker{controller};
-};
+TEST_GROUP_BASE(LoopBehaviorBlinkerTest, BlinkerTestFixture){};
 
 IGNORE_TEST(LoopBehaviorBlinkerTest, ShouldHoldDimLightForDigitZero)
 {
