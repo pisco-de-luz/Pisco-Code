@@ -80,7 +80,7 @@
 
 ## Code Duplication Reduction
 ### High Priority
-- [ ] **#1** Collapse 4 systematic test files (`binary_`, `octal_`, `decimal_`, `hexadecimal_systematic_high_level_tests.cpp`) into 1 data-driven file — they are structurally identical, differing only in `NumberBase` (~240 redundant lines)
+- [x] **#1** Collapse 4 systematic test files (`binary_`, `octal_`, `decimal_`, `hexadecimal_systematic_high_level_tests.cpp`) into 1 data-driven file — they are structurally identical, differing only in `NumberBase` (~240 redundant lines)
 - [ ] **#2** Collapse 4 internal blocks in `generate_pattern_of_digits_test.cpp` into a data-driven table (~180 redundant lines)
 - [ ] **#3** Extract shared `BlinkerTestFixture` (macro or base) for the `logger`/`controller`/`blinker` trio repeated across 7 TEST_GROUPs (~18 redundant lines, but 7 touch-points on any API change)
 

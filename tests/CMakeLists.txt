@@ -9,20 +9,17 @@
 set(PISCO_CODE_TEST_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/base_encoding_blinker_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/binary_systematic_high_level_tests.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/code_blinker_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/decimal_systematic_high_level_tests.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/generate_pattern_of_digits_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/hexadecimal_systematic_high_level_tests.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/led_blink_pattern_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/loop_behavior_blinker_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/octal_systematic_high_level_tests.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/setter_behavior_blinker_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/signal_element_iterator_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/signal_element_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/signal_pulse_iterator_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/signal_sequencer_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/signal_stack_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/systematic_high_level_tests.cpp
 )
 
 set(PISCO_CODE_MOCK_SOURCES
