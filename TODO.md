@@ -85,8 +85,8 @@
 - [x] **#3** Extract shared `BlinkerTestFixture` via `TEST_GROUP_BASE` for the `logger`/`controller`/`blinker` trio — reduces API-change touch-points from 7 to 1
 
 ### Medium Priority
-- [ ] **#4** Extract software PWM tick logic so `MockLedControllerAdapter` doesn't duplicate `LedControllerSoftwarePwm::update()` (~10 duplicated lines)
-- [ ] **#5** Make `MockLedControllerAdapter` call base class `setHighLevel`/`setLowLevel` instead of re-implementing clamping; remove duplicate in `LedBlinkPattern` (~30 redundant lines)
+- [ ] **#4** ~~Extract software PWM tick logic so `MockLedControllerAdapter` doesn't duplicate `LedControllerSoftwarePwm::update()` (~10 duplicated lines)~~ — Skipped: intentional mock pattern, not harmful duplication
+- [x] **#5** ~~Make `MockLedControllerAdapter` call base class `setHighLevel`/`setLowLevel` instead of re-implementing clamping; remove duplicate in `LedBlinkPattern`~~ — Removed shadow members + dead setters (~50 lines removed)
 - [ ] **#6** Extract shared example `app_main()` template so AVR/STM32 `basic_example.cpp` aren't 81% identical (~38 redundant lines)
 
 ### Low Priority

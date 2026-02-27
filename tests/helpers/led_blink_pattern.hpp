@@ -27,27 +27,6 @@ namespace testutils
         void               append(IntensityLevel level, DurationMs duration);
         [[nodiscard]] bool isValid() const;
 
-        void setHighLevel(IntensityLevel level)
-        {
-            high_level_ = (level > PWM_MAX) ? PWM_MAX : level;
-            if (high_level_ < MIN_INTENSITY_DIFFERENCE)
-            {
-                high_level_ = MIN_INTENSITY_DIFFERENCE;
-            }
-            if (low_level_ >= high_level_)
-            {
-                low_level_ = high_level_ - MIN_INTENSITY_DIFFERENCE;
-            }
-        }
-        void setLowLevel(IntensityLevel level)
-        {
-            constexpr auto MAX_LOW_LEVEL = PWM_MAX - MIN_INTENSITY_DIFFERENCE;
-            low_level_ = (level > MAX_LOW_LEVEL) ? MAX_LOW_LEVEL : level;
-            if (low_level_ >= high_level_)
-            {
-                low_level_ = high_level_ - MIN_INTENSITY_DIFFERENCE;
-            }
-        }
         [[nodiscard]] IntensityLevel getBaseLevel() const
         {
             return low_level_;
