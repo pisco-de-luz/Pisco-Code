@@ -6,7 +6,7 @@
 
 namespace pisco_code
 {
-    struct SignalElement
+    class SignalElement
     {
       public:
         constexpr SignalElement() noexcept :
