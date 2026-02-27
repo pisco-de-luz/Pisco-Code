@@ -32,19 +32,18 @@ namespace pisco_code
                       bit_mask(DURATION_BITS),
                   "SignalDuration fits DURATION_BITS");
 
-    static constexpr SignalModeType to_value(SignalMode mode) noexcept
+    constexpr SignalModeType to_value(SignalMode mode) noexcept
     {
         return static_cast<SignalModeType>(mode);
     }
 
-    static constexpr SignalDurationType
+    constexpr SignalDurationType
     to_value(SignalDuration signal_duration) noexcept
     {
         return static_cast<SignalDurationType>(signal_duration);
     }
 
-    static constexpr SignalTimesType
-    to_value(SignalTimesType signal_times) noexcept
+    constexpr SignalTimesType to_value(SignalTimesType signal_times) noexcept
     {
         return (signal_times);
     }
