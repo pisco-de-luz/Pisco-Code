@@ -78,6 +78,23 @@
 - [ ] Create safety validation test suite
 - [ ] Add error handling for hardware failures
 
+## Code Duplication Reduction
+### High Priority
+- [ ] **#1** Collapse 4 systematic test files (`binary_`, `octal_`, `decimal_`, `hexadecimal_systematic_high_level_tests.cpp`) into 1 data-driven file — they are structurally identical, differing only in `NumberBase` (~240 redundant lines)
+- [ ] **#2** Collapse 4 internal blocks in `generate_pattern_of_digits_test.cpp` into a data-driven table (~180 redundant lines)
+- [ ] **#3** Extract shared `BlinkerTestFixture` (macro or base) for the `logger`/`controller`/`blinker` trio repeated across 7 TEST_GROUPs (~18 redundant lines, but 7 touch-points on any API change)
+
+### Medium Priority
+- [ ] **#4** Extract software PWM tick logic so `MockLedControllerAdapter` doesn't duplicate `LedControllerSoftwarePwm::update()` (~10 duplicated lines)
+- [ ] **#5** Make `MockLedControllerAdapter` call base class `setHighLevel`/`setLowLevel` instead of re-implementing clamping; remove duplicate in `LedBlinkPattern` (~30 redundant lines)
+- [ ] **#6** Extract shared example `app_main()` template so AVR/STM32 `basic_example.cpp` aren't 81% identical (~38 redundant lines)
+
+### Low Priority
+- [ ] **#7** Move identical `hal_led.hpp` to shared `examples/common/` — both platform copies are byte-for-byte identical (17 lines × 2)
+- [ ] **#8** Extract `verifyCodeMinus103Iteration()` helper — assertion sequence is copy-pasted between `signal_pulse_iterator_test.cpp` and `signal_sequencer_test.cpp` (~50 duplicated lines)
+- [ ] **#9** Unify `code_blinker_test.cpp` standalone mock with shared `MockLedControllerAdapter`; migrate from `new`/`delete` to stack allocation
+- [ ] **#10** Fix include path inconsistency in `loop_behavior_blinker_test.cpp` — uses bare paths instead of `helpers/`/`mocks/` prefixes
+
 ## Next Release Goals
 - [x] Complete removal of `SignalEmitter` level methods
 - [ ] Add comprehensive documentation
