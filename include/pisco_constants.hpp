@@ -76,8 +76,9 @@ namespace pisco_code
                 return BaseLimits{MAX_DIGITS_DEC, MAX_VALUE_DEC};
             case NumberBase::HEX:
                 return BaseLimits{MAX_DIGITS_HEX, MAX_VALUE_HEX};
+            default:
+                return BaseLimits{0, 0};
         }
-        return BaseLimits{0, 0};
     }
     constexpr uint8_t max_digits_for_base(NumberBase base) noexcept
     {
