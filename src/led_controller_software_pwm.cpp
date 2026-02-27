@@ -7,22 +7,9 @@
 namespace pisco_code
 {
 
-    LedControllerSoftwarePwm::LedControllerSoftwarePwm() noexcept
-    {
-    }
     LedControllerSoftwarePwm::LedControllerSoftwarePwm(
         bool (*led_func)(LedControlCode)) noexcept : led_control_(led_func)
     {
-    }
-
-    void LedControllerSoftwarePwm::attachLedControl(
-        bool (*led_func)(LedControlCode)) noexcept
-    {
-        led_control_ = led_func;
-    }
-    [[nodiscard]] bool LedControllerSoftwarePwm::isAttached() const noexcept
-    {
-        return led_control_ != nullptr;
     }
 
     void LedControllerSoftwarePwm::update() noexcept

@@ -253,21 +253,6 @@ void pwmCallback(IntensityLevel level) {
 pisco_code::LedControllerHardwarePwm controller(pwmCallback);
 ```
 
-### Deferred Attachment
-
-Both controllers support deferred attachment for cases where the callback isn't available at construction time:
-
-```C++
-pisco_code::LedControllerSoftwarePwm controller;  // Default constructor
-
-// Later, when ready:
-controller.attachLedControl(ledCallback);
-
-if (controller.isAttached()) {
-    // Ready to use
-}
-```
-
 ## Runtime Control
 
 These methods allow you to monitor and control the execution of LED blink sequences.

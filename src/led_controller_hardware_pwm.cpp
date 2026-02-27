@@ -7,23 +7,9 @@
 namespace pisco_code
 {
 
-    LedControllerHardwarePwm::LedControllerHardwarePwm() noexcept
-    {
-    }
     LedControllerHardwarePwm::LedControllerHardwarePwm(
         void (*led_func)(IntensityLevel)) noexcept : led_control_(led_func)
     {
-    }
-
-    void LedControllerHardwarePwm::attachLedControl(
-        void (*led_func)(IntensityLevel)) noexcept
-    {
-        led_control_ = led_func;
-    }
-
-    [[nodiscard]] bool LedControllerHardwarePwm::isAttached() const noexcept
-    {
-        return led_control_ != nullptr;
     }
 
     void LedControllerHardwarePwm::update() noexcept
