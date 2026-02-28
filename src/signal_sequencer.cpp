@@ -70,19 +70,13 @@ namespace pisco_code
 
         const DigitValue base_val    = to_value(base);
         NumDigits        digit_count = 0;
-        for (;;)
+        do
         {
-            const DigitValue digit = to_digit(abs_code % base_val);
+            signal_stack_.push(
+                signal_element_from_digit(to_digit(abs_code % base_val)));
             abs_code /= base_val;
-
-            signal_stack_.push(signal_element_from_digit(digit));
             ++digit_count;
-
-            if (abs_code == 0 || digit_count >= max_digits_to_show)
-            {
-                break;
-            }
-        }
+        } while (abs_code != 0 && digit_count < max_digits_to_show);
 
         // Pad with leading zeros only when a fixed width was requested
         if (is_num_digits_valid)
