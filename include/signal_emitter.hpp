@@ -40,7 +40,6 @@ namespace pisco_code
         SignalController&   controller_;
         SignalSequencer     sequencer_;
         SignalPulseIterator pulse_iterator_;
-        SignalElement       element_;
         Timestamp           current_ts_     = 0;
         Timestamp           start_time_     = 0;
         Timestamp           phase_duration_ = 0;
