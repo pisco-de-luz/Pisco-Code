@@ -53,7 +53,7 @@ namespace pisco_code
     void SignalSequencer::loadSignalCode(SignalCode code, NumberBase base,
                                          NumDigits num_digits) noexcept
     {
-        if (!base_supported(base) || !is_code_in_range(base, code))
+        if (!isValidCodeForBase(base, code))
         {
             return;
         }

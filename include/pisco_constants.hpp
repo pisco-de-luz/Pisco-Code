@@ -99,6 +99,12 @@ namespace pisco_code
         return max_digits_for_base(base) != 0;
     }
 
+    constexpr bool
+    isValidCodeForBase(NumberBase base, SignalCode code) noexcept
+    {
+        return base_supported(base) && is_code_in_range(base, code);
+    }
+
     static_assert(base_supported(NumberBase::BIN), "BIN not supported");
     static_assert(base_supported(NumberBase::OCT), "OCT not supported");
     static_assert(base_supported(NumberBase::DEC), "DEC not supported");
