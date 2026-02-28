@@ -26,6 +26,7 @@ namespace pisco_code
 
       private:
         [[nodiscard]] bool phaseElapsed(Timestamp current_ts) const noexcept;
+        [[nodiscard]] bool shouldAdvancePulse() const noexcept;
         static Timestamp
         signalDurationToPhaseDuration(SignalDuration duration) noexcept;
 
@@ -36,7 +37,7 @@ namespace pisco_code
             IDLE,
         };
 
-        SignalController&    controller_;
+        SignalController&   controller_;
         SignalSequencer     sequencer_;
         SignalPulseIterator pulse_iterator_;
         SignalElement       element_;

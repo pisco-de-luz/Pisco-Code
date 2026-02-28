@@ -43,7 +43,7 @@ namespace pisco_code
             current_phase_  = PhaseLoop::APPLYING_PULSE;
         }
 
-        if (phaseElapsed(current_ts_) && is_running_)
+        if (shouldAdvancePulse())
         {
             if (pulse_iterator_.hasNext())
             {
@@ -68,6 +68,11 @@ namespace pisco_code
             }
         }
         controller_.update();
+    }
+
+    bool SignalEmitter::shouldAdvancePulse() const noexcept
+    {
+        return is_running_ && phaseElapsed(current_ts_);
     }
 
     bool SignalEmitter::phaseElapsed(Timestamp current_ts) const noexcept
