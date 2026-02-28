@@ -27,6 +27,7 @@ namespace pisco_code
       private:
         [[nodiscard]] bool phaseElapsed(Timestamp current_ts) const noexcept;
         [[nodiscard]] bool shouldAdvancePulse() const noexcept;
+        [[nodiscard]] bool isBusy() const noexcept;
         static Timestamp
         signalDurationToPhaseDuration(SignalDuration duration) noexcept;
 

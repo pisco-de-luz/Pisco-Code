@@ -18,7 +18,7 @@ namespace pisco_code
     bool SignalEmitter::showCode(SignalCode code, NumberBase base,
                                  NumDigits num_digits) noexcept
     {
-        if (current_phase_ != PhaseLoop::IDLE)
+        if (isBusy())
         {
             return false;
         }
@@ -70,6 +70,11 @@ namespace pisco_code
         controller_.update();
     }
 
+    bool SignalEmitter::isBusy() const noexcept
+    {
+        return current_phase_ != PhaseLoop::IDLE;
+    }
+
     bool SignalEmitter::shouldAdvancePulse() const noexcept
     {
         return is_running_ && phaseElapsed(current_ts_);
@@ -85,7 +90,7 @@ namespace pisco_code
 
     bool SignalEmitter::isRunning() const noexcept
     {
-        return (is_running_ || current_phase_ != PhaseLoop::IDLE);
+        return is_running_ || isBusy();
     }
 
     void SignalEmitter::setRepeatTimes(RepeatTimes repeat_times) noexcept
