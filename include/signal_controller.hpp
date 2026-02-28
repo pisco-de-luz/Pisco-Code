@@ -32,6 +32,18 @@ namespace pisco_code
       private:
         [[nodiscard]] bool levelsAreTooClose() const noexcept;
 
+        static constexpr IntensityLevel
+        clampHighLevel(IntensityLevel level) noexcept
+        {
+            return (level < MIN_HIGH_LEVEL) ? MIN_HIGH_LEVEL : level;
+        }
+
+        static constexpr IntensityLevel
+        clampLowLevel(IntensityLevel level) noexcept
+        {
+            return (level > MAX_LOW_LEVEL) ? MAX_LOW_LEVEL : level;
+        }
+
         IntensityLevel high_level_ = DEFAULT_HIGH_LEVEL;
         IntensityLevel low_level_  = DEFAULT_LOW_LEVEL;
         SignalMode     mode_       = SignalMode::NOT_DEFINED;

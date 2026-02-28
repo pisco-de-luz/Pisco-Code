@@ -8,21 +8,17 @@ namespace pisco_code
 {
     void SignalController::setHighLevel(IntensityLevel level) noexcept
     {
-        high_level_ = (level < MIN_INTENSITY_DIFFERENCE)
-                          ? MIN_INTENSITY_DIFFERENCE
-                          : level;
+        high_level_ = clampHighLevel(level);
 
         if (levelsAreTooClose())
         {
-            low_level_ = (high_level_ >= MIN_INTENSITY_DIFFERENCE)
-                             ? high_level_ - MIN_INTENSITY_DIFFERENCE
-                             : 0;
+            low_level_ = high_level_ - MIN_INTENSITY_DIFFERENCE;
         }
     }
 
     void SignalController::setLowLevel(IntensityLevel level) noexcept
     {
-        low_level_ = (level > MAX_LOW_LEVEL) ? MAX_LOW_LEVEL : level;
+        low_level_ = clampLowLevel(level);
 
         if (levelsAreTooClose())
         {
