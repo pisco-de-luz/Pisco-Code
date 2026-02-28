@@ -20,43 +20,49 @@ namespace pisco_code
             {
                 return SIGNAL_ELEMENT_NOT_DEFINED;
             }
-            if (is_pulse_between_)
+
+            if (phase_ == Phase::GAP)
             {
-                is_pulse_between_ = false;
+                phase_ = Phase::PULSE;
                 return SIGNAL_ELEMENT_INTRA_DIGIT;
             }
-            advance();
+
+            --remaining_;
+
+            if (remaining_ > 0 && isPeakShort())
+            {
+                phase_ = Phase::GAP;
+            }
+
             return {element_.get_mode(), Byte{1}, element_.get_duration()};
         }
 
         [[nodiscard]] bool hasNext() const noexcept
         {
-            return remaining_ > 0 || is_pulse_between_;
+            return remaining_ > 0 || phase_ == Phase::GAP;
         }
 
         void reset() noexcept
         {
-            remaining_        = to_value(element_.get_times());
-            is_pulse_between_ = false;
+            remaining_ = to_value(element_.get_times());
+            phase_     = Phase::PULSE;
         }
 
       private:
-        void advance() noexcept
+        enum class Phase : bool
         {
-            if (isPeakShort() && remaining_ > 1)
-            {
-                is_pulse_between_ = true;
-            }
-            --remaining_;
-        }
+            PULSE = false,
+            GAP   = true,
+        };
 
-        SignalElement      element_;
-        SignalTimesType    remaining_{0};
-        bool               is_pulse_between_{false};
         [[nodiscard]] bool isPeakShort() const noexcept
         {
             return element_.get_mode() == SignalMode::PEAK &&
                    element_.get_duration() == SignalDuration::SHORT;
         }
+
+        SignalElement   element_;
+        SignalTimesType remaining_{0};
+        Phase           phase_{Phase::PULSE};
     };
 } // namespace pisco_code
