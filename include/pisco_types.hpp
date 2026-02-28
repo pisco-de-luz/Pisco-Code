@@ -38,6 +38,7 @@ namespace pisco_code
     using DigitValue      = UInt8;
     using PwmTickPosition = UInt8;
     using SignalCode      = Int32;
+    using UnsignedCode    = UInt32;
     using Byte            = UInt8;
     using NumBits         = UInt8;
     using Counter         = UInt8;

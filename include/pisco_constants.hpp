@@ -43,6 +43,11 @@ namespace pisco_code
         return static_cast<Index>(value);
     }
 
+    constexpr UnsignedCode to_unsigned(SignalCode code) noexcept
+    {
+        return static_cast<UnsignedCode>((code < 0) ? -code : code);
+    }
+
     constexpr IntensityLevel SW_PWM_LEVEL_FACTOR = 16U;
     constexpr IntensityLevel to_sw_pwm_level(IntensityLevel level) noexcept
     {

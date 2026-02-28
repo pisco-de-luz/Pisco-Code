@@ -59,8 +59,6 @@ namespace pisco_code
         }
 
         signal_stack_.clear();
-        const bool is_negative = (code < 0);
-        SignalCode abs_code    = is_negative ? -code : code;
 
         const NumDigits max_digits = max_digits_for_base(base);
         const bool      is_num_digits_valid =
@@ -69,14 +67,15 @@ namespace pisco_code
             is_num_digits_valid ? num_digits : max_digits;
 
         const DigitValue base_val    = to_value(base);
+        UnsignedCode     remaining   = to_unsigned(code);
         NumDigits        digit_count = 0;
         do
         {
             signal_stack_.push(
-                signal_element_from_digit(to_digit(abs_code % base_val)));
-            abs_code /= base_val;
+                signal_element_from_digit(to_digit(remaining % base_val)));
+            remaining /= base_val;
             ++digit_count;
-        } while (abs_code != 0 && digit_count < max_digits_to_show);
+        } while (remaining > 0 && digit_count < max_digits_to_show);
 
         // Pad with leading zeros only when a fixed width was requested
         if (is_num_digits_valid)
@@ -88,6 +87,7 @@ namespace pisco_code
             }
         }
 
+        const bool is_negative = (code < 0);
         if (is_negative)
         {
             signal_stack_.push(SIGNAL_ELEMENT_NEGATIVE);
