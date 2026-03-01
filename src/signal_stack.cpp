@@ -13,15 +13,11 @@ namespace pisco_code
 
     void SignalStack::rewind() noexcept
     {
-        read_index_ = 0;
+        read_index_ = count_;
     }
 
     void SignalStack::clear() noexcept
     {
-        for (Index i = 0; i < MAX_SIGNAL_ELEMENTS; ++i)
-        {
-            signal_elements_[i] = SIGNAL_ELEMENT_NOT_DEFINED;
-        }
         count_      = 0;
         read_index_ = 0;
     }
@@ -30,14 +26,14 @@ namespace pisco_code
     {
         if (!isFull())
         {
-            signal_elements_[MAX_SIGNAL_ELEMENTS - 1 - count_] = unit;
-            ++count_;
+            signal_elements_[count_++] = unit;
+            read_index_ = count_;
         }
     }
 
     bool SignalStack::isEmpty() const noexcept
     {
-        return read_index_ == count_;
+        return read_index_ == 0;
     }
 
     bool SignalStack::isFull() const noexcept
@@ -49,8 +45,7 @@ namespace pisco_code
     {
         if (!isEmpty())
         {
-            return signal_elements_[MAX_SIGNAL_ELEMENTS - count_ +
-                                    read_index_++];
+            return signal_elements_[--read_index_];
         }
         return SIGNAL_ELEMENT_NOT_DEFINED;
     }
