@@ -21,6 +21,7 @@
 
 ## Low Priority / Future
 - [ ] Replace `limits_for(base)` `constexpr switch` with a policy template `BaseLimits<NumberBase::DEC>` for zero-overhead compile-time dispatch
+- [ ] Make `Timestamp` type configurable (`uint16_t` vs `uint32_t`) for RAM-constrained targets — saves 6 bytes per `SignalEmitter` on AVR when using `uint16_t` (safe because `phaseElapsed()` uses per-phase unsigned subtraction, not cumulative comparison)
 - [ ] Add sound signal controller
 - [ ] Add vibration signal controller  
 - [ ] Performance optimization for embedded systems
