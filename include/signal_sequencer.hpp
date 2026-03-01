@@ -29,9 +29,5 @@ namespace pisco_code
         SignalPulseIterator pulse_iterator_;
         RepeatTimes         repeat_count_{1};
         Index               repeat_index_{0};
-        Counter             element_count_{0};
-        Index               element_index_{0};
-        Counter             pulse_repeat_count_{0};
-        Index               pulse_repeat_index_{0};
     };
 } // namespace pisco_code
