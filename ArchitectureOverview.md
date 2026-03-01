@@ -1,62 +1,192 @@
 # Pisco Code Library — Architecture Overview
 
----
+## 1. Purpose
 
-## 1. Problem Statement
+Pisco Code encodes numeric values into blink patterns on a single LED (or any
+binary/analog actuator). It targets embedded systems where no serial port, display,
+or debugger is available in the field.
 
-- Embedded systems often have **no serial port, no display, no debugger** in the field
-- The classic limitation: a single status LED is **binary** — on or off
-- Pisco Code solves this: encode any numeric value into a readable blink pattern
+## 2. Data Flow
 
----
-
-## 2. Concept
-
-- Pisco Code encodes decimal / hex / octal / binary values into **blink patterns**
-- A **framing signal** (low-brightness prefix) solves the *"where does the sequence start?"* problem
-- Works on LEDs, vibration motors, buzzers — any binary or analog actuator
-- Example: `showCode(121, DEC, 0)` blinks out the value **121** on a single LED
-
----
-
-## 3. Architecture
+A call to `showCode(−103, DEC, 0)` triggers this pipeline:
 
 ```
-┌─────────────────────────────────┐
-│         Application Code        │  showCode(123, DEC, 0)
-├─────────────────────────────────┤
-│         SignalEmitter           │  Orchestrator / Public API
-├─────────────────────────────────┤
-│        SignalSequencer          │  Sequence & repeat logic
-├─────────────────────────────────┤
-│         SignalStack             │  Digit decomposition
-├─────────────────────────────────┤
-│       SignalController          │  Abstract base (Template Method)
-├──────────────┬──────────────────┤
-│  SoftwarePwm │  HardwarePwm     │  Concrete controllers
-├──────────────┴──────────────────┤
-│        HAL Callback             │  User-provided function
-├─────────────────────────────────┤
-│         Hardware (LED)          │
-└─────────────────────────────────┘
+ showCode(−103, DEC, 0)
+       │
+       ▼
+ ┌─────────────────┐
+ │ SignalSequencer │  Decomposes −103 into digits, pushes onto stack:
+ │  loadSignalCode │    [3] [0] [1] [NEGATIVE]  (bottom → top)
+ └────────┬────────┘
+          │
+          ▼
+ ┌─────────────────┐
+ │   SignalStack   │  Fixed-capacity LIFO (10 elements, 12 bytes).
+ │                 │  Pop order: NEGATIVE, 1, 0, 3
+ └────────┬────────┘
+          │
+          ▼
+ ┌─────────────────┐
+ │ PulseIterator   │  Wraps each symbol with framing and inter-symbol gaps.
+ │  ┌─────────────┐│  Delegates per-element expansion to ElementIterator.
+ │  │ElemIterator ││
+ │  └─────────────┘│  Output for −103:
+ └────────┬────────┘    FRAME · inter · NEG · inter · 1× · inter · gap
+          │             · inter · 3×(pulse·gap·pulse·gap·pulse) · inter · FRAME
+          ▼
+ ┌─────────────────┐
+ │  SignalEmitter  │  Drives the sequence one tick at a time via loop().
+ │                 │  Each signal element has a mode and duration.
+ └────────┬────────┘
+          │  setCurrentSignalMode(mode)  →  update()
+          ▼
+ ┌─────────────────┐
+ │ SignalController│  Maps mode → intensity level → hardware action.
+ │ (abstract base) │
+ ├────────┬────────┤
+ │ SwPWM  │ HwPWM  │  Software PWM: ON/OFF toggling at tick resolution.
+ └────────┴────────┘  Hardware PWM: direct intensity write (0–255).
+          │
+          ▼
+     HAL callback       User-provided: bool f(LedControlCode) or
+          │              void f(IntensityLevel)
+          ▼
+       Hardware
 ```
 
-Key source files:
+## 3. Signal Encoding
 
-| Component | File |
+Each digit becomes a `SignalElement` — a 1-byte bitfield:
+
+| Field      | Bits | Purpose                              |
+|------------|------|--------------------------------------|
+| `mode`     | 2    | GAP, BASE, PEAK, or NOT_DEFINED      |
+| `times`    | 4    | Repetition count (0–15)              |
+| `duration` | 2    | SHORT, MEDIUM, LONG, or EXTRA_LONG   |
+
+The encoding rules:
+
+| Symbol     | Mode   | Times | Duration | LED Behavior             |
+|------------|--------|-------|----------|--------------------------|
+| Digit N    | PEAK   | N     | SHORT    | N short blinks           |
+| Digit 0    | GAP    | 1     | SHORT    | Brief darkness           |
+| Negative   | PEAK   | 1     | LONG     | One long blink           |
+| Framing    | GAP    | 1     | LONG     | Long darkness (start/end)|
+| Inter-sym  | BASE   | 1     | LONG     | Dim glow between symbols |
+| Intra-dig  | BASE   | 1     | SHORT    | Brief dim between pulses |
+
+Intra-digit gaps are only inserted between repeated short PEAK pulses (digits > 1).
+This makes individual pulses visually countable.
+
+## 4. Component Responsibilities
+
+### SignalEmitter (public API)
+
+The only class application code interacts with. Owns the sequencer and pulse
+iterator. The `loop()` method is called once per tick (typically 1 ms) and drives
+the entire pipeline.
+
+- `showCode()` — validates, encodes, and starts a new sequence
+- `loop()` — advances the state machine by one tick
+- `isRunning()` — true while a sequence is in progress
+- Rejects `showCode()` while a sequence is already playing (`isBusy()` guard)
+
+### SignalSequencer
+
+Owns the `SignalStack` and repeat configuration. Converts a numeric code into a
+stack of `SignalElement`s via `loadSignalCode()`.
+
+- `repeat_count_` is user configuration (survives `clear()`)
+- `repeat_index_` is progress state (reset by `clear()`)
+
+### SignalStack
+
+Fixed-capacity LIFO with rewind support. Push writes forward, pop reads backward,
+`rewind()` resets the read pointer without clearing data. This allows the same
+sequence to be replayed for repeat cycles.
+
+Capacity is 10 elements (max 9 digits + 1 sign). The stack is trivially copyable
+(12 bytes) and passed by value into `SignalPulseIterator`.
+
+### SignalPulseIterator
+
+Walks the full signal sequence: leading frame → (inter-symbol → symbol) × N →
+trailing frame. For each symbol popped from the stack, it delegates pulse expansion
+to an embedded `SignalElementIterator`.
+
+### SignalElementIterator
+
+Expands a single `SignalElement` into its constituent pulses. For a digit like 3
+(mode=PEAK, times=3, duration=SHORT), it emits: pulse, gap, pulse, gap, pulse.
+Gaps are only inserted between PEAK+SHORT repetitions — all other combinations
+emit times × the element with no gaps.
+
+### SignalController (abstract base)
+
+Maps the current signal mode (PEAK, BASE, GAP) to an intensity level. Owns the
+high/low intensity configuration with clamping logic that enforces a minimum
+separation between levels (so blinks remain visually distinguishable).
+
+Two concrete implementations:
+- **SoftwarePwm** — toggles ON/OFF via a software PWM cycle (16 ticks per period)
+- **HardwarePwm** — writes the intensity level directly to a timer PWM register
+
+Both delegate actual hardware access to a user-provided callback.
+
+## 5. Ownership and Lifecycle
+
+```
+SignalEmitter
+ ├── owns SignalSequencer
+ │    └── owns SignalStack
+ ├── owns SignalPulseIterator (copy of stack)
+ │    └── owns SignalElementIterator
+ └── references SignalController (injected, not owned)
+      └── holds function pointer to HAL callback
+```
+
+- `SignalEmitter` is constructed with a reference to a `SignalController`.
+  The controller must outlive the emitter.
+- `SignalPulseIterator` copies the stack by value (12 bytes) when created.
+  This decouples iteration from the sequencer's state.
+- All objects are stack-allocated. No heap, no exceptions, no RTTI.
+
+## 6. Constraints and Invariants
+
+| Constraint | Enforced by |
 |---|---|
-| Public API | `src/signal_emitter.cpp` |
-| Timing & repeat | `src/signal_sequencer.cpp` |
-| Digit decomposition | `src/signal_stack.cpp` |
-| Base controller | `src/signal_controller.cpp` |
-| Software PWM | `src/led_controller_software_pwm.cpp` |
-| Hardware PWM | `src/led_controller_hardware_pwm.cpp` |
+| Stack never exceeds 10 elements | `isFull()` guard in `push()` |
+| `SignalElement` is exactly 1 byte | `static_assert` |
+| `SignalStack` ≤ 16 bytes | `static_assert` (pass-by-value budget) |
+| High − Low ≥ 32 intensity units | `levelsAreTooClose()` in setters |
+| High level ≥ 32 | `clampHighLevel()` |
+| Low level ≤ 223 | `clampLowLevel()` |
+| Enums fit their bitfields | `static_assert` on `SignalMode` and `SignalDuration` |
+| Code within base range | `isValidCodeForBase()` guard in `loadSignalCode()` |
+| One sequence at a time | `isBusy()` guard in `showCode()` |
 
----
+## 7. Timing Model
 
-## 4. Design Decisions & Rationale
+`loop()` is called once per tick (1 ms in typical usage). It maintains an internal
+tick counter that resets on each `showCode()` call.
 
-### 4.1 Why Two Iterators Instead of One State Machine
+Signal durations map to tick counts:
+
+| Duration       | Ticks (ms) |
+|----------------|------------|
+| SHORT          | 400        |
+| MEDIUM         | 600        |
+| LONG           | 1,200      |
+| EXTRA_LONG     | 1,900      |
+
+Phase transitions occur when the elapsed ticks exceed the current phase duration
+**and** the controller reports `readyForPhaseChange()`. For software PWM, this
+synchronizes transitions to PWM cycle boundaries (every 16 ticks) to avoid
+mid-cycle glitches.
+
+## 8. Design Decisions
+
+### 8.1 Two Iterators Instead of One State Machine
 
 The iteration is split into two levels:
 
@@ -65,196 +195,44 @@ SignalPulseIterator  → sequence-level: framing, inter-symbol gaps, symbol orde
   └─ SignalElementIterator → element-level: pulse repetition, intra-digit gaps
 ```
 
-**Why not a single flat state machine?**
+A single flat state machine was considered but rejected:
 
-1. **Independent testability.** `SignalElementIterator` has 10 dedicated unit tests that
-   verify edge cases in isolation: intra-digit gaps only on `PEAK + SHORT`, times=0 emits
-   nothing, reset re-iterates, etc. In a merged class, these become integration tests
-   requiring a full stack setup.
+1. **Testability.** `SignalElementIterator` has dedicated unit tests verifying edge
+   cases in isolation (gap insertion rules, times=0, reset behavior). Merging would
+   turn these into integration tests requiring full stack setup.
+2. **Equal complexity.** The flat machine would need the same 6 states plus
+   `remaining_pulses_` tracking — no net simplification.
 
-2. **The flat machine isn't simpler.** It would need 6 states (`LEADING_FRAME`,
-   `INTER_SYMBOL`, `PULSE`, `INTRA_GAP`, `TRAILING_FRAME`, `DONE`) plus
-   `remaining_pulses_` and `isPeakShort()` logic — the same complexity, just wider.
+### 8.2 SignalSequencer as a Class
 
-3. **Negligible size difference.** `SignalElementIterator` is 3 bytes. The full
-   `SignalPulseIterator` is 19 bytes; a merged version would be 17. Not worth the
-   tradeoff on any target.
+`loadSignalCode()` could be a free function returning a `SignalStack`. But the
+sequencer also owns the stack and manages repeat state (`repeat_count_` vs
+`repeat_index_`). Making it a free function would push both responsibilities
+into `SignalEmitter`.
 
-### 4.2 Why `SignalSequencer` Is a Class, Not a Free Function
+### 8.3 Hand-Rolled Stack
 
-`loadSignalCode()` could be a standalone function returning a `SignalStack`. But
-`SignalSequencer` also:
+The stack requires: fixed capacity, no heap, LIFO, rewind (replay without
+clearing), and trivially copyable (passed by value). No STL or ETL container
+satisfies all five constraints.
 
-- **Owns the stack** — the data lives here, not in the emitter
-- **Manages repeat state** — `repeat_count_` (user config) and `repeat_index_`
-  (progress) are its responsibility
-- Removing it would force `SignalEmitter` to absorb data ownership, timing, and repeat
-  tracking — violating Single Responsibility
+## 9. Test Strategy
 
-### 4.3 Why `loop()` Uses Sequential `if`s, Not a `switch`
-
-`loop()` has only 3 phases (`IDLE`, `STARTING`, `APPLYING_PULSE`). The `STARTING` block
-is initialization that feeds directly into the `APPLYING_PULSE` check within the same
-tick. A `switch` would require `[[fallthrough]]` (MISRA Rule 9.3.2 advisory) and add
-nesting without simplifying the 30-line function body.
-
-### 4.4 Why `current_ts_` Is a Member, Not a Parameter
-
-`current_ts_` is an internal tick counter, not an externally-provided clock:
-
-```cpp
-showCode() → current_ts_ = 0;   // reset on new code
-loop()     → ++current_ts_;      // self-incrementing, 1 tick per call
-```
-
-The caller never provides a time value. Making it a parameter would:
-
-- Require the caller to maintain a synchronized counter
-- Leak internal state (the caller would need to know when `showCode()` resets the epoch)
-- Add a 4-byte argument to every `loop()` call on AVR for zero benefit
-
-### 4.5 Why `SignalController` Holds Intensity Config
-
-An alternative is splitting into a pure interface + separate `IntensityConfig` value type.
-However, `SignalController` is only ~80 lines across header and source. The clamping logic
-(`clampHighLevel`, `clampLowLevel`, `levelsAreTooClose`) is tightly coupled to the levels
-it protects. Splitting would add a class for marginal benefit and force every concrete
-controller to compose with the config object.
-
-### 4.6 Why `SignalStack` Is Hand-Rolled
-
-Requirements: fixed capacity (10 elements), no heap, LIFO with rewind, trivially
-copyable (passed by value into `SignalPulseIterator`). No STL or ETL container satisfies
-all five:
-
-| Container | Fixed cap | No heap | LIFO | Rewind | Trivially copyable |
-|---|---|---|---|---|---|
-| `std::stack` | No | No | Yes | No | No |
-| `std::array` + index | Yes | Yes | Manual | Manual | Yes |
-| `etl::stack` | Yes | Yes | Yes | No | No |
-| **Hand-rolled** | **Yes** | **Yes** | **Yes** | **Yes** | **Yes** |
-
-The stack is 12 bytes (`static_assert` enforced ≤ 16) and uses push-forward / pop-backward
-indexing for simplicity.
-
----
-
-## 5. Controller Types
-
-| Controller | Callback Signature | Use Case |
-|---|---|---|
-| `LedControllerSoftwarePwm` | `bool f(LedControlCode)` | GPIO on/off, simple LEDs |
-| `LedControllerHardwarePwm` | `void f(IntensityLevel)` | Timer PWM, 0–255 intensity |
-
-- HAL is fully **user-provided** — the library never touches hardware directly
-- Same library binary, different platform examples:
-  - `examples/avr/hal_led.hpp`
-  - `examples/stm32/hal_led.hpp`
-
----
-
-## 6. Type System & Constants
-
-- Semantic types: `IntensityLevel`, `NumDigits`, `SignalCode`, `Timestamp`
-- `NumberBase` enum: `BIN`, `OCT`, `DEC`, `HEX`
-- Compile-time validation via `static_assert`
-- `constexpr` dispatch — `limits_for(base)` → zero runtime cost
-- `BaseLimits` struct carries max digits and max value per base
-
-```cpp
-constexpr BaseLimits limits_for(NumberBase base) noexcept; // fully constexpr
-
-static_assert(base_supported(NumberBase::DEC), "DEC not supported");
-static_assert(limits_for(NumberBase::HEX).max_value == MAX_VALUE_HEX, "mismatch");
-```
-
----
-
-## 7. Timing Model
-
-```cpp
-while (emitter.isRunning()) {
-    emitter.loop();   // Called every 1 ms
-    delay_1ms();
-}
-```
-
-- **No dynamic memory**, **no exceptions**, **no threads**
-- `loop()` is a pure time-driven state machine — deterministic and predictable
-- Signal durations defined as `constexpr Timestamp`:
-
-| Constant | Value |
-|---|---|
-| `SHORT_BLINK_MS` | 400 ms |
-| `MEDIUM_BLINK_MS` | 600 ms |
-| `LONG_BLINK_MS` | 1200 ms |
-| `EXTRA_LONG_BLINK_MS` | 1900 ms |
-
----
-
-## 8. Supported Bases & Encoding
-
-| Base | Max Digits | Max Value |
-|---|---|---|
-| `BIN` | 8 | 255 |
-| `OCT` | 9 | 134,217,727 |
-| `DEC` | 9 | 999,999,999 |
-| `HEX` | 7 | 268,435,455 |
-
-- Supports **negative values** (sign is encoded in the signal)
-- `NumDigits{0}` → auto-detect digit count from the value
-
----
-
-## 9. Test Architecture
-
-- Framework: **CppUTest** (git submodule in `external/`)
-- Systematic coverage per base: decimal, hex, octal, binary
-- Mock-based: `MockLedControllerAdapter` + `MockLedControlLogger`
-- Pattern validation: `LedBlinkPattern` — trace-based verification
-- Tests run on **host (native)** — no hardware required
+Tests run on the host (native) using CppUTest. The mock stack:
 
 ```
-tests/
-  decimal_systematic_high_level_tests.cpp
-  hexadecimal_systematic_high_level_tests.cpp
-  binary_systematic_high_level_tests.cpp
-  octal_systematic_high_level_tests.cpp
-  signal_stack_test.cpp
-  signal_sequencer_test.cpp
-  ...
+MockLedControllerAdapter (extends SignalController)
+  └─ records ON/OFF events into MockLedControlLogger
+      └─ reconstructs LedBlinkPattern from event stream
+          └─ generates trace strings for assertion
 ```
 
----
-
-## 10. CMake Integration
-
-| Target | Use Case |
-|---|---|
-| `pisco_code::core` | Desktop, Linux, unit tests |
-| `pisco_code::bare` | AVR, STM32, bare-metal |
-
-- Works as **FetchContent**, **subproject**, or **installed package** (see `INTEGRATION.md`)
-- Consumer controls all MCU flags — no hidden flags from the library
-- Cross-compile tested: **AVR** (ATmega328P) and **STM32** (F410RB)
-
----
-
-## 11. Usage Example
-
-```cpp
-// Declare controller with a user HAL callback
-pisco_code::LedControllerSoftwarePwm controller(hal_led::ledOnboard);
-pisco_code::SignalEmitter             emitter(controller);
-
-// Show value 123 in decimal, auto digit count
-emitter.showCode(SignalCode{123}, NumberBase::DEC, NumDigits{0});
-
-// Drive from a 1 ms ISR or main loop
-while (emitter.isRunning()) {
-    emitter.loop();
-    delay_1ms();
-}
-```
-
-- Run tests locally: `./scripts/Build.sh native`
+Test levels:
+- **Unit tests** — `SignalStack`, `SignalElementIterator`, `SignalSequencer`
+  tested in isolation
+- **Integration tests** — `SignalPulseIterator` tests verify the full iteration
+  chain against expected element sequences
+- **System tests** — `SignalEmitter` drives a mock controller through the
+  complete pipeline; trace strings are compared against expected patterns
+- **Systematic tests** — parametric tests cover all bases (BIN/OCT/DEC/HEX)
+  with sequential, same-digit, and padded patterns up to max digits
