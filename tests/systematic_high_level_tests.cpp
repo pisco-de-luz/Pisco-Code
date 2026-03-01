@@ -49,8 +49,8 @@
         runSameDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(                \
             Base, blinker, logger);                                            \
     }                                                                          \
-    IGNORE_TEST(GroupName,                                                     \
-                ShouldBlinkSameMaxBaseDigitUpToMaxDigitsNineTimes)             \
+    TEST(GroupName,                                                            \
+         ShouldBlinkSameMaxBaseDigitUpToMaxDigitsNineTimes)                    \
     {                                                                          \
         runSameMaxBaseDigitUpToMaxDigitsNineTimesForBase(                      \
             Base, blinker, logger);                                            \

@@ -11,12 +11,12 @@ using namespace testutils;
 
 TEST_GROUP_BASE(LoopBehaviorBlinkerTest, BlinkerTestFixture){};
 
-IGNORE_TEST(LoopBehaviorBlinkerTest, ShouldHoldDimLightForDigitZero)
+TEST(LoopBehaviorBlinkerTest, ShouldHoldDimLightForDigitZero)
 {
     controller.setLowLevel(MID_LOW_LEVEL);
     const TestBlinkerCase test_case{.blink_code   = CODE_0,
                                     .trace_check  = TraceCheck::NOT_ENFORCED,
-                                    .expectedBase = MID_LOW_LEVEL};
+                                    .expectedBase = to_sw_pwm_level(MID_LOW_LEVEL)};
 
     checkBlinkerBehavior(blinker, logger, test_case);
 }
