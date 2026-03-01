@@ -19,8 +19,7 @@ namespace pisco_code
             return;
         }
 
-        const IntensityLevel target_level = getCurrentIntensityLevel();
-        led_control_(target_level);
+        led_control_(getCurrentIntensityLevel());
     }
 
     [[nodiscard]] bool

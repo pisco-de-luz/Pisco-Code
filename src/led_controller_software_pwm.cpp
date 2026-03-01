@@ -19,8 +19,7 @@ namespace pisco_code
             return;
         }
 
-        const IntensityLevel current_level = getCurrentIntensityLevel();
-        const IntensityLevel sw_pwm_level  = to_sw_pwm_level(current_level);
+        const IntensityLevel sw_pwm_level = to_sw_pwm_level(getCurrentIntensityLevel());
 
         if (shouldTurnLedOn(sw_pwm_level))
         {
