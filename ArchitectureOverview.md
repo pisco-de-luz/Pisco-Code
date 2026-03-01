@@ -236,3 +236,36 @@ Test levels:
   complete pipeline; trace strings are compared against expected patterns
 - **Systematic tests** — parametric tests cover all bases (BIN/OCT/DEC/HEX)
   with sequential, same-digit, and padded patterns up to max digits
+
+## 10. Resource Footprint
+
+Measured with `-Os`, no exceptions, no RTTI. These are `sizeof` values from actual
+target compilers — not host (x86_64) builds, which inflate sizes due to 8-byte
+pointers and alignment padding.
+
+### RAM per Object
+
+`SignalEmitter` contains the sequencer and pulse iterator, so its size includes
+both. The total RAM per LED is: **emitter + controller**.
+
+| Object                      | AVR (bytes) | ARM Cortex-M4 (bytes) |
+|-----------------------------|------------:|----------------------:|
+| SignalEmitter               |          68 |                    72 |
+| — SignalSequencer           |          33 |                    33 |
+| — SignalPulseIterator       |          19 |                    19 |
+| — — SignalStack             |          12 |                    12 |
+| — — SignalElement           |           1 |                     1 |
+| LedControllerSoftwarePwm   |           8 |                    16 |
+| LedControllerHardwarePwm   |           7 |                    12 |
+| **Total (Emitter + SW PWM)** |      **76** |                **88** |
+| **Total (Emitter + HW PWM)** |      **75** |                **84** |
+
+ARM objects are larger due to 4-byte function pointers (vs 2-byte on AVR) and
+alignment padding.
+
+### Flash
+
+| Target                       | Text  | Data | BSS |
+|------------------------------|------:|-----:|----:|
+| AVR ATmega328p               | 2,846 |   54 |   — |
+| ARM Cortex-M4 (STM32-F410RB) | 2,648 |    4 |   4 |

@@ -110,6 +110,19 @@ int main()
 
 For detailed CMake integration instructions, see [INTEGRATION.md](INTEGRATION.md).
 
+## Resource Footprint
+
+Measured with `-Os` (size-optimized), no exceptions, no RTTI. One emitter + one controller is all you need per LED.
+
+| Target                | Flash (bytes) | RAM per LED (SW PWM) | RAM per LED (HW PWM) |
+|-----------------------|--------------:|---------------------:|----------------------:|
+| AVR ATmega328p        |         2,846 |             76 bytes |              75 bytes |
+| ARM Cortex-M4 (F410RB)|        2,648 |             88 bytes |              84 bytes |
+
+No heap allocation. All objects are stack-allocated.
+
+For per-object breakdown, see [ArchitectureOverview.md](ArchitectureOverview.md#10-resource-footprint).
+
 # AVR Build and Upload Options
 
 The AVR example system supports flexible configuration via CMake variables.
