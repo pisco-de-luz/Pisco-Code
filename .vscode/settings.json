@@ -6,6 +6,12 @@
     "C_Cpp.default.compileCommands": "${workspaceFolder}/build/${config:cmake.buildDirectory}/compile_commands.json",
     "editor.formatOnSave": true,
     "workbench.editor.tabSizing": "shrink",
+    "workbench.colorCustomizations": {
+    "editor.background": "#000000",
+    "statusBar.background": "#300000",
+    "sideBar.background": "#300000",
+    "titleBar.activeBackground": "#300000",
+  },
     "editor.codeActionsOnSave": {
         "source.fixAll": "always",
         "source.fixAll.clang-tidy": "always"
