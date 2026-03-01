@@ -82,10 +82,8 @@ namespace pisco_code
 
     bool SignalEmitter::phaseElapsed(Timestamp current_ts) const noexcept
     {
-        const auto elapsed    = (current_ts - start_time_);
-        const bool phase_done = elapsed > phase_duration_;
-
-        return phase_done && controller_.readyForPhaseChange();
+        return (current_ts - start_time_) > phase_duration_ &&
+               controller_.readyForPhaseChange();
     }
 
     bool SignalEmitter::isRunning() const noexcept
