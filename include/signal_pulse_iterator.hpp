@@ -20,7 +20,6 @@ namespace pisco_code
 
         [[nodiscard]] SignalElement next() noexcept
         {
-            SignalElement element{SIGNAL_ELEMENT_NOT_DEFINED};
             if (!hasNext())
             {
                 return SIGNAL_ELEMENT_NOT_DEFINED;
@@ -38,53 +37,46 @@ namespace pisco_code
                     element_iterator_ = SignalElementIterator(current_symbol_);
                     current_phase_    = Phase::IN_ELEMENTS;
                 }
-
                 need_inter_symbol_ = false;
-                element            = SIGNAL_ELEMENT_INTER_SYMBOL;
+                return SIGNAL_ELEMENT_INTER_SYMBOL;
             }
-            else
+            switch (current_phase_)
             {
-                switch (current_phase_)
+                case Phase::LEADING_FRAME:
                 {
-                    case Phase::LEADING_FRAME:
-                    {
-                        need_inter_symbol_ = true;
-                        element            = SIGNAL_ELEMENT_FRAMING;
-                        break;
-                    }
-                    case Phase::IN_ELEMENTS:
-                    {
-                        if (!element_iterator_.hasNext())
-                        {
-                            break;
-                        }
-                        element = element_iterator_.next();
-                        if (!element_iterator_.hasNext())
-                        {
-                            need_inter_symbol_ = true;
-                            if (allPulsesProcessed())
-                            {
-                                current_phase_ = Phase::TRAILING_FRAME;
-                            }
-                        }
-                        break;
-                    }
-                    case Phase::TRAILING_FRAME:
-                    {
-                        current_phase_     = Phase::DONE;
-                        need_inter_symbol_ = false;
-                        element            = SIGNAL_ELEMENT_FRAMING;
-                        break;
-                    }
-                    // Should never come here, but added for completeness
-                    case Phase::DONE:
-                    default:
+                    need_inter_symbol_ = true;
+                    return SIGNAL_ELEMENT_FRAMING;
+                }
+                case Phase::IN_ELEMENTS:
+                {
+                    if (!element_iterator_.hasNext())
                     {
                         return SIGNAL_ELEMENT_NOT_DEFINED;
                     }
+                    const SignalElement element = element_iterator_.next();
+                    if (!element_iterator_.hasNext())
+                    {
+                        need_inter_symbol_ = true;
+                        if (allPulsesProcessed())
+                        {
+                            current_phase_ = Phase::TRAILING_FRAME;
+                        }
+                    }
+                    return element;
+                }
+                case Phase::TRAILING_FRAME:
+                {
+                    current_phase_     = Phase::DONE;
+                    need_inter_symbol_ = false;
+                    return SIGNAL_ELEMENT_FRAMING;
+                }
+                // Should never come here, but added for completeness
+                case Phase::DONE:
+                default:
+                {
+                    return SIGNAL_ELEMENT_NOT_DEFINED;
                 }
             }
-            return element;
         }
 
         [[nodiscard]] bool hasNext() const noexcept
