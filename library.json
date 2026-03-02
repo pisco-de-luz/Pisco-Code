@@ -1,0 +1,47 @@
+{
+  "name": "Pisco-Code",
+  "version": "1.0.2",
+  "description": "Encode decimal, hex, or binary values as LED blink patterns — no serial port needed. Extends the classic blink-count method with a framing signal that unambiguously represents any digit (including zero) in any position. Supports negative values, configurable digit count, software/hardware PWM controllers, and any actuator (LED, vibration motor).",
+  "keywords": [
+    "led",
+    "blink",
+    "status-led",
+    "diagnostics",
+    "embedded",
+    "signal",
+    "encoding",
+    "pwm",
+    "avr",
+    "stm32",
+    "pisco"
+  ],
+  "authors": [
+    {
+      "name": "Andre Viegas",
+      "email": "andrerviegas@gmail.com",
+      "url": "https://github.com/pisco-de-luz",
+      "maintainer": true
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pisco-de-luz/Pisco-Code.git"
+  },
+  "homepage": "https://github.com/pisco-de-luz/Pisco-Code",
+  "license": "MIT",
+  "frameworks": ["arduino", "espidf", "*"],
+  "platforms": "*",
+  "headers": "pisco_code.hpp",
+  "build": {
+    "srcDir": "src",
+    "includeDir": "include",
+    "flags": ["-std=c++17"]
+  },
+  "examples": [
+    {
+      "name": "AVR Basic Example",
+      "base": "examples/avr",
+      "files": ["basic_example.cpp"]
+    }
+  ]
+}
