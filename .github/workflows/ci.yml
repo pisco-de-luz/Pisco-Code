@@ -1,0 +1,105 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  # -----------------------------------------------------------------------
+  # Native build + unit tests (CppUTest, runs on the host GCC/Clang)
+  # -----------------------------------------------------------------------
+  native-tests:
+    name: Native Tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends cmake ninja-build g++
+
+      - name: Configure (native)
+        run: |
+          cmake -B build/native \
+                -G Ninja \
+                -DCMAKE_BUILD_TYPE=Release \
+                -DPISCO_CODE_BUILD_EXAMPLES=OFF \
+                -DPISCO_CODE_BUILD_TESTS=ON
+
+      - name: Build
+        run: cmake --build build/native --parallel
+
+      - name: Run tests
+        working-directory: build/native
+        run: ctest --output-on-failure --parallel 4
+
+  # -----------------------------------------------------------------------
+  # Cross-compile check: AVR (avr-g++)
+  # -----------------------------------------------------------------------
+  avr-build:
+    name: AVR cross-compile
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install AVR toolchain
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends cmake ninja-build gcc-avr binutils-avr avr-libc
+
+      - name: Configure (AVR)
+        run: |
+          cmake -B build/avr \
+                -G Ninja \
+                -DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/avr-gcc.cmake \
+                -DBOARD=arduino-nano \
+                -DCMAKE_BUILD_TYPE=MinSizeRel \
+                -DPISCO_CODE_BUILD_TESTS=OFF
+
+      - name: Build
+        run: cmake --build build/avr --parallel
+
+  # -----------------------------------------------------------------------
+  # Cross-compile check: ARM / STM32 (arm-none-eabi-g++)
+  # -----------------------------------------------------------------------
+  arm-build:
+    name: ARM cross-compile (STM32)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install ARM toolchain
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends cmake ninja-build gcc-arm-none-eabi binutils-arm-none-eabi
+
+      - name: Configure (STM32)
+        run: |
+          cmake -B build/arm \
+                -G Ninja \
+                -DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/arm-none-eabi-gcc.cmake \
+                -DBOARD=f410rb \
+                -DCMAKE_BUILD_TYPE=MinSizeRel \
+                -DPISCO_CODE_BUILD_TESTS=OFF
+
+      - name: Build
+        run: cmake --build build/arm --parallel
