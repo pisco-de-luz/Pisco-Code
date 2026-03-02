@@ -119,3 +119,66 @@ jobs:
             
             ## Library-Only Distribution
             # ... rest same as above
+
+  # -----------------------------------------------------------------------
+  # Publish Arduino-compatible distribution to Pisco-Code-Arduino repo
+  # -----------------------------------------------------------------------
+  publish-arduino:
+    name: Publish to Arduino repo
+    runs-on: ubuntu-latest
+    needs: create-release
+
+    steps:
+      - name: Checkout main repo
+        uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Checkout Arduino repo
+        uses: actions/checkout@v4
+        with:
+          repository: pisco-de-luz/Pisco-Code-Arduino
+          token: ${{ secrets.ARDUINO_REPO_TOKEN }}
+          path: arduino-dist
+
+      - name: Update Arduino distribution
+        run: |
+          cd arduino-dist
+
+          # Clean old sources (keep .git, LICENSE, README.md, library.properties, examples/)
+          rm -rf src/
+          mkdir -p src examples/BasicBlink
+
+          # Copy headers (flat into src/)
+          cp ../include/*.hpp src/
+
+          # Copy implementation files
+          cp ../src/*.cpp src/
+
+          # Copy Arduino wrapper header
+          cp ../src/Pisco-Code.h src/
+
+          # Copy Arduino example
+          cp ../examples/arduino/BasicBlink/BasicBlink.ino examples/BasicBlink/
+
+          # Update version in library.properties
+          sed -i "s/^version=.*/version=${GITHUB_REF#refs/tags/v}/" library.properties
+
+          echo "=== Arduino distribution contents ==="
+          find . -not -path './.git/*' -not -path './.git' | sort
+
+      - name: Commit and push
+        run: |
+          cd arduino-dist
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update Arduino distribution — ${{ steps.get_version.outputs.VERSION }}"
+            git tag "${{ steps.get_version.outputs.VERSION }}"
+            git push origin main --tags
+          fi
