@@ -51,7 +51,7 @@ namespace testutils
     // Drives the loop for a maximum simulated time, default 64 seconds.
     inline void runSequencer(SignalEmitter* code, MockLedControlLogger* logger)
     {
-        constexpr uint8_t   LOOP_CALLS_PER_COUNTER = 64;
+        constexpr uint8_t   LOOP_CALLS_PER_COUNTER = 64U;
         constexpr Timestamp MAX_SEQUENCING_LOOPS =
             3600000UL; // Limit simulation of 1h to prevent infinite loop
         Timestamp sequencing_counter = 0;

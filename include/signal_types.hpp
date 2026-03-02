@@ -4,7 +4,7 @@
 
 namespace pisco_code
 {
-    constexpr Counter MAX_SIGNAL_ELEMENTS = 10;
+    constexpr Counter MAX_SIGNAL_ELEMENTS = 10U;
 
     enum class SignalMode : SignalModeType
     {

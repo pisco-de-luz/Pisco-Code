@@ -124,7 +124,7 @@ namespace pisco_code
             return (symbol_remaining_ == 0) && (need_inter_symbol_);
         }
     };
-    constexpr auto MAX_STACK_BYTES_PASS_BY_VALUE = 16;
+    constexpr auto MAX_STACK_BYTES_PASS_BY_VALUE = 16U;
 
     static_assert(sizeof(SignalStack) <= MAX_STACK_BYTES_PASS_BY_VALUE,
                   "Stack grew, reconsider pass-by-value");
