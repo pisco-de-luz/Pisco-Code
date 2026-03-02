@@ -26,10 +26,10 @@ namespace pisco_code
     };
 
     static_assert(static_cast<unsigned>(SignalMode::MAX_VALUE) <=
-                      bit_mask(MODE_BITS),
+                      capacity_for_bits(MODE_BITS),
                   "SignalMode fits MODE_BITS");
     static_assert(static_cast<unsigned>(SignalDuration::MAX_VALUE) <=
-                      bit_mask(DURATION_BITS),
+                      capacity_for_bits(DURATION_BITS),
                   "SignalDuration fits DURATION_BITS");
 
     constexpr SignalModeType to_value(SignalMode mode) noexcept

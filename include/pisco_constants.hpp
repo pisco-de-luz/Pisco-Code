@@ -136,7 +136,7 @@ namespace pisco_code
     constexpr IntensityLevel MIN_HIGH_LEVEL = MIN_INTENSITY_DIFFERENCE;
     constexpr IntensityLevel MAX_LOW_LEVEL =
         MAX_BYTE_VALUE - MIN_INTENSITY_DIFFERENCE;
-    constexpr UInt32 bit_mask(NumBits bits) noexcept
+    constexpr UInt32 capacity_for_bits(NumBits bits) noexcept
     {
         return bits == 0 ? 0U : ((1U << bits));
     }
