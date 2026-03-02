@@ -38,9 +38,9 @@
 
 ## Code Quality Improvements Made
 - [x] Refactor `SignalElement` constructor parameters
-- [ ] Rename `bit_mask()` to `capacity_for_bits()` — current name is misleading; the function computes the maximum number of values that fit in N bits, not a bitmask
+- [x] Rename `bit_mask()` to `capacity_for_bits()` — current name is misleading; the function computes the maximum number of values that fit in N bits, not a bitmask
 - [ ] Express `DEFAULT_HIGH_LEVEL`, `DEFAULT_LOW_LEVEL` and `MIN_INTENSITY_DIFFERENCE` as percentages of `MAX_BYTE_VALUE` instead of hardcoded absolute values
-- [ ] Update constants with 'U' suffix for consistency
+- [x] Update constants with 'U' suffix for consistency
 - [x] Rename `MIN_PULSE_BASE_GAP` to `MIN_INTENSITY_DIFFERENCE`
 - [x] Improve type safety with `NumDigits`, `Index`, `Counter` types
 - [x] Remove unused type aliases (`Index8`, `Index16`, etc.)
