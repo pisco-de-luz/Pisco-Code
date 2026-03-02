@@ -1,6 +1,6 @@
 {
   "name": "Pisco-Code",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Encode decimal, hex, or binary values as LED blink patterns — no serial port needed. Extends the classic blink-count method with a framing signal that unambiguously represents any digit (including zero) in any position. Supports negative values, configurable digit count, software/hardware PWM controllers, and any actuator (LED, vibration motor).",
   "keywords": [
     "led",

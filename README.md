@@ -1,8 +1,7 @@
 # Pisco Code
 
-[![CI](https://github.com/pisco-de-luz/Pisco-Code/actions/workflows/ci.yml/badge.svg)](https://github.com/pisco-de-luz/Pisco-Code/actions/workflows/ci.yml)
+[![CI](https://github.com/pisco-de-luz/Pisco-Code/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/pisco-de-luz/Pisco-Code/actions/workflows/ci.yml)
 [![Arduino Library](https://www.ardu-badge.com/badge/Pisco-Code.svg)](https://www.ardu-badge.com/Pisco-Code)
-[![PlatformIO Registry](https://badges.registry.platformio.org/packages/pisco-de-luz/library/Pisco-Code.svg)](https://registry.platformio.org/libraries/pisco-de-luz/Pisco-Code)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 Pisco Code is a lightweight mechanism for representing decimal or hexadecimal values using a single status LED or an actuator such as a vibration motor. The method supports both positive and negative values and is designed for use in embedded systems with minimal hardware resources.
