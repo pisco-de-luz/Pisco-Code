@@ -85,17 +85,13 @@ MockLedControlLogger::handle(LedControlCode ctrl_code)
         case LedControlCode::OFF:
             led_event = testutils::LedEvent::OFF;
             break;
-        case LedControlCode::FUNC_OK:
-            led_event = testutils::LedEvent::FUNC_OK;
-            break;
         default:
             led_event = testutils::LedEvent::FUNC_FAIL;
     }
 
     log(led_event);
     return (led_event == testutils::LedEvent::ON ||
-            led_event == testutils::LedEvent::OFF ||
-            led_event == testutils::LedEvent::FUNC_OK);
+            led_event == testutils::LedEvent::OFF);
 }
 
 const std::vector<LedStateChange>&

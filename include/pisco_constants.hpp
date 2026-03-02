@@ -10,9 +10,8 @@ namespace pisco_code
 
     enum class LedControlCode : LedCodeType
     {
-        ON      = 0U,
-        OFF     = 1U,
-        FUNC_OK = 100U,
+        ON  = 0U,
+        OFF = 1U,
     };
 
     enum class NumberBase : BaseType

@@ -42,7 +42,6 @@ namespace testutils
         INVALID,
         ON,
         OFF,
-        FUNC_OK,
         FUNC_FAIL,
     };
 

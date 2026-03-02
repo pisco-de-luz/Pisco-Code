@@ -84,8 +84,6 @@ hal_led::ledOnboard(LedControlCode code) noexcept
         case LedControlCode::OFF:
             ledOnboardOff();
             return true;
-        case LedControlCode::FUNC_OK:
-            return true;
         default:
             return false;
     }
