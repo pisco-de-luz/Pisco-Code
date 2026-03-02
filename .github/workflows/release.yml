@@ -147,21 +147,12 @@ jobs:
         run: |
           cd arduino-dist
 
-          # Clean old sources (keep .git, LICENSE, README.md, library.properties, examples/)
-          rm -rf src/
-          mkdir -p src examples/BasicBlink
+          # Remove only generated code files (keep Pisco-Code.h wrapper, examples, README, etc.)
+          rm -f src/*.hpp src/*.cpp
 
-          # Copy headers (flat into src/)
+          # Copy headers and implementation (flat into src/)
           cp ../include/*.hpp src/
-
-          # Copy implementation files
           cp ../src/*.cpp src/
-
-          # Copy Arduino wrapper header
-          cp ../src/Pisco-Code.h src/
-
-          # Copy Arduino example
-          cp ../examples/arduino/BasicBlink/BasicBlink.ino examples/BasicBlink/
 
           # Update version in library.properties
           sed -i "s/^version=.*/version=${GITHUB_REF#refs/tags/v}/" library.properties
