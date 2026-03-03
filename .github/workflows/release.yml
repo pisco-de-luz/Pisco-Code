@@ -52,47 +52,6 @@ jobs:
           cd release
           sha256sum *.tar.gz *.zip > checksums.txt
           
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            release/pisco-code-${{ steps.get_version.outputs.VERSION }}.tar.gz
-            release/pisco-code-${{ steps.get_version.outputs.VERSION }}.zip
-            release/checksums.txt
-          body: |
-            # Pisco Code Library ${{ steps.get_version.outputs.VERSION }}
-            
-            ## Quick Integration (CMake FetchContent)
-            
-            ```cmake
-            set(PISCO_CODE_VERSION "${{ steps.get_version.outputs.VERSION }}")
-            
-            include(FetchContent)
-            FetchContent_Declare(pisco_code
-              URL https://github.com/${{ github.repository }}/releases/download/${PISCO_CODE_VERSION}/pisco-code-${PISCO_CODE_VERSION}.tar.gz
-            )
-            FetchContent_MakeAvailable(pisco_code)
-            
-            target_link_libraries(your_project PRIVATE PiscoCodeCore)
-            # Or for bare-metal: target_link_libraries(your_project PRIVATE PiscoCodeBare)
-            ```
-            
-            ## Requirements
-            - CMake 3.14+
-            - C++17 compatible compiler
-            
-            ## Package Contents
-            - `include/` - Header files
-            - `src/` - Implementation files  
-            - `CMakeLists.txt` - Build configuration
-            - `INTEGRATION.md` - Detailed integration guide
-            
-            ## Checksums
-            Verify your download with checksums.txt
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Generate Changelog
         id: changelog
         run: |
@@ -106,19 +65,51 @@ jobs:
           echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
           echo "$CHANGELOG" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
-          
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          # ... files section same as above
+          files: |
+            release/pisco-code-${{ steps.get_version.outputs.VERSION }}.tar.gz
+            release/pisco-code-${{ steps.get_version.outputs.VERSION }}.zip
+            release/checksums.txt
           body: |
             # Pisco Code Library ${{ steps.get_version.outputs.VERSION }}
-            
+
             ## Changes
             ${{ steps.changelog.outputs.CHANGELOG }}
-            
-            ## Library-Only Distribution
-            # ... rest same as above
+
+            ## Quick Integration (CMake FetchContent)
+
+            ```cmake
+            set(PISCO_CODE_VERSION "${{ steps.get_version.outputs.VERSION }}")
+
+            include(FetchContent)
+            FetchContent_Declare(pisco_code
+              URL https://github.com/${{ github.repository }}/releases/download/${PISCO_CODE_VERSION}/pisco-code-${PISCO_CODE_VERSION}.tar.gz
+            )
+            FetchContent_MakeAvailable(pisco_code)
+
+            target_link_libraries(your_project PRIVATE PiscoCodeCore)
+            # Or for bare-metal: target_link_libraries(your_project PRIVATE PiscoCodeBare)
+            ```
+
+            ## Requirements
+            - CMake 3.14+
+            - C++17 compatible compiler
+
+            ## Package Contents
+            - `include/` - Header files
+            - `src/` - Implementation files
+            - `CMakeLists.txt` - Build configuration
+            - `INTEGRATION.md` - Detailed integration guide
+
+            ## Checksums
+            Verify your download with checksums.txt
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # -----------------------------------------------------------------------
   # Publish Arduino-compatible distribution to Pisco-Code-Arduino repo
