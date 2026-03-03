@@ -9,6 +9,28 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.1.1] — 2026-03-03
+
+### Added
+- Separate Arduino-compatible distribution repository ([Pisco-Code-Arduino](https://github.com/pisco-de-luz/Pisco-Code-Arduino))
+- Auto-publish job in release workflow to sync code to Arduino repo on each version tag
+- `.gitignore` for Arduino repo (build artifacts, VSCode settings)
+
+### Changed
+- Arduino `Pisco-Code.h` wrapper header refactored to safely undefine conflicting preprocessor macros
+- `BasicBlink.ino` example improved with better code formatting and comments
+- Arduino README and `library.properties` updated to clarify C++17 requirements and provide enabling instructions for older boards
+- Release workflow fixed: merged duplicate `Create Release` steps into one with changelog + integration instructions
+- `library.properties` URL corrected to point to Arduino distribution repo
+
+### Removed
+- Arduino-specific files removed from main repo (now live in Pisco-Code-Arduino)
+- `library.properties` removed from main repo (Arduino-only; `library.json` retained for PlatformIO)
+
+---
+
+## [1.1.0] — 2026-03-02
+
 ### Added
 - `isBusy()` method to `SignalEmitter` for improved state management
 - `clampHighLevel()` and `clampLowLevel()` methods to `SignalController`
@@ -89,7 +111,9 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 - CppUTest-based unit test suite (native build)
 - MIT License
 
-[Unreleased]: https://github.com/pisco-de-luz/Pisco-Code/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/pisco-de-luz/Pisco-Code/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/pisco-de-luz/Pisco-Code/compare/v1.1.0...v1.1.1
+[1.1.0]: https://github.com/pisco-de-luz/Pisco-Code/compare/v1.0.2...v1.1.0
 [1.0.2]: https://github.com/pisco-de-luz/Pisco-Code/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/pisco-de-luz/Pisco-Code/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/pisco-de-luz/Pisco-Code/releases/tag/v1.0.0
