@@ -9,8 +9,8 @@
 #include "hal_led.hpp"
 #include "pisco_code.hpp"
 
-using pisco_code::NumberBase;
 using pisco_code::NumDigits;
+using pisco_code::Radix;
 using pisco_code::SignalCode;
 
 int
@@ -29,8 +29,8 @@ main()
     pisco_code::SignalEmitter emitter_led2(controller_led2);
 
     // Start displaying codes
-    emitter_led1.showCode(SignalCode{123}, NumberBase::DEC, NumDigits{0});
-    emitter_led2.showCode(SignalCode{321}, NumberBase::DEC, NumDigits{0});
+    emitter_led1.showCode(SignalCode{123}, Radix::DEC, NumDigits{0});
+    emitter_led2.showCode(SignalCode{321}, Radix::DEC, NumDigits{0});
 
     // Main loop - call every 1ms
     while (emitter_led1.isRunning() || emitter_led2.isRunning())

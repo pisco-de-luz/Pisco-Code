@@ -46,30 +46,30 @@ namespace pisco_code
         return signal_stack_;
     }
 
-    void SignalSequencer::loadSignalCode(SignalCode code, NumberBase base,
+    void SignalSequencer::loadSignalCode(SignalCode code, Radix radix,
                                          NumDigits num_digits) noexcept
     {
-        if (!isValidCodeForBase(base, code))
+        if (!isValidCodeForRadix(radix, code))
         {
             return;
         }
 
         signal_stack_.clear();
 
-        const NumDigits max_digits = max_digits_for_base(base);
+        const NumDigits max_digits = max_digits_for_radix(radix);
         const bool      is_num_digits_valid =
             (num_digits > 0 && num_digits <= max_digits);
         const NumDigits max_digits_to_show =
             is_num_digits_valid ? num_digits : max_digits;
 
-        const DigitValue base_val    = to_value(base);
+        const DigitValue radix_val   = to_value(radix);
         UnsignedCode     remaining   = to_unsigned(code);
         NumDigits        digit_count = 0;
         do
         {
             signal_stack_.push(
-                signal_element_from_digit(to_digit(remaining % base_val)));
-            remaining /= base_val;
+                signal_element_from_digit(to_digit(remaining % radix_val)));
+            remaining /= radix_val;
             ++digit_count;
         } while (remaining > 0 && digit_count < max_digits_to_show);
 

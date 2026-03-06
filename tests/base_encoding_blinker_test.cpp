@@ -15,7 +15,7 @@ TEST(BaseEncodingBlinkerTest, CanShowDecimal10)
 {
     const TestBlinkerCase test_case{
         .blink_code  = CODE_10,
-        .number_base = NumberBase::DEC,
+        .radix = Radix::DEC,
         .trace_check = TraceCheck::ENFORCED,
     };
 
@@ -26,7 +26,7 @@ TEST(BaseEncodingBlinkerTest, CanShowZero)
 {
     const TestBlinkerCase test_case{
         .blink_code  = CODE_0,
-        .number_base = NumberBase::DEC,
+        .radix = Radix::DEC,
         .trace_check = TraceCheck::ENFORCED,
     };
 
@@ -37,7 +37,7 @@ TEST(BaseEncodingBlinkerTest, CanShowDecimal12345)
 {
     const TestBlinkerCase test_case{
         .blink_code  = CODE_12345,
-        .number_base = NumberBase::DEC,
+        .radix = Radix::DEC,
         .trace_check = TraceCheck::ENFORCED,
     };
 
@@ -48,7 +48,7 @@ TEST(BaseEncodingBlinkerTest, CanShowBinary5)
 {
     const TestBlinkerCase test_case{
         .blink_code  = CODE_BIN_5,
-        .number_base = NumberBase::BIN,
+        .radix = Radix::BIN,
         .trace_check = TraceCheck::ENFORCED,
     };
 
@@ -59,7 +59,7 @@ TEST(BaseEncodingBlinkerTest, CanShowBinaryNeg7)
 {
     const TestBlinkerCase test_case{
         .blink_code  = CODE_BIN_NEG_7,
-        .number_base = NumberBase::BIN,
+        .radix = Radix::BIN,
         .trace_check = TraceCheck::ENFORCED,
     };
 
@@ -70,7 +70,7 @@ TEST(BaseEncodingBlinkerTest, CanShowHex255)
 {
     const TestBlinkerCase test_case{
         .blink_code  = CODE_HEX_255,
-        .number_base = NumberBase::HEX,
+        .radix = Radix::HEX,
         .trace_check = TraceCheck::ENFORCED,
     };
 
@@ -81,7 +81,7 @@ TEST(BaseEncodingBlinkerTest, CanShowOctal28)
 {
     const TestBlinkerCase test_case{
         .blink_code  = CODE_OCT_28,
-        .number_base = NumberBase::OCT,
+        .radix = Radix::OCT,
         .trace_check = TraceCheck::ENFORCED,
     };
 

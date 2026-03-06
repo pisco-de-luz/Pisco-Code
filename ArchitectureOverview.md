@@ -162,7 +162,7 @@ SignalEmitter
 | Peak level ≥ 32 | `clampPeakLevel()` |
 | Base level ≤ 223 | `clampBaseLevel()` |
 | Enums fit their bitfields | `static_assert` on `SignalMode` and `SignalDuration` |
-| Code within base range | `isValidCodeForBase()` guard in `loadSignalCode()` |
+| Code within radix range | `isValidCodeForRadix()` guard in `loadSignalCode()` |
 | One sequence at a time | `isBusy()` guard in `showCode()` |
 
 ## 7. Timing Model

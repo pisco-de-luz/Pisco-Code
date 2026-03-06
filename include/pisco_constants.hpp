@@ -14,7 +14,7 @@ namespace pisco_code
         OFF = 1U,
     };
 
-    enum class NumberBase : BaseType
+    enum class Radix : RadixType
     {
         BIN = 2U,
         OCT = 8U,
@@ -22,9 +22,12 @@ namespace pisco_code
         HEX = 16U
     };
 
-    constexpr DigitValue to_value(NumberBase base) noexcept
+    using NumberBase
+        [[deprecated("Use Radix instead — will be removed in v2.0.0")]] = Radix;
+
+    constexpr DigitValue to_value(Radix radix) noexcept
     {
-        return static_cast<DigitValue>(base);
+        return static_cast<DigitValue>(radix);
     }
 
     constexpr LedCodeType to_value(LedControlCode led_control_code) noexcept
@@ -53,7 +56,7 @@ namespace pisco_code
         return ((level / SW_PWM_LEVEL_FACTOR) + 0U);
     }
 
-    struct BaseLimits
+    struct RadixLimits
     {
         NumDigits  max_digits;
         SignalCode max_value;
@@ -68,29 +71,29 @@ namespace pisco_code
     constexpr SignalCode MAX_VALUE_DEC  = 999999999U; // 10^(9) - 1
     constexpr SignalCode MAX_VALUE_HEX  = 268435455U; // 16^(7) - 1
 
-    constexpr BaseLimits limits_for(NumberBase base) noexcept
+    constexpr RadixLimits limits_for(Radix radix) noexcept
     {
-        switch (base)
+        switch (radix)
         {
-            case NumberBase::BIN:
-                return BaseLimits{MAX_DIGITS_BIN, MAX_VALUE_BIN};
-            case NumberBase::OCT:
-                return BaseLimits{MAX_DIGITS_OCT, MAX_VALUE_OCT};
-            case NumberBase::DEC:
-                return BaseLimits{MAX_DIGITS_DEC, MAX_VALUE_DEC};
-            case NumberBase::HEX:
-                return BaseLimits{MAX_DIGITS_HEX, MAX_VALUE_HEX};
+            case Radix::BIN:
+                return RadixLimits{MAX_DIGITS_BIN, MAX_VALUE_BIN};
+            case Radix::OCT:
+                return RadixLimits{MAX_DIGITS_OCT, MAX_VALUE_OCT};
+            case Radix::DEC:
+                return RadixLimits{MAX_DIGITS_DEC, MAX_VALUE_DEC};
+            case Radix::HEX:
+                return RadixLimits{MAX_DIGITS_HEX, MAX_VALUE_HEX};
             default:
-                return BaseLimits{0, 0};
+                return RadixLimits{0, 0};
         }
     }
-    constexpr uint8_t max_digits_for_base(NumberBase base) noexcept
+    constexpr uint8_t max_digits_for_radix(Radix radix) noexcept
     {
-        return limits_for(base).max_digits;
+        return limits_for(radix).max_digits;
     }
-    constexpr bool is_code_in_range(NumberBase base, SignalCode code) noexcept
+    constexpr bool is_code_in_range(Radix radix, SignalCode code) noexcept
     {
-        const BaseLimits limits = limits_for(base);
+        const RadixLimits limits = limits_for(radix);
         if (limits.max_digits == 0)
         {
             return false;
@@ -98,27 +101,27 @@ namespace pisco_code
         return (code >= -limits.max_value) && (code <= limits.max_value);
     }
 
-    constexpr bool base_supported(NumberBase base) noexcept
+    constexpr bool radix_supported(Radix radix) noexcept
     {
-        return max_digits_for_base(base) != 0;
+        return max_digits_for_radix(radix) != 0;
     }
 
-    constexpr bool isValidCodeForBase(NumberBase base, SignalCode code) noexcept
+    constexpr bool isValidCodeForRadix(Radix radix, SignalCode code) noexcept
     {
-        return base_supported(base) && is_code_in_range(base, code);
+        return radix_supported(radix) && is_code_in_range(radix, code);
     }
 
-    static_assert(base_supported(NumberBase::BIN), "BIN not supported");
-    static_assert(base_supported(NumberBase::OCT), "OCT not supported");
-    static_assert(base_supported(NumberBase::DEC), "DEC not supported");
-    static_assert(base_supported(NumberBase::HEX), "HEX not supported");
-    static_assert(limits_for(NumberBase::BIN).max_value == MAX_VALUE_BIN,
+    static_assert(radix_supported(Radix::BIN), "BIN not supported");
+    static_assert(radix_supported(Radix::OCT), "OCT not supported");
+    static_assert(radix_supported(Radix::DEC), "DEC not supported");
+    static_assert(radix_supported(Radix::HEX), "HEX not supported");
+    static_assert(limits_for(Radix::BIN).max_value == MAX_VALUE_BIN,
                   "BIN max value mismatch");
-    static_assert(limits_for(NumberBase::OCT).max_value == MAX_VALUE_OCT,
+    static_assert(limits_for(Radix::OCT).max_value == MAX_VALUE_OCT,
                   "OCT max value mismatch");
-    static_assert(limits_for(NumberBase::DEC).max_value == MAX_VALUE_DEC,
+    static_assert(limits_for(Radix::DEC).max_value == MAX_VALUE_DEC,
                   "DEC max value mismatch");
-    static_assert(limits_for(NumberBase::HEX).max_value == MAX_VALUE_HEX,
+    static_assert(limits_for(Radix::HEX).max_value == MAX_VALUE_HEX,
                   "HEX max value mismatch");
 
     // Minimum intensity separation for BASE/PEAK levels to be

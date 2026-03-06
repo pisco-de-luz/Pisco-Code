@@ -1,6 +1,7 @@
 // Targeted tests for deprecated API wrappers.
 // These verify that the old setHighLevel()/setLowLevel() names still
-// delegate correctly to setPeakLevel()/setBaseLevel().
+// delegate correctly to setPeakLevel()/setBaseLevel(), and that the
+// deprecated NumberBase alias still works as a synonym for Radix.
 // Remove this file when the deprecated wrappers are deleted in v2.0.0.
 
 #include "CppUTest/TestHarness.h"
@@ -8,6 +9,7 @@
 #include "helpers/blinker_test_fixture.hpp"
 #include "helpers/tests_constants.hpp"
 #include "pisco_constants.hpp"
+#include "signal_emitter.hpp"
 
 using namespace pisco_code;
 using namespace testutils;
@@ -50,6 +52,23 @@ TEST(DeprecatedApiCompatibilityTest, setLowLevelClampsIdenticallyToSetBaseLevel)
     const auto from_new = controller.getBaseLevel();
 
     LONGS_EQUAL(from_new, from_deprecated);
+}
+
+// --- NumberBase (deprecated alias for Radix) ---------------------------------
+
+TEST(DeprecatedApiCompatibilityTest, NumberBaseAliasResolvesToRadix)
+{
+    const NumberBase nb = NumberBase::DEC;
+    const Radix      r  = Radix::DEC;
+    CHECK_TRUE(nb == r);
+}
+
+TEST(DeprecatedApiCompatibilityTest, showCodeAcceptsNumberBaseAlias)
+{
+    const bool result =
+        blinker.showCode(SignalCode{42}, NumberBase::DEC, NumDigits{0});
+    CHECK_TRUE(result);
+    CHECK_TRUE(blinker.isRunning());
 }
 
 #pragma GCC diagnostic pop

@@ -12,24 +12,24 @@ using namespace pisco_code;
 // - Example OCT: 7,66, 555,4444,33333,...,77777777  (roll over)
 // - Example BIN: 1,0,111,0,11111..., 0
 inline void
-runSameDigitsUpToMaxDigitsForBase(NumberBase base, SignalEmitter& blinker,
+runSameDigitsUpToMaxDigitsForRadix(Radix radix, SignalEmitter& blinker,
                                   MockLedControlLogger& logger)
 {
-    const NumDigits max_digits = max_digits_for_base(base);
-    const auto      base_value = to_value(base);
+    const NumDigits max_digits = max_digits_for_radix(radix);
+    const auto      radix_value = to_value(radix);
 
     for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
         logger.clear();
         const DigitValue digit =
-            (base_value - (num_digits % base_value)) % base_value;
+            (radix_value - (num_digits % radix_value)) % radix_value;
 
         const SignalCode code = testutils::generatePatternOfDigits(
-            {testutils::PatternOption::SAME_DIGIT, base, num_digits, digit});
+            {testutils::PatternOption::SAME_DIGIT, radix, num_digits, digit});
 
         const testutils::TestBlinkerCase test_case{
             .blink_code  = code,
-            .number_base = base,
+            .radix = radix,
             .trace_check = testutils::TraceCheck::ENFORCED,
         };
 
@@ -42,22 +42,22 @@ runSameDigitsUpToMaxDigitsForBase(NumberBase base, SignalEmitter& blinker,
 // - Example OCT: 1, 12, 123, 1234, ..., 12345670
 // - Example BIN: 1, 10, 101, 1010, ..., 1010101010
 inline void
-runSequentialUpDigitsUpToMaxDigitsForBase(NumberBase            base,
+runSequentialUpDigitsUpToMaxDigitsForRadix(Radix            radix,
                                           SignalEmitter&        blinker,
                                           MockLedControlLogger& logger)
 {
-    const NumDigits max_digits = max_digits_for_base(base);
+    const NumDigits max_digits = max_digits_for_radix(radix);
 
     for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
         logger.clear();
 
         const SignalCode code = testutils::generatePatternOfDigits(
-            {testutils::PatternOption::SEQUENCIAL_UP, base, num_digits});
+            {testutils::PatternOption::SEQUENCIAL_UP, radix, num_digits});
 
         const testutils::TestBlinkerCase test_case{
             .blink_code  = code,
-            .number_base = base,
+            .radix = radix,
             .trace_check = testutils::TraceCheck::ENFORCED,
         };
 
@@ -70,22 +70,22 @@ runSequentialUpDigitsUpToMaxDigitsForBase(NumberBase            base,
 // - Example OCT: 1, 21, 321, 4321, ..., 765432107
 // - Example BIN: 1, 10, 101, 1010, ..., 1010101010
 inline void
-runSequentialDownDigitsUpToMaxDigitsForBase(NumberBase            base,
+runSequentialDownDigitsUpToMaxDigitsForRadix(Radix            radix,
                                             SignalEmitter&        blinker,
                                             MockLedControlLogger& logger)
 {
-    const NumDigits max_digits = max_digits_for_base(base);
+    const NumDigits max_digits = max_digits_for_radix(radix);
 
     for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
         logger.clear();
 
         const SignalCode code = testutils::generatePatternOfDigits(
-            {testutils::PatternOption::SEQUENCIAL_DOWN, base, num_digits});
+            {testutils::PatternOption::SEQUENCIAL_DOWN, radix, num_digits});
 
         const testutils::TestBlinkerCase test_case{
             .blink_code  = code,
-            .number_base = base,
+            .radix = radix,
             .trace_check = testutils::TraceCheck::ENFORCED,
         };
 
@@ -98,21 +98,21 @@ runSequentialDownDigitsUpToMaxDigitsForBase(NumberBase            base,
 // - Example OCT: 000000001, 000000012, 000000123, ..., 123456701
 // - Example BIN: 0{23}1, 0{22}10, 0{21}101, ..., 1010{6}
 inline void
-runSequentialDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(
-    NumberBase base, SignalEmitter& blinker, MockLedControlLogger& logger)
+runSequentialDigitsUpToMaxDigitsPaddedToMaxDigitsForRadix(
+    Radix radix, SignalEmitter& blinker, MockLedControlLogger& logger)
 {
-    const NumDigits max_digits = max_digits_for_base(base);
+    const NumDigits max_digits = max_digits_for_radix(radix);
 
     for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
         logger.clear();
 
         const SignalCode code = testutils::generatePatternOfDigits(
-            {testutils::PatternOption::SEQUENCIAL_UP, base, num_digits});
+            {testutils::PatternOption::SEQUENCIAL_UP, radix, num_digits});
 
         const testutils::TestBlinkerCase test_case{
             .blink_code  = code,
-            .number_base = base,
+            .radix = radix,
             .trace_check = testutils::TraceCheck::ENFORCED,
             .numDigits   = max_digits,
         };
@@ -126,25 +126,25 @@ runSequentialDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(
 // - Example OCT: 000000002, 000000011, 000000777, ..., 111111111
 // - Example BIN: 0{23}1, 0{22}11, 0{21}111, ..., 1{24}
 inline void
-runSameDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase     base,
+runSameDigitsUpToMaxDigitsPaddedToMaxDigitsForRadix(Radix     radix,
                                                    SignalEmitter& blinker,
                                                    MockLedControlLogger& logger)
 {
-    const NumDigits max_digits = max_digits_for_base(base);
+    const NumDigits max_digits = max_digits_for_radix(radix);
 
     for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
         logger.clear();
 
         const DigitValue digit_to_show =
-            ((max_digits - num_digits) % (to_value(base) - 1)) + 1;
+            ((max_digits - num_digits) % (to_value(radix) - 1)) + 1;
         const SignalCode code = testutils::generatePatternOfDigits(
-            {testutils::PatternOption::SAME_DIGIT, base, num_digits,
+            {testutils::PatternOption::SAME_DIGIT, radix, num_digits,
              digit_to_show});
 
         const testutils::TestBlinkerCase test_case{
             .blink_code  = code,
-            .number_base = base,
+            .radix = radix,
             .trace_check = testutils::TraceCheck::ENFORCED,
             .numDigits   = max_digits,
         };
@@ -158,21 +158,21 @@ runSameDigitsUpToMaxDigitsPaddedToMaxDigitsForBase(NumberBase     base,
 // - Example OCT: 0001, 0012, 0123, 1234, 2345,..., 6701
 // - Example BIN: 0{11}1, 0{10}10, 0{9}101, ..., 1010{3}
 inline void
-runSequentialDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(
-    NumberBase base, SignalEmitter& blinker, MockLedControlLogger& logger)
+runSequentialDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForRadix(
+    Radix radix, SignalEmitter& blinker, MockLedControlLogger& logger)
 {
-    const NumDigits max_digits = max_digits_for_base(base);
+    const NumDigits max_digits = max_digits_for_radix(radix);
 
     for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
         logger.clear();
 
         const SignalCode code = testutils::generatePatternOfDigits(
-            {testutils::PatternOption::SEQUENCIAL_UP, base, num_digits});
+            {testutils::PatternOption::SEQUENCIAL_UP, radix, num_digits});
 
         const testutils::TestBlinkerCase test_case{
             .blink_code  = code,
-            .number_base = base,
+            .radix = radix,
             .trace_check = testutils::TraceCheck::ENFORCED,
             .numDigits   = max_digits / 2,
         };
@@ -186,24 +186,24 @@ runSequentialDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(
 // - Example OCT: 0002, 0011, 0777, 6666, 5555, ..., 1111
 // - Example BIN: 0{11}1, 0{10}11, 0{9}111, ..., 1{12}
 inline void
-runSameDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(
-    NumberBase base, SignalEmitter& blinker, MockLedControlLogger& logger)
+runSameDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForRadix(
+    Radix radix, SignalEmitter& blinker, MockLedControlLogger& logger)
 {
-    const NumDigits max_digits = max_digits_for_base(base);
+    const NumDigits max_digits = max_digits_for_radix(radix);
 
     for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
         logger.clear();
 
         const DigitValue digit_to_show =
-            ((max_digits - num_digits) % (to_value(base) - 1)) + 1;
+            ((max_digits - num_digits) % (to_value(radix) - 1)) + 1;
         const SignalCode code = testutils::generatePatternOfDigits(
-            {testutils::PatternOption::SAME_DIGIT, base, num_digits,
+            {testutils::PatternOption::SAME_DIGIT, radix, num_digits,
              digit_to_show});
 
         const testutils::TestBlinkerCase test_case{
             .blink_code  = code,
-            .number_base = base,
+            .radix = radix,
             .trace_check = testutils::TraceCheck::ENFORCED,
             .numDigits   = max_digits / 2,
         };
@@ -217,25 +217,25 @@ runSameDigitsUpToMaxDigitsPaddedToHalfMaxDigitsForBase(
 // - Example OCT: 7, 77, 777, ..., 777777777
 // - Example BIN: 1, 11, 111, ..., 1{24}
 inline void
-runSameMaxBaseDigitUpToMaxDigitsNineTimesForBase(NumberBase            base,
+runSameMaxBaseDigitUpToMaxDigitsNineTimesForRadix(Radix            radix,
                                                  SignalEmitter&        blinker,
                                                  MockLedControlLogger& logger)
 {
-    const NumDigits max_digits = max_digits_for_base(base);
-    const auto      base_value = to_value(base);
+    const NumDigits max_digits = max_digits_for_radix(radix);
+    const auto      radix_value = to_value(radix);
 
     for (NumDigits num_digits = 1; num_digits <= max_digits; ++num_digits)
     {
         logger.clear();
 
-        const DigitValue digit_to_show = base_value - 1;
+        const DigitValue digit_to_show = radix_value - 1;
         const SignalCode code          = testutils::generatePatternOfDigits(
-            {testutils::PatternOption::SAME_DIGIT, base, num_digits,
+            {testutils::PatternOption::SAME_DIGIT, radix, num_digits,
                       digit_to_show});
 
         const testutils::TestBlinkerCase test_case{
             .blink_code  = code,
-            .number_base = base,
+            .radix = radix,
             .trace_check = testutils::TraceCheck::ENFORCED,
             .repeats     = 9,
         };

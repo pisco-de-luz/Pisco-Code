@@ -48,7 +48,7 @@ namespace testutils
     struct TestBlinkerCase
     {
         std::optional<SignalCode>     blink_code{std::nullopt};
-        std::optional<NumberBase>     number_base{std::nullopt};
+        std::optional<Radix>     radix{std::nullopt};
         std::optional<TraceCheck>     trace_check{std::nullopt};
         std::optional<NumDigits>      numDigits{std::nullopt};
         std::optional<RepeatTimes>    repeats{std::nullopt};
@@ -79,7 +79,7 @@ namespace testutils
     struct GeneratePatternParams
     {
         PatternOption pattern{PatternOption::SEQUENCIAL_UP};
-        NumberBase    number_base{NumberBase::DEC};
+        Radix    radix{Radix::DEC};
         NumDigits     num_digits{};
         DigitValue    digit{0};
     };

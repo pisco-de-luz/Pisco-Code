@@ -12,8 +12,8 @@
 #include "tests_types.hpp"
 
 using pisco_code::DigitValue;
-using pisco_code::NumberBase;
 using pisco_code::NumDigits;
+using pisco_code::Radix;
 using pisco_code::RepeatTimes;
 using pisco_code::SignalCode;
 using pisco_code::SignalEmitter;
@@ -72,12 +72,12 @@ namespace testutils
         logger->flush();
     }
 
-    inline TraceCode generateExpectedTrace(SignalCode code, NumberBase base,
+    inline TraceCode generateExpectedTrace(SignalCode code, Radix radix,
                                            NumDigits   num_digits = 0,
                                            RepeatTimes repeats    = 1)
     {
         SignalSequencer sequencer;
-        sequencer.loadSignalCode(code, base, num_digits);
+        sequencer.loadSignalCode(code, radix, num_digits);
         SignalPulseIterator pulse_iterator = sequencer.createPulseIterator();
 
         TraceCode trace{};
@@ -104,13 +104,13 @@ namespace testutils
             testCase.blink_code.value_or(DEFAULT_CODE);
         const NumDigits   num_digits = testCase.numDigits.value_or(0);
         const RepeatTimes repeats    = testCase.repeats.value_or(1);
-        const NumberBase  base = testCase.number_base.value_or(NumberBase::DEC);
+        const Radix       radix      = testCase.radix.value_or(Radix::DEC);
 
         const TraceCode expected_trace =
-            generateExpectedTrace(code_to_show, base, num_digits, repeats);
+            generateExpectedTrace(code_to_show, radix, num_digits, repeats);
 
         blinker.setRepeatTimes(repeats);
-        blinker.showCode(code_to_show, base, num_digits);
+        blinker.showCode(code_to_show, radix, num_digits);
         logger.setBlinker(&blinker);
         runSequencer(&blinker, &logger);
         const TraceCode actual_trace = logger.traceLogToString();
@@ -139,11 +139,11 @@ namespace testutils
     generatePatternOfDigits(const GeneratePatternParams& params)
     {
         SignalCode code_to_show = 0;
-        const auto base_value   = to_value(params.number_base);
+        const auto radix_value  = to_value(params.radix);
 
         PatternOption pattern_to_use = params.pattern;
         if (params.pattern == PatternOption::SEQUENCIAL_DOWN &&
-            params.num_digits >= base_value)
+            params.num_digits >= radix_value)
         {
             pattern_to_use = PatternOption::DESCENDING_FROM_MAX;
         }
@@ -155,16 +155,16 @@ namespace testutils
             switch (pattern_to_use)
             {
                 case PatternOption::SEQUENCIAL_UP:
-                    digit_to_show = (i + 1) % base_value;
+                    digit_to_show = (i + 1) % radix_value;
                     break;
 
                 case PatternOption::SEQUENCIAL_DOWN:
-                    digit_to_show = (params.num_digits - i) % base_value;
+                    digit_to_show = (params.num_digits - i) % radix_value;
                     break;
 
                 case PatternOption::DESCENDING_FROM_MAX:
                     digit_to_show = static_cast<DigitValue>(
-                        (base_value - 1 - (i % base_value)));
+                        (radix_value - 1 - (i % radix_value)));
                     break;
 
                 case PatternOption::SAME_DIGIT:
@@ -176,7 +176,7 @@ namespace testutils
                     break;
             }
 
-            code_to_show = code_to_show * base_value + digit_to_show;
+            code_to_show = code_to_show * radix_value + digit_to_show;
         }
 
         return code_to_show;

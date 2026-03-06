@@ -16,17 +16,25 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 - `getPeakLevel()` and `getBaseLevel()` as canonical getter methods in `SignalController`
 - `clampPeakLevel()` and `clampBaseLevel()` validation helpers in `SignalController`
 - Constants `DEFAULT_PEAK_LEVEL`, `DEFAULT_BASE_LEVEL`, `MIN_PEAK_LEVEL`, `MAX_BASE_LEVEL` in `pisco_constants.hpp`
+- `Radix` enum as canonical replacement for `NumberBase`
+- `RadixLimits` struct replacing `BaseLimits`
+- Helper functions `radix_supported()`, `max_digits_for_radix()`, `isValidCodeForRadix()`
+- `RadixType` type alias replacing `BaseType`
 - Deprecated API compatibility test suite (`deprecated_api_compatibility_test.cpp`)
 
 ### Deprecated
 - `setHighLevel()` — use `setPeakLevel()` instead (will be removed in v2.0.0)
 - `setLowLevel()` — use `setBaseLevel()` instead (will be removed in v2.0.0)
 - Constants `DEFAULT_HIGH_LEVEL`, `DEFAULT_LOW_LEVEL`, `MIN_HIGH_LEVEL`, `MAX_LOW_LEVEL` — renamed to PEAK/BASE equivalents
+- `NumberBase` — use `Radix` instead (will be removed in v2.0.0); existing code using `NumberBase::DEC` etc. still compiles via deprecated alias
+- `BaseLimits`, `base_supported()`, `max_digits_for_base()`, `isValidCodeForBase()` — renamed to Radix equivalents
 
 ### Changed
 - Internal member variables renamed: `high_level_` → `peak_level_`, `low_level_` → `base_level_`
 - Internal methods renamed: `clampHighLevel()` → `clampPeakLevel()`, `clampLowLevel()` → `clampBaseLevel()`
-- All test files updated to use PEAK/BASE terminology
+- `showCode()` and `loadSignalCode()` parameter type changed from `NumberBase` to `Radix`
+- All test files updated to use PEAK/BASE and Radix terminology
+- Examples updated to use `Radix` instead of `NumberBase`
 - README and Architecture Overview updated with new API names and examples
 
 ## [1.1.1] — 2026-03-03

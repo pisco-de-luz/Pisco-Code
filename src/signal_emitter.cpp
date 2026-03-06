@@ -15,7 +15,7 @@ namespace pisco_code
     {
     }
 
-    bool SignalEmitter::showCode(SignalCode code, NumberBase base,
+    bool SignalEmitter::showCode(SignalCode code, Radix radix,
                                  NumDigits num_digits) noexcept
     {
         if (isBusy())
@@ -23,7 +23,7 @@ namespace pisco_code
             return false;
         }
         sequencer_.clear();
-        sequencer_.loadSignalCode(code, base, num_digits);
+        sequencer_.loadSignalCode(code, radix, num_digits);
         pulse_iterator_ = sequencer_.createPulseIterator();
 
         current_ts_    = 0;

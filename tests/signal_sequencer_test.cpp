@@ -32,14 +32,14 @@ TEST(SignalSequencerTests, DefaultConstructor_InitializesCorrectly)
 
 TEST(SignalSequencerTests, ShouldHaveNextIterator_AfterLoad)
 {
-    sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
+    sequencer.loadSignalCode(CODE_0, Radix::DEC, 0);
     const SignalPulseIterator iterator = sequencer.createPulseIterator();
     CHECK_TRUE(iterator.hasNext());
 }
 
 TEST(SignalSequencerTests, ShouldNotHaveNextIterator_AfterLoadAndClear)
 {
-    sequencer.loadSignalCode(CODE_0, NumberBase::DEC, 0);
+    sequencer.loadSignalCode(CODE_0, Radix::DEC, 0);
     sequencer.clear();
     const SignalPulseIterator iterator = sequencer.createPulseIterator();
     CHECK_FALSE(iterator.hasNext());
@@ -47,7 +47,7 @@ TEST(SignalSequencerTests, ShouldNotHaveNextIterator_AfterLoadAndClear)
 
 TEST(SignalSequencerTests, CodeMinus103_IteratesCorrectly)
 {
-    sequencer.loadSignalCode(CODE_NEG_103, NumberBase::DEC, 0);
+    sequencer.loadSignalCode(CODE_NEG_103, Radix::DEC, 0);
 
     SignalPulseIterator iterator = sequencer.createPulseIterator();
 

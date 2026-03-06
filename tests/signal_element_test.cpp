@@ -58,7 +58,7 @@ TEST(SignalElementTests, SIGNAL_ELEMENT_NOT_DEFINED_HasExpectedValues)
 TEST(SignalElementTests,
      signal_element_digit_high_level_GeneratesCorrectElement)
 {
-    for (Counter val = 1; val < to_value(NumberBase::HEX); ++val)
+    for (Counter val = 1; val < to_value(Radix::HEX); ++val)
     {
         auto element = signal_element_digit(val);
         CHECK_EQUAL(to_value(SignalMode::PEAK), to_value(element.get_mode()));

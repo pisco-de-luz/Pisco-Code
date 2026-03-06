@@ -17,8 +17,8 @@ namespace pisco_code
         void clear() noexcept;
         void setRepeatTimes(RepeatTimes repeat_times) noexcept;
         [[nodiscard]] RepeatTimes getRepeatTimes() const noexcept;
-        void loadSignalCode(SignalCode code, NumberBase base,
-                            NumDigits num_digits = 0) noexcept;
+        void                      loadSignalCode(SignalCode code, Radix radix,
+                                                 NumDigits num_digits = 0) noexcept;
         [[nodiscard]] SignalPulseIterator createPulseIterator() const noexcept;
         void                              incrementRepeatIndex() noexcept;
         [[nodiscard]] bool                shouldRepeat() const noexcept;

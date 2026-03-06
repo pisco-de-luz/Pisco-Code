@@ -96,8 +96,8 @@ int main()
     pisco_code::SignalEmitter            emitter_led2(controller_led2);
 
     // Start displaying codes
-    emitter_led1.showCode(SignalCode{123}, NumberBase::DEC, NumDigits{0});
-    emitter_led2.showCode(SignalCode{-102}, NumberBase::DEC, NumDigits{0});
+    emitter_led1.showCode(SignalCode{123}, Radix::DEC, NumDigits{0});
+    emitter_led2.showCode(SignalCode{-102}, Radix::DEC, NumDigits{0});
 
     // Main loop - call every 1ms
     while (emitter_led1.isRunning() || emitter_led2.isRunning())
@@ -166,15 +166,15 @@ Or use the convenience script which handles default configuration:
 The `showCode()` method starts displaying a numeric code on the LED. It takes three arguments.
 
 ```C++
-emitter.showCode(SignalCode{-102}, NumberBase::DEC, NumDigits{0});
+emitter.showCode(SignalCode{-102}, Radix::DEC, NumDigits{0});
 ```
 
 ### Arguments
 
 | Argument       | Type         | Description                                            |
 | :---           | :---         | :---                                                   |
-| `code`         | `SignalCode` | Signed integer value to be encoded as LED blinks. Valid range depends on base (e.g., `-999999999` to `999999999` for decimal). |
-| `base`         | `NumberBase` | Numeric base: `NumberBase::DEC`, `NumberBase::HEX`, `NumberBase::OCT`, or `NumberBase::BIN` |
+| `code`         | `SignalCode` | Signed integer value to be encoded as LED blinks. Valid range depends on radix (e.g., `-999999999` to `999999999` for decimal). |
+| `radix`        | `Radix`      | Numeric radix: `Radix::DEC`, `Radix::HEX`, `Radix::OCT`, or `Radix::BIN` |
 | `num_digits`   | `NumDigits`  | Minimum number of digits to display. Set to `0` for automatic, or use a value to pad with leading zeros. |
 
 ### Return Value
@@ -190,7 +190,7 @@ To repeat the code multiple times, use `setRepeatTimes()` before calling `showCo
 
 ```C++
 emitter.setRepeatTimes(RepeatTimes{3});  // Repeat 3 times
-emitter.showCode(SignalCode{42}, NumberBase::DEC, NumDigits{0});
+emitter.showCode(SignalCode{42}, Radix::DEC, NumDigits{0});
 ```
 
 | Method                              | Description                                  |
@@ -231,7 +231,7 @@ controller.setBaseLevel(30);
 emitter.setRepeatTimes(RepeatTimes{2});
 
 // Start displaying
-emitter.showCode(SignalCode{123}, NumberBase::DEC, NumDigits{0});
+emitter.showCode(SignalCode{123}, Radix::DEC, NumDigits{0});
 ```
 
 ## Controller Types
@@ -285,7 +285,7 @@ These methods allow you to monitor and control the execution of LED blink sequen
 pisco_code::LedControllerSoftwarePwm controller(hal_led::ledOnboard);
 pisco_code::SignalEmitter            emitter(controller);
 
-emitter.showCode(SignalCode{123}, NumberBase::DEC, NumDigits{0});
+emitter.showCode(SignalCode{123}, Radix::DEC, NumDigits{0});
 
 while (emitter.isRunning()) {
     emitter.loop();     // Must be called every 1 ms
@@ -298,9 +298,9 @@ while (emitter.isRunning()) {
 * `loop()` advances the LED pattern by 1 ms. You are responsible for calling it at a steady 1 kHz rate (e.g., using `_delay_ms(1)`, `SysTick`, or RTOS task).
 * `isRunning()` is useful to wait for the current signal to complete before showing another code or putting the device to sleep.
 
-## Value Limits by Base
+## Value Limits by Radix
 
-| Base  | Max Digits | Value Range |
+| Radix | Max Digits | Value Range |
 | :---  | :---       | :---        |
 | BIN   | 8          | ±0b11111111 |
 | OCT   | 9          | ±0777777777 |

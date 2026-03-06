@@ -67,7 +67,7 @@ TEST(SignalEmitterGroup, InitiallyPaused)
 TEST(SignalEmitterGroup, ShowCodeStartsSequence)
 {
     const bool result =
-        blinker->showCode(testutils::DEFAULT_CODE, NumberBase::DEC, 2);
+        blinker->showCode(testutils::DEFAULT_CODE, Radix::DEC, 2);
     CHECK_TRUE(result);
     CHECK_TRUE(blinker->isRunning());
 }

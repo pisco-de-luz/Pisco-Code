@@ -20,7 +20,7 @@
 - [ ] Create comprehensive unit tests for new controller architecture
 
 ## Low Priority / Future
-- [ ] Replace `limits_for(base)` `constexpr switch` with a policy template `BaseLimits<NumberBase::DEC>` for zero-overhead compile-time dispatch
+- [ ] Replace `limits_for(radix)` `constexpr switch` with a policy template `RadixLimits<Radix::DEC>` for zero-overhead compile-time dispatch
 - [ ] Make `Timestamp` type configurable (`uint16_t` vs `uint32_t`) for RAM-constrained targets — saves 6 bytes per `SignalEmitter` on AVR when using `uint16_t` (safe because `phaseElapsed()` uses per-phase unsigned subtraction, not cumulative comparison)
 - [ ] Add sound signal controller
 - [ ] Add vibration signal controller  
@@ -159,9 +159,9 @@ The old `high`/`low` names remain as `[[deprecated]]` wrappers until v2.0.0.
 
 Rename `NumberBase` to `Radix` to avoid ambiguity with signal `BASE` level terminology.
 
-- [ ] Add `Radix` enum and `setRadix()`/`getRadix()` as canonical API
-- [ ] Deprecate `NumberBase`, `setBase()`, `getBase()` with `[[deprecated]]`
-- [ ] Update internal references
-- [ ] Update tests
-- [ ] Update documentation
-- [ ] Update CHANGELOG
+- [x] Add `Radix` enum as canonical type, deprecate `NumberBase` with `[[deprecated]]` alias
+- [x] Rename `BaseType` → `RadixType`, `BaseLimits` → `RadixLimits`, helper functions
+- [x] Update `showCode()` and `loadSignalCode()` signatures to use `Radix`
+- [x] Update all test files to use `Radix` terminology
+- [x] Add `NumberBase` deprecated alias compatibility tests
+- [x] Update examples, documentation, and CHANGELOG

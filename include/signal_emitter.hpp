@@ -17,7 +17,7 @@ namespace pisco_code
       public:
         explicit SignalEmitter(SignalController& controller) noexcept;
 
-        bool               showCode(SignalCode code, NumberBase base,
+        bool               showCode(SignalCode code, Radix radix,
                                     NumDigits num_digits) noexcept;
         void               loop() noexcept;
         [[nodiscard]] bool isRunning() const noexcept;

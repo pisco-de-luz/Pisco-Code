@@ -45,7 +45,7 @@ namespace pisco_code
     using Index           = UInt8;
 
     // Type aliases for various enums and types used in the code
-    using BaseType           = Byte;
+    using RadixType          = Byte;
     using LedCodeType        = Byte;
     using PhaseType          = Byte;
     using SignalModeType     = Byte;
