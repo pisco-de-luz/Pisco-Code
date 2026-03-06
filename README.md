@@ -278,6 +278,7 @@ These methods allow you to monitor and control the execution of LED blink sequen
 | :---           | :---                                         |
 | `loop()`       | Must be called exactly once per millisecond. Drives the internal timing and state machine. Non-blocking and fast. |
 | `isRunning()`  | Returns `true` if a signal is currently being displayed. |
+| `stop()`       | Immediately stops the current sequence and resets the emitter to idle. Useful when you need to start a new code without waiting for the current one to finish. |
 
 ### Example
 

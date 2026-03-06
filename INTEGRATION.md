@@ -10,7 +10,7 @@ Add this to your `CMakeLists.txt`:
 cmake_minimum_required(VERSION 3.14)
 project(MyProject LANGUAGES CXX)
 
-set(PISCO_CODE_VERSION "v1.0.2" CACHE STRING "Pisco Code version")
+set(PISCO_CODE_VERSION "v1.2.0" CACHE STRING "Pisco Code version")
 
 include(FetchContent)
 FetchContent_Declare(pisco_code
@@ -98,7 +98,7 @@ project(EmbeddedApp LANGUAGES C CXX)
 
 include(FetchContent)
 FetchContent_Declare(pisco_code
-  URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/v1.0.2/pisco-code-v1.0.2.tar.gz
+  URL https://github.com/pisco-de-luz/Pisco-Code/releases/download/v1.2.0/pisco-code-v1.2.0.tar.gz
 )
 FetchContent_MakeAvailable(pisco_code)
 
