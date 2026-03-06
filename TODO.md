@@ -61,8 +61,8 @@ The old `high`/`low` names remain as `[[deprecated]]` wrappers until v2.0.0.
 - [x] Create `tests/deprecated_api_compatibility_test.cpp` with targeted delegation tests
 
 ### Step 7 — Update documentation
-- [ ] Update `README.md` code examples and method references
-- [ ] Update `ArchitectureOverview.md` setter references
+- [x] Update `README.md` code examples and method references
+- [x] Update `ArchitectureOverview.md` setter references
 
 ### Step 8 — Update examples
 - [ ] Update AVR examples

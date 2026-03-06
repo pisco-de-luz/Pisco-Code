@@ -159,8 +159,8 @@ SignalEmitter
 | `SignalElement` is exactly 1 byte | `static_assert` |
 | `SignalStack` ≤ 16 bytes | `static_assert` (pass-by-value budget) |
 | High − Low ≥ 32 intensity units | `levelsAreTooClose()` in setters |
-| High level ≥ 32 | `clampHighLevel()` |
-| Low level ≤ 223 | `clampLowLevel()` |
+| Peak level ≥ 32 | `clampPeakLevel()` |
+| Base level ≤ 223 | `clampBaseLevel()` |
 | Enums fit their bitfields | `static_assert` on `SignalMode` and `SignalDuration` |
 | Code within base range | `isValidCodeForBase()` guard in `loadSignalCode()` |
 | One sequence at a time | `isBusy()` guard in `showCode()` |

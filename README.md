@@ -205,17 +205,17 @@ Customize the brightness levels used during the blink sequence. These methods ar
 
 | Method                              | Description                                  |
 | :---                                | :---                                         |
-| `setHighLevel(IntensityLevel level)` | Sets brightness for "on" pulses (blinks). Valid range: `0` to `255`. |
-| `setLowLevel(IntensityLevel level)`  | Sets brightness for "base" state between pulses. Valid range: `0` to `255`. |
-| `getPeakLevel()`                     | Returns the current high level setting. |
-| `getBaseLevel()`                     | Returns the current low level setting. |
+| `setPeakLevel(IntensityLevel level)` | Sets brightness for "on" pulses (blinks). Valid range: `0` to `255`. |
+| `setBaseLevel(IntensityLevel level)` | Sets brightness for "base" state between pulses. Valid range: `0` to `255`. |
+| `getPeakLevel()`                     | Returns the current peak level setting. |
+| `getBaseLevel()`                     | Returns the current base level setting. |
 
 #### Default values:
 
 | Constant             | Value | Description |
 | :---                 | :---  | :---        |
-| `DEFAULT_HIGH_LEVEL` | 200   | Default brightness for blinks |
-| `DEFAULT_LOW_LEVEL`  | 50    | Default brightness for base state |
+| `DEFAULT_PEAK_LEVEL` | 200   | Default brightness for blinks |
+| `DEFAULT_BASE_LEVEL` | 50    | Default brightness for base state |
 
 These settings are optional. If not configured, the library uses defaults suitable for most cases.
 
@@ -224,8 +224,8 @@ pisco_code::LedControllerSoftwarePwm controller(hal_led::ledOnboard);
 pisco_code::SignalEmitter            emitter(controller);
 
 // Customize brightness levels on the CONTROLLER
-controller.setHighLevel(180);
-controller.setLowLevel(30);
+controller.setPeakLevel(180);
+controller.setBaseLevel(30);
 
 // Set repeat count on the EMITTER  
 emitter.setRepeatTimes(RepeatTimes{2});
