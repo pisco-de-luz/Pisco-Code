@@ -12,9 +12,23 @@ namespace pisco_code
         virtual void               update() noexcept                    = 0;
         [[nodiscard]] virtual bool readyForPhaseChange() const noexcept = 0;
 
-        void setHighLevel(IntensityLevel level) noexcept;
-        void setLowLevel(IntensityLevel level) noexcept;
+        void setPeakLevel(IntensityLevel level) noexcept;
+        void setBaseLevel(IntensityLevel level) noexcept;
         void setCurrentSignalMode(SignalMode mode) noexcept;
+
+        [[deprecated("Use setPeakLevel() instead — will be removed in "
+                     "v2.0.0")]]
+        void setHighLevel(IntensityLevel level) noexcept
+        {
+            setPeakLevel(level);
+        }
+
+        [[deprecated("Use setBaseLevel() instead — will be removed in "
+                     "v2.0.0")]]
+        void setLowLevel(IntensityLevel level) noexcept
+        {
+            setBaseLevel(level);
+        }
 
         [[nodiscard]] IntensityLevel getPeakLevel() const noexcept;
         [[nodiscard]] IntensityLevel getBaseLevel() const noexcept;

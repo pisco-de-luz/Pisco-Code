@@ -32,8 +32,8 @@ Unify the public API to match the `SignalMode` enum vocabulary (`PEAK`, `BASE`, 
 The old `high`/`low` names remain as `[[deprecated]]` wrappers until v2.0.0.
 
 ### Step 1 — Add canonical API + deprecate old names (`signal_controller.hpp`)
-- [ ] Add `setPeakLevel()` / `setBaseLevel()` as the new canonical setter methods
-- [ ] Mark `setHighLevel()` / `setLowLevel()` as `[[deprecated]]` wrappers that delegate to the new methods
+- [x] Add `setPeakLevel()` / `setBaseLevel()` as the new canonical setter methods
+- [x] Mark `setHighLevel()` / `setLowLevel()` as `[[deprecated]]` wrappers that delegate to the new methods
 
 ### Step 2 — Rename internal constants (`pisco_constants.hpp`)
 - [ ] `DEFAULT_HIGH_LEVEL` → `DEFAULT_PEAK_LEVEL`

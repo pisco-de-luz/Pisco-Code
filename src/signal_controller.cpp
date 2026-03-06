@@ -6,7 +6,7 @@
 
 namespace pisco_code
 {
-    void SignalController::setHighLevel(IntensityLevel level) noexcept
+    void SignalController::setPeakLevel(IntensityLevel level) noexcept
     {
         high_level_ = clampHighLevel(level);
 
@@ -16,7 +16,7 @@ namespace pisco_code
         }
     }
 
-    void SignalController::setLowLevel(IntensityLevel level) noexcept
+    void SignalController::setBaseLevel(IntensityLevel level) noexcept
     {
         low_level_ = clampLowLevel(level);
 
