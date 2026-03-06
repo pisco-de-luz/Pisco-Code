@@ -31,6 +31,14 @@ namespace pisco_code
         return true;
     }
 
+    void SignalEmitter::stop() noexcept
+    {
+        is_running_    = false;
+        current_phase_ = PhaseLoop::IDLE;
+        controller_.setCurrentSignalMode(SignalMode::GAP);
+        controller_.update();
+    }
+
     void SignalEmitter::loop() noexcept
     {
         ++current_ts_;

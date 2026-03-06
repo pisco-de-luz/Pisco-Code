@@ -20,6 +20,7 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 - `RadixLimits` struct replacing `BaseLimits`
 - Helper functions `radix_supported()`, `max_digits_for_radix()`, `isValidCodeForRadix()`
 - `RadixType` type alias replacing `BaseType`
+- `stop()` method on `SignalEmitter` — immediately halts a running sequence, turns the LED off (GAP), and unblocks `showCode()` for immediate re-use
 - Deprecated API compatibility test suite (`deprecated_api_compatibility_test.cpp`)
 
 ### Deprecated

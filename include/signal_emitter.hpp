@@ -19,6 +19,7 @@ namespace pisco_code
 
         bool               showCode(SignalCode code, Radix radix,
                                     NumDigits num_digits) noexcept;
+        void               stop() noexcept;
         void               loop() noexcept;
         [[nodiscard]] bool isRunning() const noexcept;
         void               setRepeatTimes(RepeatTimes repeat_times) noexcept;

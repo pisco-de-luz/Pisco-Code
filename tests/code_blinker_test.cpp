@@ -71,3 +71,32 @@ TEST(SignalEmitterGroup, ShowCodeStartsSequence)
     CHECK_TRUE(result);
     CHECK_TRUE(blinker->isRunning());
 }
+
+TEST(SignalEmitterGroup, StopWhenIdle_IsHarmless)
+{
+    CHECK_FALSE(blinker->isRunning());
+    blinker->stop(); // should not crash or change anything meaningful
+    CHECK_FALSE(blinker->isRunning());
+}
+
+TEST(SignalEmitterGroup, StopWhenRunning_SetsIsRunningToFalse)
+{
+    blinker->showCode(testutils::DEFAULT_CODE, Radix::DEC, 2);
+    CHECK_TRUE(blinker->isRunning());
+
+    blinker->stop();
+    CHECK_FALSE(blinker->isRunning());
+}
+
+TEST(SignalEmitterGroup, StopAllowsShowCodeImmediately)
+{
+    blinker->showCode(testutils::DEFAULT_CODE, Radix::DEC, 2);
+    CHECK_TRUE(blinker->isRunning());
+
+    blinker->stop();
+
+    const bool result =
+        blinker->showCode(testutils::DEFAULT_CODE, Radix::DEC, 2);
+    CHECK_TRUE(result);
+    CHECK_TRUE(blinker->isRunning());
+}

@@ -17,6 +17,7 @@
 - [x] Move repeat logic to `SignalSequencer` class
 - [x] Separate `setRepeatTimes()` from `showCode()` method
 - [x] Add getter methods for peak and base levels
+- [x] Add `stop()` method to `SignalEmitter` — halts mid-sequence, turns LED off, unblocks `showCode()`
 - [ ] Create comprehensive unit tests for new controller architecture
 
 ## Low Priority / Future
