@@ -29,11 +29,11 @@ namespace testutils
 
         [[nodiscard]] IntensityLevel getBaseLevel() const
         {
-            return low_level_;
+            return base_level_;
         }
         [[nodiscard]] IntensityLevel getPeakLevel() const
         {
-            return high_level_;
+            return peak_level_;
         }
         [[nodiscard]] const std::vector<LedLevelDuration>& getEvents() const
         {
@@ -44,8 +44,8 @@ namespace testutils
 
       private:
         bool                          pattern_is_valid_{true};
-        IntensityLevel                low_level_{0};
-        IntensityLevel                high_level_{0};
+        IntensityLevel                base_level_{0};
+        IntensityLevel                peak_level_{0};
         std::vector<LedLevelDuration> led_events_{};
         std::set<IntensityLevel>      used_levels_{};
     };

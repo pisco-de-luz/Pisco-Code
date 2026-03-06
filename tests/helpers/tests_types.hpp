@@ -53,7 +53,7 @@ namespace testutils
         std::optional<NumDigits>      numDigits{std::nullopt};
         std::optional<RepeatTimes>    repeats{std::nullopt};
         std::optional<IntensityLevel> expectedBase{};
-        std::optional<IntensityLevel> expectedPulse{};
+        std::optional<IntensityLevel> expectedPeak{};
     };
 
     // PatternOption — Digit composition strategies used in test generation.

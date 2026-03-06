@@ -10,9 +10,9 @@ namespace testutils
 {
 
     // Trace character constants
-    inline const TraceCode LED_OFF_CHARACTER   = "_";
-    inline const TraceCode LED_PULSE_CHARACTER = "^";
-    inline const TraceCode LED_BASE_CHARACTER  = "-";
+    inline const TraceCode LED_OFF_CHARACTER  = "_";
+    inline const TraceCode LED_PEAK_CHARACTER = "^";
+    inline const TraceCode LED_BASE_CHARACTER = "-";
 
     // Duration-based repetition rules
     inline const std::array<TraceRepeatRule, 3> TRACE_REPEAT_RULES{
@@ -38,33 +38,33 @@ namespace testutils
     inline constexpr SignalCode CODE_12345                       = 12345;
     inline constexpr SignalCode CODE_12345_TRUNCATED_TO_2_DIGITS = 12345;
 
-    constexpr IntensityLevel LOWEST_LOW_LEVEL = 16U;
-    constexpr IntensityLevel HIGHEST_LOW_LEVEL =
+    constexpr IntensityLevel LOWEST_BASE_LEVEL = 16U;
+    constexpr IntensityLevel HIGHEST_BASE_LEVEL =
         MAX_BYTE_VALUE - MIN_INTENSITY_DIFFERENCE;
-    constexpr IntensityLevel MID_LOW_LEVEL =
-        (HIGHEST_LOW_LEVEL - LOWEST_LOW_LEVEL) / 2U;
-    constexpr IntensityLevel TOO_HIGH_LOW_LEVEL = MAX_BYTE_VALUE;
-    constexpr IntensityLevel TOO_LOW_LOW_LEVEL  = 0U;
+    constexpr IntensityLevel MID_BASE_LEVEL =
+        (HIGHEST_BASE_LEVEL - LOWEST_BASE_LEVEL) / 2U;
+    constexpr IntensityLevel TOO_HIGH_BASE_LEVEL = MAX_BYTE_VALUE;
+    constexpr IntensityLevel TOO_LOW_BASE_LEVEL  = 0U;
 
-    constexpr std::array<IntensityLevel, 5> ALL_LOW_LEVELS = {
+    constexpr std::array<IntensityLevel, 5> ALL_BASE_LEVELS = {
         {
-         LOWEST_LOW_LEVEL, HIGHEST_LOW_LEVEL,
-         MID_LOW_LEVEL, TOO_HIGH_LOW_LEVEL,
-         TOO_LOW_LOW_LEVEL, }
+         LOWEST_BASE_LEVEL, HIGHEST_BASE_LEVEL,
+         MID_BASE_LEVEL, TOO_HIGH_BASE_LEVEL,
+         TOO_LOW_BASE_LEVEL, }
     };
 
-    constexpr IntensityLevel LOWEST_HIGH_LEVEL  = 16U;
-    constexpr IntensityLevel HIGHEST_HIGH_LEVEL = MAX_BYTE_VALUE;
-    constexpr IntensityLevel MID_HIGH_LEVEL =
-        (HIGHEST_HIGH_LEVEL - LOWEST_HIGH_LEVEL) / 2U;
-    constexpr IntensityLevel TOO_HIGH_HIGH_LEVEL = MAX_BYTE_VALUE;
-    constexpr IntensityLevel TOO_LOW_HIGH_LEVEL  = 0U;
+    constexpr IntensityLevel LOWEST_PEAK_LEVEL  = 16U;
+    constexpr IntensityLevel HIGHEST_PEAK_LEVEL = MAX_BYTE_VALUE;
+    constexpr IntensityLevel MID_PEAK_LEVEL =
+        (HIGHEST_PEAK_LEVEL - LOWEST_PEAK_LEVEL) / 2U;
+    constexpr IntensityLevel TOO_HIGH_PEAK_LEVEL = MAX_BYTE_VALUE;
+    constexpr IntensityLevel TOO_LOW_PEAK_LEVEL  = 0U;
 
-    constexpr std::array<IntensityLevel, 5> ALL_HIGH_LEVELS = {
+    constexpr std::array<IntensityLevel, 5> ALL_PEAK_LEVELS = {
         {
-         LOWEST_HIGH_LEVEL, HIGHEST_HIGH_LEVEL,
-         MID_HIGH_LEVEL, TOO_HIGH_HIGH_LEVEL,
-         TOO_LOW_HIGH_LEVEL, }
+         LOWEST_PEAK_LEVEL, HIGHEST_PEAK_LEVEL,
+         MID_PEAK_LEVEL, TOO_HIGH_PEAK_LEVEL,
+         TOO_LOW_PEAK_LEVEL, }
     };
 
 } // namespace testutils

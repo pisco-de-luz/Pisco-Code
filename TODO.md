@@ -48,14 +48,14 @@ The old `high`/`low` names remain as `[[deprecated]]` wrappers until v2.0.0.
 - [x] Update all internal references in `signal_controller.cpp`
 
 ### Step 4 — Migrate test helpers
-- [ ] Rename constants in `tests/helpers/tests_constants.hpp`
-- [ ] Rename `expectedPulse` → `expectedPeak` in `tests/helpers/tests_types.hpp`
-- [ ] Update mock references in `tests/mocks/`
+- [x] Rename constants in `tests/helpers/tests_constants.hpp`
+- [x] Rename `expectedPulse` → `expectedPeak` in `tests/helpers/tests_types.hpp`
+- [x] Update mock references in `tests/mocks/`
 
 ### Step 5 — Migrate test files to new API
-- [ ] Update `setter_behavior_blinker_test.cpp`
-- [ ] Update `loop_behavior_blinker_test.cpp`
-- [ ] Update remaining test files referencing old names
+- [x] Update `setter_behavior_blinker_test.cpp`
+- [x] Update `loop_behavior_blinker_test.cpp`
+- [x] Update remaining test files referencing old names
 
 ### Step 6 — Add deprecated API compatibility tests
 - [ ] Create `tests/deprecated_api_compatibility_test.cpp` with targeted delegation tests
@@ -159,3 +159,14 @@ The old `high`/`low` names remain as `[[deprecated]]` wrappers until v2.0.0.
 - **Null Safety**: `SignalEmitter` now takes a `SignalController&` reference (not pointer); LED controllers reject `nullptr` at compile time via `= delete`
 - **noexcept**: All non-throwing public and private functions marked `noexcept`
 - **Header Hygiene**: `using` declarations scoped inside `namespace pisco_code`, no leakage into user translation units
+
+## Naming unification: NumberBase → Radix
+
+Rename `NumberBase` to `Radix` to avoid ambiguity with signal `BASE` level terminology.
+
+- [ ] Add `Radix` enum and `setRadix()`/`getRadix()` as canonical API
+- [ ] Deprecate `NumberBase`, `setBase()`, `getBase()` with `[[deprecated]]`
+- [ ] Update internal references
+- [ ] Update tests
+- [ ] Update documentation
+- [ ] Update CHANGELOG

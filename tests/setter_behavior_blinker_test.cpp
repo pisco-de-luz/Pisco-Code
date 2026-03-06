@@ -15,8 +15,8 @@ TEST_GROUP_BASE(SetterBehaviorBlinkerTest, BlinkerTestFixture){};
 TEST(SetterBehaviorBlinkerTest, ShouldUseDefaultPwmLevel)
 {
     const TestBlinkerCase test_case{
-        .trace_check   = TraceCheck::NOT_ENFORCED,
-        .expectedPulse = to_sw_pwm_level(DEFAULT_PEAK_LEVEL),
+        .trace_check  = TraceCheck::NOT_ENFORCED,
+        .expectedPeak = to_sw_pwm_level(DEFAULT_PEAK_LEVEL),
     };
 
     checkBlinkerBehavior(blinker, logger, test_case);
@@ -25,10 +25,10 @@ TEST(SetterBehaviorBlinkerTest, ShouldUseDefaultPwmLevel)
 TEST(SetterBehaviorBlinkerTest, ShouldUseCustomPwmLevel)
 {
 
-    controller.setHighLevel(MID_HIGH_LEVEL);
+    controller.setPeakLevel(MID_PEAK_LEVEL);
     const TestBlinkerCase test_case{
-        .trace_check   = TraceCheck::NOT_ENFORCED,
-        .expectedPulse = to_sw_pwm_level(MID_HIGH_LEVEL),
+        .trace_check  = TraceCheck::NOT_ENFORCED,
+        .expectedPeak = to_sw_pwm_level(MID_PEAK_LEVEL),
     };
 
     checkBlinkerBehavior(blinker, logger, test_case);
@@ -36,10 +36,10 @@ TEST(SetterBehaviorBlinkerTest, ShouldUseCustomPwmLevel)
 
 TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighPwmLevel)
 {
-    controller.setHighLevel(TOO_HIGH_HIGH_LEVEL);
+    controller.setPeakLevel(TOO_HIGH_PEAK_LEVEL);
     const TestBlinkerCase test_case{
-        .trace_check   = TraceCheck::NOT_ENFORCED,
-        .expectedPulse = to_sw_pwm_level(HIGHEST_HIGH_LEVEL),
+        .trace_check  = TraceCheck::NOT_ENFORCED,
+        .expectedPeak = to_sw_pwm_level(HIGHEST_PEAK_LEVEL),
     };
 
     checkBlinkerBehavior(blinker, logger, test_case);
@@ -58,10 +58,10 @@ TEST(SetterBehaviorBlinkerTest, ShouldUseDefaultBaseLevel)
 TEST(SetterBehaviorBlinkerTest, ShouldUseCustomBaseLevel)
 {
 
-    controller.setLowLevel(MID_LOW_LEVEL);
+    controller.setBaseLevel(MID_BASE_LEVEL);
     const TestBlinkerCase test_case{
         .trace_check  = TraceCheck::NOT_ENFORCED,
-        .expectedBase = to_sw_pwm_level(MID_LOW_LEVEL),
+        .expectedBase = to_sw_pwm_level(MID_BASE_LEVEL),
     };
 
     checkBlinkerBehavior(blinker, logger, test_case);
@@ -70,25 +70,25 @@ TEST(SetterBehaviorBlinkerTest, ShouldUseCustomBaseLevel)
 // Expect base level to be clamped to safe default when above allowed maximum.
 TEST(SetterBehaviorBlinkerTest, ShouldRejectTooHighBaseLevel)
 {
-    controller.setLowLevel(TOO_HIGH_LOW_LEVEL);
+    controller.setBaseLevel(TOO_HIGH_BASE_LEVEL);
     const TestBlinkerCase test_case{
         .trace_check  = TraceCheck::NOT_ENFORCED,
-        .expectedBase = to_sw_pwm_level(HIGHEST_LOW_LEVEL),
+        .expectedBase = to_sw_pwm_level(HIGHEST_BASE_LEVEL),
     };
 
     checkBlinkerBehavior(blinker, logger, test_case);
 }
 
 TEST(SetterBehaviorBlinkerTest,
-     ShouldNotAffectDefaultPulseLevelWhenSettingBaseLevel)
+     ShouldNotAffectDefaultPeakLevelWhenSettingBaseLevel)
 {
-    for (auto led_level : ALL_LOW_LEVELS)
+    for (auto led_level : ALL_BASE_LEVELS)
     {
-        controller.setLowLevel(led_level);
+        controller.setBaseLevel(led_level);
 
         const TestBlinkerCase test_case{
-            .trace_check   = TraceCheck::NOT_ENFORCED,
-            .expectedPulse = to_sw_pwm_level(DEFAULT_PEAK_LEVEL),
+            .trace_check  = TraceCheck::NOT_ENFORCED,
+            .expectedPeak = to_sw_pwm_level(DEFAULT_PEAK_LEVEL),
         };
 
         checkBlinkerBehavior(blinker, logger, test_case);
@@ -96,15 +96,15 @@ TEST(SetterBehaviorBlinkerTest,
 }
 
 TEST(SetterBehaviorBlinkerTest,
-     ShouldNotAffecLowestBaseLevelWhenSettingPulseLevel)
+     ShouldNotAffectLowestBaseLevelWhenSettingPeakLevel)
 {
-    for (auto led_level : ALL_HIGH_LEVELS)
+    for (auto led_level : ALL_PEAK_LEVELS)
     {
-        controller.setHighLevel(led_level);
-        controller.setLowLevel(LOWEST_LOW_LEVEL);
+        controller.setPeakLevel(led_level);
+        controller.setBaseLevel(LOWEST_BASE_LEVEL);
         const TestBlinkerCase test_case{
             .trace_check  = TraceCheck::NOT_ENFORCED,
-            .expectedBase = to_sw_pwm_level(LOWEST_LOW_LEVEL),
+            .expectedBase = to_sw_pwm_level(LOWEST_BASE_LEVEL),
         };
 
         checkBlinkerBehavior(blinker, logger, test_case);

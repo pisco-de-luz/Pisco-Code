@@ -127,10 +127,10 @@ namespace testutils
             CHECK_EQUAL_TEXT(testCase.expectedBase.value(),
                              logger.getBaseLevel(), "BASE level mismatch");
         }
-        if (testCase.expectedPulse.has_value())
+        if (testCase.expectedPeak.has_value())
         {
-            CHECK_EQUAL_TEXT(testCase.expectedPulse.value(),
-                             logger.getPeakLevel(), "Pulse level mismatch");
+            CHECK_EQUAL_TEXT(testCase.expectedPeak.value(),
+                             logger.getPeakLevel(), "Peak level mismatch");
         }
     }
 

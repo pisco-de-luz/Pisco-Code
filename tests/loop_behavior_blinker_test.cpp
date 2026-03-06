@@ -13,10 +13,11 @@ TEST_GROUP_BASE(LoopBehaviorBlinkerTest, BlinkerTestFixture){};
 
 TEST(LoopBehaviorBlinkerTest, ShouldHoldDimLightForDigitZero)
 {
-    controller.setLowLevel(MID_LOW_LEVEL);
-    const TestBlinkerCase test_case{.blink_code   = CODE_0,
-                                    .trace_check  = TraceCheck::NOT_ENFORCED,
-                                    .expectedBase = to_sw_pwm_level(MID_LOW_LEVEL)};
+    controller.setBaseLevel(MID_BASE_LEVEL);
+    const TestBlinkerCase test_case{.blink_code  = CODE_0,
+                                    .trace_check = TraceCheck::NOT_ENFORCED,
+                                    .expectedBase =
+                                        to_sw_pwm_level(MID_BASE_LEVEL)};
 
     checkBlinkerBehavior(blinker, logger, test_case);
 }
