@@ -9,7 +9,7 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-## [1.2.0] — 2025-07-18
+## [1.2.0] — 2026-03-06
 
 ### Added
 - `setPeakLevel()` and `setBaseLevel()` as canonical setter methods in `SignalController`
