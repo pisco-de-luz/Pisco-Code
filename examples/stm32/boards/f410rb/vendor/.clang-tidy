@@ -1,0 +1,3 @@
+# Disable all checks for third-party vendor code (ST CMSIS headers).
+# These files must not be modified.
+Checks: '-*'

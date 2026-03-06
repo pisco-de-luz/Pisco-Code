@@ -1,7 +1,7 @@
 # //--------------------------------------------------------------------------------------------
-# // Tests .clang-tidy — applies to tests/ directory
-# // Policy: suppress ONLY CppUTest macro false positives.
-# // All safety-relevant checks remain enabled.
+# // Examples .clang-tidy — applies to examples/ directory
+# // Policy: suppress ONLY IWYU (umbrella header is by design) and
+# //         vendor/HAL register noise (not our code to fix).
 # //--------------------------------------------------------------------------------------------
 Checks: >
   clang-analyzer-*,
@@ -10,23 +10,15 @@ Checks: >
   -modernize-use-trailing-return-type,
   performance-*,
   readability-*,
-  -readability-named-parameter,
   cppcoreguidelines-*,
-  -cppcoreguidelines-owning-memory,
-  -cppcoreguidelines-avoid-non-const-global-variables,
-  google-readability-function-size,
   misc-*,
   -misc-include-cleaner,
-  -misc-non-private-member-variables-in-classes,
-  -misc-use-anonymous-namespace,
-  hicpp-*,
-  -hicpp-named-parameter
+  hicpp-*
 
-HeaderFilterRegex: 'tests/|include/'
+HeaderFilterRegex: 'include/|examples/'
 FormatStyle: file
 CheckOptions:
-  # Same naming rules as library — tests code is held to the same standard.
-  # (CppUTest TEST() macros are excluded via IgnoreMacros.)
+  # Same naming rules as library.
   - key: readability-identifier-naming.ClassCase
     value: CamelCase
   - key: readability-identifier-naming.StructCase
