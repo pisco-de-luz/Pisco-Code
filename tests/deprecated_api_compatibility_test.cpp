@@ -58,9 +58,9 @@ TEST(DeprecatedApiCompatibilityTest, setLowLevelClampsIdenticallyToSetBaseLevel)
 
 TEST(DeprecatedApiCompatibilityTest, NumberBaseAliasResolvesToRadix)
 {
-    const NumberBase nb = NumberBase::DEC;
-    const Radix      r  = Radix::DEC;
-    CHECK_TRUE(nb == r);
+    const NumberBase old_alias = NumberBase::DEC;
+    const Radix      new_type  = Radix::DEC;
+    CHECK_TRUE(old_alias == new_type);
 }
 
 TEST(DeprecatedApiCompatibilityTest, showCodeAcceptsNumberBaseAlias)
