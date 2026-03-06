@@ -3,10 +3,17 @@
     // Project-wide settings — safe to commit, apply to all contributors
     // ---------------------------------------------------------------
 
-    // Clang-tidy analysis (paths are machine-local, set in user settings)
+    // Clang-tidy analysis — always run against the native build
     "C_Cpp.codeAnalysis.clangTidy.enabled": true,
     "C_Cpp.codeAnalysis.runAutomatically": true,
-    "C_Cpp.default.compileCommands": "${workspaceFolder}/build/${config:cmake.buildDirectory}/compile_commands.json",
+    "C_Cpp.default.compileCommands": "${workspaceFolder}/build/native/compile_commands.json",
+
+    // Exclude third-party and build artifacts from analysis
+    "C_Cpp.codeAnalysis.exclude": {
+        "**/external/**": true,
+        "**/build/**": true,
+        "**/_delete/**": true
+    },
 
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
