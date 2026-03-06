@@ -9,6 +9,26 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.2.0] — 2025-07-18
+
+### Added
+- `setPeakLevel()` and `setBaseLevel()` as canonical setter methods in `SignalController`
+- `getPeakLevel()` and `getBaseLevel()` as canonical getter methods in `SignalController`
+- `clampPeakLevel()` and `clampBaseLevel()` validation helpers in `SignalController`
+- Constants `DEFAULT_PEAK_LEVEL`, `DEFAULT_BASE_LEVEL`, `MIN_PEAK_LEVEL`, `MAX_BASE_LEVEL` in `pisco_constants.hpp`
+- Deprecated API compatibility test suite (`deprecated_api_compatibility_test.cpp`)
+
+### Deprecated
+- `setHighLevel()` — use `setPeakLevel()` instead (will be removed in v2.0.0)
+- `setLowLevel()` — use `setBaseLevel()` instead (will be removed in v2.0.0)
+- Constants `DEFAULT_HIGH_LEVEL`, `DEFAULT_LOW_LEVEL`, `MIN_HIGH_LEVEL`, `MAX_LOW_LEVEL` — renamed to PEAK/BASE equivalents
+
+### Changed
+- Internal member variables renamed: `high_level_` → `peak_level_`, `low_level_` → `base_level_`
+- Internal methods renamed: `clampHighLevel()` → `clampPeakLevel()`, `clampLowLevel()` → `clampBaseLevel()`
+- All test files updated to use PEAK/BASE terminology
+- README and Architecture Overview updated with new API names and examples
+
 ## [1.1.1] — 2026-03-03
 
 ### Added
@@ -111,7 +131,8 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 - CppUTest-based unit test suite (native build)
 - MIT License
 
-[Unreleased]: https://github.com/pisco-de-luz/Pisco-Code/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/pisco-de-luz/Pisco-Code/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/pisco-de-luz/Pisco-Code/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/pisco-de-luz/Pisco-Code/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/pisco-de-luz/Pisco-Code/compare/v1.0.2...v1.1.0
 [1.0.2]: https://github.com/pisco-de-luz/Pisco-Code/compare/v1.0.1...v1.0.2

@@ -64,13 +64,8 @@ The old `high`/`low` names remain as `[[deprecated]]` wrappers until v2.0.0.
 - [x] Update `README.md` code examples and method references
 - [x] Update `ArchitectureOverview.md` setter references
 
-### Step 8 — Update examples
-- [ ] Update AVR examples
-- [ ] Update STM32 examples
-- [ ] Update native examples
-
-### Step 9 — Update CHANGELOG.md
-- [ ] Add v1.2.0 section (Added / Deprecated / Changed)
+### Step 8 — Update CHANGELOG.md
+- [x] Add v1.2.0 section (Added / Deprecated / Changed)
 
 ## Architecture Decisions Made
 - [x] Use Template Method Pattern for `SignalController`
