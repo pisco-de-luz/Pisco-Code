@@ -103,8 +103,7 @@ namespace pisco_code
         return max_digits_for_base(base) != 0;
     }
 
-    constexpr bool
-    isValidCodeForBase(NumberBase base, SignalCode code) noexcept
+    constexpr bool isValidCodeForBase(NumberBase base, SignalCode code) noexcept
     {
         return base_supported(base) && is_code_in_range(base, code);
     }
@@ -129,11 +128,11 @@ namespace pisco_code
     constexpr NumBits        DURATION_BITS            = 2U;
     constexpr UInt8          MAX_BYTE_VALUE           = 255U;
     constexpr IntensityLevel PWM_MAX                  = 15U;
-    constexpr IntensityLevel DEFAULT_LOW_LEVEL        = 50U;
-    constexpr IntensityLevel DEFAULT_HIGH_LEVEL       = 200U;
+    constexpr IntensityLevel DEFAULT_BASE_LEVEL       = 50U;
+    constexpr IntensityLevel DEFAULT_PEAK_LEVEL       = 200U;
     constexpr IntensityLevel MIN_INTENSITY_DIFFERENCE = 32U;
-    constexpr IntensityLevel MIN_HIGH_LEVEL = MIN_INTENSITY_DIFFERENCE;
-    constexpr IntensityLevel MAX_LOW_LEVEL =
+    constexpr IntensityLevel MIN_PEAK_LEVEL = MIN_INTENSITY_DIFFERENCE;
+    constexpr IntensityLevel MAX_BASE_LEVEL =
         MAX_BYTE_VALUE - MIN_INTENSITY_DIFFERENCE;
     constexpr UInt32 capacity_for_bits(NumBits bits) noexcept
     {

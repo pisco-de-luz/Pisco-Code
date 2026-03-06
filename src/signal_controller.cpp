@@ -8,21 +8,21 @@ namespace pisco_code
 {
     void SignalController::setPeakLevel(IntensityLevel level) noexcept
     {
-        high_level_ = clampHighLevel(level);
+        peak_level_ = clampPeakLevel(level);
 
         if (levelsAreTooClose())
         {
-            low_level_ = high_level_ - MIN_INTENSITY_DIFFERENCE;
+            base_level_ = peak_level_ - MIN_INTENSITY_DIFFERENCE;
         }
     }
 
     void SignalController::setBaseLevel(IntensityLevel level) noexcept
     {
-        low_level_ = clampLowLevel(level);
+        base_level_ = clampBaseLevel(level);
 
         if (levelsAreTooClose())
         {
-            high_level_ = low_level_ + MIN_INTENSITY_DIFFERENCE;
+            peak_level_ = base_level_ + MIN_INTENSITY_DIFFERENCE;
         }
     }
 
@@ -33,12 +33,12 @@ namespace pisco_code
 
     IntensityLevel SignalController::getPeakLevel() const noexcept
     {
-        return high_level_;
+        return peak_level_;
     }
 
     IntensityLevel SignalController::getBaseLevel() const noexcept
     {
-        return low_level_;
+        return base_level_;
     }
 
     SignalMode SignalController::getCurrentSignalMode() const noexcept
@@ -62,7 +62,7 @@ namespace pisco_code
 
     bool SignalController::levelsAreTooClose() const noexcept
     {
-        return high_level_ - low_level_ < MIN_INTENSITY_DIFFERENCE;
+        return peak_level_ - base_level_ < MIN_INTENSITY_DIFFERENCE;
     }
 
 } // namespace pisco_code

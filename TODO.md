@@ -36,16 +36,16 @@ The old `high`/`low` names remain as `[[deprecated]]` wrappers until v2.0.0.
 - [x] Mark `setHighLevel()` / `setLowLevel()` as `[[deprecated]]` wrappers that delegate to the new methods
 
 ### Step 2 — Rename internal constants (`pisco_constants.hpp`)
-- [ ] `DEFAULT_HIGH_LEVEL` → `DEFAULT_PEAK_LEVEL`
-- [ ] `DEFAULT_LOW_LEVEL` → `DEFAULT_BASE_LEVEL`
-- [ ] `MIN_HIGH_LEVEL` → `MIN_PEAK_LEVEL`
-- [ ] `MAX_LOW_LEVEL` → `MAX_BASE_LEVEL`
-- [ ] `clampHighLevel()` → `clampPeakLevel()`
-- [ ] `clampLowLevel()` → `clampBaseLevel()`
+- [x] `DEFAULT_HIGH_LEVEL` → `DEFAULT_PEAK_LEVEL`
+- [x] `DEFAULT_LOW_LEVEL` → `DEFAULT_BASE_LEVEL`
+- [x] `MIN_HIGH_LEVEL` → `MIN_PEAK_LEVEL`
+- [x] `MAX_LOW_LEVEL` → `MAX_BASE_LEVEL`
+- [x] `clampHighLevel()` → `clampPeakLevel()`
+- [x] `clampLowLevel()` → `clampBaseLevel()`
 
 ### Step 3 — Update `signal_controller.cpp` internals
-- [ ] Rename private members `high_level_` → `peak_level_`, `low_level_` → `base_level_`
-- [ ] Update all internal references in `signal_controller.cpp`
+- [x] Rename private members `high_level_` → `peak_level_`, `low_level_` → `base_level_`
+- [x] Update all internal references in `signal_controller.cpp`
 
 ### Step 4 — Migrate test helpers
 - [ ] Rename constants in `tests/helpers/tests_constants.hpp`
