@@ -34,7 +34,7 @@ class MockLedControllerAdapter : public SignalController
 
         advancePwmTick();
     }
-    [[nodiscard]] bool readyForPhaseChange() const noexcept
+    [[nodiscard]] bool readyForPhaseChange() const noexcept override
     {
         return (pwm_tick_position_ == 0);
     }
