@@ -10,6 +10,7 @@ set(PISCO_CODE_TEST_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/base_encoding_blinker_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/code_blinker_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/deprecated_api_compatibility_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/generate_pattern_of_digits_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/led_blink_pattern_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/loop_behavior_blinker_test.cpp
