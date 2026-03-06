@@ -12,16 +12,6 @@ namespace
     class MockLedController : public SignalController
     {
       public:
-        [[nodiscard]] Int32 getBaseCalls() const noexcept
-        {
-            return base_calls;
-        }
-
-        [[nodiscard]] IntensityLevel getLastBase() const noexcept
-        {
-            return last_base;
-        }
-
         void update() noexcept override
         {
         }
@@ -32,13 +22,7 @@ namespace
         }
 
       private:
-        Int32          high_level_calls = 0;
-        Int32          base_calls       = 0;
-        Int32          off_calls        = 0;
-        IntensityLevel last_high_level  = 0;
-        IntensityLevel last_base        = 0;
-        SignalMode     blink_mode       = SignalMode::NOT_DEFINED;
-        bool           phase_ready_     = true;
+        bool phase_ready_ = true;
     };
 
 } // namespace

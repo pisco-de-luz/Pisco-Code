@@ -75,7 +75,7 @@ The old `high`/`low` names remain as `[[deprecated]]` wrappers until v2.0.0.
 - [x] Remove duplicate state between classes
 - [x] Use consistent type system (`Counter`, `Index`, `IntensityLevel`)
 - [x] Rename terminology: "dimmed" → "base" → "low", "pulse" → "peak" → "high"
-- [ ] Unify terminology to PEAK/BASE/GAP across the entire API (see *Naming Unification* section)
+- [x] Unify terminology to PEAK/BASE/GAP across the entire API (see *Naming Unification* section)
 - [x] Change `SignalLevel` to `SignalMode` for clarity
 
 ## Code Quality Improvements Made
