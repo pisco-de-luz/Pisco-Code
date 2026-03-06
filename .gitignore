@@ -2,6 +2,9 @@
 # Top-level build folder
 /build/
 
+# VS Code — machine-generated, contains local toolchain paths
+.vscode/c_cpp_properties.json
+
 # just in case someone accidentally runs an in-source build…
 CMakeFiles/
 /CMakeCache.txt
