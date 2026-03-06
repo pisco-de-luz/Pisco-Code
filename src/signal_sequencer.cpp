@@ -49,7 +49,7 @@ namespace pisco_code
     void SignalSequencer::loadSignalCode(SignalCode code, Radix radix,
                                          NumDigits num_digits) noexcept
     {
-        if (!isValidCodeForRadix(radix, code))
+        if (!is_valid_code_for_radix(radix, code))
         {
             return;
         }

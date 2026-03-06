@@ -159,10 +159,10 @@ SignalEmitter
 | `SignalElement` is exactly 1 byte | `static_assert` |
 | `SignalStack` ≤ 16 bytes | `static_assert` (pass-by-value budget) |
 | High − Low ≥ 32 intensity units | `levelsAreTooClose()` in setters |
-| Peak level ≥ 32 | `clampPeakLevel()` |
-| Base level ≤ 223 | `clampBaseLevel()` |
+| Peak level ≥ 32 | `clamp_peak_level()` |
+| Base level ≤ 223 | `clamp_base_level()` |
 | Enums fit their bitfields | `static_assert` on `SignalMode` and `SignalDuration` |
-| Code within radix range | `isValidCodeForRadix()` guard in `loadSignalCode()` |
+| Code within radix range | `is_valid_code_for_radix()` guard in `loadSignalCode()` |
 | One sequence at a time | `isBusy()` guard in `showCode()` |
 
 ## 7. Timing Model

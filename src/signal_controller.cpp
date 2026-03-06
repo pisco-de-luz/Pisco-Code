@@ -8,7 +8,7 @@ namespace pisco_code
 {
     void SignalController::setPeakLevel(IntensityLevel level) noexcept
     {
-        peak_level_ = clampPeakLevel(level);
+        peak_level_ = clamp_peak_level(level);
 
         if (levelsAreTooClose())
         {
@@ -18,7 +18,7 @@ namespace pisco_code
 
     void SignalController::setBaseLevel(IntensityLevel level) noexcept
     {
-        base_level_ = clampBaseLevel(level);
+        base_level_ = clamp_base_level(level);
 
         if (levelsAreTooClose())
         {

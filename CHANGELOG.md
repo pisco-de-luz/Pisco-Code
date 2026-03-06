@@ -14,11 +14,11 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 ### Added
 - `setPeakLevel()` and `setBaseLevel()` as canonical setter methods in `SignalController`
 - `getPeakLevel()` and `getBaseLevel()` as canonical getter methods in `SignalController`
-- `clampPeakLevel()` and `clampBaseLevel()` validation helpers in `SignalController`
+- `clamp_peak_level()` and `clamp_base_level()` validation helpers in `SignalController`
 - Constants `DEFAULT_PEAK_LEVEL`, `DEFAULT_BASE_LEVEL`, `MIN_PEAK_LEVEL`, `MAX_BASE_LEVEL` in `pisco_constants.hpp`
 - `Radix` enum as canonical replacement for `NumberBase`
 - `RadixLimits` struct replacing `BaseLimits`
-- Helper functions `radix_supported()`, `max_digits_for_radix()`, `isValidCodeForRadix()`
+- Helper functions `radix_supported()`, `max_digits_for_radix()`, `is_valid_code_for_radix()`
 - `RadixType` type alias replacing `BaseType`
 - `stop()` method on `SignalEmitter` — immediately halts a running sequence, turns the LED off (GAP), and unblocks `showCode()` for immediate re-use
 - Deprecated API compatibility test suite (`deprecated_api_compatibility_test.cpp`)
@@ -32,7 +32,7 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 - Internal member variables renamed: `high_level_` → `peak_level_`, `low_level_` → `base_level_`
-- Internal methods renamed: `clampHighLevel()` → `clampPeakLevel()`, `clampLowLevel()` → `clampBaseLevel()`
+- Internal methods renamed: `clampHighLevel()` → `clamp_peak_level()`, `clampLowLevel()` → `clamp_base_level()`
 - `showCode()` and `loadSignalCode()` parameter type changed from `NumberBase` to `Radix`
 - All test files updated to use PEAK/BASE and Radix terminology
 - Examples updated to use `Radix` instead of `NumberBase`

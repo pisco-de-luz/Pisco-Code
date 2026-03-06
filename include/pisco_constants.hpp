@@ -106,7 +106,7 @@ namespace pisco_code
         return max_digits_for_radix(radix) != 0;
     }
 
-    constexpr bool isValidCodeForRadix(Radix radix, SignalCode code) noexcept
+    constexpr bool is_valid_code_for_radix(Radix radix, SignalCode code) noexcept
     {
         return radix_supported(radix) && is_code_in_range(radix, code);
     }
