@@ -27,6 +27,51 @@
 - [ ] Performance optimization for embedded systems
 - [ ] Documentation improvements
 
+## Naming Unification — PEAK / BASE / GAP (v1.2.0 → v2.0.0)
+Unify the public API to match the `SignalMode` enum vocabulary (`PEAK`, `BASE`, `GAP`).
+The old `high`/`low` names remain as `[[deprecated]]` wrappers until v2.0.0.
+
+### Step 1 — Add canonical API + deprecate old names (`signal_controller.hpp`)
+- [ ] Add `setPeakLevel()` / `setBaseLevel()` as the new canonical setter methods
+- [ ] Mark `setHighLevel()` / `setLowLevel()` as `[[deprecated]]` wrappers that delegate to the new methods
+
+### Step 2 — Rename internal constants (`pisco_constants.hpp`)
+- [ ] `DEFAULT_HIGH_LEVEL` → `DEFAULT_PEAK_LEVEL`
+- [ ] `DEFAULT_LOW_LEVEL` → `DEFAULT_BASE_LEVEL`
+- [ ] `MIN_HIGH_LEVEL` → `MIN_PEAK_LEVEL`
+- [ ] `MAX_LOW_LEVEL` → `MAX_BASE_LEVEL`
+- [ ] `clampHighLevel()` → `clampPeakLevel()`
+- [ ] `clampLowLevel()` → `clampBaseLevel()`
+
+### Step 3 — Update `signal_controller.cpp` internals
+- [ ] Rename private members `high_level_` → `peak_level_`, `low_level_` → `base_level_`
+- [ ] Update all internal references in `signal_controller.cpp`
+
+### Step 4 — Migrate test helpers
+- [ ] Rename constants in `tests/helpers/tests_constants.hpp`
+- [ ] Rename `expectedPulse` → `expectedPeak` in `tests/helpers/tests_types.hpp`
+- [ ] Update mock references in `tests/mocks/`
+
+### Step 5 — Migrate test files to new API
+- [ ] Update `setter_behavior_blinker_test.cpp`
+- [ ] Update `loop_behavior_blinker_test.cpp`
+- [ ] Update remaining test files referencing old names
+
+### Step 6 — Add deprecated API compatibility tests
+- [ ] Create `tests/deprecated_api_compatibility_test.cpp` with targeted delegation tests
+
+### Step 7 — Update documentation
+- [ ] Update `README.md` code examples and method references
+- [ ] Update `ArchitectureOverview.md` setter references
+
+### Step 8 — Update examples
+- [ ] Update AVR examples
+- [ ] Update STM32 examples
+- [ ] Update native examples
+
+### Step 9 — Update CHANGELOG.md
+- [ ] Add v1.2.0 section (Added / Deprecated / Changed)
+
 ## Architecture Decisions Made
 - [x] Use Template Method Pattern for `SignalController`
 - [x] Separate PWM-specific logic from base controller
@@ -34,12 +79,13 @@
 - [x] Remove duplicate state between classes
 - [x] Use consistent type system (`Counter`, `Index`, `IntensityLevel`)
 - [x] Rename terminology: "dimmed" → "base" → "low", "pulse" → "peak" → "high"
+- [ ] Unify terminology to PEAK/BASE/GAP across the entire API (see *Naming Unification* section)
 - [x] Change `SignalLevel` to `SignalMode` for clarity
 
 ## Code Quality Improvements Made
 - [x] Refactor `SignalElement` constructor parameters
 - [x] Rename `bit_mask()` to `capacity_for_bits()` — current name is misleading; the function computes the maximum number of values that fit in N bits, not a bitmask
-- [ ] Express `DEFAULT_HIGH_LEVEL`, `DEFAULT_LOW_LEVEL` and `MIN_INTENSITY_DIFFERENCE` as percentages of `MAX_BYTE_VALUE` instead of hardcoded absolute values
+- [ ] Express `DEFAULT_PEAK_LEVEL`, `DEFAULT_BASE_LEVEL` and `MIN_INTENSITY_DIFFERENCE` as percentages of `MAX_BYTE_VALUE` instead of hardcoded absolute values (rename pending — see *Naming Unification* section)
 - [x] Update constants with 'U' suffix for consistency
 - [x] Rename `MIN_PULSE_BASE_GAP` to `MIN_INTENSITY_DIFFERENCE`
 - [x] Improve type safety with `NumDigits`, `Index`, `Counter` types
@@ -87,7 +133,7 @@
 
 ### Medium Priority
 - [ ] **#4** ~~Extract software PWM tick logic so `MockLedControllerAdapter` doesn't duplicate `LedControllerSoftwarePwm::update()` (~10 duplicated lines)~~ — Skipped: intentional mock pattern, not harmful duplication
-- [x] **#5** ~~Make `MockLedControllerAdapter` call base class `setHighLevel`/`setLowLevel` instead of re-implementing clamping; remove duplicate in `LedBlinkPattern`~~ — Removed shadow members + dead setters (~50 lines removed)
+- [x] **#5** ~~Make `MockLedControllerAdapter` call base class `setPeakLevel`/`setBaseLevel` instead of re-implementing clamping; remove duplicate in `LedBlinkPattern`~~ — Removed shadow members + dead setters (~50 lines removed)
 - [ ] **#6** Extract shared example `app_main()` template so AVR/STM32 `basic_example.cpp` aren't 81% identical (~38 redundant lines)
 
 ### Low Priority
