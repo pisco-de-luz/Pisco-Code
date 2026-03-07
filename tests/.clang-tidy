@@ -6,6 +6,7 @@
 Checks: >
   clang-analyzer-*,
   bugprone-*,
+  -bugprone-branch-clone,
   modernize-*,
   -modernize-use-trailing-return-type,
   performance-*,
