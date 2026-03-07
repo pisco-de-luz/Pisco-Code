@@ -48,12 +48,12 @@ namespace testutils
     struct TestBlinkerCase
     {
         std::optional<SignalCode>     blink_code{std::nullopt};
-        std::optional<Radix>     radix{std::nullopt};
+        std::optional<Radix>          radix{std::nullopt};
         std::optional<TraceCheck>     trace_check{std::nullopt};
         std::optional<NumDigits>      numDigits{std::nullopt};
         std::optional<RepeatTimes>    repeats{std::nullopt};
-        std::optional<IntensityLevel> expectedBase{};
-        std::optional<IntensityLevel> expectedPeak{};
+        std::optional<IntensityLevel> expectedBase{std::nullopt};
+        std::optional<IntensityLevel> expectedPeak{std::nullopt};
     };
 
     // PatternOption — Digit composition strategies used in test generation.
@@ -79,7 +79,7 @@ namespace testutils
     struct GeneratePatternParams
     {
         PatternOption pattern{PatternOption::SEQUENCIAL_UP};
-        Radix    radix{Radix::DEC};
+        Radix         radix{Radix::DEC};
         NumDigits     num_digits{};
         DigitValue    digit{0};
     };
