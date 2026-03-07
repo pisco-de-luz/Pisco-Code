@@ -5,7 +5,7 @@
 #include "signal_controller.hpp"
 
 using namespace pisco_code;
-class MockLedControllerAdapter : public SignalController
+class MockLedControllerAdapter final : public SignalController
 {
   public:
     explicit MockLedControllerAdapter(MockLedControlLogger* logger) :
@@ -20,8 +20,8 @@ class MockLedControllerAdapter : public SignalController
             return;
         }
 
-        IntensityLevel current_level = getCurrentIntensityLevel();
-        IntensityLevel sw_pwm_level  = to_sw_pwm_level(current_level);
+        const IntensityLevel current_level = getCurrentIntensityLevel();
+        const IntensityLevel sw_pwm_level  = to_sw_pwm_level(current_level);
 
         if (shouldTurnLedOn(sw_pwm_level))
         {
