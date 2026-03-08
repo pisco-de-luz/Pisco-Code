@@ -31,6 +31,9 @@ namespace pisco_code
     static_assert(static_cast<unsigned>(SignalDuration::MAX_VALUE) <=
                       capacity_for_bits(DURATION_BITS),
                   "SignalDuration fits DURATION_BITS");
+    static_assert(static_cast<unsigned>(MAX_DIGIT_VALUE) <
+                      capacity_for_bits(TIMES_BITS),
+                  "Max digit value fits TIMES_BITS");
 
     constexpr SignalModeType to_value(SignalMode mode) noexcept
     {

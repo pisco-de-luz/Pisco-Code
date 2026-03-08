@@ -106,7 +106,8 @@ namespace pisco_code
         return max_digits_for_radix(radix) != 0;
     }
 
-    constexpr bool is_valid_code_for_radix(Radix radix, SignalCode code) noexcept
+    constexpr bool is_valid_code_for_radix(Radix      radix,
+                                           SignalCode code) noexcept
     {
         return radix_supported(radix) && is_code_in_range(radix, code);
     }
@@ -126,13 +127,14 @@ namespace pisco_code
 
     // Minimum intensity separation for BASE/PEAK levels to be
     // distinguishable
-    constexpr NumBits        TIMES_BITS               = 4U;
-    constexpr NumBits        MODE_BITS                = 2U;
-    constexpr NumBits        DURATION_BITS            = 2U;
-    constexpr UInt8          MAX_BYTE_VALUE           = 255U;
-    constexpr IntensityLevel PWM_MAX                  = 15U;
-    constexpr IntensityLevel DEFAULT_BASE_LEVEL       = 50U;
-    constexpr IntensityLevel DEFAULT_PEAK_LEVEL       = 200U;
+    constexpr NumBits        TIMES_BITS         = 4U;
+    constexpr NumBits        MODE_BITS          = 2U;
+    constexpr NumBits        DURATION_BITS      = 2U;
+    constexpr DigitValue     MAX_DIGIT_VALUE    = 15U; // Max digit in HEX (0xF)
+    constexpr UInt8          MAX_BYTE_VALUE     = 255U;
+    constexpr IntensityLevel PWM_MAX            = 15U;
+    constexpr IntensityLevel DEFAULT_BASE_LEVEL = 50U;
+    constexpr IntensityLevel DEFAULT_PEAK_LEVEL = 200U;
     constexpr IntensityLevel MIN_INTENSITY_DIFFERENCE = 32U;
     constexpr IntensityLevel MIN_PEAK_LEVEL = MIN_INTENSITY_DIFFERENCE;
     constexpr IntensityLevel MAX_BASE_LEVEL =
