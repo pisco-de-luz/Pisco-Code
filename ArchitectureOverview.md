@@ -184,37 +184,66 @@ Phase transitions occur when the elapsed ticks exceed the current phase duration
 synchronizes transitions to PWM cycle boundaries (every 16 ticks) to avoid
 mid-cycle glitches.
 
-## 8. Design Decisions
+## 8. Design Notes
 
-### 8.1 Two Iterators Instead of One State Machine
+### 8.1 Three-Layer State Machine Instead of One Flat One
 
-The iteration is split into two levels:
+The design uses three nested FSMs, each responsible for exactly one level of the
+signal structure:
 
 ```
-SignalPulseIterator  → sequence-level: framing, inter-symbol gaps, symbol ordering
-  └─ SignalElementIterator → element-level: pulse repetition, intra-digit gaps
+SignalEmitter              (time-driven,      3 states)
+  IDLE ──► STARTING ──► APPLYING_PULSE ──► IDLE
+  │
+  └─ SignalPulseIterator  (iterator-driven, 4 states + flag)
+          LEADING_FRAME ──► IN_ELEMENTS ──► TRAILING_FRAME ──► DONE
+                                │
+                  need_inter_symbol_ flag injects INTER_SYMBOL
+                  before each transition out of IN_ELEMENTS
+       │
+       └─ SignalElementIterator  (counter-driven, 2 states — Phase : bool)
+                   PULSE ⇄ GAP
 ```
 
-A single flat state machine was considered but rejected:
+Each FSM only knows about its own level. `SignalEmitter` holds just three states:
+`IDLE` when nothing is playing, `STARTING` to latch the first pulse, and
+`APPLYING_PULSE` while ticking through each phase — it delegates all sequence logic
+to `SignalPulseIterator`. `SignalPulseIterator` handles framing, inter-symbol gaps,
+and symbol ordering — it
+delegates pulse repetition and intra-digit gaps to `SignalElementIterator`. The
+two-state counter at the bottom is the smallest meaningful machine for the job, and
+using a `bool` rather than an enum for those two states is the right call on
+memory-constrained MCUs.
 
-1. **Testability.** `SignalElementIterator` has dedicated unit tests verifying edge
-   cases in isolation (gap insertion rules, times=0, reset behavior). Merging would
-   turn these into integration tests requiring full stack setup.
-2. **Equal complexity.** The flat machine would need the same 6 states plus
-   `remaining_pulses_` tracking — no net simplification.
+The natural first idea is a single flat machine — one switch covering every state
+from leading frame to trailing frame. It works, but "are we in the third pulse of a
+digit?" and "are we between symbols?" live at different abstraction levels, and
+mixing them makes each state harder to reason about independently.
+
+Keeping the three layers separate pays off in:
+
+1. **Testability.** `SignalElementIterator` can be tested in isolation — gap
+   insertion rules, `times=0`, reset behavior — without any stack or sequencer
+   setup. `SignalPulseIterator` tests verify sequence structure without touching
+   timing. With a flat machine all of that becomes integration testing.
+2. **No net simplification from merging.** A flat machine still needs the same
+   state variables: phase within the full sequence, remaining pulses for the current
+   element, and whether to insert an intra-digit gap. Nothing is removed, just
+   folded into one place where the interactions are harder to see.
 
 ### 8.2 SignalSequencer as a Class
 
-`loadSignalCode()` could be a free function returning a `SignalStack`. But the
-sequencer also owns the stack and manages repeat state (`repeat_count_` vs
-`repeat_index_`). Making it a free function would push both responsibilities
-into `SignalEmitter`.
+`loadSignalCode()` could be a free function returning a `SignalStack`, but the
+sequencer also manages repeat state (`repeat_count_` vs `repeat_index_`), which
+survives a `clear()` while progress state does not. Keeping that distinction inside
+the sequencer avoids pushing two unrelated responsibilities into `SignalEmitter`.
 
 ### 8.3 Hand-Rolled Stack
 
-The stack requires: fixed capacity, no heap, LIFO, rewind (replay without
-clearing), and trivially copyable (passed by value). No STL or ETL container
-satisfies all five constraints.
+The stack needs fixed capacity, no heap, LIFO order, rewind (replay without
+clearing), and trivial copyability (passed by value into the iterator). No STL or
+ETL container satisfies all five, so a small custom one made more sense than
+wrapping something that almost fits.
 
 ## 9. Test Strategy
 
