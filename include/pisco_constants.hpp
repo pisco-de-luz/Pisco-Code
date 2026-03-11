@@ -14,6 +14,22 @@ namespace pisco_code
         OFF = 1U,
     };
 
+    // Arduino's Print.h defines BIN/OCT/DEC/HEX as plain macros.
+    // Undefine them here so the enum class members are not expanded by the
+    // preprocessor. This is a no-op on platforms where they are not defined.
+#ifdef BIN
+#undef BIN
+#endif
+#ifdef OCT
+#undef OCT
+#endif
+#ifdef DEC
+#undef DEC
+#endif
+#ifdef HEX
+#undef HEX
+#endif
+
     enum class Radix : RadixType
     {
         BIN = 2U,
