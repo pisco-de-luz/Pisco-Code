@@ -19,7 +19,7 @@ A common practice is to use simple blink patterns on a status LED to indicate co
 For larger values, some implementations concatenate digit sequences. For example, the code `312` may be shown as three blinks, a pause, one blink, a pause, and two blinks.
 
 Status LED showing the code `312` using a sequence of blinks.
-![code312.png](https://github.com/pisco-de-luz/Pisco-Code/blob/6c91251ed2d3033bc74d414339b4a64d40685235/graphics/code312.png)
+![code312.png](https://raw.githubusercontent.com/pisco-de-luz/Pisco-Code/main/graphics/code312.png)
 
 This method is workable but limited: it does not naturally support zero digits and may be ambiguous when interpreting sequences such as `302`.
 
@@ -29,8 +29,8 @@ Pisco Code extends the conventional approach by introducing a framing signal. Be
 
 Status LED showing the code `121` using Pisco Code.
 
-![Video-Code-121-132x132.gif](https://github.com/pisco-de-luz/Pisco-Code/blob/d0bb059eef8c726219ba4b1a40f07471f648127f/graphics/Video-Code-121-132x132.gif) 
-<img src="https://github.com/pisco-de-luz/Pisco-Code/blob/2d7ab53852a28b9fdf24be6b03f43a6450f9fef0/graphics/pisco-code-121.png" height="132">
+![Video-Code-121-132x132.gif](https://raw.githubusercontent.com/pisco-de-luz/Pisco-Code/main/graphics/Video-Code-121-132x132.gif) 
+<img src="https://raw.githubusercontent.com/pisco-de-luz/Pisco-Code/main/graphics/pisco-code-121.png" height="132">
 
 This framing mechanism improves readability, ensuring that observers can reliably distinguish between digit groups, including zeros, and recognize the start of a new value.
 
@@ -40,13 +40,13 @@ The introduction of a framing signal enables explicit representation of the digi
 
 For example, in the sequence below representing the value `120`, digits `1` and `2` are shown with one and two bright blinks, separated by pauses. The digit `0` is represented not by a blink, but by an intentional gap in the sequence. This makes it possible to represent zero clearly in any position within the code.
 
-![Pisco-Code-120-144x144.gif](https://github.com/pisco-de-luz/Pisco-Code/blob/ba3e80ebc5cc06cf77d8f8e30f36b71e3b5d880f/graphics/Pisco-Code-120-144x144.gif)
-<img src="https://github.com/pisco-de-luz/Pisco-Code/blob/9d276453b1f99df96e158106dcbb28b7e36d6daf/graphics/pisco-code-120.png" height="144">
+![Pisco-Code-120-144x144.gif](https://raw.githubusercontent.com/pisco-de-luz/Pisco-Code/main/graphics/Pisco-Code-120-144x144.gif)
+<img src="https://raw.githubusercontent.com/pisco-de-luz/Pisco-Code/main/graphics/pisco-code-120.png" height="144">
 
 In some cases, it is also necessary to define a minimum number of digits to convey information accurately. For example, when displaying a voltage measurement between 0–5 V with two decimal places (e.g., 0.02 V), at least three digits must always be shown. With this convention, the observer can infer the decimal point location.
 
-![Pisco-Code-002-144x144.gif](https://github.com/pisco-de-luz/Pisco-Code/blob/b1c607510b4095d7174fb170666a0196a63d295a/graphics/Pisco-Code-002-144x144.gif)
-<img src="https://github.com/pisco-de-luz/Pisco-Code/blob/9d276453b1f99df96e158106dcbb28b7e36d6daf/graphics/pisco-code-002.png" height="144">
+![Pisco-Code-002-144x144.gif](https://raw.githubusercontent.com/pisco-de-luz/Pisco-Code/main/graphics/Pisco-Code-002-144x144.gif)
+<img src="https://raw.githubusercontent.com/pisco-de-luz/Pisco-Code/main/graphics/pisco-code-002.png" height="144">
 
 # Binary and Hexadecimal Support
 
@@ -64,8 +64,8 @@ Some applications require distinguishing between positive and negative values. T
 
 After this initial blink, the digit-by-digit representation proceeds as usual. For example, the sequence shown below represents the value `-12`, with the initial long blink indicating the negative sign.  
 
-![Pisco-Code-Negative12-144x144.gif](https://github.com/pisco-de-luz/Pisco-Code/blob/347a2f6999becbef7c22bfab5b0d4cb3d843b71c/graphics/Pisco-Code-Negative12-144x144.gif)
-<img src="https://github.com/pisco-de-luz/Pisco-Code/blob/d46fea2847a2d3f49e9fccbcebee1c75f28df785/graphics/pisco-code-12-negative.png" height="144">
+![Pisco-Code-Negative12-144x144.gif](https://raw.githubusercontent.com/pisco-de-luz/Pisco-Code/main/graphics/Pisco-Code-Negative12-144x144.gif)
+<img src="https://raw.githubusercontent.com/pisco-de-luz/Pisco-Code/main/graphics/pisco-code-12-negative.png" height="144">
 
 
 # Usage
