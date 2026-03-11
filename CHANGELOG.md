@@ -9,6 +9,18 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.3.0] — 2026-03-11
+
+### Added
+- PlatformIO example project with `platformio.ini` for Arduino Nano and ESP32 environments (`examples/platformio/`)
+- PlatformIO build checks added to CI and release workflows
+- `MAX_DIGIT_VALUE` constant in `pisco_constants.hpp` — clarifies the maximum digit representable in a signal; enforced via static assertion in `signal_types.hpp`
+
+### Fixed
+- License mismatch corrected: repository now consistently uses MIT (the `LICENSE` file previously contained Apache 2.0)
+- `pisco_constants.hpp` now undefines `BIN`, `OCT`, `DEC`, and `HEX` macros before declaring the `Radix` enum to prevent Arduino/AVR preprocessor macro expansion from corrupting enum members
+- Architecture Overview updated for improved clarity and detail
+
 ## [1.2.0] — 2026-03-06
 
 ### Added
@@ -140,7 +152,8 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 - CppUTest-based unit test suite (native build)
 - MIT License
 
-[Unreleased]: https://github.com/pisco-de-luz/Pisco-Code/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/pisco-de-luz/Pisco-Code/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/pisco-de-luz/Pisco-Code/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/pisco-de-luz/Pisco-Code/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/pisco-de-luz/Pisco-Code/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/pisco-de-luz/Pisco-Code/compare/v1.0.2...v1.1.0
