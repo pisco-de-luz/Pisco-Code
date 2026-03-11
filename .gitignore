@@ -13,3 +13,6 @@ CMakeFiles/
 /*.marks
 
 /_delete/
+
+# LXC CI scripts — local infrastructure, not part of the project
+/scripts/lxc-ci-*.sh

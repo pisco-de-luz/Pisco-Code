@@ -1,30 +1,27 @@
-// ----------------------------------------------------------------------------
-// Pisco-Code PlatformIO Example
-//
-// Displays the value 42 in decimal via the onboard status LED using software
-// PWM — no serial port, no display required.
-//
-// Digit 4 → four short blinks, digit 2 → two short blinks.
-// A long-off framing period separates each complete sequence.
-//
-// Compatible with: Arduino Nano (AVR), ESP32, and any Arduino-framework board.
-// ----------------------------------------------------------------------------
+// Pisco-Code PlatformIO Example — displays -103 via the onboard LED.
+// Demonstrates negative sign and zero-digit handling with software PWM.
+// Compatible with Arduino Nano (AVR), ESP32, and any Arduino-framework board.
 
 #include <Arduino.h>
 
+#ifndef LED_BUILTIN
+#define LED_BUILTIN 2
+#endif
+
 #include "pisco_code.hpp"
 
+using pisco_code::LedControlCode;
 using pisco_code::LedControllerSoftwarePwm;
 using pisco_code::NumDigits;
 using pisco_code::Radix;
 using pisco_code::SignalCode;
 using pisco_code::SignalEmitter;
 
-// Callback that drives the onboard LED for software PWM (on/off toggle).
-static void
-ledWrite(uint8_t level)
+static bool
+ledWrite(LedControlCode code)
 {
-    digitalWrite(LED_BUILTIN, level > 0 ? HIGH : LOW);
+    digitalWrite(LED_BUILTIN, code == LedControlCode::ON ? HIGH : LOW);
+    return true;
 }
 
 static LedControllerSoftwarePwm controller{ledWrite};
@@ -36,16 +33,12 @@ void
 setup()
 {
     pinMode(LED_BUILTIN, OUTPUT);
-
-    // Display diagnostic code 42 in decimal (repeats automatically).
-    // Replace 42 with any int value — negative values and hex/binary also work.
-    emitter.showCode(SignalCode{42}, Radix::DEC, NumDigits{0});
+    emitter.showCode(SignalCode{-103}, Radix::DEC, NumDigits{0});
 }
 
 void
 loop()
 {
-    // Drive the Pisco-Code state machine at ~1 ms resolution.
     const unsigned long now = millis();
     if (now != lastMs)
     {
