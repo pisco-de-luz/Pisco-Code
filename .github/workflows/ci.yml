@@ -103,3 +103,30 @@ jobs:
 
       - name: Build
         run: cmake --build build/arm --parallel
+
+  # -----------------------------------------------------------------------
+  # PlatformIO build check: Arduino Nano (AVR) + ESP32
+  # Validates library.json and the Arduino-framework example compile cleanly
+  # on both targets without needing a local PlatformIO installation.
+  # -----------------------------------------------------------------------
+  platformio-build:
+    name: PlatformIO build (Arduino Nano + ESP32)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install PlatformIO
+        run: pip install platformio
+
+      - name: Build Arduino Nano (AVR)
+        run: platformio run --project-dir examples/platformio --environment uno
+
+      - name: Build ESP32
+        run: platformio run --project-dir examples/platformio --environment esp32dev

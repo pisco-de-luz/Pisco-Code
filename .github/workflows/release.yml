@@ -134,6 +134,19 @@ jobs:
           token: ${{ secrets.ARDUINO_REPO_TOKEN }}
           path: arduino-dist
 
+      - name: Update library.json version in main repo
+        run: |
+          sed -i "s/\"version\": \".*\"/\"version\": \"${GITHUB_REF#refs/tags/v}\"/" library.json
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add library.json
+          if git diff --cached --quiet; then
+            echo "library.json already up to date"
+          else
+            git commit -m "chore: bump library.json to ${GITHUB_REF#refs/tags/v}"
+            git push origin HEAD:main
+          fi
+
       - name: Update Arduino distribution
         run: |
           cd arduino-dist
