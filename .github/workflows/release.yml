@@ -17,6 +17,19 @@ jobs:
         id: get_version
         run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
         
+      - name: Bump library.json version
+        run: |
+          sed -i "s/\"version\": \".*\"/\"version\": \"${GITHUB_REF#refs/tags/v}\"/" library.json
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add library.json
+          if git diff --cached --quiet; then
+            echo "library.json already up to date"
+          else
+            git commit -m "chore: bump library.json to ${GITHUB_REF#refs/tags/v}"
+            git push origin HEAD:main
+          fi
+
       - name: Create release directory
         run: |
           mkdir -p release/pisco-code-${{ steps.get_version.outputs.VERSION }}
@@ -133,19 +146,6 @@ jobs:
           repository: pisco-de-luz/Pisco-Code-Arduino
           token: ${{ secrets.ARDUINO_REPO_TOKEN }}
           path: arduino-dist
-
-      - name: Update library.json version in main repo
-        run: |
-          sed -i "s/\"version\": \".*\"/\"version\": \"${GITHUB_REF#refs/tags/v}\"/" library.json
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add library.json
-          if git diff --cached --quiet; then
-            echo "library.json already up to date"
-          else
-            git commit -m "chore: bump library.json to ${GITHUB_REF#refs/tags/v}"
-            git push origin HEAD:main
-          fi
 
       - name: Update Arduino distribution
         run: |
