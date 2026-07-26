@@ -17,7 +17,10 @@ namespace pisco_code
 
         constexpr SignalElement(SignalMode mode, SignalTimesType times,
                                 SignalDuration duration) noexcept :
-            mode_(to_value(mode)), times_(times), duration_(to_value(duration))
+            mode_(static_cast<SignalModeType>(to_value(mode) & MODE_MASK)),
+            times_(static_cast<SignalTimesType>(times & TIMES_MASK)),
+            duration_(
+                static_cast<SignalDurationType>(to_value(duration) & DURATION_MASK))
         {
         }
 

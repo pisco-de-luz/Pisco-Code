@@ -159,4 +159,22 @@ namespace pisco_code
     {
         return bits == 0 ? 0U : ((1U << bits));
     }
+
+    // Mask covering the low `bits` bits — e.g. bit_mask(4) == 0x0F.
+    // Used to make bitfield narrowing explicit: a store into a `: N` bitfield
+    // keeps exactly these bits, so masking states that intent and lets the
+    // compiler prove the value fits (silences -Wconversion).
+    constexpr UInt32 bit_mask(NumBits bits) noexcept
+    {
+        return bits == 0 ? 0U : (capacity_for_bits(bits) - 1U);
+    }
+
+    // Named masks for the SignalElement bitfields. Deliberately constexpr
+    // VARIABLES rather than bit_mask() calls at the use sites: GCC's
+    // -Wconversion analysis folds a constexpr variable reference but not a
+    // constexpr function call, so only this form lets it prove the masked
+    // value fits the bitfield.
+    constexpr UInt32 MODE_MASK     = bit_mask(MODE_BITS);
+    constexpr UInt32 TIMES_MASK    = bit_mask(TIMES_BITS);
+    constexpr UInt32 DURATION_MASK = bit_mask(DURATION_BITS);
 } // namespace pisco_code

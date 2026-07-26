@@ -9,6 +9,23 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.3.1] — 2026-07-26
+
+### Fixed
+- `SignalElement`'s parameterised constructor now masks each value to its bitfield
+  width (`bit_mask(MODE_BITS/TIMES_BITS/DURATION_BITS)`) with an explicit
+  `static_cast` before storing. Behaviour is unchanged — a store into a `: N`
+  bitfield already kept exactly those low bits — but the narrowing is now stated,
+  so including `signal_element.hpp` no longer emits `-Wconversion` warnings in
+  downstream projects that build with that flag enabled.
+
+### Added
+- `bit_mask(NumBits)` constexpr helper in `pisco_constants.hpp`, the mask
+  counterpart of `capacity_for_bits()`, plus named `MODE_MASK` / `TIMES_MASK` /
+  `DURATION_MASK` constants for the `SignalElement` bitfields. The constructor
+  masks through the named constants because GCC's `-Wconversion` analysis folds
+  a constexpr variable reference but not a constexpr function call.
+
 ## [1.3.0] — 2026-03-11
 
 ### Added
